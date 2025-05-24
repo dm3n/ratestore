@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
 import { calculateMonthlyPayment, calculateTotalPayment, calculateTotalInterest } from "@/lib/calculator";
 import { DollarSign, Percent, Calendar } from "lucide-react";
 import { CalculationResults } from "@/components/CalculationResults";
@@ -62,17 +61,7 @@ export function MortgageCalculator() {
     setLoanTerm(value[0]);
   };
 
-  // Format currency
-  const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
-  };
-
-  // Calculate mortgage details
+  // Calculate mortgage details automatically
   useEffect(() => {
     const monthly = calculateMonthlyPayment(loanAmount, interestRate, loanTerm);
     setMonthlyPayment(monthly);
@@ -85,16 +74,16 @@ export function MortgageCalculator() {
   }, [loanAmount, interestRate, loanTerm]);
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
+    <div className="grid gap-6 lg:grid-cols-2">
       <Card className="border-0 shadow-lg">
         <CardHeader className="bg-primary/5 rounded-t-lg">
           <CardTitle className="text-2xl font-bold">Mortgage Calculator</CardTitle>
-          <CardDescription>Estimate your monthly mortgage payment</CardDescription>
+          <CardDescription>Adjust values to see updated payment estimates</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Loan Amount */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label htmlFor="loan-amount" className="text-base font-medium">
                   Loan Amount
@@ -126,7 +115,7 @@ export function MortgageCalculator() {
             </div>
 
             {/* Interest Rate */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label htmlFor="interest-rate" className="text-base font-medium">
                   Interest Rate
@@ -159,7 +148,7 @@ export function MortgageCalculator() {
             </div>
 
             {/* Loan Term */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label htmlFor="loan-term" className="text-base font-medium">
                   Loan Term (Years)
@@ -189,8 +178,6 @@ export function MortgageCalculator() {
                 <span>40 years</span>
               </div>
             </div>
-
-            <Button className="w-full">Calculate</Button>
           </div>
         </CardContent>
       </Card>
