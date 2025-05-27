@@ -31,8 +31,10 @@ export function Header() {
         </div>
         
         {!isMobile ? (
-          <nav className="flex items-center gap-6">
-            <NavLinks className="hidden md:flex" />
+          <>
+            <nav className="flex-1 flex justify-center">
+              <NavLinks className="hidden md:flex" />
+            </nav>
             <div className="hidden md:flex items-center gap-2">
               {user ? (
                 <UserMenu />
@@ -47,7 +49,7 @@ export function Header() {
                 </>
               )}
             </div>
-          </nav>
+          </>
         ) : (
           <div className="flex items-center gap-2">
             {user && <UserMenu />}
