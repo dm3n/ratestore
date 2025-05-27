@@ -1,18 +1,16 @@
+
 import { useState } from "react";
-import { MortgageCalculator } from "@/components/MortgageCalculator";
+import { CompoundInterestCalculator } from "@/components/CompoundInterestCalculator";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { RateTable } from "@/components/RateTable";
-import { LoanTypeSelector } from "@/components/LoanTypeSelector";
+import { SavingsRatesTable } from "@/components/SavingsRatesTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calculator, ChartLine, PiggyBank, Home, Shield, CheckCircle } from "lucide-react";
+import { Calculator, TrendingUp, PiggyBank, BarChart3, Shield, CheckCircle } from "lucide-react";
 
 const Index = () => {
-  const [loanType, setLoanType] = useState<string>("purchase");
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -23,34 +21,33 @@ const Index = () => {
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
               <Badge variant="outline" className="mb-4 bg-primary/10 text-primary border-primary/20">
-                Trusted by 1M+ homeowners
+                Trusted by 1M+ users
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                Find Your Perfect Mortgage Rate
+                Compare Financial Rates & Tools
               </h1>
               <p className="text-lg text-muted-foreground mb-8 md:mb-10">
-                Compare top lenders and find the best mortgage rates for your new home
-                or refinance your existing loan.
+                Find the best savings rates, calculate your financial goals, and make informed 
+                decisions with our comprehensive financial tools and rate comparisons.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Button size="lg" className="gap-2">
-                  Get Started <Home className="h-5 w-5" />
+                  Get Started <Calculator className="h-5 w-5" />
                 </Button>
                 <Button size="lg" variant="outline" className="gap-2">
-                  View Today's Rates <ChartLine className="h-5 w-5" />
+                  View Best Rates <TrendingUp className="h-5 w-5" />
                 </Button>
               </div>
             </div>
           </div>
         </section>
         
-        {/* Calculator Section */}
+        {/* Tools Section */}
         <section className="py-16">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="grid gap-8 md:grid-cols-[1fr_3fr]">
                 <div className="space-y-6">
-                  <LoanTypeSelector onSelect={setLoanType} />
                   <Card>
                     <CardHeader className="bg-primary/5 rounded-t-lg">
                       <CardTitle className="text-lg">Why RateStore?</CardTitle>
@@ -59,19 +56,19 @@ const Index = () => {
                       <ul className="space-y-4">
                         <li className="flex gap-2">
                           <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
-                          <span className="text-sm">Compare rates from 500+ lenders</span>
+                          <span className="text-sm">Compare rates from 500+ institutions</span>
                         </li>
                         <li className="flex gap-2">
                           <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
-                          <span className="text-sm">Free, no obligation quotes</span>
+                          <span className="text-sm">Free financial calculators</span>
                         </li>
                         <li className="flex gap-2">
                           <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
-                          <span className="text-sm">Fast pre-approval process</span>
+                          <span className="text-sm">Real-time rate updates</span>
                         </li>
                         <li className="flex gap-2">
                           <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
-                          <span className="text-sm">Expert mortgage advisors</span>
+                          <span className="text-sm">Expert financial guidance</span>
                         </li>
                       </ul>
                     </CardContent>
@@ -86,32 +83,40 @@ const Index = () => {
                         <span className="hidden md:inline">Calculator</span>
                       </TabsTrigger>
                       <TabsTrigger value="rates" className="gap-2">
-                        <ChartLine className="h-4 w-4" />
+                        <TrendingUp className="h-4 w-4" />
                         <span className="hidden md:inline">Rates</span>
                       </TabsTrigger>
-                      <TabsTrigger value="affordability" className="gap-2">
+                      <TabsTrigger value="planning" className="gap-2">
                         <PiggyBank className="h-4 w-4" />
-                        <span className="hidden md:inline">Affordability</span>
+                        <span className="hidden md:inline">Planning</span>
                       </TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="calculator">
-                      <MortgageCalculator />
+                      <CompoundInterestCalculator />
                     </TabsContent>
                     
                     <TabsContent value="rates">
-                      <RateTable />
+                      <SavingsRatesTable />
                     </TabsContent>
                     
-                    <TabsContent value="affordability">
+                    <TabsContent value="planning">
                       <Card className="border-0 shadow-lg">
                         <CardHeader className="bg-primary/5 rounded-t-lg">
-                          <CardTitle className="text-2xl font-bold">Affordability Calculator</CardTitle>
-                          <CardDescription>See how much house you can afford</CardDescription>
+                          <CardTitle className="text-2xl font-bold">Financial Planning Tools</CardTitle>
+                          <CardDescription>Plan your financial future with our comprehensive tools</CardDescription>
                         </CardHeader>
                         <CardContent className="pt-6">
-                          <p className="text-muted-foreground mb-4">Coming soon! Our affordability calculator will help you determine how much house you can afford based on your income, debt, and savings.</p>
-                          <Button variant="secondary" className="w-full">Get Notified When Available</Button>
+                          <div className="grid gap-4 md:grid-cols-2">
+                            <Button variant="outline" className="h-auto p-4 flex-col gap-2">
+                              <PiggyBank className="h-6 w-6" />
+                              <span>Emergency Fund</span>
+                            </Button>
+                            <Button variant="outline" className="h-auto p-4 flex-col gap-2">
+                              <BarChart3 className="h-6 w-6" />
+                              <span>Retirement Planning</span>
+                            </Button>
+                          </div>
                         </CardContent>
                       </Card>
                     </TabsContent>
@@ -126,9 +131,9 @@ const Index = () => {
         <section className="py-16 bg-primary/5">
           <div className="container">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">Simplify Your Mortgage Journey</h2>
+              <h2 className="text-3xl font-bold mb-4">Your Complete Financial Toolkit</h2>
               <p className="text-muted-foreground">
-                Our powerful tools make finding and comparing mortgage rates easy
+                Everything you need to make smart financial decisions in one place
               </p>
             </div>
             
@@ -136,11 +141,11 @@ const Index = () => {
               <Card className="border-0 shadow-sm">
                 <CardHeader>
                   <div className="mb-2 bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center">
-                    <Calculator className="h-6 w-6 text-primary" />
+                    <TrendingUp className="h-6 w-6 text-primary" />
                   </div>
-                  <CardTitle>Accurate Calculators</CardTitle>
+                  <CardTitle>Rate Comparisons</CardTitle>
                   <CardDescription>
-                    Calculate mortgage payments, interest, and more with our easy-to-use calculators.
+                    Compare savings, CD, and loan rates from hundreds of financial institutions.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -148,11 +153,11 @@ const Index = () => {
               <Card className="border-0 shadow-sm">
                 <CardHeader>
                   <div className="mb-2 bg-finance-orange/10 w-12 h-12 rounded-lg flex items-center justify-center">
-                    <ChartLine className="h-6 w-6 text-finance-orange" />
+                    <Calculator className="h-6 w-6 text-finance-orange" />
                   </div>
-                  <CardTitle>Compare Rates</CardTitle>
+                  <CardTitle>Financial Calculators</CardTitle>
                   <CardDescription>
-                    Compare mortgage rates from hundreds of lenders in real-time.
+                    Plan your finances with our comprehensive calculator suite.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -162,9 +167,9 @@ const Index = () => {
                   <div className="mb-2 bg-finance-green/10 w-12 h-12 rounded-lg flex items-center justify-center">
                     <Shield className="h-6 w-6 text-finance-green" />
                   </div>
-                  <CardTitle>Secure Process</CardTitle>
+                  <CardTitle>Secure & Private</CardTitle>
                   <CardDescription>
-                    Your information is always secure and never shared without permission.
+                    Your financial data is always secure and never shared without permission.
                   </CardDescription>
                 </CardHeader>
               </Card>

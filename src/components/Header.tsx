@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { ToolsDropdown } from "./ToolsDropdown";
+import { FinancialToolsDropdown } from "./FinancialToolsDropdown";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -66,21 +66,21 @@ function NavLinks({ className }: NavLinksProps) {
   return (
     <ul className={cn("flex items-center gap-6", className)}>
       <li>
-        <Link to="/mortgage" className="text-sm font-medium transition-colors hover:text-primary">
-          Mortgage
+        <Link to="/savings-rates" className="text-sm font-medium transition-colors hover:text-primary">
+          Savings Rates
         </Link>
       </li>
       <li>
-        <Link to="/refinance" className="text-sm font-medium transition-colors hover:text-primary">
-          Refinance
+        <Link to="/personal-loans" className="text-sm font-medium transition-colors hover:text-primary">
+          Personal Loans
         </Link>
       </li>
       <li>
-        <ToolsDropdown />
+        <FinancialToolsDropdown />
       </li>
       <li>
-        <Link to="/rates" className="text-sm font-medium transition-colors hover:text-primary">
-          Rates
+        <Link to="/credit-cards" className="text-sm font-medium transition-colors hover:text-primary">
+          Credit Cards
         </Link>
       </li>
       <li>

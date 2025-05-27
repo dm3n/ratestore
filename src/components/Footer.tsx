@@ -14,27 +14,27 @@ export function Footer() {
               <span className="font-bold text-xl">RateStore</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
-              Helping you find the best mortgage rates and calculate payments for your dream home.
+              Your trusted source for financial rate comparisons and comprehensive financial planning tools.
             </p>
           </div>
           
           <div>
-            <h3 className="font-semibold mb-3">Products</h3>
+            <h3 className="font-semibold mb-3">Rate Comparisons</h3>
             <ul className="space-y-2">
-              <li><Link to="/mortgage" className="text-sm text-muted-foreground hover:text-primary">Mortgage</Link></li>
-              <li><Link to="/refinance" className="text-sm text-muted-foreground hover:text-primary">Refinance</Link></li>
-              <li><Link to="/home-equity" className="text-sm text-muted-foreground hover:text-primary">Home Equity</Link></li>
-              <li><Link to="/rates" className="text-sm text-muted-foreground hover:text-primary">Mortgage Rates</Link></li>
+              <li><Link to="/savings-rates" className="text-sm text-muted-foreground hover:text-primary">Savings Rates</Link></li>
+              <li><Link to="/personal-loans" className="text-sm text-muted-foreground hover:text-primary">Personal Loans</Link></li>
+              <li><Link to="/credit-cards" className="text-sm text-muted-foreground hover:text-primary">Credit Cards</Link></li>
+              <li><Link to="/cd-rates" className="text-sm text-muted-foreground hover:text-primary">CD Rates</Link></li>
             </ul>
           </div>
           
           <div>
-            <h3 className="font-semibold mb-3">Resources</h3>
+            <h3 className="font-semibold mb-3">Financial Tools</h3>
             <ul className="space-y-2">
-              <li><Link to="/calculator" className="text-sm text-muted-foreground hover:text-primary">Mortgage Calculator</Link></li>
-              <li><Link to="/affordability" className="text-sm text-muted-foreground hover:text-primary">Affordability Calculator</Link></li>
-              <li><Link to="/refinance-calculator" className="text-sm text-muted-foreground hover:text-primary">Refinance Calculator</Link></li>
-              <li><Link to="/learning" className="text-sm text-muted-foreground hover:text-primary">Learning Center</Link></li>
+              <li><Link to="/tools/compound-interest" className="text-sm text-muted-foreground hover:text-primary">Compound Interest Calculator</Link></li>
+              <li><Link to="/tools/debt-payoff" className="text-sm text-muted-foreground hover:text-primary">Debt Payoff Calculator</Link></li>
+              <li><Link to="/tools/retirement" className="text-sm text-muted-foreground hover:text-primary">Retirement Calculator</Link></li>
+              <li><Link to="/tools/emergency-fund" className="text-sm text-muted-foreground hover:text-primary">Emergency Fund Calculator</Link></li>
             </ul>
           </div>
           
