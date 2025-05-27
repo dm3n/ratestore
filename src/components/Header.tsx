@@ -5,11 +5,14 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/contexts/AuthContext";
 import { FinancialToolsDropdown } from "./FinancialToolsDropdown";
+import { UserMenu } from "./UserMenu";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
+  const { user } = useAuth();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -31,14 +34,27 @@ export function Header() {
           <nav className="flex items-center gap-6">
             <NavLinks className="hidden md:flex" />
             <div className="hidden md:flex items-center gap-2">
-              <Button variant="ghost" size="sm">Log in</Button>
-              <Button size="sm">Get Started</Button>
+              {user ? (
+                <UserMenu />
+              ) : (
+                <>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/auth">Log in</Link>
+                  </Button>
+                  <Button size="sm" asChild>
+                    <Link to="/auth">Get Started</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </nav>
         ) : (
-          <Button variant="ghost" size="icon" onClick={toggleMobileMenu}>
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </Button>
+          <div className="flex items-center gap-2">
+            {user && <UserMenu />}
+            <Button variant="ghost" size="icon" onClick={toggleMobileMenu}>
+              {mobileMenuOpen ? <X /> : <Menu />}
+            </Button>
+          </div>
         )}
       </div>
       
@@ -47,10 +63,16 @@ export function Header() {
         <div className="fixed inset-0 top-16 z-50 bg-background">
           <div className="container py-4">
             <NavLinks className="flex flex-col space-y-4" />
-            <div className="mt-6 flex flex-col gap-2">
-              <Button variant="outline" className="w-full justify-center">Log in</Button>
-              <Button className="w-full justify-center">Get Started</Button>
-            </div>
+            {!user && (
+              <div className="mt-6 flex flex-col gap-2">
+                <Button variant="outline" className="w-full justify-center" asChild>
+                  <Link to="/auth">Log in</Link>
+                </Button>
+                <Button className="w-full justify-center" asChild>
+                  <Link to="/auth">Get Started</Link>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}
