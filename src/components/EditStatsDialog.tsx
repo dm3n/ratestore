@@ -34,19 +34,41 @@ export function EditStatsDialog({ open, onOpenChange, stats, onRefresh }: EditSt
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: 'Error',
+        description: 'You must be logged in to update financial goals',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const { error } = await supabase
+      console.log('Updating dashboard stats for user:', user.id);
+      console.log('Form data:', formData);
+
+      // Use upsert to either update existing record or create new one
+      const { data, error } = await supabase
         .from('user_dashboard_stats')
         .upsert({
           user_id: user.id,
-          ...formData,
+          total_savings: Number(formData.total_savings),
+          monthly_budget: Number(formData.monthly_budget),
+          savings_goal: Number(formData.savings_goal),
+          emergency_fund: Number(formData.emergency_fund),
           updated_at: new Date().toISOString(),
-        });
+        }, {
+          onConflict: 'user_id'
+        })
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Successfully updated dashboard stats:', data);
 
       toast({
         title: 'Success',
@@ -55,11 +77,11 @@ export function EditStatsDialog({ open, onOpenChange, stats, onRefresh }: EditSt
       
       onRefresh();
       onOpenChange(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating stats:', error);
       toast({
         title: 'Error',
-        description: 'Failed to update financial goals',
+        description: error.message || 'Failed to update financial goals',
         variant: 'destructive',
       });
     } finally {
@@ -91,6 +113,7 @@ export function EditStatsDialog({ open, onOpenChange, stats, onRefresh }: EditSt
               id="total_savings"
               type="number"
               step="0.01"
+              min="0"
               value={formData.total_savings}
               onChange={(e) => handleInputChange('total_savings', e.target.value)}
             />
@@ -102,6 +125,7 @@ export function EditStatsDialog({ open, onOpenChange, stats, onRefresh }: EditSt
               id="monthly_budget"
               type="number"
               step="0.01"
+              min="0"
               value={formData.monthly_budget}
               onChange={(e) => handleInputChange('monthly_budget', e.target.value)}
             />
@@ -113,6 +137,7 @@ export function EditStatsDialog({ open, onOpenChange, stats, onRefresh }: EditSt
               id="savings_goal"
               type="number"
               step="0.01"
+              min="0"
               value={formData.savings_goal}
               onChange={(e) => handleInputChange('savings_goal', e.target.value)}
             />
@@ -124,6 +149,7 @@ export function EditStatsDialog({ open, onOpenChange, stats, onRefresh }: EditSt
               id="emergency_fund"
               type="number"
               step="0.01"
+              min="0"
               value={formData.emergency_fund}
               onChange={(e) => handleInputChange('emergency_fund', e.target.value)}
             />
