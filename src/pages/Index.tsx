@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calculator, TrendingUp, PiggyBank, BarChart3, Shield, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -31,11 +32,15 @@ const Index = () => {
                 decisions with our comprehensive financial tools and rate comparisons.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="gap-2">
-                  Get Started <Calculator className="h-5 w-5" />
+                <Button size="lg" className="gap-2" asChild>
+                  <Link to="/auth">
+                    Get Started <Calculator className="h-5 w-5" />
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
-                  View Best Rates <TrendingUp className="h-5 w-5" />
+                <Button size="lg" variant="outline" className="gap-2" asChild>
+                  <Link to="/savings-rates">
+                    View Best Rates <TrendingUp className="h-5 w-5" />
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -108,13 +113,17 @@ const Index = () => {
                         </CardHeader>
                         <CardContent className="pt-6">
                           <div className="grid gap-4 md:grid-cols-2">
-                            <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                              <PiggyBank className="h-6 w-6" />
-                              <span>Emergency Fund</span>
+                            <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                              <Link to="/tools/emergency-fund">
+                                <PiggyBank className="h-6 w-6" />
+                                <span>Emergency Fund</span>
+                              </Link>
                             </Button>
-                            <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                              <BarChart3 className="h-6 w-6" />
-                              <span>Retirement Planning</span>
+                            <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                              <Link to="/tools/retirement">
+                                <BarChart3 className="h-6 w-6" />
+                                <span>Retirement Planning</span>
+                              </Link>
                             </Button>
                           </div>
                         </CardContent>

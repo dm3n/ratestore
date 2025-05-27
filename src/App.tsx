@@ -12,6 +12,13 @@ import CreditCards from '@/pages/CreditCards';
 import About from '@/pages/About';
 import Auth from '@/pages/Auth';
 import NotFound from '@/pages/NotFound';
+import Contact from '@/pages/Contact';
+import Blog from '@/pages/Blog';
+import Careers from '@/pages/Careers';
+import Privacy from '@/pages/Privacy';
+import Terms from '@/pages/Terms';
+import Disclosure from '@/pages/Disclosure';
+import CDRates from '@/pages/CDRates';
 import CompoundInterestCalculator from '@/pages/tools/CompoundInterestCalculator';
 import DebtPayoffCalculator from '@/pages/tools/DebtPayoffCalculator';
 import ROICalculator from '@/pages/tools/ROICalculator';
@@ -40,7 +47,14 @@ function App() {
           <Route path="/savings-rates" element={<SavingsRates />} />
           <Route path="/personal-loans" element={<PersonalLoans />} />
           <Route path="/credit-cards" element={<CreditCards />} />
+          <Route path="/cd-rates" element={<CDRates />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/disclosure" element={<Disclosure />} />
           <Route path="/tools/compound-interest" element={<CompoundInterestCalculator />} />
           <Route path="/tools/debt-payoff" element={<DebtPayoffCalculator />} />
           <Route path="/tools/roi-calculator" element={<ROICalculator />} />
