@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -10,10 +11,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { User, LogOut, Settings } from 'lucide-react';
+import { User, LogOut, Settings, LayoutDashboard } from 'lucide-react';
 
 export function UserMenu() {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleSignOut = async () => {
@@ -25,6 +27,10 @@ export function UserMenu() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
   };
 
   if (!user) return null;
@@ -39,16 +45,22 @@ export function UserMenu() {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Account</p>
+            <p className="text-sm font-medium leading-none">
+              {user.user_metadata?.full_name || 'Account'}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
               {user.email}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleNavigation('/dashboard')}>
+          <LayoutDashboard className="mr-2 h-4 w-4" />
+          <span>Dashboard</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleNavigation('/profile')}>
           <Settings className="mr-2 h-4 w-4" />
-          <span>Settings</span>
+          <span>Profile</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} disabled={loading}>

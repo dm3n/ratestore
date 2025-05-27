@@ -36,6 +36,122 @@ export type Database = {
         }
         Relationships: []
       }
+      user_accounts: {
+        Row: {
+          account_name: string
+          account_type: string
+          balance: number
+          created_at: string
+          id: string
+          institution: string | null
+          interest_rate: number | null
+          is_active: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_name: string
+          account_type: string
+          balance?: number
+          created_at?: string
+          id?: string
+          institution?: string | null
+          interest_rate?: number | null
+          is_active?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_name?: string
+          account_type?: string
+          balance?: number
+          created_at?: string
+          id?: string
+          institution?: string | null
+          interest_rate?: number | null
+          is_active?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_dashboard_stats: {
+        Row: {
+          created_at: string
+          emergency_fund: number | null
+          id: string
+          monthly_budget: number | null
+          savings_goal: number | null
+          total_savings: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emergency_fund?: number | null
+          id?: string
+          monthly_budget?: number | null
+          savings_goal?: number | null
+          total_savings?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emergency_fund?: number | null
+          id?: string
+          monthly_budget?: number | null
+          savings_goal?: number | null
+          total_savings?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_transactions: {
+        Row: {
+          account_id: string | null
+          amount: number
+          category: string | null
+          created_at: string
+          description: string
+          id: string
+          transaction_date: string
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          amount: number
+          category?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          transaction_date?: string
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          amount?: number
+          category?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          transaction_date?: string
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_transactions_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

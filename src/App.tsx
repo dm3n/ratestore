@@ -2,7 +2,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 import Index from '@/pages/Index';
+import Dashboard from '@/pages/Dashboard';
+import Profile from '@/pages/Profile';
 import SavingsRates from '@/pages/SavingsRates';
 import PersonalLoans from '@/pages/PersonalLoans';
 import CreditCards from '@/pages/CreditCards';
@@ -24,6 +27,16 @@ function App() {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
           <Route path="/savings-rates" element={<SavingsRates />} />
           <Route path="/personal-loans" element={<PersonalLoans />} />
           <Route path="/credit-cards" element={<CreditCards />} />
