@@ -4,154 +4,167 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Award, Shield, Phone, Mail, MapPin } from "lucide-react";
+import { CheckCircle, Users, Award, Shield, Clock, TrendingUp } from "lucide-react";
 
 const About = () => {
+  const stats = [
+    { label: "Active Users", value: "1M+", icon: Users },
+    { label: "Loans Processed", value: "$50B+", icon: TrendingUp },
+    { label: "Years Experience", value: "15+", icon: Clock },
+    { label: "Lender Partners", value: "500+", icon: Award },
+  ];
+
+  const values = [
+    {
+      title: "Transparency",
+      description: "Clear, upfront pricing with no hidden fees or surprises.",
+      icon: Shield,
+    },
+    {
+      title: "Speed",
+      description: "Fast approvals and streamlined processes to get you into your home quickly.",
+      icon: Clock,
+    },
+    {
+      title: "Support",
+      description: "Expert guidance from our team of mortgage professionals every step of the way.",
+      icon: Users,
+    },
+    {
+      title: "Trust",
+      description: "Thousands of satisfied customers and industry-leading security standards.",
+      icon: Award,
+    },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-primary/5 py-12 md:py-16">
+        <section className="bg-primary/5 py-16 md:py-24">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
-                Est. 2018
-              </Badge>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+              <Badge variant="outline" className="mb-4 bg-primary/10 text-primary border-primary/20">
                 About RateStore
+              </Badge>
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+                Your Trusted Mortgage Partner
               </h1>
-              <p className="text-lg text-muted-foreground mb-6">
-                We're on a mission to make home financing transparent, accessible, and stress-free for everyone.
+              <p className="text-lg text-muted-foreground mb-8">
+                For over 15 years, RateStore has been helping Americans find the best mortgage rates and achieve their homeownership dreams. We've processed over $50 billion in loans and helped more than 1 million families.
               </p>
+              <Button size="lg" className="gap-2">
+                Get Started Today <CheckCircle className="h-5 w-5" />
+              </Button>
             </div>
           </div>
         </section>
-        
-        {/* About Content */}
-        <section className="py-12">
+
+        {/* Stats Section */}
+        <section className="py-16">
           <div className="container">
-            <div className="max-w-4xl mx-auto space-y-12">
-              {/* Mission */}
-              <div className="text-center">
-                <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  To empower homeowners and homebuyers with the tools, information, and access to lenders they need to make informed decisions about their mortgage.
-                </p>
-              </div>
-
-              {/* Stats */}
-              <div className="grid md:grid-cols-3 gap-8">
-                <Card className="text-center">
-                  <CardHeader>
-                    <div className="mx-auto bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mb-2">
-                      <Users className="h-6 w-6 text-primary" />
-                    </div>
-                    <CardTitle className="text-2xl">1M+</CardTitle>
-                    <CardDescription>Happy Customers</CardDescription>
-                  </CardHeader>
-                </Card>
-
-                <Card className="text-center">
-                  <CardHeader>
-                    <div className="mx-auto bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center mb-2">
-                      <Award className="h-6 w-6 text-green-600" />
-                    </div>
-                    <CardTitle className="text-2xl">500+</CardTitle>
-                    <CardDescription>Lending Partners</CardDescription>
-                  </CardHeader>
-                </Card>
-
-                <Card className="text-center">
-                  <CardHeader>
-                    <div className="mx-auto bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-2">
-                      <Shield className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <CardTitle className="text-2xl">$50B+</CardTitle>
-                    <CardDescription>Loans Facilitated</CardDescription>
-                  </CardHeader>
-                </Card>
-              </div>
-
-              {/* Story */}
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                  <h3 className="text-xl font-bold mb-4">Our Story</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Founded in 2018, RateStore began with a simple observation: the mortgage process was too complicated and opaque for most people.
-                  </p>
-                  <p className="text-muted-foreground mb-4">
-                    We set out to change that by creating a platform that puts transparency first, giving you access to real rates from real lenders without the runaround.
-                  </p>
-                  <p className="text-muted-foreground">
-                    Today, we're proud to be a trusted resource for over 1 million homeowners and homebuyers across the country.
-                  </p>
-                </div>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Our Values</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3">
-                      <li className="flex items-start gap-2">
-                        <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0"></div>
-                        <div>
-                          <strong>Transparency:</strong> No hidden fees or surprises
-                        </div>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0"></div>
-                        <div>
-                          <strong>Simplicity:</strong> Making complex processes easy
-                        </div>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0"></div>
-                        <div>
-                          <strong>Trust:</strong> Your information is always secure
-                        </div>
-                      </li>
-                    </ul>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {stats.map((stat, index) => (
+                <Card key={index} className="text-center border-0 shadow-sm">
+                  <CardContent className="pt-6">
+                    <stat.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
+                    <div className="text-2xl font-bold mb-1">{stat.value}</div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
                   </CardContent>
                 </Card>
-              </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-              {/* Contact */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Get in Touch</CardTitle>
-                  <CardDescription>Have questions? We're here to help.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-primary" />
-                      <div>
-                        <div className="font-medium">(555) 123-4567</div>
-                        <div className="text-sm text-muted-foreground">Mon-Fri 8AM-8PM EST</div>
-                      </div>
+        {/* Our Story */}
+        <section className="py-16 bg-primary/5">
+          <div className="container">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold mb-4">Our Story</h2>
+                <p className="text-muted-foreground">How we became America's trusted mortgage platform</p>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h3 className="text-xl font-semibold mb-4">Founded on Trust and Innovation</h3>
+                  <p className="text-muted-foreground mb-4">
+                    RateStore was founded in 2009 with a simple mission: make the mortgage process transparent, fast, and affordable for everyone. We saw how complicated and stressful getting a mortgage could be, and we knew there had to be a better way.
+                  </p>
+                  <p className="text-muted-foreground mb-6">
+                    Today, we're proud to be one of the most trusted names in mortgage lending, with cutting-edge technology and a team of experts dedicated to helping you find the perfect loan.
+                  </p>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">A+ Better Business Bureau Rating</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Licensed in all 50 states</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Award-winning customer service</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="bg-white rounded-lg p-6 shadow-lg">
+                  <img 
+                    src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=500&h=300&fit=crop&crop=center" 
+                    alt="Our team"
+                    className="w-full h-48 object-cover rounded-lg mb-4"
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Our headquarters in Austin, Texas, where innovation meets expertise.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Our Values */}
+        <section className="py-16">
+          <div className="container">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Our Values</h2>
+              <p className="text-muted-foreground">The principles that guide everything we do</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {values.map((value, index) => (
+                <Card key={index} className="text-center border-0 shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader>
+                    <div className="mb-2 bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto">
+                      <value.icon className="h-6 w-6 text-primary" />
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-primary" />
-                      <div>
-                        <div className="font-medium">hello@ratestore.com</div>
-                        <div className="text-sm text-muted-foreground">24/7 email support</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <MapPin className="h-5 w-5 text-primary" />
-                      <div>
-                        <div className="font-medium">San Francisco, CA</div>
-                        <div className="text-sm text-muted-foreground">Headquarters</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-6">
-                    <Button className="w-full md:w-auto">Contact Our Team</Button>
-                  </div>
-                </CardContent>
-              </Card>
+                    <CardTitle className="text-lg">{value.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">{value.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Contact CTA */}
+        <section className="py-16 bg-primary/5">
+          <div className="container">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+              <p className="text-muted-foreground mb-8">
+                Join over 1 million Americans who have trusted RateStore with their mortgage needs.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg">Calculate Your Payment</Button>
+                <Button size="lg" variant="outline">Contact an Expert</Button>
+              </div>
             </div>
           </div>
         </section>

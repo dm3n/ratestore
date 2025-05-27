@@ -43,12 +43,47 @@ export function CalculationResults({
 
   // Data for the pie chart
   const data = [
-    { name: "Principal", value: loanAmount },
-    { name: "Interest", value: totalInterest },
+    { name: "Principal", value: loanAmount, color: "#3b82f6" },
+    { name: "Interest", value: totalInterest, color: "#f59e0b" },
   ];
 
-  // Colors for the pie chart
-  const COLORS = ["#4f46e5", "#f97316"];
+  // Custom tooltip
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+          <p className="font-medium text-gray-900">{payload[0].name}</p>
+          <p className="text-sm text-gray-600">
+            {formatCurrency(payload[0].value)}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Custom label function to prevent overlap
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }: any) => {
+    if (percent < 0.05) return null; // Don't show label if slice is too small
+    
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text 
+        x={x} 
+        y={y} 
+        fill="white" 
+        textAnchor={x > cx ? 'start' : 'end'} 
+        dominantBaseline="central"
+        className="text-sm font-medium"
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
 
   return (
     <Card className="border-0 shadow-lg">
@@ -59,73 +94,87 @@ export function CalculationResults({
       <CardContent className="pt-6">
         <div className="space-y-6">
           {/* Monthly Payment */}
-          <div className="rounded-lg border bg-card p-4">
+          <div className="rounded-lg border bg-gradient-to-r from-blue-50 to-indigo-50 p-6">
             <div className="flex items-center justify-between">
-              <div className="text-sm font-medium">Monthly Payment</div>
-              <div className="text-2xl font-bold">{formatMonthlyPayment(monthlyPayment)}</div>
+              <div className="text-sm font-medium text-gray-600">Monthly Payment</div>
+              <div className="text-3xl font-bold text-blue-600">{formatMonthlyPayment(monthlyPayment)}</div>
             </div>
           </div>
 
           {/* Loan Breakdown */}
           <div className="space-y-4">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center p-3 rounded-lg bg-gray-50">
               <div className="flex items-center">
-                <Wallet className="h-5 w-5 mr-2 text-primary" />
+                <Wallet className="h-5 w-5 mr-2 text-blue-600" />
                 <div className="text-sm font-medium">Loan Amount</div>
               </div>
-              <div className="font-medium">{formatCurrency(loanAmount)}</div>
+              <div className="font-semibold">{formatCurrency(loanAmount)}</div>
             </div>
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center p-3 rounded-lg bg-gray-50">
               <div className="flex items-center">
                 <Calculator className="h-5 w-5 mr-2 text-orange-500" />
                 <div className="text-sm font-medium">Total Interest</div>
               </div>
-              <div className="font-medium">{formatCurrency(totalInterest)}</div>
+              <div className="font-semibold">{formatCurrency(totalInterest)}</div>
             </div>
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center p-3 rounded-lg bg-gray-50">
               <div className="flex items-center">
                 <BadgeDollarSign className="h-5 w-5 mr-2 text-green-600" />
                 <div className="text-sm font-medium">Total Cost</div>
               </div>
-              <div className="font-medium">{formatCurrency(totalPayment)}</div>
+              <div className="font-semibold">{formatCurrency(totalPayment)}</div>
             </div>
 
             <div className="pt-2">
-              <div className="text-xs font-medium mb-1 flex justify-between">
+              <div className="text-xs font-medium mb-2 flex justify-between">
                 <span>Principal vs. Interest</span>
                 <span>{Math.round((loanAmount / totalPayment) * 100)}% Principal</span>
               </div>
-              <Progress value={(loanAmount / totalPayment) * 100} className="h-2" />
+              <Progress value={(loanAmount / totalPayment) * 100} className="h-3" />
             </div>
           </div>
 
-          {/* Payment Breakdown Chart */}
+          {/* Modern Payment Breakdown Chart */}
           <div className="pt-4">
-            <h3 className="text-sm font-medium mb-2">Payment Breakdown</h3>
-            <div className="h-[200px] w-full">
+            <h3 className="text-lg font-semibold mb-4 text-center">Payment Breakdown</h3>
+            <div className="h-[280px] w-full relative">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={data}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    outerRadius={100}
+                    innerRadius={40}
                     fill="#8884d8"
-                    paddingAngle={2}
                     dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    stroke="#ffffff"
+                    strokeWidth={3}
                   >
                     {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => formatCurrency(Number(value))} />
-                  <Legend />
+                  <Tooltip content={<CustomTooltip />} />
                 </PieChart>
               </ResponsiveContainer>
+              
+              {/* Custom Legend */}
+              <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-6">
+                {data.map((entry, index) => (
+                  <div key={entry.name} className="flex items-center gap-2">
+                    <div 
+                      className="w-4 h-4 rounded-full" 
+                      style={{ backgroundColor: entry.color }}
+                    />
+                    <span className="text-sm font-medium text-gray-700">{entry.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
