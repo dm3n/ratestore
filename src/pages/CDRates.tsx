@@ -1,7 +1,7 @@
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { RateTable } from "@/components/RateTable";
+import { CDRatesTable } from "@/components/CDRatesTable";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Shield, Clock } from "lucide-react";
@@ -71,15 +71,9 @@ const CDRates = () => {
             <div className="max-w-6xl mx-auto">
               <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
                 <div>
-                  <RateTable 
+                  <CDRatesTable 
                     rates={cdRates}
                     title="Top CD Rates - 12 Month Terms"
-                    columns={[
-                      { key: 'institution', label: 'Bank/Credit Union' },
-                      { key: 'apy', label: 'APY' },
-                      { key: 'minDeposit', label: 'Min Deposit' },
-                      { key: 'term', label: 'Term' }
-                    ]}
                   />
                 </div>
                 
