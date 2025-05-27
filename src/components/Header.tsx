@@ -2,9 +2,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ToolsDropdown } from "./ToolsDropdown";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -75,10 +76,7 @@ function NavLinks({ className }: NavLinksProps) {
         </Link>
       </li>
       <li>
-        <div className="flex items-center text-sm font-medium transition-colors hover:text-primary cursor-pointer">
-          <span>Tools</span>
-          <ChevronDown className="ml-1 h-4 w-4" />
-        </div>
+        <ToolsDropdown />
       </li>
       <li>
         <Link to="/rates" className="text-sm font-medium transition-colors hover:text-primary">
