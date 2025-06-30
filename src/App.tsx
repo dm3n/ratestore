@@ -20,6 +20,9 @@ import Privacy from '@/pages/Privacy';
 import Terms from '@/pages/Terms';
 import Disclosure from '@/pages/Disclosure';
 import CDRates from '@/pages/CDRates';
+import Mortgages from '@/pages/Mortgages';
+import Investing from '@/pages/Investing';
+import Insurance from '@/pages/Insurance';
 import CompoundInterestCalculator from '@/pages/tools/CompoundInterestCalculator';
 import DebtPayoffCalculator from '@/pages/tools/DebtPayoffCalculator';
 import ROICalculator from '@/pages/tools/ROICalculator';
@@ -45,10 +48,18 @@ function App() {
               <Profile />
             </ProtectedRoute>
           } />
+          
+          {/* Financial Products */}
+          <Route path="/mortgages" element={<Mortgages />} />
+          <Route path="/credit-cards" element={<CreditCards />} />
+          <Route path="/banking" element={<SavingsRates />} />
           <Route path="/savings-rates" element={<SavingsRates />} />
           <Route path="/personal-loans" element={<PersonalLoans />} />
-          <Route path="/credit-cards" element={<CreditCards />} />
           <Route path="/cd-rates" element={<CDRates />} />
+          <Route path="/investing" element={<Investing />} />
+          <Route path="/insurance" element={<Insurance />} />
+          
+          {/* Company Pages */}
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/blog" element={<Blog />} />
@@ -57,12 +68,15 @@ function App() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/disclosure" element={<Disclosure />} />
+          
+          {/* Financial Tools */}
           <Route path="/tools/compound-interest" element={<CompoundInterestCalculator />} />
           <Route path="/tools/debt-payoff" element={<DebtPayoffCalculator />} />
           <Route path="/tools/roi-calculator" element={<ROICalculator />} />
           <Route path="/tools/retirement" element={<RetirementCalculator />} />
           <Route path="/tools/emergency-fund" element={<EmergencyFundCalculator />} />
           <Route path="/tools/loan-comparison" element={<LoanComparisonTool />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />

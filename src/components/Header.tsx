@@ -6,7 +6,6 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
-import { FinancialToolsDropdown } from "./FinancialToolsDropdown";
 import { UserMenu } from "./UserMenu";
 
 export function Header() {
@@ -23,10 +22,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
-            <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gradient-to-br from-primary to-indigo-600">
-              <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg">R</div>
-            </div>
-            <span className="font-bold text-xl">RateStore</span>
+            <span className="font-bold text-xl text-primary">ratehub.ca</span>
           </Link>
         </div>
         
@@ -39,14 +35,9 @@ export function Header() {
               {user ? (
                 <UserMenu />
               ) : (
-                <>
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link to="/auth">Log in</Link>
-                  </Button>
-                  <Button size="sm" asChild>
-                    <Link to="/auth">Get Started</Link>
-                  </Button>
-                </>
+                <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white">
+                  <Link to="/auth">Sign In</Link>
+                </Button>
               )}
             </div>
           </>
@@ -67,11 +58,8 @@ export function Header() {
             <NavLinks className="flex flex-col space-y-4" />
             {!user && (
               <div className="mt-6 flex flex-col gap-2">
-                <Button variant="outline" className="w-full justify-center" asChild>
-                  <Link to="/auth">Log in</Link>
-                </Button>
-                <Button className="w-full justify-center" asChild>
-                  <Link to="/auth">Get Started</Link>
+                <Button variant="outline" className="w-full justify-center border-primary text-primary hover:bg-primary hover:text-white" asChild>
+                  <Link to="/auth">Sign In</Link>
                 </Button>
               </div>
             )}
@@ -88,19 +76,11 @@ interface NavLinksProps {
 
 function NavLinks({ className }: NavLinksProps) {
   return (
-    <ul className={cn("flex items-center gap-6", className)}>
+    <ul className={cn("flex items-center gap-8", className)}>
       <li>
-        <Link to="/savings-rates" className="text-sm font-medium transition-colors hover:text-primary">
-          Savings Rates
+        <Link to="/mortgages" className="text-sm font-medium transition-colors hover:text-primary">
+          Mortgages
         </Link>
-      </li>
-      <li>
-        <Link to="/personal-loans" className="text-sm font-medium transition-colors hover:text-primary">
-          Personal Loans
-        </Link>
-      </li>
-      <li>
-        <FinancialToolsDropdown />
       </li>
       <li>
         <Link to="/credit-cards" className="text-sm font-medium transition-colors hover:text-primary">
@@ -108,8 +88,28 @@ function NavLinks({ className }: NavLinksProps) {
         </Link>
       </li>
       <li>
-        <Link to="/about" className="text-sm font-medium transition-colors hover:text-primary">
-          About
+        <Link to="/banking" className="text-sm font-medium transition-colors hover:text-primary">
+          Banking
+        </Link>
+      </li>
+      <li>
+        <Link to="/personal-loans" className="text-sm font-medium transition-colors hover:text-primary">
+          Loans
+        </Link>
+      </li>
+      <li>
+        <Link to="/investing" className="text-sm font-medium transition-colors hover:text-primary">
+          Investing
+        </Link>
+      </li>
+      <li>
+        <Link to="/insurance" className="text-sm font-medium transition-colors hover:text-primary">
+          Insurance
+        </Link>
+      </li>
+      <li>
+        <Link to="/blog" className="text-sm font-medium transition-colors hover:text-primary">
+          Blog
         </Link>
       </li>
     </ul>
