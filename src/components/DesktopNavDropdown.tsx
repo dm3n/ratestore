@@ -55,9 +55,11 @@ const navCategories: NavCategory[] = [
         links: [
           { name: "Mortgage payment calculator", href: "/tools/mortgage-calculator" },
           { name: "Mortgage affordability calculator", href: "/tools/affordability" },
+          { name: "Down payment calculator", href: "/tools/down-payment" },
+          { name: "Amortization schedule", href: "/tools/amortization" },
+          { name: "Extra payment calculator", href: "/tools/extra-payment" },
           { name: "Mortgage renewal calculator", href: "/tools/renewal" },
-          { name: "Mortgage refinance calculator", href: "/tools/refinance" },
-          { name: "Mortgage down payment calculator", href: "/tools/down-payment" },
+          { name: "Mortgage refinance calculator", href: "/refinance" },
           { name: "Land transfer tax calculator", href: "/tools/land-transfer-tax" },
         ]
       },

@@ -26,7 +26,7 @@ const tools: Tool[] = [
     name: "Mortgage Calculator",
     description: "Calculate monthly payments and total costs",
     icon: Calculator,
-    href: "/mortgage",
+    href: "/tools/mortgage-calculator",
     category: "calculators"
   },
   {

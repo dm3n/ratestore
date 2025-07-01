@@ -38,12 +38,18 @@ import BC from '@/pages/mortgages/BC';
 import Ontario from '@/pages/mortgages/Ontario';
 import Quebec from '@/pages/mortgages/Quebec';
 import Historical from '@/pages/mortgages/Historical';
+import Mortgage from '@/pages/mortgages/Mortgage';
+import Refinance from '@/pages/mortgages/Refinance';
+import DownPaymentCalculator from '@/pages/tools/DownPaymentCalculator';
+import ExtraPaymentCalculator from '@/pages/tools/ExtraPaymentCalculator';
 import CompoundInterestCalculator from '@/pages/tools/CompoundInterestCalculator';
 import DebtPayoffCalculator from '@/pages/tools/DebtPayoffCalculator';
 import ROICalculator from '@/pages/tools/ROICalculator';
 import RetirementCalculator from '@/pages/tools/RetirementCalculator';
 import EmergencyFundCalculator from '@/pages/tools/EmergencyFundCalculator';
 import LoanComparisonTool from '@/pages/tools/LoanComparisonTool';
+import AmortizationSchedule from '@/pages/tools/AmortizationSchedule';
+import AffordabilityCalculator from '@/pages/tools/AffordabilityCalculator';
 import './App.css';
 import Terms from '@/pages/mortgages/Terms';
 import Compare from '@/pages/mortgages/Compare';
@@ -110,6 +116,13 @@ function App() {
           <Route path="/disclosure" element={<Disclosure />} />
           
           {/* Financial Tools */}
+          <Route path="/mortgage" element={<Mortgage />} />
+          <Route path="/refinance" element={<Refinance />} />
+          <Route path="/tools/mortgage-calculator" element={<Mortgage />} />
+          <Route path="/tools/affordability" element={<AffordabilityCalculator />} />
+          <Route path="/tools/down-payment" element={<DownPaymentCalculator />} />
+          <Route path="/tools/amortization" element={<AmortizationSchedule />} />
+          <Route path="/tools/extra-payment" element={<ExtraPaymentCalculator />} />
           <Route path="/tools/compound-interest" element={<CompoundInterestCalculator />} />
           <Route path="/tools/debt-payoff" element={<DebtPayoffCalculator />} />
           <Route path="/tools/roi-calculator" element={<ROICalculator />} />
