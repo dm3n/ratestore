@@ -38,7 +38,7 @@ export function AdminRateManager() {
     lender_type: 'bank',
     rate_type: 'fixed',
     term: '5-yr',
-    base_rate: 0,
+    base_rate: 3.84,
     min_down_payment: 0.05,
     max_loan_to_value: 0.95,
     transaction_types: ['buying'],
@@ -88,7 +88,7 @@ export function AdminRateManager() {
           lender_type: editingRate.lender_type,
           rate_type: editingRate.rate_type,
           term: editingRate.term,
-          base_rate: editingRate.base_rate,
+          base_rate: editingRate.base_rate / 100, // Convert percentage to decimal for storage
           min_down_payment: editingRate.min_down_payment,
           max_loan_to_value: editingRate.max_loan_to_value,
           transaction_types: editingRate.transaction_types,
@@ -151,6 +151,7 @@ export function AdminRateManager() {
         .from('mortgage_rates')
         .insert([{
           ...newRate,
+          base_rate: newRate.base_rate / 100, // Convert percentage to decimal for storage
           prime_discount: newRate.prime_discount || null
         }]);
 
@@ -167,7 +168,7 @@ export function AdminRateManager() {
         lender_type: 'bank',
         rate_type: 'fixed',
         term: '5-yr',
-        base_rate: 0,
+        base_rate: 3.84,
         min_down_payment: 0.05,
         max_loan_to_value: 0.95,
         transaction_types: ['buying'],
@@ -252,12 +253,15 @@ export function AdminRateManager() {
                 </Select>
               </div>
               <div>
-                <Label>Base Rate (decimal)</Label>
+                <Label>Base Rate (%)</Label>
                 <Input
                   type="number"
-                  step="0.0001"
+                  step="0.01"
+                  min="1"
+                  max="10"
                   value={newRate.base_rate}
                   onChange={(e) => setNewRate({...newRate, base_rate: parseFloat(e.target.value) || 0})}
+                  placeholder="e.g., 3.84"
                 />
               </div>
               <div>
@@ -316,9 +320,12 @@ export function AdminRateManager() {
                     {editingId === rate.id ? (
                       <Input
                         type="number"
-                        step="0.0001"
-                        value={editingRate?.base_rate || 0}
+                        step="0.01"
+                        min="1"
+                        max="10"
+                        value={editingRate ? (editingRate.base_rate * 100).toFixed(2) : 0}
                         onChange={(e) => setEditingRate(prev => prev ? {...prev, base_rate: parseFloat(e.target.value) || 0} : null)}
+                        placeholder="e.g., 3.84"
                       />
                     ) : (
                       `${(rate.base_rate * 100).toFixed(2)}%`
