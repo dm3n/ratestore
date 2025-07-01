@@ -312,12 +312,21 @@ interface MobileNavLinksProps {
 
 function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
   const [openSections, setOpenSections] = useState<string[]>([]);
+  const [openSubSections, setOpenSubSections] = useState<string[]>([]);
 
   const toggleSection = (sectionTitle: string) => {
     setOpenSections(prev => 
       prev.includes(sectionTitle) 
         ? prev.filter(s => s !== sectionTitle)
         : [...prev, sectionTitle]
+    );
+  };
+
+  const toggleSubSection = (subSectionTitle: string) => {
+    setOpenSubSections(prev => 
+      prev.includes(subSectionTitle) 
+        ? prev.filter(s => s !== subSectionTitle)
+        : [...prev, subSectionTitle]
     );
   };
 
@@ -347,16 +356,34 @@ function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
               View All {category.title}
             </Link>
             
-            {/* Subcategory section headers only */}
+            {/* Subcategory sections with nested expansion */}
             {category.sections.map((section) => (
-              <Link
+              <Collapsible
                 key={section.title}
-                to={section.href}
-                onClick={onLinkClick}
-                className="block px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                open={openSubSections.includes(section.title)}
+                onOpenChange={() => toggleSubSection(section.title)}
               >
-                {section.title}
-              </Link>
+                <CollapsibleTrigger className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span>{section.title}</span>
+                  {openSubSections.includes(section.title) ? (
+                    <ChevronDown className="h-3 w-3 text-gray-400" />
+                  ) : (
+                    <ChevronRight className="h-3 w-3 text-gray-400" />
+                  )}
+                </CollapsibleTrigger>
+                <CollapsibleContent className="ml-4 mt-1 space-y-1">
+                  {section.links.map((link) => (
+                    <Link
+                      key={link.name}
+                      to={link.href}
+                      onClick={onLinkClick}
+                      className="block px-3 py-2 text-xs text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
             ))}
           </CollapsibleContent>
         </Collapsible>
