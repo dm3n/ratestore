@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Balance, Shield, TrendingUp, Star } from "lucide-react";
+import { Scale, Shield, TrendingUp, Star } from "lucide-react";
 
 const ThreeYearFixed = () => {
   const threeYearRates = [
@@ -18,7 +18,7 @@ const ThreeYearFixed = () => {
 
   const benefits = [
     {
-      icon: Balance,
+      icon: Scale,
       title: "Balanced Approach",
       description: "Good balance between rate and term security"
     },
@@ -43,7 +43,7 @@ const ThreeYearFixed = () => {
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
               <Badge variant="outline" className="mb-6 bg-purple-100 text-purple-700 border-purple-200">
-                <Balance className="h-3 w-3 mr-1" />
+                <Scale className="h-3 w-3 mr-1" />
                 Balanced Choice
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
