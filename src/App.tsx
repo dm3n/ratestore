@@ -32,6 +32,12 @@ import ThreeYearFixed from '@/pages/mortgages/ThreeYearFixed';
 import ThreeYearVariable from '@/pages/mortgages/ThreeYearVariable';
 import FiveYearVariable from '@/pages/mortgages/FiveYearVariable';
 import HELOCRates from '@/pages/mortgages/HELOCRates';
+import BankRates from '@/pages/mortgages/BankRates';
+import Alberta from '@/pages/mortgages/Alberta';
+import BC from '@/pages/mortgages/BC';
+import Ontario from '@/pages/mortgages/Ontario';
+import Quebec from '@/pages/mortgages/Quebec';
+import Historical from '@/pages/mortgages/Historical';
 import CompoundInterestCalculator from '@/pages/tools/CompoundInterestCalculator';
 import DebtPayoffCalculator from '@/pages/tools/DebtPayoffCalculator';
 import ROICalculator from '@/pages/tools/ROICalculator';
@@ -61,6 +67,7 @@ function App() {
           {/* Financial Products */}
           <Route path="/mortgages" element={<Mortgages />} />
           <Route path="/mortgages/compare-rates" element={<CompareRates />} />
+          <Route path="/mortgages/compare" element={<CompareRates />} />
           <Route path="/mortgages/best-rates" element={<BestRates />} />
           <Route path="/mortgages/renewal-rates" element={<RenewalRates />} />
           <Route path="/mortgages/5-year-fixed" element={<FiveYearFixed />} />
@@ -69,6 +76,12 @@ function App() {
           <Route path="/mortgages/3-year-variable" element={<ThreeYearVariable />} />
           <Route path="/mortgages/5-year-variable" element={<FiveYearVariable />} />
           <Route path="/mortgages/heloc" element={<HELOCRates />} />
+          <Route path="/mortgages/bank-rates" element={<BankRates />} />
+          <Route path="/mortgages/alberta" element={<Alberta />} />
+          <Route path="/mortgages/bc" element={<BC />} />
+          <Route path="/mortgages/ontario" element={<Ontario />} />
+          <Route path="/mortgages/quebec" element={<Quebec />} />
+          <Route path="/mortgages/historical" element={<Historical />} />
           
           <Route path="/credit-cards" element={<CreditCards />} />
           <Route path="/banking" element={<SavingsRates />} />
