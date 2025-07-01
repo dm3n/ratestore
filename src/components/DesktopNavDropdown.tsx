@@ -388,7 +388,9 @@ export function DesktopNavDropdown() {
                         {section.links.length > 6 && (
                           <li>
                             <Link
-                              to={`/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                              to={section.title === "Compare mortgage rates" ? "/mortgages/compare" : 
+                                  section.title === "Mortgage terms" ? "/mortgages/terms" :
+                                  `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
                               className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
                             >
                               View all {section.title.toLowerCase()} →
