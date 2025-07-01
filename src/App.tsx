@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -51,6 +50,8 @@ import EmergencyFundCalculator from '@/pages/tools/EmergencyFundCalculator';
 import LoanComparisonTool from '@/pages/tools/LoanComparisonTool';
 import AmortizationSchedule from '@/pages/tools/AmortizationSchedule';
 import AffordabilityCalculator from '@/pages/tools/AffordabilityCalculator';
+import RenewalCalculator from '@/pages/tools/RenewalCalculator';
+import CalculatorsOverview from '@/pages/tools/CalculatorsOverview';
 import './App.css';
 import Terms from '@/pages/mortgages/Terms';
 import Compare from '@/pages/mortgages/Compare';
@@ -117,6 +118,8 @@ function App() {
           <Route path="/disclosure" element={<Disclosure />} />
           
           {/* Financial Tools */}
+          <Route path="/tools" element={<CalculatorsOverview />} />
+          <Route path="/tools/calculators" element={<CalculatorsOverview />} />
           <Route path="/mortgage" element={<Mortgage />} />
           <Route path="/refinance" element={<Refinance />} />
           <Route path="/tools/mortgage-calculator" element={<Mortgage />} />
@@ -124,6 +127,7 @@ function App() {
           <Route path="/tools/down-payment" element={<DownPaymentCalculator />} />
           <Route path="/tools/amortization" element={<AmortizationSchedule />} />
           <Route path="/tools/extra-payment" element={<ExtraPaymentCalculator />} />
+          <Route path="/tools/renewal" element={<RenewalCalculator />} />
           <Route path="/tools/compound-interest" element={<CompoundInterestCalculator />} />
           <Route path="/tools/debt-payoff" element={<DebtPayoffCalculator />} />
           <Route path="/tools/roi-calculator" element={<ROICalculator />} />
