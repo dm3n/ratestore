@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -74,7 +73,11 @@ export function AdminRateManager() {
 
   const handleEdit = (rate: MortgageRate) => {
     setEditingId(rate.id);
-    setEditingRate({ ...rate });
+    // Convert decimal to percentage for editing
+    setEditingRate({ 
+      ...rate, 
+      base_rate: rate.base_rate * 100 
+    });
   };
 
   const handleSave = async () => {
@@ -323,7 +326,7 @@ export function AdminRateManager() {
                         step="0.01"
                         min="1"
                         max="10"
-                        value={editingRate ? (editingRate.base_rate * 100).toFixed(2) : 0}
+                        value={editingRate?.base_rate || 0}
                         onChange={(e) => setEditingRate(prev => prev ? {...prev, base_rate: parseFloat(e.target.value) || 0} : null)}
                         placeholder="e.g., 3.84"
                       />
