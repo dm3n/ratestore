@@ -1,8 +1,8 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import ScrollToTop from '@/components/ScrollToTop';
 import Index from '@/pages/Index';
 import Dashboard from '@/pages/Dashboard';
 import Admin from '@/pages/Admin';
@@ -61,6 +61,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
