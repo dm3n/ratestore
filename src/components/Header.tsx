@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserMenu } from "./UserMenu";
+import { DesktopNavDropdown } from "./DesktopNavDropdown";
 import {
   Sheet,
   SheetContent,
@@ -36,7 +37,7 @@ export function Header() {
         {!isMobile ? (
           <>
             <nav className="flex-1 flex justify-center">
-              <NavLinks className="hidden md:flex" />
+              <DesktopNavDropdown />
             </nav>
             <div className="hidden md:flex items-center gap-2">
               {user ? (
@@ -87,52 +88,6 @@ export function Header() {
         )}
       </div>
     </header>
-  );
-}
-
-interface NavLinksProps {
-  className?: string;
-}
-
-function NavLinks({ className }: NavLinksProps) {
-  return (
-    <ul className={cn("flex items-center gap-6 lg:gap-8", className)}>
-      <li>
-        <Link to="/mortgages" className="text-sm font-medium transition-colors hover:text-primary">
-          Mortgages
-        </Link>
-      </li>
-      <li>
-        <Link to="/credit-cards" className="text-sm font-medium transition-colors hover:text-primary">
-          Credit Cards
-        </Link>
-      </li>
-      <li>
-        <Link to="/banking" className="text-sm font-medium transition-colors hover:text-primary">
-          Banking
-        </Link>
-      </li>
-      <li>
-        <Link to="/personal-loans" className="text-sm font-medium transition-colors hover:text-primary">
-          Loans
-        </Link>
-      </li>
-      <li>
-        <Link to="/investing" className="text-sm font-medium transition-colors hover:text-primary">
-          Investing
-        </Link>
-      </li>
-      <li>
-        <Link to="/insurance" className="text-sm font-medium transition-colors hover:text-primary">
-          Insurance
-        </Link>
-      </li>
-      <li>
-        <Link to="/blog" className="text-sm font-medium transition-colors hover:text-primary">
-          Blog
-        </Link>
-      </li>
-    </ul>
   );
 }
 
