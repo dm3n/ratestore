@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -28,6 +29,7 @@ const navCategories = [
     sections: [
       {
         title: "Compare mortgage rates",
+        href: "/mortgages/compare-rates",
         links: [
           { name: "Best mortgage rates", href: "/mortgages/best-rates" },
           { name: "Best mortgage renewal rates", href: "/mortgages/renewal-rates" },
@@ -41,6 +43,7 @@ const navCategories = [
       },
       {
         title: "Mortgage terms",
+        href: "/mortgages/terms",
         links: [
           { name: "2-year fixed rates", href: "/mortgages/2-year-fixed" },
           { name: "3-year fixed rates", href: "/mortgages/3-year-fixed" },
@@ -53,6 +56,7 @@ const navCategories = [
       },
       {
         title: "Calculators",
+        href: "/mortgages/calculators",
         links: [
           { name: "Mortgage payment calculator", href: "/tools/mortgage-calculator" },
           { name: "Mortgage affordability calculator", href: "/tools/affordability" },
@@ -70,6 +74,7 @@ const navCategories = [
     sections: [
       {
         title: "Compare credit cards",
+        href: "/credit-cards/compare",
         links: [
           { name: "CardFinder", href: "/credit-cards/finder" },
           { name: "Best overall credit cards", href: "/credit-cards/best" },
@@ -79,6 +84,7 @@ const navCategories = [
       },
       {
         title: "Reward credit cards",
+        href: "/credit-cards/rewards",
         links: [
           { name: "Aeroplan", href: "/credit-cards/aeroplan" },
           { name: "Cash back", href: "/credit-cards/cash-back" },
@@ -90,6 +96,7 @@ const navCategories = [
       },
       {
         title: "Type of credit cards",
+        href: "/credit-cards/types",
         links: [
           { name: "Balance Transfer", href: "/credit-cards/balance-transfer" },
           { name: "Business", href: "/credit-cards/business" },
@@ -111,6 +118,7 @@ const navCategories = [
     sections: [
       {
         title: "Best of",
+        href: "/banking/best",
         links: [
           { name: "Best savings accounts", href: "/banking/best-savings" },
           { name: "Best chequing accounts", href: "/banking/best-chequing" },
@@ -119,6 +127,7 @@ const navCategories = [
       },
       {
         title: "Savings accounts",
+        href: "/banking/savings",
         links: [
           { name: "Compare all savings accounts", href: "/banking/savings/compare" },
           { name: "High-interest savings accounts", href: "/banking/savings/high-interest" },
@@ -131,6 +140,7 @@ const navCategories = [
       },
       {
         title: "Chequing accounts",
+        href: "/banking/chequing",
         links: [
           { name: "Compare all chequing accounts", href: "/banking/chequing/compare" },
           { name: "Personal chequing accounts", href: "/banking/chequing/personal" },
@@ -148,6 +158,7 @@ const navCategories = [
     sections: [
       {
         title: "Compare loans",
+        href: "/personal-loans/compare",
         links: [
           { name: "Best personal loan rates", href: "/personal-loans/best-rates" },
           { name: "Debt consolidation loans", href: "/personal-loans/debt-consolidation" },
@@ -162,6 +173,7 @@ const navCategories = [
     sections: [
       {
         title: "Best of",
+        href: "/investing/best",
         links: [
           { name: "Best GIC rates", href: "/investing/gic/best" },
           { name: "Best RESPs", href: "/investing/resp/best" },
@@ -169,6 +181,7 @@ const navCategories = [
       },
       {
         title: "GIC terms and types",
+        href: "/investing/gic",
         links: [
           { name: "1-year", href: "/investing/gic/1-year" },
           { name: "5-year", href: "/investing/gic/5-year" },
@@ -186,6 +199,7 @@ const navCategories = [
     sections: [
       {
         title: "Auto insurance",
+        href: "/insurance/auto",
         links: [
           { name: "Auto insurance quotes", href: "/insurance/auto/quotes" },
           { name: "Motorcycle insurance", href: "/insurance/auto/motorcycle" },
@@ -195,6 +209,7 @@ const navCategories = [
       },
       {
         title: "Home insurance",
+        href: "/insurance/home",
         links: [
           { name: "Home insurance quotes", href: "/insurance/home/quotes" },
           { name: "Tenant insurance", href: "/insurance/home/tenant" },
@@ -204,6 +219,7 @@ const navCategories = [
       },
       {
         title: "Life insurance",
+        href: "/insurance/life",
         links: [
           { name: "Life insurance quotes", href: "/insurance/life/quotes" },
           { name: "Term life insurance", href: "/insurance/life/term" },
@@ -331,25 +347,16 @@ function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
               View All {category.title}
             </Link>
             
-            {/* Subcategory sections */}
+            {/* Subcategory section headers only */}
             {category.sections.map((section) => (
-              <div key={section.title} className="ml-2">
-                <h4 className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                  {section.title}
-                </h4>
-                <div className="space-y-1">
-                  {section.links.map((link) => (
-                    <Link
-                      key={link.name}
-                      to={link.href}
-                      onClick={onLinkClick}
-                      className="block px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              <Link
+                key={section.title}
+                to={section.href}
+                onClick={onLinkClick}
+                className="block px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors"
+              >
+                {section.title}
+              </Link>
             ))}
           </CollapsibleContent>
         </Collapsible>
