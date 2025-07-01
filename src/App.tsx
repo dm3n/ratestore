@@ -27,6 +27,11 @@ import CompareRates from '@/pages/mortgages/CompareRates';
 import BestRates from '@/pages/mortgages/BestRates';
 import RenewalRates from '@/pages/mortgages/RenewalRates';
 import FiveYearFixed from '@/pages/mortgages/FiveYearFixed';
+import TwoYearFixed from '@/pages/mortgages/TwoYearFixed';
+import ThreeYearFixed from '@/pages/mortgages/ThreeYearFixed';
+import ThreeYearVariable from '@/pages/mortgages/ThreeYearVariable';
+import FiveYearVariable from '@/pages/mortgages/FiveYearVariable';
+import HELOCRates from '@/pages/mortgages/HELOCRates';
 import CompoundInterestCalculator from '@/pages/tools/CompoundInterestCalculator';
 import DebtPayoffCalculator from '@/pages/tools/DebtPayoffCalculator';
 import ROICalculator from '@/pages/tools/ROICalculator';
@@ -59,6 +64,11 @@ function App() {
           <Route path="/mortgages/best-rates" element={<BestRates />} />
           <Route path="/mortgages/renewal-rates" element={<RenewalRates />} />
           <Route path="/mortgages/5-year-fixed" element={<FiveYearFixed />} />
+          <Route path="/mortgages/2-year-fixed" element={<TwoYearFixed />} />
+          <Route path="/mortgages/3-year-fixed" element={<ThreeYearFixed />} />
+          <Route path="/mortgages/3-year-variable" element={<ThreeYearVariable />} />
+          <Route path="/mortgages/5-year-variable" element={<FiveYearVariable />} />
+          <Route path="/mortgages/heloc" element={<HELOCRates />} />
           
           <Route path="/credit-cards" element={<CreditCards />} />
           <Route path="/banking" element={<SavingsRates />} />
