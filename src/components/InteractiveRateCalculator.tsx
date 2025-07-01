@@ -23,8 +23,16 @@ interface RateData {
   transactionTypes: string[];
 }
 
-export function InteractiveRateCalculator() {
-  const [transactionType, setTransactionType] = useState("buying");
+interface InteractiveRateCalculatorProps {
+  defaultTransactionType?: string;
+  provinceFilter?: string;
+}
+
+export function InteractiveRateCalculator({ 
+  defaultTransactionType = "buying",
+  provinceFilter 
+}: InteractiveRateCalculatorProps) {
+  const [transactionType, setTransactionType] = useState(defaultTransactionType);
   const [purchasePrice, setPurchasePrice] = useState(400000);
   const [downPayment, setDownPayment] = useState(20000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(5);
@@ -53,8 +61,8 @@ export function InteractiveRateCalculator() {
       const loanAmount = purchasePrice - downPayment;
       const loanToValue = loanAmount / purchasePrice;
       
-      // Fetch active rates from Supabase, ordered by rate to get best rates first
-      const { data: dbRates, error } = await supabase
+      // Build query with province filter if specified
+      let query = supabase
         .from('mortgage_rates')
         .select('*')
         .eq('is_active', true)
@@ -62,6 +70,13 @@ export function InteractiveRateCalculator() {
         .lte('min_down_payment', downPaymentPercent / 100)
         .gte('max_loan_to_value', loanToValue)
         .order('base_rate', { ascending: true });
+
+      // Add province filter if specified
+      if (provinceFilter && provinceFilter !== 'all') {
+        query = query.eq('province', provinceFilter);
+      }
+
+      const { data: dbRates, error } = await query;
 
       if (error) {
         console.error('Error fetching rates:', error);
@@ -119,7 +134,7 @@ export function InteractiveRateCalculator() {
   // Update rates when inputs change
   useEffect(() => {
     updateRates();
-  }, [purchasePrice, downPayment, transactionType, activeTab]);
+  }, [purchasePrice, downPayment, transactionType, activeTab, provinceFilter]);
 
   // Set up real-time updates for rate changes
   useEffect(() => {
@@ -142,7 +157,7 @@ export function InteractiveRateCalculator() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [transactionType, purchasePrice, downPayment, activeTab]);
+  }, [transactionType, purchasePrice, downPayment, activeTab, provinceFilter]);
 
   const handleInputChange = (setter: (value: any) => void, value: any) => {
     setter(value);
@@ -164,6 +179,9 @@ export function InteractiveRateCalculator() {
               )}
               <span className="block text-xs text-muted-foreground/70 mt-1">
                 Last updated: {lastUpdated.toLocaleTimeString()}
+                {provinceFilter && provinceFilter !== 'all' && (
+                  <span className="ml-2 text-primary">• Showing {provinceFilter} rates</span>
+                )}
               </span>
             </p>
           </div>
@@ -204,6 +222,7 @@ export function InteractiveRateCalculator() {
                 <SelectItem value="buying">Buying a home</SelectItem>
                 <SelectItem value="refinancing">Refinancing</SelectItem>
                 <SelectItem value="renewal">Renewal</SelectItem>
+                <SelectItem value="heloc">HELOC</SelectItem>
               </SelectContent>
             </Select>
           </div>

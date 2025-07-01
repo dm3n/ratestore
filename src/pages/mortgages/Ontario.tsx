@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -56,7 +55,7 @@ const Ontario = () => {
                   Calculate your mortgage payments with Ontario rates
                 </p>
               </div>
-              <InteractiveRateCalculator />
+              <InteractiveRateCalculator provinceFilter="ON" />
             </div>
           </div>
         </section>

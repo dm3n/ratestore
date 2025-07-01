@@ -74,7 +74,7 @@ const HELOCRates = () => {
                   Calculate your potential HELOC payments and compare rates
                 </p>
               </div>
-              <InteractiveRateCalculator />
+              <InteractiveRateCalculator defaultTransactionType="heloc" />
             </div>
           </div>
         </section>

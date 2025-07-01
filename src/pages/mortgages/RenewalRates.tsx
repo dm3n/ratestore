@@ -61,7 +61,7 @@ const RenewalRates = () => {
                   Calculate how much you could save by switching lenders at renewal
                 </p>
               </div>
-              <InteractiveRateCalculator />
+              <InteractiveRateCalculator defaultTransactionType="renewal" />
             </div>
           </div>
         </section>
