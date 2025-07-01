@@ -47,6 +47,7 @@ const navCategories: NavCategory[] = [
           { name: "3-year variable rates", href: "/mortgages/3-year-variable" },
           { name: "5-year variable rates", href: "/mortgages/5-year-variable" },
           { name: "Historical rates", href: "/mortgages/historical" },
+          { name: "View all terms", href: "/mortgages/terms" },
         ]
       },
       {
