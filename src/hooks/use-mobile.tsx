@@ -1,6 +1,8 @@
+
 import * as React from "react"
 
-const MOBILE_BREAKPOINT = 768
+// Updated breakpoint to include tablets in mobile view
+const MOBILE_BREAKPOINT = 1024
 
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)

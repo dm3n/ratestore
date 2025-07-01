@@ -240,6 +240,9 @@ export function Header() {
     setMobileMenuOpen(false);
   };
 
+  // Show mobile menu for tablets and mobile (up to 1024px instead of 768px)
+  const shouldShowMobileMenu = window.innerWidth < 1024;
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -249,58 +252,60 @@ export function Header() {
           </Link>
         </div>
         
-        {!isMobile ? (
-          <>
-            <nav className="flex-1 flex justify-center">
-              <DesktopNavDropdown />
-            </nav>
-            <div className="hidden md:flex items-center gap-2">
-              {user ? (
-                <UserMenu />
-              ) : (
-                <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white">
-                  <Link to="/auth">Sign In</Link>
-                </Button>
-              )}
-            </div>
-          </>
-        ) : (
-          <div className="flex items-center gap-2">
-            {user && <UserMenu />}
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-full sm:w-80 p-0">
-                <SheetHeader className="p-6 pb-4 border-b">
-                  <SheetTitle className="text-left text-xl font-bold text-primary">
-                    ratehub.ca
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col h-full">
-                  <nav className="flex-1 px-6 py-4 overflow-y-auto">
-                    <MobileNavLinks onLinkClick={closeMobileMenu} />
-                  </nav>
-                  {!user && (
-                    <div className="p-6 border-t bg-gray-50/50">
-                      <Button 
-                        variant="default" 
-                        className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3"
-                        asChild
-                        onClick={closeMobileMenu}
-                      >
-                        <Link to="/auth">Sign In</Link>
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-        )}
+        {/* Desktop navigation - only show on larger screens (1024px+) */}
+        <div className="hidden lg:flex flex-1 justify-center">
+          <DesktopNavDropdown />
+        </div>
+        
+        <div className="flex items-center gap-2">
+          {/* User menu - always visible when user is logged in */}
+          {user && <UserMenu />}
+          
+          {/* Desktop sign in button - only show on larger screens */}
+          {!user && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="hidden lg:flex border-primary text-primary hover:bg-primary hover:text-white"
+            >
+              <Link to="/auth">Sign In</Link>
+            </Button>
+          )}
+          
+          {/* Mobile menu button - show on tablets and mobile */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="lg:hidden">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-full sm:w-80 md:w-96 p-0">
+              <SheetHeader className="p-4 sm:p-6 pb-4 border-b">
+                <SheetTitle className="text-left text-lg sm:text-xl font-bold text-primary">
+                  ratehub.ca
+                </SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col h-full">
+                <nav className="flex-1 px-4 sm:px-6 py-4 overflow-y-auto">
+                  <MobileNavLinks onLinkClick={closeMobileMenu} />
+                </nav>
+                {!user && (
+                  <div className="p-4 sm:p-6 border-t bg-gray-50/50">
+                    <Button 
+                      variant="default" 
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3"
+                      asChild
+                      onClick={closeMobileMenu}
+                    >
+                      <Link to="/auth">Sign In</Link>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );
@@ -331,27 +336,27 @@ function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1 sm:space-y-2">
       {navCategories.map((category) => (
         <Collapsible 
           key={category.title}
           open={openSections.includes(category.title)}
           onOpenChange={() => toggleSection(category.title)}
         >
-          <CollapsibleTrigger className="flex items-center justify-between w-full px-3 py-3 text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 transition-colors">
+          <CollapsibleTrigger className="flex items-center justify-between w-full px-3 py-3 text-sm sm:text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 transition-colors">
             <span>{category.title}</span>
             {openSections.includes(category.title) ? (
-              <ChevronDown className="h-4 w-4 text-gray-400" />
+              <ChevronDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
             ) : (
-              <ChevronRight className="h-4 w-4 text-gray-400" />
+              <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
             )}
           </CollapsibleTrigger>
-          <CollapsibleContent className="ml-3 mt-2 space-y-1">
+          <CollapsibleContent className="ml-2 sm:ml-3 mt-2 space-y-1">
             {/* Main category link */}
             <Link
               to={category.href}
               onClick={onLinkClick}
-              className="flex items-center px-3 py-2 text-sm font-medium text-primary rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center px-3 py-2 text-xs sm:text-sm font-medium text-primary rounded-lg hover:bg-gray-50 transition-colors"
             >
               View All {category.title}
             </Link>
@@ -363,21 +368,21 @@ function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
                 open={openSubSections.includes(section.title)}
                 onOpenChange={() => toggleSubSection(section.title)}
               >
-                <CollapsibleTrigger className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                  <span>{section.title}</span>
+                <CollapsibleTrigger className="flex items-center justify-between w-full px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="text-left">{section.title}</span>
                   {openSubSections.includes(section.title) ? (
-                    <ChevronDown className="h-3 w-3 text-gray-400" />
+                    <ChevronDown className="h-3 w-3 text-gray-400 flex-shrink-0" />
                   ) : (
-                    <ChevronRight className="h-3 w-3 text-gray-400" />
+                    <ChevronRight className="h-3 w-3 text-gray-400 flex-shrink-0" />
                   )}
                 </CollapsibleTrigger>
-                <CollapsibleContent className="ml-4 mt-1 space-y-1">
+                <CollapsibleContent className="ml-3 sm:ml-4 mt-1 space-y-1">
                   {section.links.map((link) => (
                     <Link
                       key={link.name}
                       to={link.href}
                       onClick={onLinkClick}
-                      className="block px-3 py-2 text-xs text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                      className="block px-3 py-2 text-xs text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors leading-relaxed"
                     >
                       {link.name}
                     </Link>
@@ -393,10 +398,10 @@ function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
       <Link
         to="/blog"
         onClick={onLinkClick}
-        className="flex items-center justify-between px-3 py-3 text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+        className="flex items-center justify-between px-3 py-3 text-sm sm:text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
       >
         <span>Blog</span>
-        <ChevronRight className="h-4 w-4 text-gray-400" />
+        <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
       </Link>
     </div>
   );
