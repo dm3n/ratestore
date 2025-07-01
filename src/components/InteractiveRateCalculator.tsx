@@ -31,6 +31,7 @@ export function InteractiveRateCalculator() {
   const [activeTab, setActiveTab] = useState("best-market");
   const [rates, setRates] = useState<RateData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
   // Calculate down payment percentage when dollar amount changes
   useEffect(() => {
@@ -50,16 +51,17 @@ export function InteractiveRateCalculator() {
     
     try {
       const loanAmount = purchasePrice - downPayment;
-      const loanToValue = (loanAmount / purchasePrice) * 100;
+      const loanToValue = loanAmount / purchasePrice;
       
-      // Fetch rates from Supabase
+      // Fetch active rates from Supabase, ordered by rate to get best rates first
       const { data: dbRates, error } = await supabase
         .from('mortgage_rates')
         .select('*')
         .eq('is_active', true)
         .contains('transaction_types', [transactionType])
         .lte('min_down_payment', downPaymentPercent / 100)
-        .gte('max_loan_to_value', loanToValue / 100);
+        .gte('max_loan_to_value', loanToValue)
+        .order('base_rate', { ascending: true });
 
       if (error) {
         console.error('Error fetching rates:', error);
@@ -106,6 +108,7 @@ export function InteractiveRateCalculator() {
       });
 
       setRates(bestRates);
+      setLastUpdated(new Date());
     } catch (error) {
       console.error('Error updating rates:', error);
     } finally {
@@ -118,6 +121,29 @@ export function InteractiveRateCalculator() {
     updateRates();
   }, [purchasePrice, downPayment, transactionType, activeTab]);
 
+  // Set up real-time updates for rate changes
+  useEffect(() => {
+    const channel = supabase
+      .channel('mortgage-rates-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'mortgage_rates'
+        },
+        () => {
+          console.log('Mortgage rates updated, refreshing calculator...');
+          updateRates();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [transactionType, purchasePrice, downPayment, activeTab]);
+
   const handleInputChange = (setter: (value: any) => void, value: any) => {
     setter(value);
   };
@@ -129,21 +155,36 @@ export function InteractiveRateCalculator() {
           <div>
             <CardTitle className="text-2xl font-bold">Find Your Best Rate</CardTitle>
             <p className="text-muted-foreground mt-1">
-              Live rates from our database
+              Live rates updated automatically
               {isLoading && (
                 <span className="inline-flex items-center ml-2 text-primary">
                   <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
                   Loading rates...
                 </span>
               )}
+              <span className="block text-xs text-muted-foreground/70 mt-1">
+                Last updated: {lastUpdated.toLocaleTimeString()}
+              </span>
             </p>
           </div>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
-            <TabsList className="grid w-fit grid-cols-2">
-              <TabsTrigger value="best-market" className="text-sm">Best market rates</TabsTrigger>
-              <TabsTrigger value="best-bank" className="text-sm">Best bank rates</TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={updateRates}
+              disabled={isLoading}
+              className="flex items-center gap-2"
+            >
+              <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
+              <TabsList className="grid w-fit grid-cols-2">
+                <TabsTrigger value="best-market" className="text-sm">Best market rates</TabsTrigger>
+                <TabsTrigger value="best-bank" className="text-sm">Best bank rates</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
         </div>
       </CardHeader>
       
