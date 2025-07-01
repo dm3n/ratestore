@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { ChevronDown, Calculator, PiggyBank, TrendingUp, Home, FileText, DollarSign } from "lucide-react";
+import { ChevronDown, Calculator, PiggyBank, TrendingUp, Home, FileText, DollarSign, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
