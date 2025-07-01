@@ -318,6 +318,7 @@ interface MobileNavLinksProps {
 function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
   const [openSections, setOpenSections] = useState<string[]>([]);
   const [openSubSections, setOpenSubSections] = useState<string[]>([]);
+  const [expandedSubSections, setExpandedSubSections] = useState<string[]>([]);
 
   const toggleSection = (sectionTitle: string) => {
     setOpenSections(prev => 
@@ -333,6 +334,20 @@ function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
         ? prev.filter(s => s !== subSectionTitle)
         : [...prev, subSectionTitle]
     );
+  };
+
+  const toggleSubSectionExpansion = (subSectionTitle: string) => {
+    setExpandedSubSections(prev => 
+      prev.includes(subSectionTitle) 
+        ? prev.filter(s => s !== subSectionTitle)
+        : [...prev, subSectionTitle]
+    );
+  };
+
+  const shouldShowMoreButton = (links: any[]) => links.length > 5;
+  const getVisibleLinks = (links: any[], sectionTitle: string) => {
+    const isExpanded = expandedSubSections.includes(sectionTitle);
+    return isExpanded ? links : links.slice(0, 5);
   };
 
   return (
@@ -377,7 +392,7 @@ function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
                   )}
                 </CollapsibleTrigger>
                 <CollapsibleContent className="ml-3 sm:ml-4 mt-1 space-y-1">
-                  {section.links.map((link) => (
+                  {getVisibleLinks(section.links, section.title).map((link) => (
                     <Link
                       key={link.name}
                       to={link.href}
@@ -387,6 +402,16 @@ function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
                       {link.name}
                     </Link>
                   ))}
+                  
+                  {/* More/Less button */}
+                  {shouldShowMoreButton(section.links) && (
+                    <button
+                      onClick={() => toggleSubSectionExpansion(section.title)}
+                      className="block px-3 py-2 text-xs text-primary font-medium rounded-lg hover:bg-gray-50 transition-colors w-full text-left"
+                    >
+                      {expandedSubSections.includes(section.title) ? 'less' : 'more'}
+                    </button>
+                  )}
                 </CollapsibleContent>
               </Collapsible>
             ))}
