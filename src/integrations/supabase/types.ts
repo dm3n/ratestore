@@ -20,6 +20,7 @@ export type Database = {
           max_loan_to_value: number | null
           min_down_payment: number | null
           prime_discount: string | null
+          province: string | null
           rate_type: string
           special_conditions: Json | null
           term: string
@@ -36,6 +37,7 @@ export type Database = {
           max_loan_to_value?: number | null
           min_down_payment?: number | null
           prime_discount?: string | null
+          province?: string | null
           rate_type: string
           special_conditions?: Json | null
           term: string
@@ -52,6 +54,7 @@ export type Database = {
           max_loan_to_value?: number | null
           min_down_payment?: number | null
           prime_discount?: string | null
+          province?: string | null
           rate_type?: string
           special_conditions?: Json | null
           term?: string

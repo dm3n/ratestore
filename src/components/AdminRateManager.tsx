@@ -24,7 +24,7 @@ interface MortgageRate {
   transaction_types: string[];
   prime_discount: string | null;
   is_active: boolean;
-  province?: string;
+  province: string;
 }
 
 export function AdminRateManager() {
@@ -169,9 +169,16 @@ export function AdminRateManager() {
       const { error } = await supabase
         .from('mortgage_rates')
         .insert([{
-          ...newRate,
+          lender_name: newRate.lender_name,
+          lender_type: newRate.lender_type,
+          rate_type: newRate.rate_type,
+          term: newRate.term,
           base_rate: newRate.base_rate / 100,
+          min_down_payment: newRate.min_down_payment,
+          max_loan_to_value: newRate.max_loan_to_value,
+          transaction_types: newRate.transaction_types,
           prime_discount: newRate.prime_discount || null,
+          is_active: newRate.is_active,
           province: provinceToAdd
         }]);
 
