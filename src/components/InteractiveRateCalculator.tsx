@@ -7,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Home, Building2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Plus, Home, Building2, RefreshCw } from "lucide-react";
 
 interface RateData {
   lender: string;
@@ -24,9 +25,8 @@ export function InteractiveRateCalculator() {
   const [downPayment, setDownPayment] = useState(20000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(5);
   const [activeTab, setActiveTab] = useState("best-market");
-
-  // Mock rate data that changes based on inputs
   const [rates, setRates] = useState<RateData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Calculate down payment percentage when dollar amount changes
   useEffect(() => {
@@ -40,77 +40,128 @@ export function InteractiveRateCalculator() {
     setDownPayment(Math.round((percent / 100) * purchasePrice));
   };
 
-  // Generate rates based on current inputs
-  useEffect(() => {
+  // Generate rates based on current inputs with loading animation
+  const updateRates = async () => {
+    setIsLoading(true);
+    
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
+    
     const loanAmount = purchasePrice - downPayment;
     const loanToValue = (loanAmount / purchasePrice) * 100;
     
-    // Different rates based on loan-to-value ratio and transaction type
+    // More sophisticated rate calculation based on multiple factors
     let baseRates = {
       "2-year": { fixed: 4.24, variable: 4.35 },
       "3-year": { fixed: 3.89, variable: 4.15 },
       "5-year": { fixed: 3.84, variable: 3.95 }
     };
 
-    // Adjust rates based on LTV and transaction type
-    if (loanToValue > 80) {
-      // Higher LTV = slightly higher rates
+    // Loan-to-Value adjustments
+    if (loanToValue > 95) {
+      // Very high LTV (5% down or less) - CMHC insured but higher rates
+      Object.keys(baseRates).forEach(term => {
+        baseRates[term as keyof typeof baseRates].fixed += 0.15;
+        baseRates[term as keyof typeof baseRates].variable += 0.12;
+      });
+    } else if (loanToValue > 80) {
+      // High LTV (less than 20% down) - CMHC insured
       Object.keys(baseRates).forEach(term => {
         baseRates[term as keyof typeof baseRates].fixed += 0.10;
-        baseRates[term as keyof typeof baseRates].variable += 0.10;
+        baseRates[term as keyof typeof baseRates].variable += 0.08;
+      });
+    } else if (loanToValue < 65) {
+      // Low LTV (35%+ down) - better rates
+      Object.keys(baseRates).forEach(term => {
+        baseRates[term as keyof typeof baseRates].fixed -= 0.05;
+        baseRates[term as keyof typeof baseRates].variable -= 0.03;
       });
     }
 
+    // Transaction type adjustments
     if (transactionType === "refinancing") {
-      // Refinancing typically has slightly higher rates
+      Object.keys(baseRates).forEach(term => {
+        baseRates[term as keyof typeof baseRates].fixed += 0.08;
+        baseRates[term as keyof typeof baseRates].variable += 0.06;
+      });
+    } else if (transactionType === "renewal") {
+      Object.keys(baseRates).forEach(term => {
+        baseRates[term as keyof typeof baseRates].fixed += 0.03;
+        baseRates[term as keyof typeof baseRates].variable += 0.02;
+      });
+    }
+
+    // Purchase price adjustments (larger loans often get better rates)
+    if (purchasePrice > 1000000) {
+      Object.keys(baseRates).forEach(term => {
+        baseRates[term as keyof typeof baseRates].fixed -= 0.03;
+        baseRates[term as keyof typeof baseRates].variable -= 0.02;
+      });
+    } else if (purchasePrice < 200000) {
       Object.keys(baseRates).forEach(term => {
         baseRates[term as keyof typeof baseRates].fixed += 0.05;
-        baseRates[term as keyof typeof baseRates].variable += 0.05;
+        baseRates[term as keyof typeof baseRates].variable += 0.04;
       });
     }
 
     const newRates: RateData[] = [
       {
-        lender: "Canadian Lender",
+        lender: activeTab === "best-market" ? "Alternative Lender" : "TD Bank",
         rate: baseRates["2-year"].fixed,
-        lenderType: "home",
+        lenderType: activeTab === "best-market" ? "home" : "bank",
         term: "2-yr",
         type: "fixed"
       },
       {
-        lender: "Big 6 Bank",
+        lender: activeTab === "best-market" ? "Credit Union Plus" : "RBC",
         rate: baseRates["3-year"].fixed,
-        lenderType: "bank",
+        lenderType: activeTab === "best-market" ? "home" : "bank",
         term: "3-yr",
         type: "fixed"
       },
       {
-        lender: "Canadian Lender",
+        lender: activeTab === "best-market" ? "Alternative Lender" : "BMO",
         rate: baseRates["3-year"].variable,
-        lenderType: "home",
+        lenderType: activeTab === "best-market" ? "home" : "bank",
         term: "3-yr",
         type: "variable",
         prime: "Prime - 0.80%"
       },
       {
-        lender: "Canadian Lender",
+        lender: activeTab === "best-market" ? "Canadian Lender" : "Scotiabank",
         rate: baseRates["5-year"].fixed,
-        lenderType: "home",
+        lenderType: activeTab === "best-market" ? "home" : "bank",
         term: "5-yr",
         type: "fixed"
       },
       {
-        lender: "Canadian Lender",
+        lender: activeTab === "best-market" ? "Canadian Lender" : "CIBC",
         rate: baseRates["5-year"].variable,
-        lenderType: "home",
+        lenderType: activeTab === "best-market" ? "home" : "bank",
         term: "5-yr",
         type: "variable",
         prime: "Prime - 1.00%"
       }
     ];
 
+    // Add slight randomization to make it feel more realistic
+    newRates.forEach(rate => {
+      rate.rate += (Math.random() - 0.5) * 0.02;
+      rate.rate = Math.round(rate.rate * 100) / 100;
+    });
+
     setRates(newRates);
-  }, [purchasePrice, downPayment, transactionType]);
+    setIsLoading(false);
+  };
+
+  // Update rates when inputs change
+  useEffect(() => {
+    updateRates();
+  }, [purchasePrice, downPayment, transactionType, activeTab]);
+
+  const handleInputChange = (setter: (value: any) => void, value: any) => {
+    setter(value);
+  };
 
   return (
     <Card className="border-2 border-primary/20 shadow-lg">
@@ -118,7 +169,15 @@ export function InteractiveRateCalculator() {
         <div className="flex justify-between items-center">
           <div>
             <CardTitle className="text-2xl font-bold">Find Your Best Rate</CardTitle>
-            <p className="text-muted-foreground mt-1">Rates update based on your scenario</p>
+            <p className="text-muted-foreground mt-1">
+              Rates update based on your scenario
+              {isLoading && (
+                <span className="inline-flex items-center ml-2 text-primary">
+                  <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
+                  Updating rates...
+                </span>
+              )}
+            </p>
           </div>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
             <TabsList className="grid w-fit grid-cols-2">
@@ -134,7 +193,10 @@ export function InteractiveRateCalculator() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 p-4 bg-gray-50 rounded-lg">
           <div className="space-y-2">
             <Label htmlFor="transaction-type" className="text-sm font-medium">Transaction type</Label>
-            <Select value={transactionType} onValueChange={setTransactionType}>
+            <Select 
+              value={transactionType} 
+              onValueChange={(value) => handleInputChange(setTransactionType, value)}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -156,7 +218,7 @@ export function InteractiveRateCalculator() {
                 value={purchasePrice.toLocaleString()}
                 onChange={(e) => {
                   const value = parseInt(e.target.value.replace(/,/g, '')) || 0;
-                  setPurchasePrice(value);
+                  handleInputChange(setPurchasePrice, value);
                 }}
                 className="pl-8"
               />
@@ -173,7 +235,7 @@ export function InteractiveRateCalculator() {
                 value={downPayment.toLocaleString()}
                 onChange={(e) => {
                   const value = parseInt(e.target.value.replace(/,/g, '')) || 0;
-                  setDownPayment(value);
+                  handleInputChange(setDownPayment, value);
                 }}
                 className="pl-8"
               />
@@ -227,7 +289,13 @@ export function InteractiveRateCalculator() {
                       compare all rates
                     </button>
                   </div>
-                  {fixedRate && (
+                  {isLoading ? (
+                    <div className="text-center space-y-2">
+                      <Skeleton className="h-8 w-20" />
+                      <Skeleton className="h-6 w-32" />
+                      <Skeleton className="h-8 w-16" />
+                    </div>
+                  ) : fixedRate && (
                     <div className="text-center">
                       <div className="text-2xl font-bold text-primary">{fixedRate.rate.toFixed(2)}%</div>
                       <div className="flex items-center gap-2 mt-2">
@@ -248,14 +316,25 @@ export function InteractiveRateCalculator() {
                   )}
                 </div>
 
-                {variableRate && (
+                {isLoading ? (
+                  <div className="text-center lg:border-l lg:pl-4 space-y-2">
+                    <Skeleton className="h-8 w-20 mx-auto" />
+                    <Skeleton className="h-4 w-24 mx-auto" />
+                    <Skeleton className="h-6 w-32 mx-auto" />
+                    <Skeleton className="h-8 w-16 mx-auto" />
+                  </div>
+                ) : variableRate && (
                   <div className="text-center lg:border-l lg:pl-4">
                     <div className="text-2xl font-bold text-primary">{variableRate.rate.toFixed(2)}%</div>
                     {variableRate.prime && (
                       <div className="text-sm text-muted-foreground">{variableRate.prime}</div>
                     )}
                     <div className="flex items-center justify-center gap-2 mt-2">
-                      <Home className="h-4 w-4" />
+                      {variableRate.lenderType === "home" ? (
+                        <Home className="h-4 w-4" />
+                      ) : (
+                        <Building2 className="h-4 w-4" />
+                      )}
                       <span className="text-sm">{variableRate.lender}</span>
                       <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                         inquire
