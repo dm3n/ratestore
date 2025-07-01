@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAdmin } from '@/hooks/useAdmin';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,9 +13,11 @@ import { DashboardStats } from '@/components/DashboardStats';
 import { AccountsOverview } from '@/components/AccountsOverview';
 import { RecentTransactions } from '@/components/RecentTransactions';
 import { QuickActions } from '@/components/QuickActions';
+import { AdminDashboard } from '@/components/AdminDashboard';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const { isAdmin, loading: adminLoading } = useAdmin();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState({
@@ -24,10 +27,10 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    if (user) {
+    if (user && !adminLoading) {
       fetchDashboardData();
     }
-  }, [user]);
+  }, [user, adminLoading]);
 
   const fetchDashboardData = async () => {
     try {
@@ -94,7 +97,7 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) {
+  if (loading || adminLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -111,12 +114,26 @@ const Dashboard = () => {
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.user_metadata?.full_name || user?.email}</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-gray-900">
+              Welcome back, {user?.user_metadata?.full_name || user?.email}
+            </h1>
+            {isAdmin && (
+              <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                <Shield className="h-4 w-4" />
+                Admin
+              </div>
+            )}
+          </div>
           <p className="text-gray-600 mt-2">Here's your financial overview</p>
         </div>
 
         <div className="grid gap-6">
-          {/* Dashboard Stats */}
+          {isAdmin && (
+            <AdminDashboard />
+          )}
+          
+          {/* Regular Dashboard Stats */}
           <DashboardStats stats={dashboardData.stats} onRefresh={fetchDashboardData} />
           
           {/* Quick Actions */}
