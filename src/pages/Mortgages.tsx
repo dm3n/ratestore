@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,25 +23,25 @@ const Mortgages = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-primary/5 py-16">
-          <div className="container">
+        <section className="bg-primary/5 py-12 md:py-16 lg:py-20">
+          <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-600 border-blue-200">
+              <Badge variant="outline" className="mb-4 md:mb-6 bg-blue-50 text-blue-600 border-blue-200">
                 Compare mortgage rates from 100+ lenders
               </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 md:mb-6">
                 Find the Best Mortgage Rates in Canada
               </h1>
-              <p className="text-lg text-muted-foreground mb-8">
+              <p className="text-lg md:text-xl text-muted-foreground mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
                 Compare rates from Canada's top banks and lenders. Get personalized quotes 
                 and expert advice to find the perfect mortgage for your home purchase or renewal.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="gap-2">
-                  Compare Rates <TrendingUp className="h-5 w-5" />
+                <Button size="lg" className="gap-2 px-6 md:px-8">
+                  Compare Rates <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
-                  Calculate Payments <Calculator className="h-5 w-5" />
+                <Button size="lg" variant="outline" className="gap-2 px-6 md:px-8">
+                  Calculate Payments <Calculator className="h-4 w-4 md:h-5 md:w-5" />
                 </Button>
               </div>
             </div>
@@ -48,32 +49,32 @@ const Mortgages = () => {
         </section>
 
         {/* Featured Rates */}
-        <section className="py-16">
-          <div className="container">
+        <section className="py-12 md:py-16 lg:py-20">
+          <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-bold">Today's Best Mortgage Rates</h2>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 md:mb-12 gap-4">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Today's Best Mortgage Rates</h2>
                 <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
                   Updated daily
                 </Badge>
               </div>
               
-              <div className="grid gap-6">
+              <div className="grid gap-6 md:gap-8">
                 {/* Featured Rates */}
-                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
                   {bestRates.filter(rate => rate.type === "featured").map((rate, index) => (
-                    <Card key={index} className="border-2 border-primary/20 shadow-lg">
+                    <Card key={index} className="border-2 border-primary/20 shadow-lg hover:shadow-xl transition-all duration-200">
                       <CardHeader className="text-center pb-4">
                         <Badge variant="outline" className="self-center mb-2 bg-primary/10 text-primary">
-                          - featured -
+                          Featured
                         </Badge>
                         <div className="flex items-center justify-center gap-2 mb-2">
                           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                             <Home className="h-4 w-4 text-blue-600" />
                           </div>
-                          <span className="font-medium">{rate.lender}</span>
+                          <span className="font-medium text-sm md:text-base">{rate.lender}</span>
                         </div>
-                        <div className="text-3xl font-bold text-primary">{rate.rate}</div>
+                        <div className="text-2xl md:text-3xl font-bold text-primary">{rate.rate}</div>
                         <div className="text-sm text-muted-foreground">{rate.term}</div>
                       </CardHeader>
                       <CardContent>
@@ -88,25 +89,25 @@ const Mortgages = () => {
                 {/* Other Competitive Rates */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>More Competitive Rates</CardTitle>
+                    <CardTitle className="text-xl md:text-2xl">More Competitive Rates</CardTitle>
                     <CardDescription>Additional mortgage rates from trusted lenders</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       {bestRates.filter(rate => rate.type === "regular").map((rate, index) => (
-                        <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                        <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors gap-4">
                           <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
                               <Home className="h-5 w-5 text-primary" />
                             </div>
                             <div>
-                              <div className="font-semibold">{rate.lender}</div>
+                              <div className="font-semibold text-sm md:text-base">{rate.lender}</div>
                               <div className="text-sm text-muted-foreground">{rate.term}</div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-primary">{rate.rate}</div>
-                            <Button variant="outline" size="sm" className="mt-2">
+                          <div className="flex items-center gap-4 w-full sm:w-auto">
+                            <div className="text-xl md:text-2xl font-bold text-primary">{rate.rate}</div>
+                            <Button variant="outline" size="sm" className="shrink-0">
                               Compare
                             </Button>
                           </div>
@@ -121,19 +122,21 @@ const Mortgages = () => {
         </section>
 
         {/* Tools and Resources */}
-        <section className="py-16 bg-primary/5">
-          <div className="container">
+        <section className="py-12 md:py-16 lg:py-20 bg-primary/5">
+          <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold text-center mb-12">Mortgage Tools & Resources</h2>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12">
+                Mortgage Tools & Resources
+              </h2>
               
-              <div className="grid md:grid-cols-3 gap-8">
-                <Card className="border-0 shadow-sm">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-200">
                   <CardHeader>
-                    <div className="mb-2 bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center">
-                      <Calculator className="h-6 w-6 text-blue-600" />
+                    <div className="mb-3 bg-blue-100 w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
+                      <Calculator className="h-6 w-6 md:h-7 md:w-7 text-blue-600" />
                     </div>
-                    <CardTitle>Mortgage Calculator</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-lg md:text-xl">Mortgage Calculator</CardTitle>
+                    <CardDescription className="text-sm md:text-base">
                       Calculate your monthly payments and see how much you can afford.
                     </CardDescription>
                   </CardHeader>
@@ -144,13 +147,13 @@ const Mortgages = () => {
                   </CardContent>
                 </Card>
                 
-                <Card className="border-0 shadow-sm">
+                <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-200">
                   <CardHeader>
-                    <div className="mb-2 bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center">
-                      <FileText className="h-6 w-6 text-green-600" />
+                    <div className="mb-3 bg-green-100 w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
+                      <FileText className="h-6 w-6 md:h-7 md:w-7 text-green-600" />
                     </div>
-                    <CardTitle>Affordability Calculator</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-lg md:text-xl">Affordability Calculator</CardTitle>
+                    <CardDescription className="text-sm md:text-base">
                       Find out how much house you can afford based on your income.
                     </CardDescription>
                   </CardHeader>
@@ -161,13 +164,13 @@ const Mortgages = () => {
                   </CardContent>
                 </Card>
                 
-                <Card className="border-0 shadow-sm">
+                <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-200 sm:col-span-2 lg:col-span-1">
                   <CardHeader>
-                    <div className="mb-2 bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center">
-                      <BookOpen className="h-6 w-6 text-purple-600" />
+                    <div className="mb-3 bg-purple-100 w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
+                      <BookOpen className="h-6 w-6 md:h-7 md:w-7 text-purple-600" />
                     </div>
-                    <CardTitle>First-Time Buyer Guide</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-lg md:text-xl">First-Time Buyer Guide</CardTitle>
+                    <CardDescription className="text-sm md:text-base">
                       Complete guide to buying your first home in Canada.
                     </CardDescription>
                   </CardHeader>
