@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Calculator, Home, PiggyBank, TrendingUp, FileText, DollarSign, RefreshCw, Search, Filter, ArrowRight } from "lucide-react";
+import { Calculator, Home, PiggyBank, TrendingUp, FileText, DollarSign, RefreshCw, Search, Filter, ArrowRight, Percent, CreditCard, Banknote, Target, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -107,6 +107,78 @@ const calculators: CalculatorTool[] = [
     difficulty: "advanced",
     popular: false,
     features: ["Payment breakdown", "Principal tracking", "Interest analysis", "Export options"]
+  },
+  {
+    id: "compound-interest",
+    name: "Compound Interest Calculator",
+    description: "Calculate investment growth over time",
+    longDescription: "See how compound interest can grow your investments with regular contributions and different compounding frequencies.",
+    icon: TrendingUp,
+    href: "/tools/compound-interest",
+    category: "investment",
+    difficulty: "beginner",
+    popular: false,
+    features: ["Growth projections", "Regular contributions", "Compounding frequency", "Timeline analysis"]
+  },
+  {
+    id: "debt-payoff",
+    name: "Debt Payoff Calculator",
+    description: "Create a strategy to pay off your debts",
+    longDescription: "Compare debt payoff strategies including snowball and avalanche methods to become debt-free faster.",
+    icon: CreditCard,
+    href: "/tools/debt-payoff",
+    category: "debt",
+    difficulty: "intermediate",
+    popular: false,
+    features: ["Payoff strategies", "Interest savings", "Payment scheduling", "Debt comparison"]
+  },
+  {
+    id: "roi-calculator",
+    name: "ROI Calculator",
+    description: "Calculate return on investment",
+    longDescription: "Analyze the return on investment for various financial decisions and compare different investment options.",
+    icon: Percent,
+    href: "/tools/roi-calculator",
+    category: "investment",
+    difficulty: "intermediate",
+    popular: false,
+    features: ["ROI analysis", "Investment comparison", "Risk assessment", "Performance tracking"]
+  },
+  {
+    id: "retirement",
+    name: "Retirement Calculator",
+    description: "Plan for your retirement savings needs",
+    longDescription: "Calculate how much you need to save for retirement and track your progress toward your retirement goals.",
+    icon: Target,
+    href: "/tools/retirement",
+    category: "planning",
+    difficulty: "advanced",
+    popular: false,
+    features: ["Retirement planning", "Savings goals", "Social security", "Investment projections"]
+  },
+  {
+    id: "emergency-fund",
+    name: "Emergency Fund Calculator",
+    description: "Determine your emergency fund needs",
+    longDescription: "Calculate the ideal emergency fund size based on your expenses and create a savings plan to build your safety net.",
+    icon: Shield,
+    href: "/tools/emergency-fund",
+    category: "planning",
+    difficulty: "beginner",
+    popular: false,
+    features: ["Fund sizing", "Expense analysis", "Savings plan", "Timeline goals"]
+  },
+  {
+    id: "loan-comparison",
+    name: "Loan Comparison Tool",
+    description: "Compare different loan options side by side",
+    longDescription: "Compare multiple loan offers including rates, terms, and total costs to find the best financing option.",
+    icon: Banknote,
+    href: "/tools/loan-comparison",
+    category: "debt",
+    difficulty: "intermediate",
+    popular: false,
+    features: ["Side-by-side comparison", "Total cost analysis", "Payment schedules", "Rate scenarios"]
   }
 ];
 
@@ -115,7 +187,7 @@ const categories = [
   { id: "mortgage", name: "Mortgage Tools", icon: Home },
   { id: "planning", name: "Planning Tools", icon: PiggyBank },
   { id: "investment", name: "Investment Tools", icon: TrendingUp },
-  { id: "debt", name: "Debt Tools", icon: DollarSign }
+  { id: "debt", name: "Debt Tools", icon: CreditCard }
 ];
 
 const CalculatorsOverview = () => {
