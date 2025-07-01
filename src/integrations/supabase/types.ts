@@ -9,6 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      mortgage_rates: {
+        Row: {
+          base_rate: number
+          created_at: string
+          id: string
+          is_active: boolean | null
+          lender_name: string
+          lender_type: string
+          max_loan_to_value: number | null
+          min_down_payment: number | null
+          prime_discount: string | null
+          rate_type: string
+          special_conditions: Json | null
+          term: string
+          transaction_types: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          base_rate: number
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          lender_name: string
+          lender_type: string
+          max_loan_to_value?: number | null
+          min_down_payment?: number | null
+          prime_discount?: string | null
+          rate_type: string
+          special_conditions?: Json | null
+          term: string
+          transaction_types?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          base_rate?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          lender_name?: string
+          lender_type?: string
+          max_loan_to_value?: number | null
+          min_down_payment?: number | null
+          prime_discount?: string | null
+          rate_type?: string
+          special_conditions?: Json | null
+          term?: string
+          transaction_types?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
