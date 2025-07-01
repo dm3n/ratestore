@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -83,6 +84,7 @@ function App() {
           <Route path="/mortgages" element={<Mortgages />} />
           <Route path="/mortgages/compare" element={<Compare />} />
           <Route path="/mortgages/terms" element={<Terms />} />
+          <Route path="/mortgages/calculators" element={<CalculatorsOverview />} />
           <Route path="/mortgages/compare-rates" element={<CompareRates />} />
           <Route path="/mortgages/best-rates" element={<BestRates />} />
           <Route path="/mortgages/renewal-rates" element={<RenewalRates />} />
