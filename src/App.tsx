@@ -23,6 +23,10 @@ import CDRates from '@/pages/CDRates';
 import Mortgages from '@/pages/Mortgages';
 import Investing from '@/pages/Investing';
 import Insurance from '@/pages/Insurance';
+import CompareRates from '@/pages/mortgages/CompareRates';
+import BestRates from '@/pages/mortgages/BestRates';
+import RenewalRates from '@/pages/mortgages/RenewalRates';
+import FiveYearFixed from '@/pages/mortgages/FiveYearFixed';
 import CompoundInterestCalculator from '@/pages/tools/CompoundInterestCalculator';
 import DebtPayoffCalculator from '@/pages/tools/DebtPayoffCalculator';
 import ROICalculator from '@/pages/tools/ROICalculator';
@@ -51,6 +55,11 @@ function App() {
           
           {/* Financial Products */}
           <Route path="/mortgages" element={<Mortgages />} />
+          <Route path="/mortgages/compare-rates" element={<CompareRates />} />
+          <Route path="/mortgages/best-rates" element={<BestRates />} />
+          <Route path="/mortgages/renewal-rates" element={<RenewalRates />} />
+          <Route path="/mortgages/5-year-fixed" element={<FiveYearFixed />} />
+          
           <Route path="/credit-cards" element={<CreditCards />} />
           <Route path="/banking" element={<SavingsRates />} />
           <Route path="/savings-rates" element={<SavingsRates />} />
