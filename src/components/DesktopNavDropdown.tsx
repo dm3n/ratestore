@@ -353,26 +353,89 @@ export function DesktopNavDropdown() {
               </Link>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="w-[800px] p-6">
-                <div className="grid grid-cols-5 gap-6">
-                  {category.sections.map((section) => (
-                    <div key={section.title} className="space-y-3">
-                      <h4 className="text-sm font-semibold text-gray-900">{section.title}</h4>
-                      <ul className="space-y-2">
-                        {section.links.map((link) => (
+              <div className="w-[900px] p-8">
+                {/* Category header with main link */}
+                <div className="mb-6 pb-4 border-b border-gray-100">
+                  <Link 
+                    to={`/${category.title.toLowerCase().replace(' ', '-')}`}
+                    className="text-lg font-semibold text-gray-900 hover:text-primary transition-colors"
+                  >
+                    All {category.title}
+                  </Link>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Explore all {category.title.toLowerCase()} options and services
+                  </p>
+                </div>
+                
+                {/* Organized grid with better spacing */}
+                <div className="grid grid-cols-3 gap-8">
+                  {category.sections.slice(0, 3).map((section) => (
+                    <div key={section.title} className="space-y-4">
+                      <h4 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-2">
+                        {section.title}
+                      </h4>
+                      <ul className="space-y-2.5">
+                        {section.links.slice(0, 6).map((link) => (
                           <li key={link.name}>
                             <Link
                               to={link.href}
-                              className="text-sm text-gray-600 hover:text-primary transition-colors"
+                              className="text-sm text-gray-600 hover:text-primary transition-colors block py-1 leading-relaxed"
                             >
                               {link.name}
                             </Link>
                           </li>
                         ))}
+                        {section.links.length > 6 && (
+                          <li>
+                            <Link
+                              to={`/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                              className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
+                            >
+                              View all {section.title.toLowerCase()} →
+                            </Link>
+                          </li>
+                        )}
                       </ul>
                     </div>
                   ))}
                 </div>
+                
+                {/* Additional sections if any */}
+                {category.sections.length > 3 && (
+                  <div className="mt-8 pt-6 border-t border-gray-100">
+                    <div className="grid grid-cols-2 gap-8">
+                      {category.sections.slice(3, 5).map((section) => (
+                        <div key={section.title} className="space-y-4">
+                          <h4 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-2">
+                            {section.title}
+                          </h4>
+                          <ul className="space-y-2.5">
+                            {section.links.slice(0, 4).map((link) => (
+                              <li key={link.name}>
+                                <Link
+                                  to={link.href}
+                                  className="text-sm text-gray-600 hover:text-primary transition-colors block py-1 leading-relaxed"
+                                >
+                                  {link.name}
+                                </Link>
+                              </li>
+                            ))}
+                            {section.links.length > 4 && (
+                              <li>
+                                <Link
+                                  to={`/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                                  className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
+                                >
+                                  View more →
+                                </Link>
+                              </li>
+                            )}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
