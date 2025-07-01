@@ -33,14 +33,16 @@ export function AdminRateManager() {
   const [editingRate, setEditingRate] = useState<MortgageRate | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [selectedProvince, setSelectedProvince] = useState<string>("BC");
+  const [selectedProvince, setSelectedProvince] = useState<string>("all");
   const { toast } = useToast();
 
   const provinces = [
+    { value: "all", label: "All Provinces" },
     { value: "BC", label: "British Columbia" },
     { value: "AB", label: "Alberta" },
     { value: "ON", label: "Ontario" },
-    { value: "QC", label: "Quebec" }
+    { value: "QC", label: "Quebec" },
+    { value: "national", label: "National" }
   ];
 
   const [newRate, setNewRate] = useState({
@@ -54,13 +56,8 @@ export function AdminRateManager() {
     transaction_types: ['buying'],
     prime_discount: '',
     is_active: true,
-    province: selectedProvince
+    province: 'national'
   });
-
-  // Update newRate province when selectedProvince changes
-  useEffect(() => {
-    setNewRate(prev => ({ ...prev, province: selectedProvince }));
-  }, [selectedProvince]);
 
   const fetchRates = async () => {
     setIsLoading(true);
@@ -179,7 +176,7 @@ export function AdminRateManager() {
 
       toast({
         title: "Success",
-        description: `Rate added successfully to ${provinces.find(p => p.value === selectedProvince)?.label} - available across all calculators`
+        description: "Rate added successfully - available across all calculators"
       });
 
       setShowAddForm(false);
@@ -194,7 +191,7 @@ export function AdminRateManager() {
         transaction_types: ['buying'],
         prime_discount: '',
         is_active: true,
-        province: selectedProvince
+        province: 'national'
       });
       fetchRates();
     } catch (error) {
@@ -208,7 +205,8 @@ export function AdminRateManager() {
   };
 
   const getFilteredRates = (province: string) => {
-    return rates.filter(rate => rate.province === province);
+    if (province === "all") return rates;
+    return rates.filter(rate => rate.province === province || rate.province === 'national');
   };
 
   const renderRatesTable = (filteredRates: MortgageRate[]) => (
@@ -222,6 +220,7 @@ export function AdminRateManager() {
             <TableHead>Term</TableHead>
             <TableHead>Rate</TableHead>
             <TableHead>Prime Discount</TableHead>
+            <TableHead>Province</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -264,6 +263,9 @@ export function AdminRateManager() {
               </TableCell>
               <TableCell>{rate.prime_discount || '-'}</TableCell>
               <TableCell>
+                <Badge variant="outline">{rate.province || 'National'}</Badge>
+              </TableCell>
+              <TableCell>
                 <Badge variant={rate.is_active ? 'default' : 'destructive'}>
                   {rate.is_active ? 'Active' : 'Inactive'}
                 </Badge>
@@ -305,14 +307,14 @@ export function AdminRateManager() {
           <CardTitle>Mortgage Rate Management by Province</CardTitle>
           <Button onClick={() => setShowAddForm(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            Add Rate to {provinces.find(p => p.value === selectedProvince)?.label}
+            Add Rate
           </Button>
         </div>
       </CardHeader>
       <CardContent>
         {showAddForm && (
           <Card className="mb-6 p-4">
-            <h3 className="text-lg font-semibold mb-4">Add New Rate to {provinces.find(p => p.value === selectedProvince)?.label}</h3>
+            <h3 className="text-lg font-semibold mb-4">Add New Rate</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
                 <Label>Lender Name</Label>
@@ -320,6 +322,21 @@ export function AdminRateManager() {
                   value={newRate.lender_name}
                   onChange={(e) => setNewRate({...newRate, lender_name: e.target.value})}
                 />
+              </div>
+              <div>
+                <Label>Province</Label>
+                <Select value={newRate.province} onValueChange={(value) => setNewRate({...newRate, province: value})}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="national">National</SelectItem>
+                    <SelectItem value="BC">British Columbia</SelectItem>
+                    <SelectItem value="AB">Alberta</SelectItem>
+                    <SelectItem value="ON">Ontario</SelectItem>
+                    <SelectItem value="QC">Quebec</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label>Lender Type</Label>
@@ -393,7 +410,7 @@ export function AdminRateManager() {
         )}
 
         <Tabs value={selectedProvince} onValueChange={setSelectedProvince} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-6">
             {provinces.map((province) => (
               <TabsTrigger key={province.value} value={province.value}>
                 {province.label}
