@@ -26,11 +26,13 @@ interface RateData {
 interface InteractiveRateCalculatorProps {
   defaultTransactionType?: string;
   provinceFilter?: string;
+  termFilter?: string; // New prop to filter by specific term
 }
 
 export function InteractiveRateCalculator({ 
   defaultTransactionType = "buying",
-  provinceFilter 
+  provinceFilter,
+  termFilter 
 }: InteractiveRateCalculatorProps) {
   const [transactionType, setTransactionType] = useState(defaultTransactionType);
   const [purchasePrice, setPurchasePrice] = useState(400000);
@@ -74,6 +76,11 @@ export function InteractiveRateCalculator({
       // Add province filter if specified
       if (provinceFilter && provinceFilter !== 'all') {
         query = query.eq('province', provinceFilter);
+      }
+
+      // Add term filter if specified
+      if (termFilter) {
+        query = query.eq('term', termFilter);
       }
 
       const { data: dbRates, error } = await query;
@@ -134,7 +141,7 @@ export function InteractiveRateCalculator({
   // Update rates when inputs change
   useEffect(() => {
     updateRates();
-  }, [purchasePrice, downPayment, transactionType, activeTab, provinceFilter]);
+  }, [purchasePrice, downPayment, transactionType, activeTab, provinceFilter, termFilter]);
 
   // Set up real-time updates for rate changes
   useEffect(() => {
@@ -157,11 +164,14 @@ export function InteractiveRateCalculator({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [transactionType, purchasePrice, downPayment, activeTab, provinceFilter]);
+  }, [transactionType, purchasePrice, downPayment, activeTab, provinceFilter, termFilter]);
 
   const handleInputChange = (setter: (value: any) => void, value: any) => {
     setter(value);
   };
+
+  // Get available terms - if termFilter is specified, only show that term
+  const availableTerms = termFilter ? [termFilter] : ["2-yr", "3-yr", "5-yr"];
 
   return (
     <Card className="border-2 border-primary/20 shadow-lg">
@@ -181,6 +191,9 @@ export function InteractiveRateCalculator({
                 Last updated: {lastUpdated.toLocaleTimeString()}
                 {provinceFilter && provinceFilter !== 'all' && (
                   <span className="ml-2 text-primary">• Showing {provinceFilter} rates</span>
+                )}
+                {termFilter && (
+                  <span className="ml-2 text-primary">• {termFilter} term only</span>
                 )}
               </span>
             </p>
@@ -295,7 +308,7 @@ export function InteractiveRateCalculator({
             </div>
           </div>
 
-          {["2-yr", "3-yr", "5-yr"].map((term) => {
+          {availableTerms.map((term) => {
             const fixedRate = rates.find(r => r.term === term && r.type === "fixed");
             const variableRate = rates.find(r => r.term === term && r.type === "variable");
 

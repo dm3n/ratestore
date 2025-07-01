@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -74,7 +73,10 @@ const FiveYearFixed = () => {
                   Get live rates from our database for 5-year fixed mortgages
                 </p>
               </div>
-              <InteractiveRateCalculator defaultTransactionType="buying" />
+              <InteractiveRateCalculator 
+                defaultTransactionType="buying" 
+                termFilter="5-yr"
+              />
             </div>
           </div>
         </section>
