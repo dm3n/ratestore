@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Award, TrendingDown, Clock, CheckCircle } from "lucide-react";
+import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 
 const BestRates = () => {
   const bestRates = [
@@ -75,10 +76,26 @@ const BestRates = () => {
           </div>
         </section>
 
+        {/* Interactive Rate Calculator */}
+        <section className="py-16 bg-gray-50">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <InteractiveRateCalculator />
+            </div>
+          </div>
+        </section>
+
         {/* Best Rates Cards */}
         <section className="py-16">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold mb-4">Today's Best Rates</h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Our top-rated mortgage products chosen by our expert team.
+                </p>
+              </div>
+
               <div className="grid lg:grid-cols-3 gap-8 mb-16">
                 {bestRates.map((rate, index) => (
                   <Card key={index} className="relative border-2 border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300">
