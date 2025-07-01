@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Home, CreditCard, Zap, Star } from "lucide-react";
+import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 
 const HELOCRates = () => {
   const helocRates = [
@@ -60,6 +60,21 @@ const HELOCRates = () => {
                   <div className="text-xs text-muted-foreground mt-1">Variable rate based on Prime</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Interactive HELOC Calculator */}
+        <section className="py-16 bg-gray-50">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4">HELOC Calculator</h2>
+                <p className="text-lg text-muted-foreground">
+                  Calculate your potential HELOC payments and compare rates
+                </p>
+              </div>
+              <InteractiveRateCalculator />
             </div>
           </div>
         </section>

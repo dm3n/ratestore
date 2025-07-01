@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RefreshCw, AlertCircle, Calculator, CheckCircle } from "lucide-react";
+import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 
 const RenewalRates = () => {
   const renewalRates = [
@@ -47,6 +47,21 @@ const RenewalRates = () => {
                   <span className="font-medium">Average savings by switching: $16,000 over 5 years</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Interactive Renewal Calculator */}
+        <section className="py-16 bg-gray-50">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4">Renewal Savings Calculator</h2>
+                <p className="text-lg text-muted-foreground">
+                  Calculate how much you could save by switching lenders at renewal
+                </p>
+              </div>
+              <InteractiveRateCalculator />
             </div>
           </div>
         </section>

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MapPin, Star } from "lucide-react";
+import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 
 const Alberta = () => {
   const albertaRates = [
@@ -41,6 +42,21 @@ const Alberta = () => {
                   <div className="text-sm text-muted-foreground">Best Alberta Rate Today</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Interactive Rate Calculator */}
+        <section className="py-16 bg-gray-50">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4">Alberta Mortgage Calculator</h2>
+                <p className="text-lg text-muted-foreground">
+                  Calculate your mortgage payments with Alberta rates
+                </p>
+              </div>
+              <InteractiveRateCalculator />
             </div>
           </div>
         </section>

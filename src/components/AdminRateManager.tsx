@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { Pencil, Trash2, Plus, Save, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -22,6 +23,7 @@ interface MortgageRate {
   transaction_types: string[];
   prime_discount: string | null;
   is_active: boolean;
+  province?: string;
 }
 
 export function AdminRateManager() {
@@ -30,7 +32,17 @@ export function AdminRateManager() {
   const [editingRate, setEditingRate] = useState<MortgageRate | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [selectedProvince, setSelectedProvince] = useState<string>("all");
   const { toast } = useToast();
+
+  const provinces = [
+    { value: "all", label: "All Provinces" },
+    { value: "BC", label: "British Columbia" },
+    { value: "AB", label: "Alberta" },
+    { value: "ON", label: "Ontario" },
+    { value: "QC", label: "Quebec" },
+    { value: "national", label: "National" }
+  ];
 
   const [newRate, setNewRate] = useState({
     lender_name: '',
@@ -42,7 +54,8 @@ export function AdminRateManager() {
     max_loan_to_value: 0.95,
     transaction_types: ['buying'],
     prime_discount: '',
-    is_active: true
+    is_active: true,
+    province: 'national'
   });
 
   const fetchRates = async () => {
@@ -73,7 +86,6 @@ export function AdminRateManager() {
 
   const handleEdit = (rate: MortgageRate) => {
     setEditingId(rate.id);
-    // Convert decimal to percentage for editing
     setEditingRate({ 
       ...rate, 
       base_rate: rate.base_rate * 100 
@@ -91,12 +103,13 @@ export function AdminRateManager() {
           lender_type: editingRate.lender_type,
           rate_type: editingRate.rate_type,
           term: editingRate.term,
-          base_rate: editingRate.base_rate / 100, // Convert percentage to decimal for storage
+          base_rate: editingRate.base_rate / 100,
           min_down_payment: editingRate.min_down_payment,
           max_loan_to_value: editingRate.max_loan_to_value,
           transaction_types: editingRate.transaction_types,
           prime_discount: editingRate.prime_discount || null,
           is_active: editingRate.is_active,
+          province: editingRate.province,
           updated_at: new Date().toISOString()
         })
         .eq('id', editingRate.id);
@@ -105,7 +118,7 @@ export function AdminRateManager() {
 
       toast({
         title: "Success",
-        description: "Rate updated successfully"
+        description: "Rate updated successfully - changes will reflect across all calculators"
       });
 
       setEditingId(null);
@@ -154,7 +167,7 @@ export function AdminRateManager() {
         .from('mortgage_rates')
         .insert([{
           ...newRate,
-          base_rate: newRate.base_rate / 100, // Convert percentage to decimal for storage
+          base_rate: newRate.base_rate / 100,
           prime_discount: newRate.prime_discount || null
         }]);
 
@@ -162,7 +175,7 @@ export function AdminRateManager() {
 
       toast({
         title: "Success",
-        description: "Rate added successfully"
+        description: "Rate added successfully - available across all calculators"
       });
 
       setShowAddForm(false);
@@ -176,7 +189,8 @@ export function AdminRateManager() {
         max_loan_to_value: 0.95,
         transaction_types: ['buying'],
         prime_discount: '',
-        is_active: true
+        is_active: true,
+        province: 'national'
       });
       fetchRates();
     } catch (error) {
@@ -189,11 +203,107 @@ export function AdminRateManager() {
     }
   };
 
+  const getFilteredRates = (province: string) => {
+    if (province === "all") return rates;
+    return rates.filter(rate => rate.province === province || rate.province === 'national');
+  };
+
+  const renderRatesTable = (filteredRates: MortgageRate[]) => (
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Lender</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Rate Type</TableHead>
+            <TableHead>Term</TableHead>
+            <TableHead>Rate</TableHead>
+            <TableHead>Prime Discount</TableHead>
+            <TableHead>Province</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {filteredRates.map((rate) => (
+            <TableRow key={rate.id}>
+              <TableCell>
+                {editingId === rate.id ? (
+                  <Input
+                    value={editingRate?.lender_name || ''}
+                    onChange={(e) => setEditingRate(prev => prev ? {...prev, lender_name: e.target.value} : null)}
+                  />
+                ) : (
+                  rate.lender_name
+                )}
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline">{rate.lender_type}</Badge>
+              </TableCell>
+              <TableCell>
+                <Badge variant={rate.rate_type === 'fixed' ? 'default' : 'secondary'}>
+                  {rate.rate_type}
+                </Badge>
+              </TableCell>
+              <TableCell>{rate.term}</TableCell>
+              <TableCell>
+                {editingId === rate.id ? (
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    max="10"
+                    value={editingRate?.base_rate || 0}
+                    onChange={(e) => setEditingRate(prev => prev ? {...prev, base_rate: parseFloat(e.target.value) || 0} : null)}
+                  />
+                ) : (
+                  `${(rate.base_rate * 100).toFixed(2)}%`
+                )}
+              </TableCell>
+              <TableCell>{rate.prime_discount || '-'}</TableCell>
+              <TableCell>
+                <Badge variant="outline">{rate.province || 'National'}</Badge>
+              </TableCell>
+              <TableCell>
+                <Badge variant={rate.is_active ? 'default' : 'destructive'}>
+                  {rate.is_active ? 'Active' : 'Inactive'}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <div className="flex gap-2">
+                  {editingId === rate.id ? (
+                    <>
+                      <Button size="sm" variant="outline" onClick={handleSave}>
+                        <Save className="h-3 w-3" />
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => {setEditingId(null); setEditingRate(null);}}>
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button size="sm" variant="outline" onClick={() => handleEdit(rate)}>
+                        <Pencil className="h-3 w-3" />
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => handleDelete(rate.id)}>
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+
   return (
     <Card className="mb-6">
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle>Mortgage Rate Management</CardTitle>
+          <CardTitle>Mortgage Rate Management by Province</CardTitle>
           <Button onClick={() => setShowAddForm(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Add Rate
@@ -211,6 +321,21 @@ export function AdminRateManager() {
                   value={newRate.lender_name}
                   onChange={(e) => setNewRate({...newRate, lender_name: e.target.value})}
                 />
+              </div>
+              <div>
+                <Label>Province</Label>
+                <Select value={newRate.province} onValueChange={(value) => setNewRate({...newRate, province: value})}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="national">National</SelectItem>
+                    <SelectItem value="BC">British Columbia</SelectItem>
+                    <SelectItem value="AB">Alberta</SelectItem>
+                    <SelectItem value="ON">Ontario</SelectItem>
+                    <SelectItem value="QC">Quebec</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label>Lender Type</Label>
@@ -283,91 +408,33 @@ export function AdminRateManager() {
           </Card>
         )}
 
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Lender</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Rate Type</TableHead>
-                <TableHead>Term</TableHead>
-                <TableHead>Rate</TableHead>
-                <TableHead>Prime Discount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rates.map((rate) => (
-                <TableRow key={rate.id}>
-                  <TableCell>
-                    {editingId === rate.id ? (
-                      <Input
-                        value={editingRate?.lender_name || ''}
-                        onChange={(e) => setEditingRate(prev => prev ? {...prev, lender_name: e.target.value} : null)}
-                      />
-                    ) : (
-                      rate.lender_name
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{rate.lender_type}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={rate.rate_type === 'fixed' ? 'default' : 'secondary'}>
-                      {rate.rate_type}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{rate.term}</TableCell>
-                  <TableCell>
-                    {editingId === rate.id ? (
-                      <Input
-                        type="number"
-                        step="0.01"
-                        min="1"
-                        max="10"
-                        value={editingRate?.base_rate || 0}
-                        onChange={(e) => setEditingRate(prev => prev ? {...prev, base_rate: parseFloat(e.target.value) || 0} : null)}
-                        placeholder="e.g., 3.84"
-                      />
-                    ) : (
-                      `${(rate.base_rate * 100).toFixed(2)}%`
-                    )}
-                  </TableCell>
-                  <TableCell>{rate.prime_discount || '-'}</TableCell>
-                  <TableCell>
-                    <Badge variant={rate.is_active ? 'default' : 'destructive'}>
-                      {rate.is_active ? 'Active' : 'Inactive'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      {editingId === rate.id ? (
-                        <>
-                          <Button size="sm" variant="outline" onClick={handleSave}>
-                            <Save className="h-3 w-3" />
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={() => {setEditingId(null); setEditingRate(null);}}>
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button size="sm" variant="outline" onClick={() => handleEdit(rate)}>
-                            <Pencil className="h-3 w-3" />
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={() => handleDelete(rate.id)}>
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <Tabs value={selectedProvince} onValueChange={setSelectedProvince} className="space-y-4">
+          <TabsList className="grid w-full grid-cols-6">
+            {provinces.map((province) => (
+              <TabsTrigger key={province.value} value={province.value}>
+                {province.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          {provinces.map((province) => (
+            <TabsContent key={province.value} value={province.value}>
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    {province.label} Rates ({getFilteredRates(province.value).length})
+                  </CardTitle>
+                  <CardDescription>
+                    Manage rates for {province.label}. Changes update automatically across all calculators.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {renderRatesTable(getFilteredRates(province.value))}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          ))}
+        </Tabs>
       </CardContent>
     </Card>
   );
