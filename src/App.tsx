@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -38,8 +39,8 @@ import BC from '@/pages/mortgages/BC';
 import Ontario from '@/pages/mortgages/Ontario';
 import Quebec from '@/pages/mortgages/Quebec';
 import Historical from '@/pages/mortgages/Historical';
-import Mortgage from '@/pages/mortgages/Mortgage';
-import Refinance from '@/pages/mortgages/Refinance';
+import Mortgage from '@/pages/Mortgage';
+import Refinance from '@/pages/Refinance';
 import DownPaymentCalculator from '@/pages/tools/DownPaymentCalculator';
 import ExtraPaymentCalculator from '@/pages/tools/ExtraPaymentCalculator';
 import CompoundInterestCalculator from '@/pages/tools/CompoundInterestCalculator';
