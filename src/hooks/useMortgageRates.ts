@@ -14,6 +14,7 @@ export interface MortgageRate {
   transaction_types: string[];
   prime_discount: string | null;
   is_active: boolean;
+  province: string;
   created_at: string;
   updated_at: string;
 }
@@ -24,6 +25,7 @@ interface UseMortgageRatesOptions {
   rateType?: 'fixed' | 'variable';
   term?: string;
   minDownPayment?: number;
+  province?: string;
   autoRefresh?: boolean;
 }
 
@@ -65,12 +67,17 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
         query = query.lte('min_down_payment', options.minDownPayment);
       }
 
+      if (options.province) {
+        query = query.eq('province', options.province);
+      }
+
       const { data, error } = await query;
 
       if (error) {
         throw error;
       }
 
+      console.log('Fetched rates:', data);
       setRates(data || []);
       setLastUpdated(new Date());
     } catch (err) {
@@ -89,7 +96,8 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
     options.lenderType,
     options.rateType,
     options.term,
-    options.minDownPayment
+    options.minDownPayment,
+    options.province
   ]);
 
   // Set up real-time updates if autoRefresh is enabled

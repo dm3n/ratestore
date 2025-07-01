@@ -34,6 +34,7 @@ export function AdminRateManager() {
   const [isLoading, setIsLoading] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState<string>("all");
+  const [selectedRateCategory, setSelectedRateCategory] = useState<string>("mortgage");
   const { toast } = useToast();
 
   const provinces = [
@@ -42,6 +43,12 @@ export function AdminRateManager() {
     { value: "AB", label: "Alberta" },
     { value: "ON", label: "Ontario" },
     { value: "QC", label: "Quebec" }
+  ];
+
+  const rateCategories = [
+    { value: "mortgage", label: "Mortgage Rates" },
+    { value: "heloc", label: "HELOC Rates" },
+    { value: "renewal", label: "Renewal Rates" }
   ];
 
   const [newRate, setNewRate] = useState({
@@ -162,8 +169,15 @@ export function AdminRateManager() {
   };
 
   const handleAddRate = async () => {
-    // Determine which province to add to
     const provinceToAdd = selectedProvince === "all" ? "BC" : selectedProvince;
+    
+    // Set transaction types based on selected category
+    let transactionTypes = ['buying'];
+    if (selectedRateCategory === 'heloc') {
+      transactionTypes = ['heloc'];
+    } else if (selectedRateCategory === 'renewal') {
+      transactionTypes = ['renewal'];
+    }
     
     try {
       const { error } = await supabase
@@ -176,7 +190,7 @@ export function AdminRateManager() {
           base_rate: newRate.base_rate / 100,
           min_down_payment: newRate.min_down_payment,
           max_loan_to_value: newRate.max_loan_to_value,
-          transaction_types: newRate.transaction_types,
+          transaction_types: transactionTypes,
           prime_discount: newRate.prime_discount || null,
           is_active: newRate.is_active,
           province: provinceToAdd
@@ -186,7 +200,7 @@ export function AdminRateManager() {
 
       toast({
         title: "Success",
-        description: `Rate added successfully to ${provinceToAdd} - available across all calculators`
+        description: `${selectedRateCategory.toUpperCase()} rate added successfully to ${provinceToAdd} - available across all calculators`
       });
 
       setShowAddForm(false);
@@ -198,7 +212,7 @@ export function AdminRateManager() {
         base_rate: 3.84,
         min_down_payment: 0.05,
         max_loan_to_value: 0.95,
-        transaction_types: ['buying'],
+        transaction_types: transactionTypes,
         prime_discount: '',
         is_active: true,
         province: provinceToAdd
@@ -214,9 +228,31 @@ export function AdminRateManager() {
     }
   };
 
-  const getFilteredRates = (province: string) => {
-    if (province === "all") return rates;
-    return rates.filter(rate => rate.province === province);
+  const getFilteredRates = (province: string, category: string) => {
+    let filteredRates = rates;
+    
+    // Filter by province
+    if (province !== "all") {
+      filteredRates = filteredRates.filter(rate => rate.province === province);
+    }
+    
+    // Filter by rate category
+    if (category === "heloc") {
+      filteredRates = filteredRates.filter(rate => 
+        rate.transaction_types?.includes('heloc')
+      );
+    } else if (category === "renewal") {
+      filteredRates = filteredRates.filter(rate => 
+        rate.transaction_types?.includes('renewal')
+      );
+    } else if (category === "mortgage") {
+      filteredRates = filteredRates.filter(rate => 
+        rate.transaction_types?.includes('buying') || 
+        rate.transaction_types?.includes('refinancing')
+      );
+    }
+    
+    return filteredRates;
   };
 
   const getProvinceForNewRate = () => {
@@ -234,6 +270,7 @@ export function AdminRateManager() {
             <TableHead>Term</TableHead>
             <TableHead>Rate</TableHead>
             <TableHead>Prime Discount</TableHead>
+            <TableHead>Transaction Types</TableHead>
             <TableHead>Province</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Actions</TableHead>
@@ -277,6 +314,15 @@ export function AdminRateManager() {
               </TableCell>
               <TableCell>{rate.prime_discount || '-'}</TableCell>
               <TableCell>
+                <div className="flex flex-wrap gap-1">
+                  {rate.transaction_types?.map((type, idx) => (
+                    <Badge key={idx} variant="outline" className="text-xs">
+                      {type}
+                    </Badge>
+                  ))}
+                </div>
+              </TableCell>
+              <TableCell>
                 <Badge variant="outline">{rate.province || 'N/A'}</Badge>
               </TableCell>
               <TableCell>
@@ -318,10 +364,10 @@ export function AdminRateManager() {
     <Card className="mb-6">
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle>Mortgage Rate Management by Province</CardTitle>
+          <CardTitle>Mortgage Rate Management</CardTitle>
           <Button onClick={() => setShowAddForm(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            Add Rate {selectedProvince !== "all" && `to ${selectedProvince}`}
+            Add {selectedRateCategory.toUpperCase()} Rate
           </Button>
         </div>
       </CardHeader>
@@ -329,7 +375,7 @@ export function AdminRateManager() {
         {showAddForm && (
           <Card className="mb-6 p-4">
             <h3 className="text-lg font-semibold mb-4">
-              Add New Rate to {getProvinceForNewRate()}
+              Add New {selectedRateCategory.toUpperCase()} Rate to {getProvinceForNewRate()}
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
@@ -427,6 +473,22 @@ export function AdminRateManager() {
           </Card>
         )}
 
+        <div className="mb-4">
+          <Label>Rate Category</Label>
+          <Select value={selectedRateCategory} onValueChange={setSelectedRateCategory}>
+            <SelectTrigger className="w-48">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {rateCategories.map((category) => (
+                <SelectItem key={category.value} value={category.value}>
+                  {category.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         <Tabs value={selectedProvince} onValueChange={setSelectedProvince} className="space-y-4">
           <TabsList className="grid w-full grid-cols-5">
             {provinces.map((province) => (
@@ -441,14 +503,14 @@ export function AdminRateManager() {
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    {province.label} Rates ({getFilteredRates(province.value).length})
+                    {province.label} {rateCategories.find(c => c.value === selectedRateCategory)?.label} ({getFilteredRates(province.value, selectedRateCategory).length})
                   </CardTitle>
                   <CardDescription>
-                    Manage rates for {province.label}. Changes update automatically across all calculators.
+                    Manage {selectedRateCategory} rates for {province.label}. Changes update automatically across all calculators.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {renderRatesTable(getFilteredRates(province.value))}
+                  {renderRatesTable(getFilteredRates(province.value, selectedRateCategory))}
                 </CardContent>
               </Card>
             </TabsContent>

@@ -1,25 +1,38 @@
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { RefreshCw, AlertCircle, Calculator, CheckCircle } from "lucide-react";
+import { RefreshCw, Star, TrendingUp } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 
 const RenewalRates = () => {
   const renewalRates = [
-    { lender: "Alternative Lender", rate: "3.79%", term: "5-Year Fixed", savings: "$18,400", cashback: "$2,000" },
-    { lender: "Credit Union Plus", rate: "3.85%", term: "5-Year Fixed", savings: "$16,800", cashback: "$1,500" },
-    { lender: "Your Current Bank", rate: "4.89%", term: "5-Year Fixed", savings: "$0", cashback: "$0", current: true },
-    { lender: "Online Lender", rate: "3.92%", term: "5-Year Variable", savings: "$15,200", cashback: "$1,000" },
+    { lender: "RBC", rate: "3.79%", term: "5-Year Fixed", specialOffer: "Renewal Discount", location: "Canada Wide", featured: true },
+    { lender: "TD Bank", rate: "3.84%", term: "5-Year Fixed", specialOffer: "Client Retention Rate", location: "Canada Wide", featured: true },
+    { lender: "Scotiabank", rate: "3.89%", term: "5-Year Fixed", specialOffer: "Loyalty Rate", location: "Canada Wide", featured: false },
+    { lender: "BMO", rate: "3.94%", term: "5-Year Fixed", specialOffer: "Renewal Special", location: "Canada Wide", featured: false },
+    { lender: "CIBC", rate: "3.99%", term: "5-Year Fixed", specialOffer: "Existing Client Rate", location: "Canada Wide", featured: false },
   ];
 
-  const renewalSteps = [
-    { step: 1, title: "Review Your Options", description: "90 days before renewal, start comparing rates" },
-    { step: 2, title: "Get Pre-Approved", description: "Secure a better rate with alternative lenders" },
-    { step: 3, title: "Negotiate", description: "Use competing offers to negotiate with your current lender" },
-    { step: 4, title: "Switch or Stay", description: "Choose the best option - switch lenders or accept your bank's counter-offer" }
+  const renewalBenefits = [
+    {
+      icon: RefreshCw,
+      title: "No Stress Renewal",
+      description: "Renew with your current lender or explore better options elsewhere"
+    },
+    {
+      icon: TrendingUp,
+      title: "Better Rates Available", 
+      description: "Renewal time is the perfect opportunity to negotiate better terms"
+    },
+    {
+      icon: Star,
+      title: "Loyalty Rewards",
+      description: "Many lenders offer special rates to retain existing customers"
+    }
   ];
 
   return (
@@ -27,24 +40,25 @@ const RenewalRates = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-blue-50 to-primary/5 py-16">
+        <section className="bg-gradient-to-br from-orange-50 to-primary/5 py-16">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-blue-100 text-blue-700 border-blue-200">
+              <Badge variant="outline" className="mb-6 bg-orange-100 text-orange-700 border-orange-200">
                 <RefreshCw className="h-3 w-3 mr-1" />
-                Renewal Season
+                Mortgage Renewal
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                Best Mortgage Renewal Rates
+                Mortgage Renewal Rates
               </h1>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Don't auto-renew! Compare renewal rates and save thousands on your mortgage. 
-                Most Canadians can get a better rate by switching lenders.
+                Your mortgage is up for renewal? Compare the best renewal rates 
+                and negotiate better terms with your current lender or switch to a new one.
               </p>
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
-                <div className="flex items-center gap-2 text-yellow-800">
-                  <AlertCircle className="h-5 w-5" />
-                  <span className="font-medium">Average savings by switching: $16,000 over 5 years</span>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary mb-2">3.79%</div>
+                  <div className="text-sm text-muted-foreground">Best Renewal Rate Today</div>
+                  <div className="text-xs text-muted-foreground mt-1">Special rates for existing customers</div>
                 </div>
               </div>
             </div>
@@ -56,9 +70,9 @@ const RenewalRates = () => {
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold mb-4">Renewal Savings Calculator</h2>
+                <h2 className="text-3xl font-bold mb-4">Renewal Calculator</h2>
                 <p className="text-lg text-muted-foreground">
-                  Calculate how much you could save by switching lenders at renewal
+                  Calculate your renewal payments and compare rates
                 </p>
               </div>
               <InteractiveRateCalculator defaultTransactionType="renewal" />
@@ -66,16 +80,20 @@ const RenewalRates = () => {
           </div>
         </section>
 
-        {/* Renewal Rate Comparison */}
         <section className="py-16">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <Card className="mb-12">
                 <CardHeader>
-                  <CardTitle className="text-2xl">Your Renewal Options</CardTitle>
-                  <CardDescription>
-                    Compare what you could save by switching lenders vs. staying with your current bank
-                  </CardDescription>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-2xl">Current Renewal Rates</CardTitle>
+                      <CardDescription>Special rates for mortgage renewals from major Canadian lenders</CardDescription>
+                    </div>
+                    <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">
+                      Updated Today
+                    </Badge>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="overflow-x-auto">
@@ -85,45 +103,34 @@ const RenewalRates = () => {
                           <TableHead>Lender</TableHead>
                           <TableHead>Rate</TableHead>
                           <TableHead>Term</TableHead>
-                          <TableHead>5-Year Savings</TableHead>
-                          <TableHead>Cash Back</TableHead>
+                          <TableHead>Special Offer</TableHead>
+                          <TableHead>Coverage</TableHead>
                           <TableHead></TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {renewalRates.map((rate, index) => (
-                          <TableRow 
-                            key={index} 
-                            className={rate.current ? "bg-red-50 border-red-200" : "hover:bg-gray-50"}
-                          >
+                          <TableRow key={index} className={rate.featured ? "bg-orange-50/50" : ""}>
                             <TableCell className="font-medium">
                               <div className="flex items-center gap-2">
-                                {rate.current && <Badge variant="outline" className="text-xs bg-red-100 text-red-700">Current</Badge>}
+                                {rate.featured && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
                                 {rate.lender}
                               </div>
                             </TableCell>
                             <TableCell>
-                              <span className={`text-lg font-bold ${rate.current ? 'text-red-600' : 'text-green-600'}`}>
-                                {rate.rate}
-                              </span>
+                              <span className="text-lg font-bold text-primary">{rate.rate}</span>
                             </TableCell>
                             <TableCell>{rate.term}</TableCell>
                             <TableCell>
-                              <span className={`font-bold ${rate.current ? 'text-gray-500' : 'text-green-600'}`}>
-                                {rate.current ? 'Baseline' : `+$${rate.savings}`}
-                              </span>
+                              <Badge variant="outline" className="text-xs bg-orange-50 text-orange-600 border-orange-200">
+                                {rate.specialOffer}
+                              </Badge>
                             </TableCell>
+                            <TableCell>{rate.location}</TableCell>
                             <TableCell>
-                              <span className="font-medium">
-                                {rate.cashback === "$0" ? "None" : rate.cashback}
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              {!rate.current && (
-                                <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                                  Get Quote
-                                </Button>
-                              )}
+                              <Button size="sm" variant={rate.featured ? "default" : "outline"}>
+                                Get Quote
+                              </Button>
                             </TableCell>
                           </TableRow>
                         ))}
@@ -133,83 +140,59 @@ const RenewalRates = () => {
                 </CardContent>
               </Card>
 
-              {/* Renewal Process */}
-              <Card className="mb-12">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold mb-4">Renewal Benefits</h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Why renewal time is the perfect opportunity to save money.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-8 mb-12">
+                {renewalBenefits.map((benefit, index) => (
+                  <Card key={index} className="text-center border-0 shadow-sm">
+                    <CardHeader>
+                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <benefit.icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <CardTitle className="text-xl">{benefit.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">{benefit.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-2xl flex items-center gap-2">
-                    <Calculator className="h-6 w-6" />
-                    Smart Renewal Process
-                  </CardTitle>
-                  <CardDescription>
-                    Follow these steps to maximize your savings at renewal time
-                  </CardDescription>
+                  <CardTitle className="text-2xl">Renewal vs New Mortgage</CardTitle>
+                  <CardDescription>Understanding your options at renewal time</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {renewalSteps.map((item, index) => (
-                      <div key={index} className="relative">
-                        <div className="flex items-center gap-4 mb-4">
-                          <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">
-                            {item.step}
-                          </div>
-                          <h3 className="font-semibold">{item.title}</h3>
-                        </div>
-                        <p className="text-sm text-muted-foreground pl-12">
-                          {item.description}
-                        </p>
-                        {index < renewalSteps.length - 1 && (
-                          <div className="hidden lg:block absolute top-4 -right-3 w-6 h-0.5 bg-gray-300"></div>
-                        )}
-                      </div>
-                    ))}
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <h3 className="font-semibold mb-4 text-green-600">Stay with Current Lender</h3>
+                      <ul className="space-y-2 text-sm">
+                        <li>• No paperwork or credit checks</li>
+                        <li>• Automatic renewal process</li>
+                        <li>• Loyalty discounts may apply</li>
+                        <li>• Keep existing mortgage terms</li>
+                        <li>• No legal or appraisal fees</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-4 text-orange-600">Switch to New Lender</h3>
+                      <ul className="space-y-2 text-sm">
+                        <li>• Potentially better rates available</li>
+                        <li>• New lender may cover switch costs</li>
+                        <li>• Opportunity to change mortgage terms</li>
+                        <li>• Access to new mortgage products</li>
+                        <li>• Credit check and income verification required</li>
+                      </ul>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Benefits of Switching */}
-              <div className="grid md:grid-cols-3 gap-8">
-                <Card className="text-center">
-                  <CardHeader>
-                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle className="h-6 w-6 text-green-600" />
-                    </div>
-                    <CardTitle>Lower Rates</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      Alternative lenders often offer rates 0.5-1.0% lower than big banks
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="text-center">
-                  <CardHeader>
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                      <RefreshCw className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <CardTitle>Cash Incentives</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      Many lenders offer cash back up to $2,000 to cover switching costs
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="text-center">
-                  <CardHeader>
-                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                      <Calculator className="h-6 w-6 text-purple-600" />
-                    </div>
-                    <CardTitle>Better Terms</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      More flexible prepayment options and better mortgage features
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
             </div>
           </div>
         </section>
