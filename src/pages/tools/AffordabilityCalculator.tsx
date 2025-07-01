@@ -1,164 +1,292 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { Home, DollarSign, Calculator } from "lucide-react";
+import { Home, Calculator, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const AffordabilityCalculator = () => {
-  const [income, setIncome] = useState<string>("");
-  const [debts, setDebts] = useState<string>("");
-  const [downPayment, setDownPayment] = useState<string>("");
-  const [interestRate, setInterestRate] = useState<string>("6.5");
+  const [annualIncome, setAnnualIncome] = useState(80000);
+  const [monthlyDebts, setMonthlyDebts] = useState(500);
+  const [downPayment, setDownPayment] = useState(20000);
+  const [interestRate, setInterestRate] = useState(5.5);
+  const [isCalculating, setIsCalculating] = useState(false);
   const [results, setResults] = useState<any>(null);
 
   const calculateAffordability = () => {
-    const monthlyIncome = parseFloat(income) / 12;
-    const monthlyDebts = parseFloat(debts);
-    const down = parseFloat(downPayment);
-    const rate = parseFloat(interestRate) / 100 / 12;
+    setIsCalculating(true);
+    
+    // Simulate calculation delay for animation
+    setTimeout(() => {
+      const monthlyIncome = annualIncome / 12;
+      const maxMonthlyPayment = monthlyIncome * 0.28 - monthlyDebts; // 28% rule
+      const totalDebtRatio = (maxMonthlyPayment + monthlyDebts) / monthlyIncome;
+      
+      // Calculate maximum loan amount
+      const monthlyRate = interestRate / 100 / 12;
+      const numPayments = 30 * 12; // 30 years
+      const maxLoanAmount = maxMonthlyPayment * (1 - Math.pow(1 + monthlyRate, -numPayments)) / monthlyRate;
+      
+      const maxHomePrice = maxLoanAmount + downPayment;
+      
+      setResults({
+        maxHomePrice,
+        maxLoanAmount,
+        maxMonthlyPayment,
+        totalDebtRatio,
+        monthlyIncome,
+        affordabilityScore: Math.min(100, (maxHomePrice / 1000000) * 100)
+      });
+      
+      setIsCalculating(false);
+    }, 1000);
+  };
 
-    // Using 28% front-end ratio and 36% back-end ratio
-    const maxMonthlyPayment = Math.min(
-      monthlyIncome * 0.28, // Front-end ratio
-      (monthlyIncome * 0.36) - monthlyDebts // Back-end ratio
-    );
+  useEffect(() => {
+    calculateAffordability();
+  }, [annualIncome, monthlyDebts, downPayment, interestRate]);
 
-    // Calculate max loan amount
-    const termMonths = 30 * 12;
-    const maxLoanAmount = maxMonthlyPayment * ((1 - Math.pow(1 + rate, -termMonths)) / rate);
-    const maxHomePrice = maxLoanAmount + down;
-
-    setResults({
-      maxHomePrice,
-      maxLoanAmount,
-      maxMonthlyPayment,
-      downPayment: down
-    });
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Header />
       
-      <main className="flex-1">
-        <section className="bg-primary/5 py-12 md:py-16">
-          <div className="container">
-            <div className="max-w-3xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
-                Planning Tool
-              </Badge>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-                Home Affordability Calculator
-              </h1>
-              <p className="text-lg text-muted-foreground mb-6">
-                Determine how much house you can afford based on your income and debts.
-              </p>
-            </div>
-          </div>
-        </section>
+      <main className="flex-1 py-12">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <Badge variant="outline" className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
+              <Home className="h-3 w-3 mr-1" />
+              Home Affordability
+            </Badge>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Home Affordability Calculator
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Discover how much home you can afford based on your income and financial situation
+            </p>
+          </motion.div>
 
-        <section className="py-12">
-          <div className="container">
-            <div className="max-w-4xl mx-auto">
-              <div className="grid gap-8 lg:grid-cols-2">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Calculator className="h-5 w-5" />
-                      Your Financial Information
-                    </CardTitle>
-                    <CardDescription>
-                      Enter your income and debt information to calculate affordability
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <Label htmlFor="income">Annual Gross Income</Label>
+          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Input Section */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <Card className="border-2 border-blue-100 shadow-xl">
+                <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
+                  <CardTitle className="flex items-center text-2xl">
+                    <Calculator className="h-6 w-6 mr-2 text-blue-600" />
+                    Your Financial Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="annual-income" className="text-base font-medium">
+                      Annual Gross Income
+                    </Label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        id="income"
+                        id="annual-income"
                         type="number"
-                        placeholder="75000"
-                        value={income}
-                        onChange={(e) => setIncome(e.target.value)}
+                        value={annualIncome}
+                        onChange={(e) => setAnnualIncome(Number(e.target.value))}
+                        className="pl-10 text-lg"
+                        placeholder="80,000"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="debts">Monthly Debt Payments</Label>
+                    <Slider
+                      value={[annualIncome]}
+                      onValueChange={(value) => setAnnualIncome(value[0])}
+                      min={30000}
+                      max={300000}
+                      step={5000}
+                      className="mt-2"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="monthly-debts" className="text-base font-medium">
+                      Monthly Debt Payments
+                    </Label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        id="debts"
+                        id="monthly-debts"
                         type="number"
+                        value={monthlyDebts}
+                        onChange={(e) => setMonthlyDebts(Number(e.target.value))}
+                        className="pl-10 text-lg"
                         placeholder="500"
-                        value={debts}
-                        onChange={(e) => setDebts(e.target.value)}
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="downPayment">Down Payment Available</Label>
-                      <Input
-                        id="downPayment"
-                        type="number"
-                        placeholder="50000"
-                        value={downPayment}
-                        onChange={(e) => setDownPayment(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="rate">Interest Rate (%)</Label>
-                      <Input
-                        id="rate"
-                        type="number"
-                        step="0.1"
-                        value={interestRate}
-                        onChange={(e) => setInterestRate(e.target.value)}
-                      />
-                    </div>
-                    <Button onClick={calculateAffordability} className="w-full">
-                      Calculate Affordability
-                    </Button>
-                  </CardContent>
-                </Card>
+                    <Slider
+                      value={[monthlyDebts]}
+                      onValueChange={(value) => setMonthlyDebts(value[0])}
+                      min={0}
+                      max={5000}
+                      step={50}
+                      className="mt-2"
+                    />
+                  </div>
 
-                {results && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Home className="h-5 w-5" />
-                        Your Home Buying Budget
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="p-4 bg-primary/5 rounded-lg">
-                        <div className="text-sm text-muted-foreground">Maximum Home Price</div>
-                        <div className="text-2xl font-bold text-primary">
-                          ${results.maxHomePrice.toLocaleString()}
+                  <div className="space-y-2">
+                    <Label htmlFor="down-payment" className="text-base font-medium">
+                      Down Payment Available
+                    </Label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="down-payment"
+                        type="number"
+                        value={downPayment}
+                        onChange={(e) => setDownPayment(Number(e.target.value))}
+                        className="pl-10 text-lg"
+                        placeholder="20,000"
+                      />
+                    </div>
+                    <Slider
+                      value={[downPayment]}
+                      onValueChange={(value) => setDownPayment(value[0])}
+                      min={5000}
+                      max={200000}
+                      step={1000}
+                      className="mt-2"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="interest-rate" className="text-base font-medium">
+                      Interest Rate (%)
+                    </Label>
+                    <Input
+                      id="interest-rate"
+                      type="number"
+                      step="0.1"
+                      value={interestRate}
+                      onChange={(e) => setInterestRate(Number(e.target.value))}
+                      className="text-lg"
+                      placeholder="5.5"
+                    />
+                    <Slider
+                      value={[interestRate]}
+                      onValueChange={(value) => setInterestRate(value[0])}
+                      min={3}
+                      max={10}
+                      step={0.1}
+                      className="mt-2"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Results Section */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Card className="border-2 border-green-100 shadow-xl">
+                <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
+                  <CardTitle className="flex items-center text-2xl">
+                    <TrendingUp className="h-6 w-6 mr-2 text-green-600" />
+                    Affordability Results
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <AnimatePresence mode="wait">
+                    {isCalculating ? (
+                      <motion.div
+                        key="loading"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center h-64"
+                      >
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                      </motion.div>
+                    ) : results ? (
+                      <motion.div
+                        key="results"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.5 }}
+                        className="space-y-6"
+                      >
+                        <div className="text-center">
+                          <div className="text-4xl font-bold text-green-600 mb-2">
+                            {formatCurrency(results.maxHomePrice)}
+                          </div>
+                          <div className="text-lg text-muted-foreground">Maximum Home Price</div>
                         </div>
-                      </div>
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span className="text-sm">Maximum Loan Amount</span>
-                          <span className="font-medium">${results.maxLoanAmount.toLocaleString()}</span>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
+                            <div className="text-2xl font-bold text-blue-600">
+                              {formatCurrency(results.maxMonthlyPayment)}
+                            </div>
+                            <div className="text-sm text-muted-foreground">Max Monthly Payment</div>
+                          </div>
+                          <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg">
+                            <div className="text-2xl font-bold text-purple-600">
+                              {formatCurrency(results.maxLoanAmount)}
+                            </div>
+                            <div className="text-sm text-muted-foreground">Max Loan Amount</div>
+                          </div>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm">Down Payment</span>
-                          <span className="font-medium">${results.downPayment.toLocaleString()}</span>
+
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Debt-to-Income Ratio</span>
+                            <span className={`text-sm font-bold ${results.totalDebtRatio <= 0.36 ? 'text-green-600' : 'text-red-600'}`}>
+                              {(results.totalDebtRatio * 100).toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <motion.div
+                              className={`h-2 rounded-full ${results.totalDebtRatio <= 0.36 ? 'bg-green-500' : 'bg-red-500'}`}
+                              initial={{ width: 0 }}
+                              animate={{ width: `${Math.min(results.totalDebtRatio * 100, 100)}%` }}
+                              transition={{ duration: 1, delay: 0.5 }}
+                            />
+                          </div>
+                          {results.totalDebtRatio > 0.36 && (
+                            <div className="flex items-center text-amber-600 text-sm">
+                              <AlertCircle className="h-4 w-4 mr-1" />
+                              Consider reducing debt or increasing income
+                            </div>
+                          )}
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm">Max Monthly Payment</span>
-                          <span className="font-medium">${results.maxMonthlyPayment.toLocaleString()}</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            </div>
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
-        </section>
+        </div>
       </main>
       
       <Footer />
