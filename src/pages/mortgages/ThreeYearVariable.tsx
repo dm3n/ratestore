@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TrendingDown, AlertTriangle, DollarSign, Star } from "lucide-react";
+import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 
 const ThreeYearVariable = () => {
   const variableRates = [
@@ -60,6 +61,24 @@ const ThreeYearVariable = () => {
                   <div className="text-xs text-muted-foreground mt-1">(Prime - 0.25%)</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Interactive Rate Calculator */}
+        <section className="py-16 bg-gray-50">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4">3-Year Variable Rate Calculator</h2>
+                <p className="text-lg text-muted-foreground">
+                  Get live rates from our database for 3-year variable mortgages
+                </p>
+              </div>
+              <InteractiveRateCalculator 
+                defaultTransactionType="buying" 
+                termFilter="3-yr"
+              />
             </div>
           </div>
         </section>

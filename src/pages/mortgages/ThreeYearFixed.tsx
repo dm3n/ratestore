@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Scale, Shield, TrendingUp, Star } from "lucide-react";
+import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 
 const ThreeYearFixed = () => {
   const threeYearRates = [
@@ -59,6 +60,24 @@ const ThreeYearFixed = () => {
                   <div className="text-sm text-muted-foreground">Best 3-Year Fixed Rate Today</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Interactive Rate Calculator */}
+        <section className="py-16 bg-gray-50">
+          <div className="container px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-4">3-Year Fixed Rate Calculator</h2>
+                <p className="text-lg text-muted-foreground">
+                  Get live rates from our database for 3-year fixed mortgages
+                </p>
+              </div>
+              <InteractiveRateCalculator 
+                defaultTransactionType="buying" 
+                termFilter="3-yr"
+              />
             </div>
           </div>
         </section>
