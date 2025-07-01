@@ -6,19 +6,20 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { DollarSign, TrendingUp, Target, Shield, Plus, CreditCard, PiggyBank, TrendingDown } from 'lucide-react';
+import { DollarSign, TrendingUp, Target, Shield, Plus, CreditCard, PiggyBank, TrendingDown, Settings } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { DashboardStats } from '@/components/DashboardStats';
 import { AccountsOverview } from '@/components/AccountsOverview';
 import { RecentTransactions } from '@/components/RecentTransactions';
 import { QuickActions } from '@/components/QuickActions';
-import { AdminDashboard } from '@/components/AdminDashboard';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const { isAdmin, loading: adminLoading } = useAdmin();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState({
     stats: null,
@@ -114,25 +115,29 @@ const Dashboard = () => {
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-gray-900">
-              Welcome back, {user?.user_metadata?.full_name || user?.email}
-            </h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold text-gray-900">
+                Welcome back, {user?.user_metadata?.full_name || user?.email}
+              </h1>
+              {isAdmin && (
+                <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                  <Shield className="h-4 w-4" />
+                  Admin
+                </div>
+              )}
+            </div>
             {isAdmin && (
-              <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                <Shield className="h-4 w-4" />
-                Admin
-              </div>
+              <Button onClick={() => navigate('/admin')} className="flex items-center gap-2">
+                <Settings className="h-4 w-4" />
+                Admin Dashboard
+              </Button>
             )}
           </div>
           <p className="text-gray-600 mt-2">Here's your financial overview</p>
         </div>
 
         <div className="grid gap-6">
-          {isAdmin && (
-            <AdminDashboard />
-          )}
-          
           {/* Regular Dashboard Stats */}
           <DashboardStats stats={dashboardData.stats} onRefresh={fetchDashboardData} />
           

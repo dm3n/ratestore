@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import Index from '@/pages/Index';
 import Dashboard from '@/pages/Dashboard';
+import Admin from '@/pages/Admin';
 import Profile from '@/pages/Profile';
 import SavingsRates from '@/pages/SavingsRates';
 import PersonalLoans from '@/pages/PersonalLoans';
@@ -57,6 +58,11 @@ function App() {
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <Admin />
             </ProtectedRoute>
           } />
           <Route path="/profile" element={
