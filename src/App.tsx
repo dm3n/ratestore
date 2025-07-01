@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -17,7 +16,7 @@ import Blog from '@/pages/Blog';
 import BlogPost from '@/pages/BlogPost';
 import Careers from '@/pages/Careers';
 import Privacy from '@/pages/Privacy';
-import Terms from '@/pages/Terms';
+import TermsPage from '@/pages/Terms';
 import Disclosure from '@/pages/Disclosure';
 import CDRates from '@/pages/CDRates';
 import Mortgages from '@/pages/Mortgages';
@@ -45,6 +44,8 @@ import RetirementCalculator from '@/pages/tools/RetirementCalculator';
 import EmergencyFundCalculator from '@/pages/tools/EmergencyFundCalculator';
 import LoanComparisonTool from '@/pages/tools/LoanComparisonTool';
 import './App.css';
+import Terms from '@/pages/mortgages/Terms';
+import Compare from '@/pages/mortgages/Compare';
 
 function App() {
   return (
@@ -66,8 +67,9 @@ function App() {
           
           {/* Financial Products */}
           <Route path="/mortgages" element={<Mortgages />} />
+          <Route path="/mortgages/compare" element={<Compare />} />
+          <Route path="/mortgages/terms" element={<Terms />} />
           <Route path="/mortgages/compare-rates" element={<CompareRates />} />
-          <Route path="/mortgages/compare" element={<CompareRates />} />
           <Route path="/mortgages/best-rates" element={<BestRates />} />
           <Route path="/mortgages/renewal-rates" element={<RenewalRates />} />
           <Route path="/mortgages/5-year-fixed" element={<FiveYearFixed />} />
@@ -98,7 +100,7 @@ function App() {
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
+          <Route path="/terms" element={<TermsPage />} />
           <Route path="/disclosure" element={<Disclosure />} />
           
           {/* Financial Tools */}

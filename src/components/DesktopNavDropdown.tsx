@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -29,6 +28,7 @@ const navCategories: NavCategory[] = [
       {
         title: "Compare mortgage rates",
         links: [
+          { name: "All mortgage comparisons", href: "/mortgages/compare" },
           { name: "Best mortgage rates", href: "/mortgages/best-rates" },
           { name: "Best mortgage renewal rates", href: "/mortgages/renewal-rates" },
           { name: "HELOC mortgage rates", href: "/mortgages/heloc" },
@@ -42,12 +42,12 @@ const navCategories: NavCategory[] = [
       {
         title: "Mortgage terms",
         links: [
+          { name: "All mortgage terms", href: "/mortgages/terms" },
           { name: "2-year fixed rates", href: "/mortgages/2-year-fixed" },
           { name: "3-year fixed rates", href: "/mortgages/3-year-fixed" },
           { name: "5-year fixed rates", href: "/mortgages/5-year-fixed" },
           { name: "3-year variable rates", href: "/mortgages/3-year-variable" },
           { name: "5-year variable rates", href: "/mortgages/5-year-variable" },
-          { name: "Compare all rates", href: "/mortgages/compare" },
           { name: "Historical rates", href: "/mortgages/historical" },
         ]
       },
