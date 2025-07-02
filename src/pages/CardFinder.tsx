@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -77,15 +78,14 @@ const CardFinder = () => {
           <div className="container">
             <div className="flex justify-center items-center flex-wrap gap-8 md:gap-16 opacity-60">
               {banks.map((bank, index) => (
-                <div key={index} className="flex flex-col items-center">
-                  <div className="h-12 w-20 mb-2 flex items-center justify-center">
+                <div key={index} className="flex items-center justify-center">
+                  <div className="h-12 w-20 flex items-center justify-center">
                     <img 
                       src={bank.logo} 
                       alt={bank.name}
                       className="max-h-full max-w-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
                     />
                   </div>
-                  <span className="text-sm font-medium text-gray-600">{bank.name}</span>
                 </div>
               ))}
             </div>
