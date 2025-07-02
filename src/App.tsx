@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -49,6 +50,43 @@ import CreditCardTypes from "@/pages/guides/CreditCardTypes";
 import RewardsCreditCards from "@/pages/guides/RewardsCreditCards";
 import CreditCardInsurance from "@/pages/guides/CreditCardInsurance";
 
+// Mortgage pages
+import Terms from "@/pages/mortgages/Terms";
+import BestRates from "@/pages/mortgages/BestRates";
+import RenewalRates from "@/pages/mortgages/RenewalRates";
+import HELOCRates from "@/pages/mortgages/HELOCRates";
+import BankRates from "@/pages/mortgages/BankRates";
+import Alberta from "@/pages/mortgages/Alberta";
+import BC from "@/pages/mortgages/BC";
+import Ontario from "@/pages/mortgages/Ontario";
+import Quebec from "@/pages/mortgages/Quebec";
+import TwoYearFixed from "@/pages/mortgages/TwoYearFixed";
+import ThreeYearFixed from "@/pages/mortgages/ThreeYearFixed";
+import FiveYearFixed from "@/pages/mortgages/FiveYearFixed";
+import ThreeYearVariable from "@/pages/mortgages/ThreeYearVariable";
+import FiveYearVariable from "@/pages/mortgages/FiveYearVariable";
+import Historical from "@/pages/mortgages/Historical";
+import Lenders from "@/pages/mortgages/Lenders";
+import Brokers from "@/pages/mortgages/Brokers";
+
+// Tools pages
+import MortgageCalculator from "@/pages/tools/MortgageCalculator";
+import AffordabilityCalculator from "@/pages/tools/AffordabilityCalculator";
+import DownPaymentCalculator from "@/pages/tools/DownPaymentCalculator";
+import AmortizationSchedule from "@/pages/tools/AmortizationSchedule";
+import ExtraPaymentCalculator from "@/pages/tools/ExtraPaymentCalculator";
+import RenewalCalculator from "@/pages/tools/RenewalCalculator";
+import LandTransferTaxCalculator from "@/pages/tools/LandTransferTaxCalculator";
+
+// Guide pages
+import HomeBuying from "@/pages/guides/HomeBuying";
+import MortgageRenewal from "@/pages/guides/MortgageRenewal";
+import Refinancing from "@/pages/guides/Refinancing";
+import FirstTimeBuyer from "@/pages/guides/FirstTimeBuyer";
+import PrimeRate from "@/pages/guides/PrimeRate";
+import VariableVsFixed from "@/pages/guides/VariableVsFixed";
+import OvernightRate from "@/pages/guides/OvernightRate";
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -77,6 +115,43 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<Admin />} />
             </Route>
+
+            {/* Mortgage Routes */}
+            <Route path="/mortgages/terms" element={<Terms />} />
+            <Route path="/mortgages/best-rates" element={<BestRates />} />
+            <Route path="/mortgages/renewal-rates" element={<RenewalRates />} />
+            <Route path="/mortgages/heloc" element={<HELOCRates />} />
+            <Route path="/mortgages/bank-rates" element={<BankRates />} />
+            <Route path="/mortgages/alberta" element={<Alberta />} />
+            <Route path="/mortgages/bc" element={<BC />} />
+            <Route path="/mortgages/ontario" element={<Ontario />} />
+            <Route path="/mortgages/quebec" element={<Quebec />} />
+            <Route path="/mortgages/2-year-fixed" element={<TwoYearFixed />} />
+            <Route path="/mortgages/3-year-fixed" element={<ThreeYearFixed />} />
+            <Route path="/mortgages/5-year-fixed" element={<FiveYearFixed />} />
+            <Route path="/mortgages/3-year-variable" element={<ThreeYearVariable />} />
+            <Route path="/mortgages/5-year-variable" element={<FiveYearVariable />} />
+            <Route path="/mortgages/historical" element={<Historical />} />
+            <Route path="/mortgages/lenders" element={<Lenders />} />
+            <Route path="/mortgages/brokers" element={<Brokers />} />
+
+            {/* Tools Routes */}
+            <Route path="/tools/mortgage-calculator" element={<MortgageCalculator />} />
+            <Route path="/tools/affordability" element={<AffordabilityCalculator />} />
+            <Route path="/tools/down-payment" element={<DownPaymentCalculator />} />
+            <Route path="/tools/amortization" element={<AmortizationSchedule />} />
+            <Route path="/tools/extra-payment" element={<ExtraPaymentCalculator />} />
+            <Route path="/tools/renewal" element={<RenewalCalculator />} />
+            <Route path="/tools/land-transfer-tax" element={<LandTransferTaxCalculator />} />
+
+            {/* Guide Routes */}
+            <Route path="/guides/home-buying" element={<HomeBuying />} />
+            <Route path="/guides/mortgage-renewal" element={<MortgageRenewal />} />
+            <Route path="/guides/refinancing" element={<Refinancing />} />
+            <Route path="/guides/first-time-buyer" element={<FirstTimeBuyer />} />
+            <Route path="/guides/prime-rate" element={<PrimeRate />} />
+            <Route path="/guides/variable-vs-fixed" element={<VariableVsFixed />} />
+            <Route path="/guides/overnight-rate" element={<OvernightRate />} />
 
             {/* Credit Card Category Routes */}
             <Route path="/credit-cards/no-fee" element={<NoFee />} />
