@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -39,6 +40,8 @@ import BC from '@/pages/mortgages/BC';
 import Ontario from '@/pages/mortgages/Ontario';
 import Quebec from '@/pages/mortgages/Quebec';
 import Historical from '@/pages/mortgages/Historical';
+import Lenders from '@/pages/mortgages/Lenders';
+import Brokers from '@/pages/mortgages/Brokers';
 import Mortgage from '@/pages/Mortgage';
 import Refinance from '@/pages/Refinance';
 import DownPaymentCalculator from '@/pages/tools/DownPaymentCalculator';
@@ -53,6 +56,8 @@ import AmortizationSchedule from '@/pages/tools/AmortizationSchedule';
 import AffordabilityCalculator from '@/pages/tools/AffordabilityCalculator';
 import RenewalCalculator from '@/pages/tools/RenewalCalculator';
 import CalculatorsOverview from '@/pages/tools/CalculatorsOverview';
+import HomeBuying from '@/pages/guides/HomeBuying';
+import FirstTimeBuyer from '@/pages/guides/FirstTimeBuyer';
 import './App.css';
 import Terms from '@/pages/mortgages/Terms';
 import Compare from '@/pages/mortgages/Compare';
@@ -101,6 +106,8 @@ function App() {
           <Route path="/mortgages/ontario" element={<Ontario />} />
           <Route path="/mortgages/quebec" element={<Quebec />} />
           <Route path="/mortgages/historical" element={<Historical />} />
+          <Route path="/mortgages/lenders" element={<Lenders />} />
+          <Route path="/mortgages/brokers" element={<Brokers />} />
           
           <Route path="/credit-cards" element={<CreditCards />} />
           <Route path="/banking" element={<SavingsRates />} />
@@ -119,6 +126,10 @@ function App() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/disclosure" element={<Disclosure />} />
+          
+          {/* Guides */}
+          <Route path="/guides/home-buying" element={<HomeBuying />} />
+          <Route path="/guides/first-time-buyer" element={<FirstTimeBuyer />} />
           
           {/* Financial Tools */}
           <Route path="/tools" element={<CalculatorsOverview />} />
