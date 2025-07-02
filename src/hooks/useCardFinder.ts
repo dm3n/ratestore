@@ -105,12 +105,13 @@ export const useCardFinder = () => {
     }
 
     // Annual Fee Preference (15% weight)
-    if (card.annual_fee <= preferences.maxAnnualFee) {
+    const annualFee = card.annual_fee || 0;
+    if (annualFee <= preferences.maxAnnualFee) {
       score += 15;
-      if (card.annual_fee === 0) {
+      if (annualFee === 0) {
         reasons.push('No annual fee');
       } else {
-        reasons.push(`Annual fee within your budget ($${card.annual_fee})`);
+        reasons.push(`Annual fee within your budget ($${annualFee})`);
       }
     } else {
       score -= 10;
@@ -129,11 +130,11 @@ export const useCardFinder = () => {
       const generalWeight = preferences.monthlySpending.general / totalSpending;
 
       const weightedRewardRate = 
-        (card.cashback_rate_grocery * groceryWeight) +
-        (card.cashback_rate_dining * diningWeight) +
-        (card.cashback_rate_gas * gasWeight) +
-        (card.cashback_rate_travel * travelWeight) +
-        (card.cashback_rate_general * generalWeight);
+        ((card.cashback_rate_grocery || 0) * groceryWeight) +
+        ((card.cashback_rate_dining || 0) * diningWeight) +
+        ((card.cashback_rate_gas || 0) * gasWeight) +
+        ((card.cashback_rate_travel || 0) * travelWeight) +
+        ((card.cashback_rate_general || 0) * generalWeight);
 
       categoryScore = Math.min(weightedRewardRate * 4, 20); // Cap at 20 points
       
@@ -146,10 +147,11 @@ export const useCardFinder = () => {
     score += categoryScore;
 
     // Welcome Bonus Value (10% weight)
-    if (card.welcome_bonus_value > 0) {
-      const bonusScore = Math.min((card.welcome_bonus_value / 500) * 10, 10);
+    const welcomeBonusValue = card.welcome_bonus_value || 0;
+    if (welcomeBonusValue > 0) {
+      const bonusScore = Math.min((welcomeBonusValue / 500) * 10, 10);
       score += bonusScore;
-      reasons.push(`${card.welcome_bonus_value} welcome bonus`);
+      reasons.push(`${welcomeBonusValue} welcome bonus`);
     }
 
     return { score: Math.round(score), reasons };
@@ -166,13 +168,31 @@ export const useCardFinder = () => {
 
       if (cardsError) throw cardsError;
 
-      // Calculate match scores for each card
+      // Calculate match scores for each card and transform to proper types
       const scoredCards = cards.map(card => {
         const { score, reasons } = calculateMatchScore(card, preferences);
+        
+        // Transform the card data to match CardRecommendation interface
         return {
-          ...card,
+          id: card.id,
+          name: card.name,
+          issuer: card.issuer,
+          card_type: card.card_type,
+          annual_fee: card.annual_fee || 0,
+          welcome_bonus_value: card.welcome_bonus_value || 0,
+          welcome_bonus_requirement: card.welcome_bonus_requirement || 0,
+          cashback_rate_general: card.cashback_rate_general || 0,
+          cashback_rate_grocery: card.cashback_rate_grocery || 0,
+          cashback_rate_gas: card.cashback_rate_gas || 0,
+          cashback_rate_dining: card.cashback_rate_dining || 0,
+          cashback_rate_travel: card.cashback_rate_travel || 0,
+          features: Array.isArray(card.features) ? card.features as string[] : [],
+          pros: Array.isArray(card.pros) ? card.pros as string[] : [],
+          cons: Array.isArray(card.cons) ? card.cons as string[] : [],
+          apply_url: card.apply_url || '',
           match_score: score,
-          match_reasons: reasons
+          match_reasons: reasons,
+          rank: 0 // Will be set below
         };
       });
 
