@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -390,11 +391,7 @@ export function DesktopNavDropdown() {
                         {section.links.length > 6 && (
                           <li>
                             <Link
-                              to={section.title === "Compare mortgage rates" ? "/mortgages/compare" : 
-                                  section.title === "Mortgage terms" ? "/mortgages/terms" :
-                                  section.title === "Education centre" ? "/guides/education-centre" :
-                                  section.title === "Banks & Networks" ? "/credit-cards" :
-                                  `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                              to={getViewAllLink(category.title, section.title)}
                               className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
                             >
                               View all {section.title.toLowerCase()} →
@@ -429,9 +426,7 @@ export function DesktopNavDropdown() {
                             {section.links.length > 4 && (
                               <li>
                                 <Link
-                                  to={section.title === "Education centre" ? "/guides/education-centre" : 
-                                      section.title === "Banks & Networks" ? "/credit-cards" :
-                                      `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                                  to={getViewAllLink(category.title, section.title)}
                                   className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
                                 >
                                   View more →
@@ -459,4 +454,57 @@ export function DesktopNavDropdown() {
       </NavigationMenuList>
     </NavigationMenu>
   );
+}
+
+// Helper function to generate the correct "View all" links for each section
+function getViewAllLink(categoryTitle: string, sectionTitle: string): string {
+  const category = categoryTitle.toLowerCase().replace(' ', '-');
+  
+  // Banking overview links
+  if (category === "banking") {
+    if (sectionTitle === "Best of") return "/banking";
+    if (sectionTitle === "Savings accounts") return "/banking/savings/compare";
+    if (sectionTitle === "Chequing accounts") return "/banking/chequing/compare";
+    if (sectionTitle === "Education centre") return "/guides/education-centre";
+    if (sectionTitle === "Calculators") return "/tools/tfsa-calculator";
+  }
+  
+  // Investing overview links
+  if (category === "investing") {
+    if (sectionTitle === "Best of") return "/investing";
+    if (sectionTitle === "GIC terms and types") return "/investing/gic/compare";
+    if (sectionTitle === "Stocks & ETFs") return "/investing";
+    if (sectionTitle === "Education centre") return "/guides/education-centre";
+    if (sectionTitle === "Calculators") return "/tools/compound-interest";
+  }
+  
+  // Insurance overview links
+  if (category === "insurance") {
+    if (sectionTitle === "Auto insurance") return "/insurance/auto/types";
+    if (sectionTitle === "Home insurance") return "/insurance/home/types";
+    if (sectionTitle === "Life insurance") return "/insurance/life/types";
+    if (sectionTitle === "Travel insurance") return "/insurance/travel/types";
+    if (sectionTitle === "Business insurance") return "/insurance/business/quotes";
+  }
+  
+  // Mortgage overview links
+  if (category === "mortgages") {
+    if (sectionTitle === "Compare mortgage rates") return "/mortgages/compare";
+    if (sectionTitle === "Mortgage terms") return "/mortgages/terms";
+    if (sectionTitle === "Calculators") return "/tools/mortgage-calculator";
+    if (sectionTitle === "Mortgage providers") return "/mortgages/lenders";
+    if (sectionTitle === "Education centre") return "/guides/education-centre";
+  }
+  
+  // Credit Cards overview links
+  if (category === "credit-cards") {
+    if (sectionTitle === "Compare credit cards") return "/credit-cards";
+    if (sectionTitle === "Reward credit cards") return "/credit-cards";
+    if (sectionTitle === "Type of credit cards") return "/credit-cards";
+    if (sectionTitle === "Banks & Networks") return "/credit-cards";
+    if (sectionTitle === "Education centre") return "/guides/education-centre";
+  }
+  
+  // Default fallback
+  return `/${category}`;
 }
