@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -45,6 +44,10 @@ import Grocery from "@/pages/credit-cards/Grocery";
 import Rewards from "@/pages/credit-cards/Rewards";
 import Store from "@/pages/credit-cards/Store";
 import Aeroplan from "@/pages/credit-cards/Aeroplan";
+
+// Credit Card Promotions and Awards
+import Promotions from "@/pages/credit-cards/Promotions";
+import Awards from "@/pages/credit-cards/Awards";
 
 // Bank & Network Routes
 import Amex from "@/pages/credit-cards/Amex";
@@ -192,6 +195,10 @@ function App() {
             <Route path="/credit-cards/secured" element={<Secured />} />
             <Route path="/credit-cards/student" element={<Student />} />
             <Route path="/credit-cards/travel-insurance" element={<TravelInsurance />} />
+
+            {/* Credit Card Promotions and Awards */}
+            <Route path="/credit-cards/promotions" element={<Promotions />} />
+            <Route path="/credit-cards/awards" element={<Awards />} />
 
             {/* Bank & Network Routes */}
             <Route path="/credit-cards/amex" element={<Amex />} />
