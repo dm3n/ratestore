@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -253,7 +252,7 @@ const BestOverallCreditCards = () => {
                 Editor's Choice
               </Badge>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                Best Overall Credit Cards
+                Best Canadian Credit Cards
               </h1>
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Our top-rated credit cards for 2025, carefully selected based on rewards, 
