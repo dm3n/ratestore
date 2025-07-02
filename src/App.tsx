@@ -30,6 +30,18 @@ import NoFXFee from "@/pages/credit-cards/NoFXFee";
 import Secured from "@/pages/credit-cards/Secured";
 import Student from "@/pages/credit-cards/Student";
 import TravelInsurance from "@/pages/credit-cards/TravelInsurance";
+import Amex from "@/pages/credit-cards/Amex";
+import BMO from "@/pages/credit-cards/BMO";
+import CIBC from "@/pages/credit-cards/CIBC";
+import Mastercard from "@/pages/credit-cards/Mastercard";
+import MBNA from "@/pages/credit-cards/MBNA";
+import NationalBank from "@/pages/credit-cards/NationalBank";
+import PCFinancial from "@/pages/credit-cards/PCFinancial";
+import RBC from "@/pages/credit-cards/RBC";
+import Scotiabank from "@/pages/credit-cards/Scotiabank";
+import Tangerine from "@/pages/credit-cards/Tangerine";
+import TD from "@/pages/credit-cards/TD";
+import Visa from "@/pages/credit-cards/Visa";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +72,7 @@ function App() {
               <Route path="/admin" element={<Admin />} />
             </Route>
 
+            {/* Credit Card Category Routes */}
             <Route path="/credit-cards/no-fee" element={<NoFee />} />
             <Route path="/credit-cards/travel" element={<Travel />} />
             <Route path="/credit-cards/best-canadian" element={<BestCanadian />} />
@@ -73,6 +86,20 @@ function App() {
             <Route path="/credit-cards/secured" element={<Secured />} />
             <Route path="/credit-cards/student" element={<Student />} />
             <Route path="/credit-cards/travel-insurance" element={<TravelInsurance />} />
+
+            {/* Bank & Network Routes */}
+            <Route path="/credit-cards/amex" element={<Amex />} />
+            <Route path="/credit-cards/bmo" element={<BMO />} />
+            <Route path="/credit-cards/cibc" element={<CIBC />} />
+            <Route path="/credit-cards/mastercard" element={<Mastercard />} />
+            <Route path="/credit-cards/mbna" element={<MBNA />} />
+            <Route path="/credit-cards/national-bank" element={<NationalBank />} />
+            <Route path="/credit-cards/pc-financial" element={<PCFinancial />} />
+            <Route path="/credit-cards/rbc" element={<RBC />} />
+            <Route path="/credit-cards/scotiabank" element={<Scotiabank />} />
+            <Route path="/credit-cards/tangerine" element={<Tangerine />} />
+            <Route path="/credit-cards/td" element={<TD />} />
+            <Route path="/credit-cards/visa" element={<Visa />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
