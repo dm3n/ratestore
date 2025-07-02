@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -61,6 +62,7 @@ import RewardsCreditCards from "@/pages/guides/RewardsCreditCards";
 import CreditCardInsurance from "@/pages/guides/CreditCardInsurance";
 
 // Mortgage pages
+import Compare from "@/pages/mortgages/Compare";
 import Terms from "@/pages/mortgages/Terms";
 import BestRates from "@/pages/mortgages/BestRates";
 import RenewalRates from "@/pages/mortgages/RenewalRates";
@@ -127,6 +129,7 @@ function App() {
             </Route>
 
             {/* Mortgage Routes */}
+            <Route path="/mortgages/compare" element={<Compare />} />
             <Route path="/mortgages/terms" element={<Terms />} />
             <Route path="/mortgages/best-rates" element={<BestRates />} />
             <Route path="/mortgages/renewal-rates" element={<RenewalRates />} />
