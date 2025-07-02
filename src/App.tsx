@@ -16,7 +16,7 @@ import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
 import Unauthorized from "@/pages/Unauthorized";
 import NotFound from "@/pages/NotFound";
-import ProtectedRoute from "@/components/ProtectedRoute";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import NoFee from "@/pages/credit-cards/NoFee";
 import Travel from "@/pages/credit-cards/Travel";
 import BestCanadian from "@/pages/credit-cards/BestCanadian";
