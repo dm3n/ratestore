@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -6,6 +5,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Index from "@/pages/Index";
 import Mortgages from "@/pages/Mortgages";
 import CreditCards from "@/pages/CreditCards";
+import CardFinder from "@/pages/CardFinder";
 import Banking from "@/pages/Banking";
 import Investing from "@/pages/Investing";
 import Insurance from "@/pages/Insurance";
@@ -43,6 +43,7 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/mortgages" element={<Mortgages />} />
             <Route path="/credit-cards" element={<CreditCards />} />
+            <Route path="/card-finder" element={<CardFinder />} />
             <Route path="/banking" element={<Banking />} />
             <Route path="/investing" element={<Investing />} />
             <Route path="/insurance" element={<Insurance />} />
