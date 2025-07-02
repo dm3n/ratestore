@@ -64,14 +64,14 @@ const Tangerine = () => {
               <h2 className="text-3xl font-bold text-center mb-12">Tangerine Credit Cards</h2>
               <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                 {tangerineCards.map((card, index) => (
-                  <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow">
+                  <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow pt-12">
                     {card.featured && (
-                      <Badge className="absolute top-4 right-4 bg-yellow-500 text-yellow-900">
+                      <Badge className="absolute top-4 right-4 bg-yellow-500 text-yellow-900 z-10">
                         <Star className="h-3 w-3 mr-1" />
                         Featured
                       </Badge>
                     )}
-                    <CardHeader>
+                    <CardHeader className="pt-4">
                       <div className="flex items-center justify-between mb-2">
                         <CreditCard className="h-6 w-6 text-orange-600" />
                         <div className="flex items-center">

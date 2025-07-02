@@ -67,12 +67,14 @@ export const CardRecommendations = ({ recommendations, onBack }: CardRecommendat
 
           <div className="grid gap-6">
             {recommendations.map((card, index) => (
-              <Card key={card.id} className={`${index === 0 ? 'ring-2 ring-blue-500' : ''}`}>
-                <CardHeader>
+              <Card key={card.id} className={`relative ${index === 0 ? 'ring-2 ring-blue-500 pt-12' : 'pt-12'}`}>
+                {index === 0 && (
+                  <Badge className="absolute top-4 right-4 bg-blue-600 z-10">Top Match</Badge>
+                )}
+                <CardHeader className="pt-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        {index === 0 && <Badge className="bg-blue-600">Top Match</Badge>}
                         <Badge className={getCardTypeColor(card.card_type)}>
                           {card.card_type.replace('_', ' ').toUpperCase()}
                         </Badge>

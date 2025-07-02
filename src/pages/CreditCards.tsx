@@ -252,14 +252,14 @@ const CreditCards = () => {
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {featuredCards.map((card, index) => (
-                    <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow">
+                    <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow pt-12">
                       {card.featured && (
-                        <Badge className="absolute top-4 right-4 bg-yellow-500 text-yellow-900">
+                        <Badge className="absolute top-4 right-4 bg-yellow-500 text-yellow-900 z-10">
                           <Star className="h-3 w-3 mr-1" />
                           Featured
                         </Badge>
                       )}
-                      <CardHeader>
+                      <CardHeader className="pt-4">
                         <div className="flex items-center justify-between mb-2">
                           <Badge variant="outline">{card.category}</Badge>
                           <div className="flex items-center">
