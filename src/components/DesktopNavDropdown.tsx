@@ -391,6 +391,7 @@ export function DesktopNavDropdown() {
                             <Link
                               to={section.title === "Compare mortgage rates" ? "/mortgages/compare" : 
                                   section.title === "Mortgage terms" ? "/mortgages/terms" :
+                                  section.title === "Education centre" ? "/guides/education-centre" :
                                   `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
                               className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
                             >
@@ -426,7 +427,8 @@ export function DesktopNavDropdown() {
                             {section.links.length > 4 && (
                               <li>
                                 <Link
-                                  to={`/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                                  to={section.title === "Education centre" ? "/guides/education-centre" : 
+                                      `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
                                   className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
                                 >
                                   View more →

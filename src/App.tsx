@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -58,6 +57,10 @@ import RenewalCalculator from '@/pages/tools/RenewalCalculator';
 import CalculatorsOverview from '@/pages/tools/CalculatorsOverview';
 import HomeBuying from '@/pages/guides/HomeBuying';
 import FirstTimeBuyer from '@/pages/guides/FirstTimeBuyer';
+import MortgageRenewal from '@/pages/guides/MortgageRenewal';
+import Refinancing from '@/pages/guides/Refinancing';
+import FirstTimePrograms from '@/pages/guides/FirstTimePrograms';
+import EducationCentre from '@/pages/guides/EducationCentre';
 import './App.css';
 import Terms from '@/pages/mortgages/Terms';
 import Compare from '@/pages/mortgages/Compare';
@@ -128,8 +131,13 @@ function App() {
           <Route path="/disclosure" element={<Disclosure />} />
           
           {/* Guides */}
+          <Route path="/guides" element={<EducationCentre />} />
+          <Route path="/guides/education-centre" element={<EducationCentre />} />
           <Route path="/guides/home-buying" element={<HomeBuying />} />
           <Route path="/guides/first-time-buyer" element={<FirstTimeBuyer />} />
+          <Route path="/guides/mortgage-renewal" element={<MortgageRenewal />} />
+          <Route path="/guides/refinancing" element={<Refinancing />} />
+          <Route path="/guides/first-time-programs" element={<FirstTimePrograms />} />
           
           {/* Financial Tools */}
           <Route path="/tools" element={<CalculatorsOverview />} />
