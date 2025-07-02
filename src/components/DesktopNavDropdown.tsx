@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -344,6 +345,36 @@ const navCategories: NavCategory[] = [
 ];
 
 export function DesktopNavDropdown() {
+  const navigate = useNavigate();
+
+  const handleBanksNetworksClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    // Navigate to credit cards page
+    navigate('/credit-cards');
+    
+    // Wait for navigation to complete, then scroll to banks tab and activate it
+    setTimeout(() => {
+      // Find and click the banks & networks tab
+      const banksTab = document.querySelector('[data-value="banks"]') as HTMLElement;
+      if (banksTab) {
+        banksTab.click();
+        
+        // Smooth scroll to the tabs section
+        setTimeout(() => {
+          const tabsSection = document.querySelector('[role="tablist"]');
+          if (tabsSection) {
+            tabsSection.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start',
+              inline: 'nearest'
+            });
+          }
+        }, 100);
+      }
+    }, 100);
+  };
+
   return (
     <NavigationMenu>
       <NavigationMenuList className="gap-6">
@@ -389,16 +420,24 @@ export function DesktopNavDropdown() {
                         ))}
                         {section.links.length > 6 && (
                           <li>
-                            <Link
-                              to={section.title === "Compare mortgage rates" ? "/mortgages/compare" : 
-                                  section.title === "Mortgage terms" ? "/mortgages/terms" :
-                                  section.title === "Education centre" ? "/guides/education-centre" :
-                                  section.title === "Banks & Networks" ? "/credit-cards" :
-                                  `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
-                              className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
-                            >
-                              View all {section.title.toLowerCase()} →
-                            </Link>
+                            {section.title === "Banks & Networks" ? (
+                              <button
+                                onClick={handleBanksNetworksClick}
+                                className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1 cursor-pointer"
+                              >
+                                View more →
+                              </button>
+                            ) : (
+                              <Link
+                                to={section.title === "Compare mortgage rates" ? "/mortgages/compare" : 
+                                    section.title === "Mortgage terms" ? "/mortgages/terms" :
+                                    section.title === "Education centre" ? "/guides/education-centre" :
+                                    `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                                className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
+                              >
+                                View all {section.title.toLowerCase()} →
+                              </Link>
+                            )}
                           </li>
                         )}
                       </ul>
@@ -428,14 +467,22 @@ export function DesktopNavDropdown() {
                             ))}
                             {section.links.length > 4 && (
                               <li>
-                                <Link
-                                  to={section.title === "Education centre" ? "/guides/education-centre" : 
-                                      section.title === "Banks & Networks" ? "/credit-cards" :
-                                      `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
-                                  className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
-                                >
-                                  View more →
-                                </Link>
+                                {section.title === "Banks & Networks" ? (
+                                  <button
+                                    onClick={handleBanksNetworksClick}
+                                    className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1 cursor-pointer"
+                                  >
+                                    View more →
+                                  </button>
+                                ) : (
+                                  <Link
+                                    to={section.title === "Education centre" ? "/guides/education-centre" : 
+                                        `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                                    className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
+                                  >
+                                    View more →
+                                  </Link>
+                                )}
                               </li>
                             )}
                           </ul>
