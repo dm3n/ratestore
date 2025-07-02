@@ -90,7 +90,7 @@ const navCategories: NavCategory[] = [
       {
         title: "Compare credit cards",
         links: [
-          { name: "CardFinder", href: "/credit-cards/finder" },
+          { name: "CardFinder", href: "/credit-cards/card-finder" },
           { name: "Best overall credit cards", href: "/credit-cards/best" },
           { name: "Top credit card promotions", href: "/credit-cards/promotions" },
           { name: "Ratehub's 2025 credit card awards", href: "/credit-cards/awards" },
