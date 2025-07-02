@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
-import { Pencil, Trash2, Plus, Save, X } from "lucide-react";
+import { Pencil, Trash2, Plus, Save, X, Building2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface MortgageRate {
@@ -35,13 +35,14 @@ export function AdminRateManager() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState<string>("all");
   const [selectedRateCategory, setSelectedRateCategory] = useState<string>("mortgage");
+  const [activeTab, setActiveTab] = useState<string>("big5");
   const { toast } = useToast();
 
   const provinces = [
     { value: "all", label: "All Provinces" },
     { value: "BC", label: "British Columbia" },
     { value: "AB", label: "Alberta" },
-    { value: "ON", label: "Ontario" },
+    { value: "ON", label: "Ontario" },  
     { value: "QC", label: "Quebec" }
   ];
 
@@ -50,6 +51,9 @@ export function AdminRateManager() {
     { value: "heloc", label: "HELOC Rates" },
     { value: "renewal", label: "Renewal Rates" }
   ];
+
+  // Big 5 Canadian banks
+  const big5Banks = ['RBC', 'TD', 'Scotiabank', 'BMO', 'CIBC'];
 
   const [newRate, setNewRate] = useState({
     lender_name: '',
@@ -228,6 +232,40 @@ export function AdminRateManager() {
     }
   };
 
+  const getBig5BankRates = (province: string, category: string) => {
+    let filteredRates = rates.filter(rate => 
+      big5Banks.some(bank => 
+        rate.lender_name.toLowerCase().includes(bank.toLowerCase()) ||
+        (bank === 'RBC' && rate.lender_name.toLowerCase().includes('royal bank')) ||
+        (bank === 'TD' && rate.lender_name.toLowerCase().includes('td canada trust')) ||
+        (bank === 'BMO' && rate.lender_name.toLowerCase().includes('bank of montreal'))
+      )
+    );
+    
+    // Filter by province
+    if (province !== "all") {
+      filteredRates = filteredRates.filter(rate => rate.province === province);
+    }
+    
+    // Filter by rate category
+    if (category === "heloc") {
+      filteredRates = filteredRates.filter(rate => 
+        rate.transaction_types?.includes('heloc')
+      );
+    } else if (category === "renewal") {
+      filteredRates = filteredRates.filter(rate => 
+        rate.transaction_types?.includes('renewal')
+      );
+    } else if (category === "mortgage") {
+      filteredRates = filteredRates.filter(rate => 
+        rate.transaction_types?.includes('buying') || 
+        rate.transaction_types?.includes('refinancing')
+      );
+    }
+    
+    return filteredRates;
+  };
+
   const getFilteredRates = (province: string, category: string) => {
     let filteredRates = rates;
     
@@ -286,7 +324,15 @@ export function AdminRateManager() {
                     onChange={(e) => setEditingRate(prev => prev ? {...prev, lender_name: e.target.value} : null)}
                   />
                 ) : (
-                  rate.lender_name
+                  <div className="flex items-center gap-2">
+                    {big5Banks.some(bank => 
+                      rate.lender_name.toLowerCase().includes(bank.toLowerCase()) ||
+                      (bank === 'RBC' && rate.lender_name.toLowerCase().includes('royal bank')) ||
+                      (bank === 'TD' && rate.lender_name.toLowerCase().includes('td canada trust')) ||
+                      (bank === 'BMO' && rate.lender_name.toLowerCase().includes('bank of montreal'))
+                    ) && <Building2 className="h-4 w-4 text-blue-600" />}
+                    {rate.lender_name}
+                  </div>
                 )}
               </TableCell>
               <TableCell>
@@ -489,32 +535,75 @@ export function AdminRateManager() {
           </Select>
         </div>
 
-        <Tabs value={selectedProvince} onValueChange={setSelectedProvince} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-5">
-            {provinces.map((province) => (
-              <TabsTrigger key={province.value} value={province.value}>
-                {province.label}
-              </TabsTrigger>
-            ))}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="big5" className="flex items-center gap-2">
+              <Building2 className="h-4 w-4" />
+              Big 5 Banks
+            </TabsTrigger>
+            <TabsTrigger value="all">All Lenders</TabsTrigger>
           </TabsList>
 
-          {provinces.map((province) => (
-            <TabsContent key={province.value} value={province.value}>
-              <Card>
-                <CardHeader>
-                  <CardTitle>
-                    {province.label} {rateCategories.find(c => c.value === selectedRateCategory)?.label} ({getFilteredRates(province.value, selectedRateCategory).length})
-                  </CardTitle>
-                  <CardDescription>
-                    Manage {selectedRateCategory} rates for {province.label}. Changes update automatically across all calculators.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {renderRatesTable(getFilteredRates(province.value, selectedRateCategory))}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          ))}
+          <TabsContent value="big5" className="space-y-4">
+            <Tabs value={selectedProvince} onValueChange={setSelectedProvince} className="space-y-4">
+              <TabsList className="grid w-full grid-cols-5">
+                {provinces.map((province) => (
+                  <TabsTrigger key={province.value} value={province.value}>
+                    {province.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+
+              {provinces.map((province) => (
+                <TabsContent key={province.value} value={province.value}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Building2 className="h-5 w-5 text-blue-600" />
+                        Big 5 Banks - {province.label} {rateCategories.find(c => c.value === selectedRateCategory)?.label} ({getBig5BankRates(province.value, selectedRateCategory).length})
+                      </CardTitle>
+                      <CardDescription>
+                        Manage rates for RBC, TD, Scotiabank, BMO, and CIBC in {province.label}. Changes update automatically across all calculators and the bank rates page.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {renderRatesTable(getBig5BankRates(province.value, selectedRateCategory))}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </TabsContent>
+
+          <TabsContent value="all" className="space-y-4">
+            <Tabs value={selectedProvince} onValueChange={setSelectedProvince} className="space-y-4">
+              <TabsList className="grid w-full grid-cols-5">
+                {provinces.map((province) => (
+                  <TabsTrigger key={province.value} value={province.value}>
+                    {province.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+
+              {provinces.map((province) => (
+                <TabsContent key={province.value} value={province.value}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>
+                        {province.label} {rateCategories.find(c => c.value === selectedRateCategory)?.label} ({getFilteredRates(province.value, selectedRateCategory).length})
+                      </CardTitle>
+                      <CardDescription>
+                        Manage {selectedRateCategory} rates for {province.label}. Changes update automatically across all calculators.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {renderRatesTable(getFilteredRates(province.value, selectedRateCategory))}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </TabsContent>
         </Tabs>
       </CardContent>
     </Card>
