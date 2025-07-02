@@ -6,7 +6,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Index from "@/pages/Index";
 import Mortgages from "@/pages/Mortgages";
 import CreditCards from "@/pages/CreditCards";
-import Banking from "@/pages/banking/Banking";
+import Banking from "@/pages/Banking";
 import Investing from "@/pages/Investing";
 import Insurance from "@/pages/Insurance";
 import About from "@/pages/About";
