@@ -67,6 +67,7 @@ import Terms from '@/pages/mortgages/Terms';
 import Compare from '@/pages/mortgages/Compare';
 import CardFinder from '@/pages/CardFinder';
 import BestOverallCreditCards from '@/pages/credit-cards/BestOverall';
+import Promotions from '@/pages/credit-cards/Promotions';
 
 function App() {
   return (
@@ -118,6 +119,7 @@ function App() {
           <Route path="/credit-cards" element={<CreditCards />} />
           <Route path="/credit-cards/card-finder" element={<CardFinder />} />
           <Route path="/credit-cards/best" element={<BestOverallCreditCards />} />
+          <Route path="/credit-cards/promotions" element={<Promotions />} />
           <Route path="/credit-cards/awards" element={<BestOverallCreditCards />} />
           
           <Route path="/banking" element={<SavingsRates />} />
