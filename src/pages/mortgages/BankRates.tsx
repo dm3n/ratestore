@@ -3,19 +3,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Building2, Star, Award } from "lucide-react";
+import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { Building2 } from "lucide-react";
 
 const BankRates = () => {
-  const bankRates = [
-    { bank: "RBC Royal Bank", rate: "4.79%", term: "5-Year Fixed", special: "New client offer", featured: true },
-    { bank: "TD Canada Trust", rate: "4.84%", term: "5-Year Fixed", special: "Branch exclusive", featured: true },
-    { bank: "Scotiabank", rate: "4.89%", term: "5-Year Fixed", special: "Scotia Rewards", featured: false },
-    { bank: "BMO Bank of Montreal", rate: "4.94%", term: "5-Year Fixed", special: "Smart Fixed", featured: false },
-    { bank: "CIBC", rate: "4.99%", term: "5-Year Fixed", special: "CIBC Smart Account", featured: false },
-  ];
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -33,12 +24,12 @@ const BankRates = () => {
               </h1>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Compare mortgage rates from Canada's major banks. Find the best rates 
-                from RBC, TD, Scotiabank, BMO, and CIBC.
+                from RBC, TD, Scotiabank, BMO, and CIBC with our live rate calculator.
               </p>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">4.79%</div>
-                  <div className="text-sm text-muted-foreground">Best Bank Rate Today</div>
+                  <div className="text-sm text-muted-foreground mb-2">Live rates updated automatically</div>
+                  <div className="text-sm text-muted-foreground">Powered by our database-driven rate engine</div>
                 </div>
               </div>
             </div>
@@ -48,53 +39,52 @@ const BankRates = () => {
         <section className="py-16">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl">Major Bank Mortgage Rates</CardTitle>
-                  <CardDescription>Current rates from Canada's Big 5 banks</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Bank</TableHead>
-                          <TableHead>Rate</TableHead>
-                          <TableHead>Term</TableHead>
-                          <TableHead>Special Offer</TableHead>
-                          <TableHead></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {bankRates.map((rate, index) => (
-                          <TableRow key={index} className={rate.featured ? "bg-blue-50/50" : ""}>
-                            <TableCell className="font-medium">
-                              <div className="flex items-center gap-2">
-                                {rate.featured && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
-                                {rate.bank}
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <span className="text-lg font-bold text-primary">{rate.rate}</span>
-                            </TableCell>
-                            <TableCell>{rate.term}</TableCell>
-                            <TableCell>
-                              <Badge variant="outline" className="text-xs">
-                                {rate.special}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              <Button size="sm" variant={rate.featured ? "default" : "outline"}>
-                                Get Quote
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="mb-8 text-center">
+                <h2 className="text-3xl font-bold mb-4">Live Bank Mortgage Rates</h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Get real-time rates from major Canadian banks, updated automatically 
+                  and managed through our admin console.
+                </p>
+              </div>
+              
+              <InteractiveRateCalculator 
+                defaultTransactionType="buying"
+              />
+              
+              <div className="mt-12">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-xl">About Bank Rates</CardTitle>
+                    <CardDescription>
+                      Understanding how bank mortgage rates work in Canada
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="prose max-w-none">
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div>
+                        <h3 className="text-lg font-semibold mb-3">Why Choose Bank Rates?</h3>
+                        <ul className="space-y-2 text-sm">
+                          <li>• Established institutions with nationwide presence</li>
+                          <li>• Full-service banking relationships</li>
+                          <li>• Comprehensive mortgage products</li>
+                          <li>• Branch and online support</li>
+                          <li>• Competitive promotional rates</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold mb-3">Rate Considerations</h3>
+                        <ul className="space-y-2 text-sm">
+                          <li>• Rates vary by credit score and down payment</li>
+                          <li>• Special offers for new clients</li>
+                          <li>• Bundle discounts with other banking products</li>
+                          <li>• Negotiation opportunities with relationship managers</li>
+                          <li>• Rate holds typically 60-120 days</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </section>
