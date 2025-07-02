@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -74,6 +73,16 @@ import Grocery from '@/pages/credit-cards/Grocery';
 import Rewards from '@/pages/credit-cards/Rewards';
 import Store from '@/pages/credit-cards/Store';
 import Travel from '@/pages/credit-cards/Travel';
+import BalanceTransfer from '@/pages/credit-cards/BalanceTransfer';
+import Business from '@/pages/credit-cards/Business';
+import InstantApproval from '@/pages/credit-cards/InstantApproval';
+import LowInterest from '@/pages/credit-cards/LowInterest';
+import Newcomers from '@/pages/credit-cards/Newcomers';
+import NoFee from '@/pages/credit-cards/NoFee';
+import NoFXFee from '@/pages/credit-cards/NoFXFee';
+import Secured from '@/pages/credit-cards/Secured';
+import Student from '@/pages/credit-cards/Student';
+import TravelInsurance from '@/pages/credit-cards/TravelInsurance';
 
 function App() {
   return (
@@ -133,6 +142,16 @@ function App() {
           <Route path="/credit-cards/rewards" element={<Rewards />} />
           <Route path="/credit-cards/store" element={<Store />} />
           <Route path="/credit-cards/travel" element={<Travel />} />
+          <Route path="/credit-cards/balance-transfer" element={<BalanceTransfer />} />
+          <Route path="/credit-cards/business" element={<Business />} />
+          <Route path="/credit-cards/instant-approval" element={<InstantApproval />} />
+          <Route path="/credit-cards/low-interest" element={<LowInterest />} />
+          <Route path="/credit-cards/newcomers" element={<Newcomers />} />
+          <Route path="/credit-cards/no-fee" element={<NoFee />} />
+          <Route path="/credit-cards/no-fx-fee" element={<NoFXFee />} />
+          <Route path="/credit-cards/secured" element={<Secured />} />
+          <Route path="/credit-cards/student" element={<Student />} />
+          <Route path="/credit-cards/travel-insurance" element={<TravelInsurance />} />
           
           <Route path="/banking" element={<SavingsRates />} />
           <Route path="/savings-rates" element={<SavingsRates />} />
