@@ -64,6 +64,7 @@ import EducationCentre from '@/pages/guides/EducationCentre';
 import './App.css';
 import Terms from '@/pages/mortgages/Terms';
 import Compare from '@/pages/mortgages/Compare';
+import CardFinder from '@/pages/CardFinder';
 
 function App() {
   return (
@@ -113,6 +114,8 @@ function App() {
           <Route path="/mortgages/brokers" element={<Brokers />} />
           
           <Route path="/credit-cards" element={<CreditCards />} />
+          <Route path="/credit-cards/card-finder" element={<CardFinder />} />
+          
           <Route path="/banking" element={<SavingsRates />} />
           <Route path="/savings-rates" element={<SavingsRates />} />
           <Route path="/personal-loans" element={<PersonalLoans />} />
