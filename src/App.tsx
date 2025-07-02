@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -31,13 +32,13 @@ import FiveYearFixed from '@/pages/mortgages/FiveYearFixed';
 import TwoYearFixed from '@/pages/mortgages/TwoYearFixed';
 import ThreeYearFixed from '@/pages/mortgages/ThreeYearFixed';
 import ThreeYearVariable from '@/pages/mortgages/ThreeYearVariable';
-import FiveYearVariable from '@/pages/FiveYearVariable';
+import FiveYearVariable from '@/pages/mortgages/FiveYearVariable';
 import HELOCRates from '@/pages/mortgages/HELOCRates';
 import BankRates from '@/pages/mortgages/BankRates';
 import Alberta from '@/pages/mortgages/Alberta';
 import BC from '@/pages/mortgages/BC';
 import Ontario from '@/pages/mortgages/Ontario';
-import Quebec from '@/pages/Quebec';
+import Quebec from '@/pages/mortgages/Quebec';
 import Historical from '@/pages/mortgages/Historical';
 import Lenders from '@/pages/mortgages/Lenders';
 import Brokers from '@/pages/mortgages/Brokers';
