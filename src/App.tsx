@@ -19,6 +19,13 @@ import Unauthorized from "@/pages/Unauthorized";
 import NotFound from "@/pages/NotFound";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
+// New pages that need to be created
+import Blog from "@/pages/Blog";
+import Privacy from "@/pages/Privacy";
+import TermsOfUse from "@/pages/Terms";
+import Disclosure from "@/pages/Disclosure";
+import Careers from "@/pages/Careers";
+
 // Credit Card Category Routes
 import NoFee from "@/pages/credit-cards/NoFee";
 import Travel from "@/pages/credit-cards/Travel";
@@ -63,7 +70,7 @@ import CreditCardInsurance from "@/pages/guides/CreditCardInsurance";
 
 // Mortgage pages
 import Compare from "@/pages/mortgages/Compare";
-import Terms from "@/pages/mortgages/Terms";
+import MortgageTerms from "@/pages/mortgages/Terms";
 import BestRates from "@/pages/mortgages/BestRates";
 import RenewalRates from "@/pages/mortgages/RenewalRates";
 import HELOCRates from "@/pages/mortgages/HELOCRates";
@@ -117,6 +124,11 @@ function App() {
             <Route path="/insurance" element={<Insurance />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<TermsOfUse />} />
+            <Route path="/disclosure" element={<Disclosure />} />
+            <Route path="/careers" element={<Careers />} />
             <Route path="/login" element={<Auth />} />
             <Route path="/register" element={<Auth />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
@@ -130,7 +142,7 @@ function App() {
 
             {/* Mortgage Routes */}
             <Route path="/mortgages/compare" element={<Compare />} />
-            <Route path="/mortgages/terms" element={<Terms />} />
+            <Route path="/mortgages/terms" element={<MortgageTerms />} />
             <Route path="/mortgages/best-rates" element={<BestRates />} />
             <Route path="/mortgages/renewal-rates" element={<RenewalRates />} />
             <Route path="/mortgages/heloc" element={<HELOCRates />} />

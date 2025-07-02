@@ -74,7 +74,8 @@ const Disclosure = () => {
         </section>
       </main>
       
-      <Footer />    </div>
+      <Footer />
+    </div>
   );
 };
 

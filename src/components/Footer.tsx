@@ -21,10 +21,10 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-3">Rate Comparisons</h3>
             <ul className="space-y-2">
-              <li><Link to="/savings-rates" className="text-sm text-muted-foreground hover:text-primary">Savings Rates</Link></li>
+              <li><Link to="/banking" className="text-sm text-muted-foreground hover:text-primary">Savings Rates</Link></li>
               <li><Link to="/personal-loans" className="text-sm text-muted-foreground hover:text-primary">Personal Loans</Link></li>
               <li><Link to="/credit-cards" className="text-sm text-muted-foreground hover:text-primary">Credit Cards</Link></li>
-              <li><Link to="/cd-rates" className="text-sm text-muted-foreground hover:text-primary">CD Rates</Link></li>
+              <li><Link to="/investing" className="text-sm text-muted-foreground hover:text-primary">CD Rates</Link></li>
             </ul>
           </div>
           
