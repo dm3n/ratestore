@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -75,6 +74,7 @@ const bankingGuides = [
     readTime: "10 min read",
     category: "Savings",
     icon: Calculator,
+    featured: false,
     href: "/guides/tfsa"
   },
   {
@@ -83,6 +83,7 @@ const bankingGuides = [
     readTime: "12 min read",
     category: "Retirement",
     icon: Calculator,
+    featured: false,
     href: "/guides/rrsp"
   },
   {
@@ -91,6 +92,7 @@ const bankingGuides = [
     readTime: "8 min read",
     category: "Banking",
     icon: Calculator,
+    featured: false,
     href: "/guides/savings-accounts"
   }
 ];
@@ -102,6 +104,7 @@ const investingGuides = [
     readTime: "10 min read",
     category: "Investments",
     icon: TrendingUp,
+    featured: false,
     href: "/guides/gic"
   },
   {
@@ -110,6 +113,7 @@ const investingGuides = [
     readTime: "12 min read",
     category: "Education Savings",
     icon: Users,
+    featured: false,
     href: "/guides/resp"
   }
 ];
@@ -121,6 +125,7 @@ const creditGuides = [
     readTime: "8 min read",
     category: "Credit",
     icon: FileText,
+    featured: false,
     href: "/guides/credit-cards"
   },
   {
@@ -129,6 +134,7 @@ const creditGuides = [
     readTime: "10 min read",
     category: "Credit Cards",
     icon: Star,
+    featured: false,
     href: "/guides/rewards-cards"
   }
 ];
