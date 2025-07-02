@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -18,7 +19,7 @@ import Unauthorized from "@/pages/Unauthorized";
 import NotFound from "@/pages/NotFound";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
-// New pages that need to be created
+// Main pages
 import Blog from "@/pages/Blog";
 import Privacy from "@/pages/Privacy";
 import TermsOfUse from "@/pages/Terms";
