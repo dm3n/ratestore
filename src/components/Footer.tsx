@@ -21,20 +21,20 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-3">Rate Comparisons</h3>
             <ul className="space-y-2">
-              <li><Link to="/mortgages" className="text-sm text-muted-foreground hover:text-primary">Mortgages</Link></li>
+              <li><Link to="/savings-rates" className="text-sm text-muted-foreground hover:text-primary">Savings Rates</Link></li>
+              <li><Link to="/personal-loans" className="text-sm text-muted-foreground hover:text-primary">Personal Loans</Link></li>
               <li><Link to="/credit-cards" className="text-sm text-muted-foreground hover:text-primary">Credit Cards</Link></li>
-              <li><Link to="/banking" className="text-sm text-muted-foreground hover:text-primary">Banking</Link></li>
-              <li><Link to="/investing" className="text-sm text-muted-foreground hover:text-primary">Investing</Link></li>
+              <li><Link to="/cd-rates" className="text-sm text-muted-foreground hover:text-primary">CD Rates</Link></li>
             </ul>
           </div>
           
           <div>
             <h3 className="font-semibold mb-3">Financial Tools</h3>
             <ul className="space-y-2">
-              <li><Link to="/tools/mortgage-calculator" className="text-sm text-muted-foreground hover:text-primary">Mortgage Calculator</Link></li>
-              <li><Link to="/tools/affordability" className="text-sm text-muted-foreground hover:text-primary">Affordability Calculator</Link></li>
-              <li><Link to="/tools/down-payment" className="text-sm text-muted-foreground hover:text-primary">Down Payment Calculator</Link></li>
-              <li><Link to="/card-finder" className="text-sm text-muted-foreground hover:text-primary">Credit Card Finder</Link></li>
+              <li><Link to="/tools/compound-interest" className="text-sm text-muted-foreground hover:text-primary">Compound Interest Calculator</Link></li>
+              <li><Link to="/tools/debt-payoff" className="text-sm text-muted-foreground hover:text-primary">Debt Payoff Calculator</Link></li>
+              <li><Link to="/tools/retirement" className="text-sm text-muted-foreground hover:text-primary">Retirement Calculator</Link></li>
+              <li><Link to="/tools/emergency-fund" className="text-sm text-muted-foreground hover:text-primary">Emergency Fund Calculator</Link></li>
             </ul>
           </div>
           
@@ -43,8 +43,8 @@ export function Footer() {
             <ul className="space-y-2">
               <li><Link to="/about" className="text-sm text-muted-foreground hover:text-primary">About Us</Link></li>
               <li><Link to="/contact" className="text-sm text-muted-foreground hover:text-primary">Contact</Link></li>
+              <li><Link to="/careers" className="text-sm text-muted-foreground hover:text-primary">Careers</Link></li>
               <li><Link to="/blog" className="text-sm text-muted-foreground hover:text-primary">Blog</Link></li>
-              <li><Link to="/guides/education-centre" className="text-sm text-muted-foreground hover:text-primary">Education Centre</Link></li>
             </ul>
           </div>
         </div>
