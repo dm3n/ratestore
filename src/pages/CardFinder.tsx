@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -12,11 +11,12 @@ const CardFinder = () => {
   const [showForm, setShowForm] = useState(false);
 
   const banks = [
-    { name: "BMO", logo: "🏦" },
-    { name: "Scotiabank", logo: "🏦" },
-    { name: "American Express", logo: "🏦" },
-    { name: "TD Canada Trust", logo: "🏦" },
-    { name: "CIBC", logo: "🏦" }
+    { name: "BMO", logo: "/lovable-uploads/a32376c2-10c4-4756-bf08-549605f4b43f.png" },
+    { name: "Scotiabank", logo: "/lovable-uploads/177cdd56-ed4d-44e3-ba61-e877091fc7fc.png" },
+    { name: "American Express", logo: "/lovable-uploads/c7b88ec9-3875-47c8-b9d8-3a212dfa80f3.png" },
+    { name: "TD Canada Trust", logo: "/lovable-uploads/462c565b-4046-4c96-82a5-45dee6df21ad.png" },
+    { name: "CIBC", logo: "/lovable-uploads/47f66fea-674a-4648-9d98-39c18545a233.png" },
+    { name: "RBC", logo: "/lovable-uploads/2bccf949-e0b6-474a-8df9-0be5093f0717.png" }
   ];
 
   const benefits = [
@@ -75,10 +75,16 @@ const CardFinder = () => {
         {/* Bank Logos */}
         <section className="py-12 bg-gray-50">
           <div className="container">
-            <div className="flex justify-center items-center space-x-8 md:space-x-16 opacity-60">
+            <div className="flex justify-center items-center flex-wrap gap-8 md:gap-16 opacity-60">
               {banks.map((bank, index) => (
                 <div key={index} className="flex flex-col items-center">
-                  <div className="text-2xl mb-2">{bank.logo}</div>
+                  <div className="h-12 w-20 mb-2 flex items-center justify-center">
+                    <img 
+                      src={bank.logo} 
+                      alt={bank.name}
+                      className="max-h-full max-w-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
+                    />
+                  </div>
                   <span className="text-sm font-medium text-gray-600">{bank.name}</span>
                 </div>
               ))}
