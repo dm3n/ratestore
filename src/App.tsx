@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -32,13 +31,13 @@ import FiveYearFixed from '@/pages/mortgages/FiveYearFixed';
 import TwoYearFixed from '@/pages/mortgages/TwoYearFixed';
 import ThreeYearFixed from '@/pages/mortgages/ThreeYearFixed';
 import ThreeYearVariable from '@/pages/mortgages/ThreeYearVariable';
-import FiveYearVariable from '@/pages/mortgages/FiveYearVariable';
+import FiveYearVariable from '@/pages/FiveYearVariable';
 import HELOCRates from '@/pages/mortgages/HELOCRates';
 import BankRates from '@/pages/mortgages/BankRates';
 import Alberta from '@/pages/mortgages/Alberta';
 import BC from '@/pages/mortgages/BC';
 import Ontario from '@/pages/mortgages/Ontario';
-import Quebec from '@/pages/mortgages/Quebec';
+import Quebec from '@/pages/Quebec';
 import Historical from '@/pages/mortgages/Historical';
 import Lenders from '@/pages/mortgages/Lenders';
 import Brokers from '@/pages/mortgages/Brokers';
@@ -68,6 +67,12 @@ import Compare from '@/pages/mortgages/Compare';
 import CardFinder from '@/pages/CardFinder';
 import BestOverallCreditCards from '@/pages/credit-cards/BestOverall';
 import Promotions from '@/pages/credit-cards/Promotions';
+import Aeroplan from '@/pages/credit-cards/Aeroplan';
+import CashBack from '@/pages/credit-cards/CashBack';
+import Grocery from '@/pages/credit-cards/Grocery';
+import Rewards from '@/pages/credit-cards/Rewards';
+import Store from '@/pages/credit-cards/Store';
+import Travel from '@/pages/credit-cards/Travel';
 
 function App() {
   return (
@@ -121,6 +126,12 @@ function App() {
           <Route path="/credit-cards/best" element={<BestOverallCreditCards />} />
           <Route path="/credit-cards/promotions" element={<Promotions />} />
           <Route path="/credit-cards/awards" element={<BestOverallCreditCards />} />
+          <Route path="/credit-cards/aeroplan" element={<Aeroplan />} />
+          <Route path="/credit-cards/cash-back" element={<CashBack />} />
+          <Route path="/credit-cards/grocery" element={<Grocery />} />
+          <Route path="/credit-cards/rewards" element={<Rewards />} />
+          <Route path="/credit-cards/store" element={<Store />} />
+          <Route path="/credit-cards/travel" element={<Travel />} />
           
           <Route path="/banking" element={<SavingsRates />} />
           <Route path="/savings-rates" element={<SavingsRates />} />
