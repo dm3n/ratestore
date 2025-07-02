@@ -9,6 +9,234 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      card_finder_submissions: {
+        Row: {
+          annual_income_range: string
+          balance_transfer_amount: number | null
+          card_purpose: string
+          city: string | null
+          created_at: string
+          credit_score_range: string
+          current_cards: Json | null
+          date_of_birth: string | null
+          id: string
+          max_annual_fee: number | null
+          monthly_spending: Json | null
+          postal_code: string | null
+          preferred_features: Json | null
+          primary_spending_categories: Json | null
+          province: string | null
+          session_id: string
+          travel_frequency: string | null
+          user_id: string | null
+        }
+        Insert: {
+          annual_income_range: string
+          balance_transfer_amount?: number | null
+          card_purpose: string
+          city?: string | null
+          created_at?: string
+          credit_score_range: string
+          current_cards?: Json | null
+          date_of_birth?: string | null
+          id?: string
+          max_annual_fee?: number | null
+          monthly_spending?: Json | null
+          postal_code?: string | null
+          preferred_features?: Json | null
+          primary_spending_categories?: Json | null
+          province?: string | null
+          session_id: string
+          travel_frequency?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          annual_income_range?: string
+          balance_transfer_amount?: number | null
+          card_purpose?: string
+          city?: string | null
+          created_at?: string
+          credit_score_range?: string
+          current_cards?: Json | null
+          date_of_birth?: string | null
+          id?: string
+          max_annual_fee?: number | null
+          monthly_spending?: Json | null
+          postal_code?: string | null
+          preferred_features?: Json | null
+          primary_spending_categories?: Json | null
+          province?: string | null
+          session_id?: string
+          travel_frequency?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      card_recommendations: {
+        Row: {
+          card_id: string
+          created_at: string
+          id: string
+          match_reasons: Json | null
+          match_score: number
+          rank: number
+          submission_id: string
+        }
+        Insert: {
+          card_id: string
+          created_at?: string
+          id?: string
+          match_reasons?: Json | null
+          match_score: number
+          rank: number
+          submission_id: string
+        }
+        Update: {
+          card_id?: string
+          created_at?: string
+          id?: string
+          match_reasons?: Json | null
+          match_score?: number
+          rank?: number
+          submission_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "card_recommendations_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "credit_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "card_recommendations_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "card_finder_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credit_cards: {
+        Row: {
+          annual_fee: number | null
+          apply_url: string | null
+          balance_transfer_apr: number | null
+          balance_transfer_fee: number | null
+          card_type: string
+          cash_advance_apr: number | null
+          cash_advance_fee: number | null
+          cashback_rate_dining: number | null
+          cashback_rate_gas: number | null
+          cashback_rate_general: number | null
+          cashback_rate_grocery: number | null
+          cashback_rate_travel: number | null
+          cons: Json | null
+          created_at: string
+          credit_score_required: string | null
+          features: Json | null
+          foreign_transaction_fee: number | null
+          id: string
+          insurance_benefits: Json | null
+          intro_apr: number | null
+          intro_period_months: number | null
+          is_active: boolean | null
+          issuer: string
+          late_payment_fee: number | null
+          minimum_income_required: number | null
+          name: string
+          overlimit_fee: number | null
+          points_per_dollar: number | null
+          promotional_offer: string | null
+          pros: Json | null
+          regular_apr: number | null
+          rewards_program: string | null
+          travel_benefits: Json | null
+          updated_at: string
+          welcome_bonus_requirement: number | null
+          welcome_bonus_timeframe: number | null
+          welcome_bonus_value: number | null
+        }
+        Insert: {
+          annual_fee?: number | null
+          apply_url?: string | null
+          balance_transfer_apr?: number | null
+          balance_transfer_fee?: number | null
+          card_type: string
+          cash_advance_apr?: number | null
+          cash_advance_fee?: number | null
+          cashback_rate_dining?: number | null
+          cashback_rate_gas?: number | null
+          cashback_rate_general?: number | null
+          cashback_rate_grocery?: number | null
+          cashback_rate_travel?: number | null
+          cons?: Json | null
+          created_at?: string
+          credit_score_required?: string | null
+          features?: Json | null
+          foreign_transaction_fee?: number | null
+          id?: string
+          insurance_benefits?: Json | null
+          intro_apr?: number | null
+          intro_period_months?: number | null
+          is_active?: boolean | null
+          issuer: string
+          late_payment_fee?: number | null
+          minimum_income_required?: number | null
+          name: string
+          overlimit_fee?: number | null
+          points_per_dollar?: number | null
+          promotional_offer?: string | null
+          pros?: Json | null
+          regular_apr?: number | null
+          rewards_program?: string | null
+          travel_benefits?: Json | null
+          updated_at?: string
+          welcome_bonus_requirement?: number | null
+          welcome_bonus_timeframe?: number | null
+          welcome_bonus_value?: number | null
+        }
+        Update: {
+          annual_fee?: number | null
+          apply_url?: string | null
+          balance_transfer_apr?: number | null
+          balance_transfer_fee?: number | null
+          card_type?: string
+          cash_advance_apr?: number | null
+          cash_advance_fee?: number | null
+          cashback_rate_dining?: number | null
+          cashback_rate_gas?: number | null
+          cashback_rate_general?: number | null
+          cashback_rate_grocery?: number | null
+          cashback_rate_travel?: number | null
+          cons?: Json | null
+          created_at?: string
+          credit_score_required?: string | null
+          features?: Json | null
+          foreign_transaction_fee?: number | null
+          id?: string
+          insurance_benefits?: Json | null
+          intro_apr?: number | null
+          intro_period_months?: number | null
+          is_active?: boolean | null
+          issuer?: string
+          late_payment_fee?: number | null
+          minimum_income_required?: number | null
+          name?: string
+          overlimit_fee?: number | null
+          points_per_dollar?: number | null
+          promotional_offer?: string | null
+          pros?: Json | null
+          regular_apr?: number | null
+          rewards_program?: string | null
+          travel_benefits?: Json | null
+          updated_at?: string
+          welcome_bonus_requirement?: number | null
+          welcome_bonus_timeframe?: number | null
+          welcome_bonus_value?: number | null
+        }
+        Relationships: []
+      }
       mortgage_rates: {
         Row: {
           base_rate: number
