@@ -91,7 +91,7 @@ const navCategories: NavCategory[] = [
         title: "Compare credit cards",
         links: [
           { name: "CardFinder", href: "/credit-cards/card-finder" },
-          { name: "Best overall credit cards", href: "/credit-cards/best" },
+          { name: "Best overall credit cards", href: "/credit-cards/best-canadian" },
           { name: "Top credit card promotions", href: "/credit-cards/promotions" },
           { name: "RateStore's 2025 credit card awards", href: "/credit-cards/awards" },
         ]
@@ -379,7 +379,7 @@ export function DesktopNavDropdown() {
                         {section.links.slice(0, 6).map((link) => (
                           <li key={link.name}>
                             <Link
-                              to={link.href}
+                              to={link.name === "Best overall credit cards" ? "/credit-cards/best-canadian" : link.href}
                               className="text-sm text-gray-600 hover:text-primary transition-colors block py-1 leading-relaxed"
                             >
                               {link.name}
