@@ -23,10 +23,16 @@ interface RateData {
   transactionTypes: string[];
 }
 
+interface BankRateData {
+  bankName: string;
+  bestFixedRate: RateData | null;
+  bestVariableRate: RateData | null;
+}
+
 interface InteractiveRateCalculatorProps {
   defaultTransactionType?: string;
   provinceFilter?: string;
-  termFilter?: string; // New prop to filter by specific term
+  termFilter?: string;
 }
 
 export function InteractiveRateCalculator({ 
@@ -40,8 +46,18 @@ export function InteractiveRateCalculator({
   const [downPaymentPercent, setDownPaymentPercent] = useState(5);
   const [activeTab, setActiveTab] = useState("best-market");
   const [rates, setRates] = useState<RateData[]>([]);
+  const [bankRates, setBankRates] = useState<BankRateData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
+  // Big 5 Canadian banks
+  const big5Banks = [
+    { name: 'RBC', searchTerms: ['rbc', 'royal bank'] },
+    { name: 'TD', searchTerms: ['td', 'td canada trust'] },
+    { name: 'Scotiabank', searchTerms: ['scotiabank', 'scotia'] },
+    { name: 'BMO', searchTerms: ['bmo', 'bank of montreal'] },
+    { name: 'CIBC', searchTerms: ['cibc'] }
+  ];
 
   // Calculate down payment percentage when dollar amount changes
   useEffect(() => {
@@ -104,10 +120,44 @@ export function InteractiveRateCalculator({
         transactionTypes: rate.transaction_types || []
       }));
 
-      // Filter rates based on activeTab preference
+      // Filter for Big 5 banks if termFilter is provided (indicating this is for bank rates page)
       let filteredRates = transformedRates;
-      if (activeTab === "best-bank") {
+      if (termFilter) {
+        filteredRates = transformedRates.filter(rate => 
+          big5Banks.some(bank => 
+            bank.searchTerms.some(term => 
+              rate.lender.toLowerCase().includes(term)
+            )
+          )
+        );
+      } else if (activeTab === "best-bank") {
         filteredRates = transformedRates.filter(rate => rate.lenderType === 'bank');
+      }
+
+      // Process Big 5 bank rates for preset boxes
+      if (termFilter) {
+        const bankRatesData: BankRateData[] = big5Banks.map(bank => {
+          const bankRates = filteredRates.filter(rate => 
+            bank.searchTerms.some(term => 
+              rate.lender.toLowerCase().includes(term)
+            )
+          );
+
+          const fixedRates = bankRates.filter(rate => rate.type === 'fixed');
+          const variableRates = bankRates.filter(rate => rate.type === 'variable');
+
+          return {
+            bankName: bank.name,
+            bestFixedRate: fixedRates.length > 0 ? fixedRates.reduce((best, current) => 
+              current.rate < best.rate ? current : best
+            ) : null,
+            bestVariableRate: variableRates.length > 0 ? variableRates.reduce((best, current) => 
+              current.rate < best.rate ? current : best
+            ) : null
+          };
+        });
+
+        setBankRates(bankRatesData);
       }
 
       // Group by term and select best rates for each term/type combination
@@ -209,12 +259,14 @@ export function InteractiveRateCalculator({
               <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
-              <TabsList className="grid w-fit grid-cols-2">
-                <TabsTrigger value="best-market" className="text-sm">Best market rates</TabsTrigger>
-                <TabsTrigger value="best-bank" className="text-sm">Best bank rates</TabsTrigger>
-              </TabsList>
-            </Tabs>
+            {!termFilter && (
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
+                <TabsList className="grid w-fit grid-cols-2">
+                  <TabsTrigger value="best-market" className="text-sm">Best market rates</TabsTrigger>
+                  <TabsTrigger value="best-bank" className="text-sm">Best bank rates</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            )}
           </div>
         </div>
       </CardHeader>
@@ -298,10 +350,70 @@ export function InteractiveRateCalculator({
           </div>
         </div>
 
+        {/* Big 5 Banks Preset Boxes - Only show when termFilter is active */}
+        {termFilter && (
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4">Big 5 Banks - Best Rates</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {big5Banks.map((bank) => {
+                const bankData = bankRates.find(br => br.bankName === bank.name);
+                return (
+                  <Card key={bank.name} className="border-2 border-blue-100">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Building2 className="h-5 w-5 text-blue-600" />
+                        {bank.name}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div>
+                        <div className="text-sm text-muted-foreground mb-1">Fixed Rate</div>
+                        {isLoading ? (
+                          <Skeleton className="h-8 w-20" />
+                        ) : bankData?.bestFixedRate ? (
+                          <div className="text-2xl font-bold text-primary">
+                            {(bankData.bestFixedRate.rate * 100).toFixed(2)}%
+                          </div>
+                        ) : (
+                          <div className="text-sm text-muted-foreground">No rates available</div>
+                        )}
+                      </div>
+                      <div>
+                        <div className="text-sm text-muted-foreground mb-1">Variable Rate</div>
+                        {isLoading ? (
+                          <Skeleton className="h-8 w-20" />
+                        ) : bankData?.bestVariableRate ? (
+                          <div>
+                            <div className="text-2xl font-bold text-primary">
+                              {(bankData.bestVariableRate.rate * 100).toFixed(2)}%
+                            </div>
+                            {bankData.bestVariableRate.prime && (
+                              <div className="text-xs text-muted-foreground">
+                                {bankData.bestVariableRate.prime}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="text-sm text-muted-foreground">No rates available</div>
+                        )}
+                      </div>
+                      <Button size="sm" className="w-full bg-blue-600 hover:bg-blue-700">
+                        Get Quote
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Rate Results */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Term</h3>
+            <h3 className="text-lg font-semibold">
+              {termFilter ? "All Big 5 Bank Rates by Term" : "Term"}
+            </h3>
             <div className="flex gap-8 text-sm font-medium">
               <span>Fixed</span>
               <span>Variable</span>
