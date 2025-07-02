@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -17,6 +16,10 @@ import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
 import Unauthorized from "@/pages/Unauthorized";
 import NotFound from "@/pages/NotFound";
+import Blog from "@/pages/Blog";
+import Privacy from "@/pages/Privacy";
+import Terms from "@/pages/Terms";
+import Disclosure from "@/pages/Disclosure";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 // Credit Card Category Routes
@@ -117,8 +120,13 @@ function App() {
             <Route path="/insurance" element={<Insurance />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/disclosure" element={<Disclosure />} />
             <Route path="/login" element={<Auth />} />
             <Route path="/register" element={<Auth />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="*" element={<NotFound />} />
 
@@ -130,6 +138,7 @@ function App() {
 
             {/* Mortgage Routes */}
             <Route path="/mortgages/compare" element={<Compare />} />
+            <Route path="/mortgages/compare-rates" element={<Compare />} />
             <Route path="/mortgages/terms" element={<Terms />} />
             <Route path="/mortgages/best-rates" element={<BestRates />} />
             <Route path="/mortgages/renewal-rates" element={<RenewalRates />} />
@@ -170,6 +179,7 @@ function App() {
             <Route path="/credit-cards/no-fee" element={<NoFee />} />
             <Route path="/credit-cards/travel" element={<Travel />} />
             <Route path="/credit-cards/best-canadian" element={<BestCanadian />} />
+            <Route path="/credit-cards/best" element={<BestCanadian />} />
             <Route path="/credit-cards/cash-back" element={<CashBack />} />
             <Route path="/credit-cards/balance-transfer" element={<BalanceTransfer />} />
             <Route path="/credit-cards/business" element={<Business />} />
@@ -180,6 +190,11 @@ function App() {
             <Route path="/credit-cards/secured" element={<Secured />} />
             <Route path="/credit-cards/student" element={<Student />} />
             <Route path="/credit-cards/travel-insurance" element={<TravelInsurance />} />
+            <Route path="/credit-cards/gas" element={<Gas />} />
+            <Route path="/credit-cards/grocery" element={<Grocery />} />
+            <Route path="/credit-cards/rewards" element={<Rewards />} />
+            <Route path="/credit-cards/store" element={<Store />} />
+            <Route path="/credit-cards/aeroplan" element={<Aeroplan />} />
 
             {/* Bank & Network Routes */}
             <Route path="/credit-cards/amex" element={<Amex />} />
@@ -203,12 +218,11 @@ function App() {
             <Route path="/guides/rewards-credit-cards" element={<RewardsCreditCards />} />
             <Route path="/guides/credit-card-insurance" element={<CreditCardInsurance />} />
 
-            {/* Additional Credit Card Routes from Navigation */}
-            <Route path="/credit-cards/aeroplan" element={<Aeroplan />} />
-            <Route path="/credit-cards/grocery" element={<Grocery />} />
-            <Route path="/credit-cards/rewards" element={<Rewards />} />
-            <Route path="/credit-cards/store" element={<Store />} />
-            <Route path="/credit-cards/gas" element={<Gas />} />
+            {/* Additional routes that might be referenced in navigation */}
+            <Route path="/personal-loans" element={<NotFound />} />
+            <Route path="/savings-rates" element={<NotFound />} />
+            <Route path="/cd-rates" element={<NotFound />} />
+            <Route path="/careers" element={<NotFound />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>

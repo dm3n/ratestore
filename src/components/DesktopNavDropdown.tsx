@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 interface NavCategory {
   title: string;
+  href: string;
   sections: {
     title: string;
     links: {
@@ -24,6 +26,7 @@ interface NavCategory {
 const navCategories: NavCategory[] = [
   {
     title: "Mortgages",
+    href: "/mortgages",
     sections: [
       {
         title: "Compare mortgage rates",
@@ -59,7 +62,6 @@ const navCategories: NavCategory[] = [
           { name: "Amortization schedule", href: "/tools/amortization" },
           { name: "Extra payment calculator", href: "/tools/extra-payment" },
           { name: "Mortgage renewal calculator", href: "/tools/renewal" },
-          { name: "Mortgage refinance calculator", href: "/refinance" },
           { name: "Land transfer tax calculator", href: "/tools/land-transfer-tax" },
         ]
       },
@@ -86,14 +88,13 @@ const navCategories: NavCategory[] = [
   },
   {
     title: "Credit Cards",
+    href: "/credit-cards",
     sections: [
       {
         title: "Compare credit cards",
         links: [
           { name: "CardFinder", href: "/card-finder" },
           { name: "Best overall credit cards", href: "/credit-cards/best-canadian" },
-          { name: "Top credit card promotions", href: "/credit-cards/promotions" },
-          { name: "RateStore's 2025 credit card awards", href: "/credit-cards/awards" },
         ]
       },
       {
@@ -105,6 +106,7 @@ const navCategories: NavCategory[] = [
           { name: "Rewards", href: "/credit-cards/rewards" },
           { name: "Store", href: "/credit-cards/store" },
           { name: "Travel", href: "/credit-cards/travel" },
+          { name: "Gas", href: "/credit-cards/gas" },
         ]
       },
       {
@@ -147,69 +149,26 @@ const navCategories: NavCategory[] = [
           { name: "Types of credit cards", href: "/guides/credit-card-types" },
           { name: "Rewards credit cards guide", href: "/guides/rewards-credit-cards" },
           { name: "Credit card insurance guide", href: "/guides/credit-card-insurance" },
-          { name: "Credit score and fraud guide", href: "/guides/credit-score" },
-          { name: "Credit card interest calculator", href: "/tools/credit-card-calculator" },
         ]
       }
     ]
   },
   {
     title: "Banking",
+    href: "/banking",
     sections: [
       {
         title: "Best of",
         links: [
           { name: "Best savings accounts", href: "/banking/best-savings" },
           { name: "Best chequing accounts", href: "/banking/best-chequing" },
-          { name: "Personal Finance Awards 2025", href: "/banking/awards" },
-        ]
-      },
-      {
-        title: "Savings accounts",
-        links: [
-          { name: "Compare all savings accounts", href: "/banking/savings/compare" },
-          { name: "High-interest savings accounts", href: "/banking/savings/high-interest" },
-          { name: "TFSA savings accounts", href: "/banking/savings/tfsa" },
-          { name: "RRSP savings accounts", href: "/banking/savings/rrsp" },
-          { name: "Youth savings accounts", href: "/banking/savings/youth" },
-          { name: "First home saving accounts", href: "/banking/savings/first-home" },
-          { name: "RESP accounts", href: "/banking/savings/resp" },
-        ]
-      },
-      {
-        title: "Chequing accounts",
-        links: [
-          { name: "Compare all chequing accounts", href: "/banking/chequing/compare" },
-          { name: "Personal chequing accounts", href: "/banking/chequing/personal" },
-          { name: "Student chequing accounts", href: "/banking/chequing/student" },
-          { name: "Youth chequing accounts", href: "/banking/chequing/youth" },
-          { name: "Senior chequing accounts", href: "/banking/chequing/senior" },
-          { name: "Newcomer chequing accounts", href: "/banking/chequing/newcomer" },
-        ]
-      },
-      {
-        title: "Education centre",
-        links: [
-          { name: "What is a savings account", href: "/guides/savings-account" },
-          { name: "Tiered savings accounts", href: "/guides/tiered-savings" },
-          { name: "Savings account alternatives", href: "/guides/savings-alternatives" },
-          { name: "Chequing account basics", href: "/guides/chequing-basics" },
-          { name: "Chequing account types", href: "/guides/chequing-types" },
-          { name: "Chequing account fees", href: "/guides/chequing-fees" },
-          { name: "RESP basics", href: "/guides/resp" },
-          { name: "RESP contribution limit and withdrawals", href: "/guides/resp-contributions" },
-        ]
-      },
-      {
-        title: "Calculators",
-        links: [
-          { name: "TFSA contribution room calculator", href: "/tools/tfsa-calculator" },
         ]
       }
     ]
   },
   {
     title: "Investing",
+    href: "/investing",
     sections: [
       {
         title: "Best of",
@@ -217,65 +176,18 @@ const navCategories: NavCategory[] = [
           { name: "Best GIC rates", href: "/investing/gic/best" },
           { name: "Best RESPs", href: "/investing/resp/best" },
         ]
-      },
-      {
-        title: "GIC terms and types",
-        links: [
-          { name: "1-year", href: "/investing/gic/1-year" },
-          { name: "5-year", href: "/investing/gic/5-year" },
-          { name: "Registered GICs", href: "/investing/gic/registered" },
-          { name: "TFSA GIC rates", href: "/investing/gic/tfsa" },
-          { name: "USD GIC rates", href: "/investing/gic/usd" },
-          { name: "Compare all GICs", href: "/investing/gic/compare" },
-        ]
-      },
-      {
-        title: "Stocks & ETFs",
-        links: [
-          { name: "Best robo-advisors 2025", href: "/investing/robo-advisors" },
-          { name: "Best online brokerages 2025", href: "/investing/brokerages" },
-          { name: "Best crypto exchanges 2025", href: "/investing/crypto" },
-        ]
-      },
-      {
-        title: "Education centre",
-        links: [
-          { name: "GIC basics", href: "/guides/gic" },
-          { name: "GIC types", href: "/guides/gic-types" },
-          { name: "RRSP basics", href: "/guides/rrsp" },
-          { name: "RRSP contribution", href: "/guides/rrsp-contribution" },
-          { name: "RRSP withdrawals", href: "/guides/rrsp-withdrawals" },
-          { name: "TFSA basics", href: "/guides/tfsa" },
-          { name: "TFSA contributions, withdrawals, transfers", href: "/guides/tfsa-contributions" },
-          { name: "RESP basics", href: "/guides/resp-basics" },
-          { name: "TFSA investments", href: "/guides/tfsa-investments" },
-          { name: "RESP contribution limit and withdrawals", href: "/guides/resp-limit" },
-        ]
-      },
-      {
-        title: "Calculators",
-        links: [
-          { name: "Compound interest calculator", href: "/tools/compound-interest" },
-        ]
       }
     ]
   },
   {
     title: "Insurance",
+    href: "/insurance",
     sections: [
       {
         title: "Auto insurance",
         links: [
           { name: "Auto insurance quotes", href: "/insurance/auto/quotes" },
           { name: "Motorcycle insurance", href: "/insurance/auto/motorcycle" },
-          { name: "All auto insurance types", href: "/insurance/auto/types" },
-          { name: "Ontario car insurance", href: "/insurance/auto/ontario" },
-          { name: "Toronto car insurance", href: "/insurance/auto/toronto" },
-          { name: "Alberta car insurance", href: "/insurance/auto/alberta" },
-          { name: "Calgary car insurance", href: "/insurance/auto/calgary" },
-          { name: "Quebec car insurance", href: "/insurance/auto/quebec" },
-          { name: "Montreal car insurance", href: "/insurance/auto/montreal" },
-          { name: "All car insurance regions", href: "/insurance/auto/regions" },
         ]
       },
       {
@@ -283,14 +195,6 @@ const navCategories: NavCategory[] = [
         links: [
           { name: "Home insurance quotes", href: "/insurance/home/quotes" },
           { name: "Tenant insurance", href: "/insurance/home/tenant" },
-          { name: "Condo insurance", href: "/insurance/home/condo" },
-          { name: "Landlord insurance", href: "/insurance/home/landlord" },
-          { name: "All home insurance types", href: "/insurance/home/types" },
-          { name: "Ontario home insurance", href: "/insurance/home/ontario" },
-          { name: "Alberta home insurance", href: "/insurance/home/alberta" },
-          { name: "BC home insurance", href: "/insurance/home/bc" },
-          { name: "Quebec home insurance", href: "/insurance/home/quebec" },
-          { name: "All home insurance regions", href: "/insurance/home/regions" },
         ]
       },
       {
@@ -298,45 +202,6 @@ const navCategories: NavCategory[] = [
         links: [
           { name: "Life insurance quotes", href: "/insurance/life/quotes" },
           { name: "Term life insurance", href: "/insurance/life/term" },
-          { name: "Permanent life insurance", href: "/insurance/life/permanent" },
-          { name: "Disability insurance", href: "/insurance/life/disability" },
-          { name: "Critical illness insurance", href: "/insurance/life/critical-illness" },
-          { name: "Group insurance", href: "/insurance/life/group" },
-          { name: "All life insurance types", href: "/insurance/life/types" },
-          { name: "Life insurance by region", href: "/insurance/life/region" },
-          { name: "Life insurance education", href: "/insurance/life/education" },
-          { name: "Life insurance companies", href: "/insurance/life/companies" },
-        ]
-      },
-      {
-        title: "Travel insurance",
-        links: [
-          { name: "Travel insurance quotes", href: "/insurance/travel/quotes" },
-          { name: "Multi-trip insurance", href: "/insurance/travel/multi-trip" },
-          { name: "Travel medical insurance", href: "/insurance/travel/medical" },
-          { name: "Trip cancellation insurance", href: "/insurance/travel/cancellation" },
-          { name: "Senior travel insurance", href: "/insurance/travel/senior" },
-          { name: "Pre-existing condition", href: "/insurance/travel/pre-existing" },
-          { name: "Visitors to Canada", href: "/insurance/travel/visitors" },
-          { name: "Travel insurance programs", href: "/insurance/travel/programs" },
-          { name: "Travel insurance types", href: "/insurance/travel/types" },
-          { name: "Travel insurance reviews", href: "/insurance/travel/reviews" },
-        ]
-      },
-      {
-        title: "Business insurance",
-        links: [
-          { name: "Business insurance quotes", href: "/insurance/business/quotes" },
-          { name: "Professional liability", href: "/insurance/business/professional" },
-          { name: "D&O insurance", href: "/insurance/business/directors" },
-          { name: "Commercial general liability", href: "/insurance/business/general" },
-          { name: "Product liability insurance", href: "/insurance/business/product" },
-          { name: "Business interruption insurance", href: "/insurance/business/interruption" },
-          { name: "Contractor insurance", href: "/insurance/business/contractor" },
-          { name: "Non-profit insurance", href: "/insurance/business/non-profit" },
-          { name: "Cyber insurance", href: "/insurance/business/cyber" },
-          { name: "Technology insurance", href: "/insurance/business/technology" },
-          { name: "Fitness insurance", href: "/insurance/business/fitness" },
         ]
       }
     ]
@@ -350,7 +215,7 @@ export function DesktopNavDropdown() {
         {navCategories.map((category) => (
           <NavigationMenuItem key={category.title}>
             <NavigationMenuTrigger className="text-sm font-medium transition-colors hover:text-primary bg-transparent">
-              <Link to={`/${category.title.toLowerCase().replace(' ', '-')}`}>
+              <Link to={category.href}>
                 {category.title}
               </Link>
             </NavigationMenuTrigger>
@@ -359,7 +224,7 @@ export function DesktopNavDropdown() {
                 {/* Category header with main link */}
                 <div className="mb-6 pb-4 border-b border-gray-100">
                   <Link 
-                    to={`/${category.title.toLowerCase().replace(' ', '-')}`}
+                    to={category.href}
                     className="text-lg font-semibold text-gray-900 hover:text-primary transition-colors"
                   >
                     All {category.title}
@@ -394,7 +259,7 @@ export function DesktopNavDropdown() {
                                   section.title === "Mortgage terms" ? "/mortgages/terms" :
                                   section.title === "Education centre" ? "/guides/education-centre" :
                                   section.title === "Banks & Networks" ? "/credit-cards" :
-                                  `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                                  category.href}
                               className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
                             >
                               View all {section.title.toLowerCase()} →
@@ -431,7 +296,7 @@ export function DesktopNavDropdown() {
                                 <Link
                                   to={section.title === "Education centre" ? "/guides/education-centre" : 
                                       section.title === "Banks & Networks" ? "/credit-cards" :
-                                      `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
+                                      category.href}
                                   className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
                                 >
                                   View more →
