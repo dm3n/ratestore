@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -146,9 +145,103 @@ const CreditCards = () => {
     }
   ];
 
-  const banks = [
-    "TD", "RBC", "BMO", "Scotiabank", "CIBC", "American Express", 
-    "MBNA", "National Bank", "Tangerine", "PC Financial"
+  const banksAndNetworks = [
+    {
+      name: "TD",
+      type: "Bank",
+      description: "Leading Canadian bank with Aeroplan partnerships",
+      cardCount: "15+ cards",
+      link: "/credit-cards/td",
+      popular: true
+    },
+    {
+      name: "RBC",
+      type: "Bank", 
+      description: "Avion rewards and comprehensive banking solutions",
+      cardCount: "12+ cards",
+      link: "/credit-cards/rbc",
+      popular: true
+    },
+    {
+      name: "BMO",
+      type: "Bank",
+      description: "AIR MILES rewards and cash back options",
+      cardCount: "10+ cards", 
+      link: "/credit-cards/bmo",
+      popular: true
+    },
+    {
+      name: "Scotiabank",
+      type: "Bank",
+      description: "Scene+ rewards and international benefits",
+      cardCount: "14+ cards",
+      link: "/credit-cards/scotiabank",
+      popular: true
+    },
+    {
+      name: "CIBC",
+      type: "Bank",
+      description: "Aventura rewards and flexible redemption options",
+      cardCount: "11+ cards",
+      link: "/credit-cards/cibc",
+      popular: true
+    },
+    {
+      name: "American Express",
+      type: "Network",
+      description: "Premium rewards and exclusive benefits",
+      cardCount: "8+ cards",
+      link: "/credit-cards/amex",
+      popular: true
+    },
+    {
+      name: "National Bank",
+      type: "Bank",
+      description: "À la Carte rewards and travel benefits",
+      cardCount: "6+ cards",
+      link: "/credit-cards/national-bank",
+      popular: false
+    },
+    {
+      name: "Tangerine",
+      type: "Bank",
+      description: "Simple cash back with no annual fees",
+      cardCount: "3+ cards",
+      link: "/credit-cards/tangerine",
+      popular: true
+    },
+    {
+      name: "PC Financial",
+      type: "Bank",
+      description: "PC Optimum points for grocery savings",
+      cardCount: "2+ cards",
+      link: "/credit-cards/pc-financial",
+      popular: false
+    },
+    {
+      name: "MBNA",
+      type: "Bank",
+      description: "Rewards Mastercard with flexible options",
+      cardCount: "5+ cards", 
+      link: "/credit-cards/mbna",
+      popular: false
+    },
+    {
+      name: "Mastercard",
+      type: "Network",
+      description: "Wide acceptance and priceless experiences",
+      cardCount: "100+ cards",
+      link: "/credit-cards/mastercard",
+      popular: true
+    },
+    {
+      name: "Visa",
+      type: "Network", 
+      description: "Global acceptance and security features",
+      cardCount: "120+ cards",
+      link: "/credit-cards/visa",
+      popular: true
+    }
   ];
 
   return (
@@ -235,11 +328,12 @@ const CreditCards = () => {
         <section className="py-16">
           <div className="container">
             <Tabs defaultValue="featured" className="max-w-7xl mx-auto">
-              <TabsList className="grid w-full grid-cols-4 mb-8">
+              <TabsList className="grid w-full grid-cols-5 mb-8">
                 <TabsTrigger value="featured">Featured Cards</TabsTrigger>
                 <TabsTrigger value="rewards">Reward Cards</TabsTrigger>
                 <TabsTrigger value="types">Card Types</TabsTrigger>
-                <TabsTrigger value="banks">By Bank</TabsTrigger>
+                <TabsTrigger value="banks">Banks & Networks</TabsTrigger>
+                <TabsTrigger value="tools">Tools</TabsTrigger>
               </TabsList>
 
               {/* Featured Cards Tab */}
@@ -362,93 +456,136 @@ const CreditCards = () => {
                 </div>
               </TabsContent>
 
-              {/* Banks Tab */}
+              {/* Banks & Networks Tab */}
               <TabsContent value="banks" className="space-y-6">
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl font-bold mb-4">Cards by Bank</h2>
+                  <h2 className="text-3xl font-bold mb-4">Banks & Networks</h2>
                   <p className="text-muted-foreground max-w-2xl mx-auto">
-                    Browse credit cards from Canada's leading financial institutions.
+                    Browse credit cards from Canada's leading banks and major payment networks.
                   </p>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                  {banks.map((bank, index) => (
-                    <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer">
-                      <CardContent className="p-6 text-center">
-                        <h3 className="font-semibold text-lg">{bank}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">View Cards</p>
-                      </CardContent>
-                    </Card>
-                  ))}
+                
+                {/* Popular Banks & Networks */}
+                <div className="mb-12">
+                  <h3 className="text-2xl font-bold mb-6 text-center">Most Popular</h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {banksAndNetworks.filter(item => item.popular).map((item, index) => (
+                      <Card key={index} className="hover:shadow-lg transition-shadow relative">
+                        <CardHeader>
+                          <div className="flex items-center justify-between mb-2">
+                            <Badge variant={item.type === 'Bank' ? 'default' : 'secondary'}>
+                              {item.type}
+                            </Badge>
+                            <Badge variant="outline" className="text-xs">
+                              {item.cardCount}
+                            </Badge>
+                          </div>
+                          <CardTitle className="text-xl">{item.name}</CardTitle>
+                          <CardDescription className="text-sm">
+                            {item.description}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <Button asChild className="w-full">
+                            <Link to={item.link}>
+                              View {item.name} Cards
+                            </Link>
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+
+                {/* All Banks & Networks */}
+                <div>
+                  <h3 className="text-2xl font-bold mb-6 text-center">All Banks & Networks</h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {banksAndNetworks.map((item, index) => (
+                      <Card key={index} className="hover:shadow-md transition-shadow">
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <Badge variant={item.type === 'Bank' ? 'default' : 'secondary'} className="text-xs">
+                              {item.type}
+                            </Badge>
+                            <span className="text-xs text-muted-foreground">{item.cardCount}</span>
+                          </div>
+                          <h4 className="font-semibold text-lg mb-2">{item.name}</h4>
+                          <Button asChild variant="outline" size="sm" className="w-full">
+                            <Link to={item.link}>
+                              View Cards
+                            </Link>
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Tools Tab */}
+              <TabsContent value="tools" className="space-y-6">
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold mb-4">Credit Card Tools & Resources</h2>
+                  <p className="text-muted-foreground max-w-2xl mx-auto">
+                    Make informed decisions with our helpful tools and educational resources.
+                  </p>
+                </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <Card className="text-center hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <Calculator className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                      <CardTitle className="text-lg">Payment Calculator</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Calculate monthly payments and interest costs
+                      </p>
+                      <Button variant="outline" className="w-full">Use Calculator</Button>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="text-center hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <Users className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                      <CardTitle className="text-lg">Credit Score Guide</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Learn how to improve your credit score
+                      </p>
+                      <Button variant="outline" className="w-full">Read Guide</Button>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="text-center hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <Award className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+                      <CardTitle className="text-lg">2025 Awards</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        See our annual credit card awards
+                      </p>
+                      <Button variant="outline" className="w-full">View Winners</Button>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="text-center hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <Shield className="h-8 w-8 text-red-600 mx-auto mb-2" />
+                      <CardTitle className="text-lg">Card Security</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Tips to protect yourself from fraud
+                      </p>
+                      <Button variant="outline" className="w-full">Learn More</Button>
+                    </CardContent>
+                  </Card>
                 </div>
               </TabsContent>
             </Tabs>
-          </div>
-        </section>
-
-        {/* Tools and Resources */}
-        <section className="py-16 bg-gray-50">
-          <div className="container">
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4">Credit Card Tools & Resources</h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Make informed decisions with our helpful tools and educational resources.
-                </p>
-              </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="text-center hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <Calculator className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                    <CardTitle className="text-lg">Payment Calculator</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Calculate monthly payments and interest costs
-                    </p>
-                    <Button variant="outline" className="w-full">Use Calculator</Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="text-center hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <Users className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                    <CardTitle className="text-lg">Credit Score Guide</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Learn how to improve your credit score
-                    </p>
-                    <Button variant="outline" className="w-full">Read Guide</Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="text-center hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <Award className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                    <CardTitle className="text-lg">2025 Awards</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      See our annual credit card awards
-                    </p>
-                    <Button variant="outline" className="w-full">View Winners</Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="text-center hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <Shield className="h-8 w-8 text-red-600 mx-auto mb-2" />
-                    <CardTitle className="text-lg">Card Security</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Tips to protect yourself from fraud
-                    </p>
-                    <Button variant="outline" className="w-full">Learn More</Button>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
           </div>
         </section>
 
