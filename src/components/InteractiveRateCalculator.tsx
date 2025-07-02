@@ -193,7 +193,7 @@ export function InteractiveRateCalculator({
                   <span className="ml-2 text-primary">• Showing {provinceFilter} rates</span>
                 )}
                 {termFilter && (
-                  <span className="ml-2 text-primary">• {termFilter} term only</span>
+                  <span className="ml-2 text-primary">• Top 5 banks only</span>
                 )}
               </span>
             </p>
