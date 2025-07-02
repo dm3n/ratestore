@@ -118,6 +118,7 @@ function App() {
           <Route path="/credit-cards" element={<CreditCards />} />
           <Route path="/credit-cards/card-finder" element={<CardFinder />} />
           <Route path="/credit-cards/best" element={<BestOverallCreditCards />} />
+          <Route path="/credit-cards/awards" element={<BestOverallCreditCards />} />
           
           <Route path="/banking" element={<SavingsRates />} />
           <Route path="/savings-rates" element={<SavingsRates />} />

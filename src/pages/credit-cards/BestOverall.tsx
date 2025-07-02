@@ -249,14 +249,14 @@ const BestOverallCreditCards = () => {
           <div className="container">
             <div className="max-w-4xl mx-auto text-center">
               <Badge variant="outline" className="mb-4 bg-primary/10 text-primary border-primary/20">
-                Editor's Choice
+                RateStore 2025 Awards
               </Badge>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                Best Canadian Credit Cards
+                Best Canadian Credit Cards 2025
               </h1>
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Our top-rated credit cards for 2025, carefully selected based on rewards, 
-                fees, benefits, and overall value. Find the perfect card for your spending.
+                Our award-winning credit cards for 2025, carefully selected based on rewards, 
+                fees, benefits, and overall value. Winner of RateStore's annual credit card awards.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="gap-2" asChild>
@@ -272,16 +272,30 @@ const BestOverallCreditCards = () => {
           </div>
         </section>
 
+        {/* Awards Banner */}
+        <section className="py-8 bg-primary/5 border-y">
+          <div className="container">
+            <div className="max-w-6xl mx-auto text-center">
+              <h2 className="text-xl md:text-2xl font-bold text-primary mb-2">
+                🏆 RateStore 2025 Credit Card Awards
+              </h2>
+              <p className="text-muted-foreground">
+                Recognizing excellence in Canadian credit cards based on comprehensive analysis of rewards, benefits, and customer value
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Featured Cards */}
         <section className="py-12 md:py-16">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  Top Credit Cards for 2025
+                  Award-Winning Credit Cards
                 </h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
-                  These cards offer the best combination of rewards, benefits, and value. 
+                  These cards have earned RateStore's 2025 awards for outstanding performance in their categories. 
                   Updated monthly based on current offers and market conditions.
                 </p>
               </div>
@@ -291,7 +305,7 @@ const BestOverallCreditCards = () => {
                   <Card key={card.id} className={`relative overflow-hidden ${card.featured ? 'ring-2 ring-primary/20 shadow-lg' : ''}`}>
                     {card.featured && (
                       <div className="absolute top-0 left-0 bg-primary text-white px-3 py-1 text-sm font-medium">
-                        Featured
+                        🏆 2025 Award Winner
                       </div>
                     )}
                     
@@ -423,7 +437,7 @@ const BestOverallCreditCards = () => {
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  Best Credit Cards by Category
+                  Browse by Category
                 </h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
                   Find the perfect card for your specific needs and spending habits.
@@ -459,16 +473,56 @@ const BestOverallCreditCards = () => {
           </div>
         </section>
 
+        {/* Awards Info Section */}
+        <section className="py-12 md:py-16 bg-primary/5">
+          <div className="container">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-2xl md:text-3xl font-bold mb-6">
+                About RateStore's 2025 Credit Card Awards
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Shield className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Rigorous Testing</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Every card undergoes comprehensive analysis of rewards, fees, and benefits
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Star className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Expert Review</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Our team of financial experts evaluates each card's value proposition
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Gift className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Real Value</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Awards based on actual consumer benefit and long-term value
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="py-12 md:py-16">
           <div className="container">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                Not Sure Which Card is Right for You?
+                Not Sure Which Award Winner is Right for You?
               </h2>
               <p className="text-lg text-muted-foreground mb-8">
-                Use our CardFinder tool to get personalized recommendations based on your 
-                spending habits, credit score, and financial goals.
+                Use our CardFinder tool to get personalized recommendations from our award-winning selection 
+                based on your spending habits, credit score, and financial goals.
               </p>
               <Button size="lg" className="gap-2" asChild>
                 <Link to="/credit-cards/card-finder">

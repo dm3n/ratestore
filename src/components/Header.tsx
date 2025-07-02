@@ -247,7 +247,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
-            <span className="font-bold text-xl text-primary">ratehub.ca</span>
+            <span className="font-bold text-xl text-primary">ratestore.ca</span>
           </Link>
         </div>
         
@@ -282,7 +282,7 @@ export function Header() {
             <SheetContent side="right" className="w-full sm:w-80 md:w-96 p-0">
               <SheetHeader className="p-4 sm:p-6 pb-4 border-b">
                 <SheetTitle className="text-left text-lg sm:text-xl font-bold text-primary">
-                  ratehub.ca
+                  ratestore.ca
                 </SheetTitle>
               </SheetHeader>
               <div className="flex flex-col h-full">
