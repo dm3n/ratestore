@@ -328,11 +328,11 @@ const CreditCards = () => {
         <section className="py-16">
           <div className="container">
             <Tabs defaultValue="featured" className="max-w-7xl mx-auto">
-              <TabsList className="grid w-full grid-cols-5 mb-8" role="tablist">
+              <TabsList className="grid w-full grid-cols-5 mb-8">
                 <TabsTrigger value="featured">Featured Cards</TabsTrigger>
                 <TabsTrigger value="rewards">Reward Cards</TabsTrigger>
                 <TabsTrigger value="types">Card Types</TabsTrigger>
-                <TabsTrigger value="banks" data-value="banks">Banks & Networks</TabsTrigger>
+                <TabsTrigger value="banks">Banks & Networks</TabsTrigger>
                 <TabsTrigger value="tools">Tools</TabsTrigger>
               </TabsList>
 
