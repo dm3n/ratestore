@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -392,6 +393,7 @@ export function DesktopNavDropdown() {
                               to={section.title === "Compare mortgage rates" ? "/mortgages/compare" : 
                                   section.title === "Mortgage terms" ? "/mortgages/terms" :
                                   section.title === "Education centre" ? "/guides/education-centre" :
+                                  section.title === "Type of credit cards" ? "/credit-cards" :
                                   `/${category.title.toLowerCase().replace(' ', '-')}/${section.title.toLowerCase().replace(' ', '-')}`}
                               className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
                             >
