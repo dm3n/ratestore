@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -18,6 +17,8 @@ import Admin from "@/pages/Admin";
 import Unauthorized from "@/pages/Unauthorized";
 import NotFound from "@/pages/NotFound";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+
+// Credit Card Category Routes
 import NoFee from "@/pages/credit-cards/NoFee";
 import Travel from "@/pages/credit-cards/Travel";
 import BestCanadian from "@/pages/credit-cards/BestCanadian";
@@ -31,6 +32,13 @@ import NoFXFee from "@/pages/credit-cards/NoFXFee";
 import Secured from "@/pages/credit-cards/Secured";
 import Student from "@/pages/credit-cards/Student";
 import TravelInsurance from "@/pages/credit-cards/TravelInsurance";
+import Gas from "@/pages/credit-cards/Gas";
+import Grocery from "@/pages/credit-cards/Grocery";
+import Rewards from "@/pages/credit-cards/Rewards";
+import Store from "@/pages/credit-cards/Store";
+import Aeroplan from "@/pages/credit-cards/Aeroplan";
+
+// Bank & Network Routes
 import Amex from "@/pages/credit-cards/Amex";
 import BMO from "@/pages/credit-cards/BMO";
 import CIBC from "@/pages/credit-cards/CIBC";
@@ -43,6 +51,8 @@ import Scotiabank from "@/pages/credit-cards/Scotiabank";
 import Tangerine from "@/pages/credit-cards/Tangerine";
 import TD from "@/pages/credit-cards/TD";
 import Visa from "@/pages/credit-cards/Visa";
+
+// Education Centre Routes
 import EducationCentre from "@/pages/guides/EducationCentre";
 import CreditCardsEducation from "@/pages/guides/CreditCardsEducation";
 import CreditCardBasics from "@/pages/guides/CreditCardBasics";
@@ -189,6 +199,13 @@ function App() {
             <Route path="/guides/credit-card-types" element={<CreditCardTypes />} />
             <Route path="/guides/rewards-credit-cards" element={<RewardsCreditCards />} />
             <Route path="/guides/credit-card-insurance" element={<CreditCardInsurance />} />
+
+            {/* Additional Credit Card Routes from Navigation */}
+            <Route path="/credit-cards/aeroplan" element={<Aeroplan />} />
+            <Route path="/credit-cards/grocery" element={<Grocery />} />
+            <Route path="/credit-cards/rewards" element={<Rewards />} />
+            <Route path="/credit-cards/store" element={<Store />} />
+            <Route path="/credit-cards/gas" element={<Gas />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
