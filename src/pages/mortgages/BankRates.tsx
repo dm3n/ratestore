@@ -4,9 +4,9 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Building2, Star, Award } from "lucide-react";
+import { Building2, Star } from "lucide-react";
 import { useMortgageRates } from "@/hooks/useMortgageRates";
+import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 
 const BankRates = () => {
   const { rates, isLoading, error } = useMortgageRates({
@@ -16,24 +16,25 @@ const BankRates = () => {
     autoRefresh: true
   });
 
-  // Filter for major Canadian banks and sort by rate
-  const majorBanks = ['RBC', 'RBC Royal Bank', 'TD', 'TD Bank', 'TD Canada Trust', 'Scotiabank', 'BMO', 'BMO Bank of Montreal', 'CIBC'];
+  // Filter for major Canadian banks only
+  const majorBanks = ['RBC', 'TD', 'Scotiabank', 'BMO', 'CIBC'];
   
   const bankRates = rates
-    .filter(rate => majorBanks.some(bank => 
-      rate.lender_name.toLowerCase().includes(bank.toLowerCase())
-    ))
-    .slice(0, 5)
-    .map((rate, index) => ({
-      bank: rate.lender_name,
-      rate: `${(rate.base_rate * 100).toFixed(2)}%`,
-      term: rate.term.replace('-', ' ').replace('yr', 'Year Fixed'),
-      special: rate.prime_discount || "Standard Rate",
-      featured: index < 2 // First 2 rates are featured
-    }));
+    .filter(rate => {
+      const lenderName = rate.lender_name.toLowerCase();
+      return majorBanks.some(bank => {
+        const bankName = bank.toLowerCase();
+        return lenderName.includes(bankName) ||
+               (bankName === 'rbc' && lenderName.includes('royal bank')) ||
+               (bankName === 'td' && lenderName.includes('td canada trust')) ||
+               (bankName === 'bmo' && lenderName.includes('bank of montreal'));
+      });
+    })
+    .sort((a, b) => a.base_rate - b.base_rate)
+    .slice(0, 8); // Show up to 8 rates from the Big 5
 
   // Get the best rate for display
-  const bestRate = bankRates.length > 0 ? bankRates[0].rate : "4.79%";
+  const bestRate = bankRates.length > 0 ? `${(bankRates[0].base_rate * 100).toFixed(2)}%` : "4.79%";
 
   if (isLoading) {
     return (
@@ -67,13 +68,13 @@ const BankRates = () => {
                 Best Bank Mortgage Rates
               </h1>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Compare mortgage rates from Canada's major banks. Find the best rates 
+                Compare mortgage rates from Canada's Big 5 banks. Find the best rates 
                 from RBC, TD, Scotiabank, BMO, and CIBC.
               </p>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary mb-2">{bestRate}</div>
-                  <div className="text-sm text-muted-foreground">Best Bank Rate Today</div>
+                  <div className="text-sm text-muted-foreground">Best Big 5 Bank Rate Today</div>
                 </div>
               </div>
             </div>
@@ -83,58 +84,67 @@ const BankRates = () => {
         <section className="py-16">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <Card>
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold mb-4">Find Your Best Big 5 Bank Rate</h2>
+                <p className="text-muted-foreground">
+                  Get personalized rates from Canada's major banks based on your specific needs.
+                </p>
+              </div>
+              
+              <InteractiveRateCalculator 
+                defaultTransactionType="buying"
+                termFilter="5-yr"
+              />
+
+              <Card className="mt-8">
                 <CardHeader>
-                  <CardTitle className="text-2xl">Major Bank Mortgage Rates</CardTitle>
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <Building2 className="h-6 w-6 text-blue-600" />
+                    Big 5 Bank Mortgage Rates
+                  </CardTitle>
                   <CardDescription>
-                    Current rates from Canada's Big 5 banks - Updated live from our rate database
+                    Current rates from Canada's major banks - Updated live from our database
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   {bankRates.length > 0 ? (
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Bank</TableHead>
-                            <TableHead>Rate</TableHead>
-                            <TableHead>Term</TableHead>
-                            <TableHead>Special Offer</TableHead>
-                            <TableHead></TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {bankRates.map((rate, index) => (
-                            <TableRow key={index} className={rate.featured ? "bg-blue-50/50" : ""}>
-                              <TableCell className="font-medium">
-                                <div className="flex items-center gap-2">
-                                  {rate.featured && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
-                                  {rate.bank}
+                    <div className="grid gap-4">
+                      {bankRates.map((rate, index) => (
+                        <div key={rate.id} className={`p-4 border rounded-lg ${index < 2 ? "bg-blue-50/50 border-blue-200" : ""}`}>
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2">
+                                {index < 2 && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
+                                <Building2 className="h-5 w-5 text-blue-600" />
+                                <div>
+                                  <div className="font-semibold text-lg">{rate.lender_name}</div>
+                                  <div className="text-sm text-muted-foreground">
+                                    {rate.term.replace('-', ' ').replace('yr', 'Year')} {rate.rate_type} • {rate.province}
+                                  </div>
                                 </div>
-                              </TableCell>
-                              <TableCell>
-                                <span className="text-lg font-bold text-primary">{rate.rate}</span>
-                              </TableCell>
-                              <TableCell>{rate.term}</TableCell>
-                              <TableCell>
-                                <Badge variant="outline" className="text-xs">
-                                  {rate.special}
-                                </Badge>
-                              </TableCell>
-                              <TableCell>
-                                <Button size="sm" variant={rate.featured ? "default" : "outline"}>
-                                  Get Quote
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-2xl font-bold text-primary">
+                                {(rate.base_rate * 100).toFixed(2)}%
+                              </div>
+                              {rate.prime_discount && (
+                                <div className="text-sm text-muted-foreground">
+                                  {rate.prime_discount}
+                                </div>
+                              )}
+                              <Button size="sm" className="mt-2" variant={index < 2 ? "default" : "outline"}>
+                                Get Quote
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <div className="text-center py-8">
                       <p className="text-muted-foreground">
-                        No bank rates available at the moment. Please check back later.
+                        No Big 5 bank rates available at the moment. Please check back later.
                       </p>
                     </div>
                   )}
