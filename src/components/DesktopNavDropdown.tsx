@@ -142,9 +142,10 @@ const navCategories: NavCategory[] = [
       {
         title: "Education centre",
         links: [
-          { name: "Credit card basics", href: "/guides/credit-cards" },
+          { name: "Credit Cards Education Hub", href: "/guides/credit-cards" },
+          { name: "Credit card basics", href: "/guides/credit-card-basics" },
           { name: "Types of credit cards", href: "/guides/credit-card-types" },
-          { name: "Rewards credit cards guide", href: "/guides/rewards-cards" },
+          { name: "Rewards credit cards guide", href: "/guides/rewards-credit-cards" },
           { name: "Credit card insurance guide", href: "/guides/credit-card-insurance" },
           { name: "Credit score and fraud guide", href: "/guides/credit-score" },
           { name: "Credit card interest calculator", href: "/tools/credit-card-calculator" },

@@ -42,6 +42,12 @@ import Scotiabank from "@/pages/credit-cards/Scotiabank";
 import Tangerine from "@/pages/credit-cards/Tangerine";
 import TD from "@/pages/credit-cards/TD";
 import Visa from "@/pages/credit-cards/Visa";
+import EducationCentre from "@/pages/guides/EducationCentre";
+import CreditCardsEducation from "@/pages/guides/CreditCardsEducation";
+import CreditCardBasics from "@/pages/guides/CreditCardBasics";
+import CreditCardTypes from "@/pages/guides/CreditCardTypes";
+import RewardsCreditCards from "@/pages/guides/RewardsCreditCards";
+import CreditCardInsurance from "@/pages/guides/CreditCardInsurance";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +106,14 @@ function App() {
             <Route path="/credit-cards/tangerine" element={<Tangerine />} />
             <Route path="/credit-cards/td" element={<TD />} />
             <Route path="/credit-cards/visa" element={<Visa />} />
+
+            {/* Education Centre Routes */}
+            <Route path="/guides/education-centre" element={<EducationCentre />} />
+            <Route path="/guides/credit-cards" element={<CreditCardsEducation />} />
+            <Route path="/guides/credit-card-basics" element={<CreditCardBasics />} />
+            <Route path="/guides/credit-card-types" element={<CreditCardTypes />} />
+            <Route path="/guides/rewards-credit-cards" element={<RewardsCreditCards />} />
+            <Route path="/guides/credit-card-insurance" element={<CreditCardInsurance />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
