@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -109,6 +108,64 @@ import FirstTimeBuyer from "@/pages/guides/FirstTimeBuyer";
 import PrimeRate from "@/pages/guides/PrimeRate";
 import VariableVsFixed from "@/pages/guides/VariableVsFixed";
 import OvernightRate from "@/pages/guides/OvernightRate";
+
+// Banking Routes
+import BestSavings from "@/pages/banking/BestSavings";
+import BestChequing from "@/pages/banking/BestChequing";
+import BankingAwards from "@/pages/banking/Awards";
+
+// Banking Savings Routes
+import CompareSavings from "@/pages/banking/savings/Compare";
+import HighInterestSavings from "@/pages/banking/savings/HighInterest";
+import TFSASavings from "@/pages/banking/savings/TFSA";
+import RRSPSavings from "@/pages/banking/savings/RRSP";
+import YouthSavings from "@/pages/banking/savings/Youth";
+import FirstHomeSavings from "@/pages/banking/savings/FirstHome";
+import RESPAccounts from "@/pages/banking/savings/RESP";
+
+// Banking Chequing Routes
+import CompareChequing from "@/pages/banking/chequing/Compare";
+import PersonalChequing from "@/pages/banking/chequing/Personal";
+import StudentChequing from "@/pages/banking/chequing/Student";
+import YouthChequing from "@/pages/banking/chequing/Youth";
+import SeniorChequing from "@/pages/banking/chequing/Senior";
+import NewcomerChequing from "@/pages/banking/chequing/Newcomer";
+
+// Investing Routes
+import BestGIC from "@/pages/investing/gic/Best";
+import BestRESP from "@/pages/investing/resp/Best";
+import OneYearGIC from "@/pages/investing/gic/OneYear";
+import FiveYearGIC from "@/pages/investing/gic/FiveYear";
+import RegisteredGIC from "@/pages/investing/gic/Registered";
+import TFSAGIC from "@/pages/investing/gic/TFSA";
+import USDGIC from "@/pages/investing/gic/USD";
+import CompareGIC from "@/pages/investing/gic/Compare";
+import RoboAdvisors from "@/pages/investing/RoboAdvisors";
+import Brokerages from "@/pages/investing/Brokerages";
+import Crypto from "@/pages/investing/Crypto";
+
+// Insurance Routes
+import AutoInsuranceQuotes from "@/pages/insurance/auto/Quotes";
+import MotorcycleInsurance from "@/pages/insurance/auto/Motorcycle";
+import AutoInsuranceTypes from "@/pages/insurance/auto/Types";
+import HomeInsuranceQuotes from "@/pages/insurance/home/Quotes";
+import TenantInsurance from "@/pages/insurance/home/Tenant";
+import CondoInsurance from "@/pages/insurance/home/Condo";
+import LandlordInsurance from "@/pages/insurance/home/Landlord";
+import LifeInsuranceQuotes from "@/pages/insurance/life/Quotes";
+import TermLifeInsurance from "@/pages/insurance/life/Term";
+import PermanentLifeInsurance from "@/pages/insurance/life/Permanent";
+import TravelInsuranceQuotes from "@/pages/insurance/travel/Quotes";
+import BusinessInsuranceQuotes from "@/pages/insurance/business/Quotes";
+
+// Additional Guide Routes
+import SavingsAccountGuide from "@/pages/guides/SavingsAccount";
+import GICGuide from "@/pages/guides/GIC";
+import TFSAGuide from "@/pages/guides/TFSA";
+import RRSPGuide from "@/pages/guides/RRSP";
+
+// Additional Tool Routes
+import TFSACalculator from "@/pages/tools/TFSACalculator";
 
 const queryClient = new QueryClient();
 
@@ -229,6 +286,64 @@ function App() {
             <Route path="/credit-cards/rewards" element={<Rewards />} />
             <Route path="/credit-cards/store" element={<Store />} />
             <Route path="/credit-cards/gas" element={<Gas />} />
+
+            {/* Banking Routes */}
+            <Route path="/banking/best-savings" element={<BestSavings />} />
+            <Route path="/banking/best-chequing" element={<BestChequing />} />
+            <Route path="/banking/awards" element={<BankingAwards />} />
+            
+            {/* Banking Savings Routes */}
+            <Route path="/banking/savings/compare" element={<CompareSavings />} />
+            <Route path="/banking/savings/high-interest" element={<HighInterestSavings />} />
+            <Route path="/banking/savings/tfsa" element={<TFSASavings />} />
+            <Route path="/banking/savings/rrsp" element={<RRSPSavings />} />
+            <Route path="/banking/savings/youth" element={<YouthSavings />} />
+            <Route path="/banking/savings/first-home" element={<FirstHomeSavings />} />
+            <Route path="/banking/savings/resp" element={<RESPAccounts />} />
+            
+            {/* Banking Chequing Routes */}
+            <Route path="/banking/chequing/compare" element={<CompareChequing />} />
+            <Route path="/banking/chequing/personal" element={<PersonalChequing />} />
+            <Route path="/banking/chequing/student" element={<StudentChequing />} />
+            <Route path="/banking/chequing/youth" element={<YouthChequing />} />
+            <Route path="/banking/chequing/senior" element={<SeniorChequing />} />
+            <Route path="/banking/chequing/newcomer" element={<NewcomerChequing />} />
+
+            {/* Investing Routes */}
+            <Route path="/investing/gic/best" element={<BestGIC />} />
+            <Route path="/investing/resp/best" element={<BestRESP />} />
+            <Route path="/investing/gic/1-year" element={<OneYearGIC />} />
+            <Route path="/investing/gic/5-year" element={<FiveYearGIC />} />
+            <Route path="/investing/gic/registered" element={<RegisteredGIC />} />
+            <Route path="/investing/gic/tfsa" element={<TFSAGIC />} />
+            <Route path="/investing/gic/usd" element={<USDGIC />} />
+            <Route path="/investing/gic/compare" element={<CompareGIC />} />
+            <Route path="/investing/robo-advisors" element={<RoboAdvisors />} />
+            <Route path="/investing/brokerages" element={<Brokerages />} />
+            <Route path="/investing/crypto" element={<Crypto />} />
+
+            {/* Insurance Routes */}
+            <Route path="/insurance/auto/quotes" element={<AutoInsuranceQuotes />} />
+            <Route path="/insurance/auto/motorcycle" element={<MotorcycleInsurance />} />
+            <Route path="/insurance/auto/types" element={<AutoInsuranceTypes />} />
+            <Route path="/insurance/home/quotes" element={<HomeInsuranceQuotes />} />
+            <Route path="/insurance/home/tenant" element={<TenantInsurance />} />
+            <Route path="/insurance/home/condo" element={<CondoInsurance />} />
+            <Route path="/insurance/home/landlord" element={<LandlordInsurance />} />
+            <Route path="/insurance/life/quotes" element={<LifeInsuranceQuotes />} />
+            <Route path="/insurance/life/term" element={<TermLifeInsurance />} />
+            <Route path="/insurance/life/permanent" element={<PermanentLifeInsurance />} />
+            <Route path="/insurance/travel/quotes" element={<TravelInsuranceQuotes />} />
+            <Route path="/insurance/business/quotes" element={<BusinessInsuranceQuotes />} />
+
+            {/* Additional Guide Routes */}
+            <Route path="/guides/savings-account" element={<SavingsAccountGuide />} />
+            <Route path="/guides/gic" element={<GICGuide />} />
+            <Route path="/guides/tfsa" element={<TFSAGuide />} />
+            <Route path="/guides/rrsp" element={<RRSPGuide />} />
+
+            {/* Additional Tool Routes */}
+            <Route path="/tools/tfsa-calculator" element={<TFSACalculator />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
