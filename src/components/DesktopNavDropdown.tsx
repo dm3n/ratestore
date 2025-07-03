@@ -268,30 +268,30 @@ const navCategories: NavCategory[] = [
         title: "Auto insurance",
         links: [
           { name: "Auto insurance quotes", href: "/insurance/auto/quotes" },
-          { name: "Auto insurance types", href: "/insurance/auto/types" },
-          { name: "Auto insurance by region", href: "/insurance/auto/regions" },
           { name: "Motorcycle insurance", href: "/insurance/auto/motorcycle" },
+          { name: "All auto insurance types", href: "/insurance/auto/types" },
           { name: "Ontario car insurance", href: "/insurance/auto/ontario" },
           { name: "Toronto car insurance", href: "/insurance/auto/toronto" },
           { name: "Alberta car insurance", href: "/insurance/auto/alberta" },
           { name: "Calgary car insurance", href: "/insurance/auto/calgary" },
           { name: "Quebec car insurance", href: "/insurance/auto/quebec" },
           { name: "Montreal car insurance", href: "/insurance/auto/montreal" },
+          { name: "All car insurance regions", href: "/insurance/auto/regions" },
         ]
       },
       {
         title: "Home insurance",
         links: [
           { name: "Home insurance quotes", href: "/insurance/home/quotes" },
-          { name: "Home insurance types", href: "/insurance/home/types" },
-          { name: "Home insurance by region", href: "/insurance/home/regions" },
           { name: "Tenant insurance", href: "/insurance/home/tenant" },
           { name: "Condo insurance", href: "/insurance/home/condo" },
           { name: "Landlord insurance", href: "/insurance/home/landlord" },
+          { name: "All home insurance types", href: "/insurance/home/types" },
           { name: "Ontario home insurance", href: "/insurance/home/ontario" },
           { name: "Alberta home insurance", href: "/insurance/home/alberta" },
           { name: "BC home insurance", href: "/insurance/home/bc" },
           { name: "Quebec home insurance", href: "/insurance/home/quebec" },
+          { name: "All home insurance regions", href: "/insurance/home/regions" },
         ]
       },
       {
@@ -300,72 +300,211 @@ const navCategories: NavCategory[] = [
           { name: "Life insurance quotes", href: "/insurance/life/quotes" },
           { name: "Term life insurance", href: "/insurance/life/term" },
           { name: "Permanent life insurance", href: "/insurance/life/permanent" },
-          { name: "Life insurance types", href: "/insurance/life/types" },
+          { name: "Disability insurance", href: "/insurance/life/disability" },
+          { name: "Critical illness insurance", href: "/insurance/life/critical-illness" },
+          { name: "Group insurance", href: "/insurance/life/group" },
+          { name: "All life insurance types", href: "/insurance/life/types" },
+          { name: "Life insurance by region", href: "/insurance/life/region" },
+          { name: "Life insurance education", href: "/insurance/life/education" },
+          { name: "Life insurance companies", href: "/insurance/life/companies" },
         ]
       },
       {
         title: "Travel insurance",
         links: [
           { name: "Travel insurance quotes", href: "/insurance/travel/quotes" },
+          { name: "Multi-trip insurance", href: "/insurance/travel/multi-trip" },
+          { name: "Travel medical insurance", href: "/insurance/travel/medical" },
+          { name: "Trip cancellation insurance", href: "/insurance/travel/cancellation" },
+          { name: "Senior travel insurance", href: "/insurance/travel/senior" },
+          { name: "Pre-existing condition", href: "/insurance/travel/pre-existing" },
+          { name: "Visitors to Canada", href: "/insurance/travel/visitors" },
+          { name: "Travel insurance programs", href: "/insurance/travel/programs" },
           { name: "Travel insurance types", href: "/insurance/travel/types" },
+          { name: "Travel insurance reviews", href: "/insurance/travel/reviews" },
         ]
       },
       {
         title: "Business insurance",
         links: [
           { name: "Business insurance quotes", href: "/insurance/business/quotes" },
+          { name: "Professional liability", href: "/insurance/business/professional" },
+          { name: "D&O insurance", href: "/insurance/business/directors" },
+          { name: "Commercial general liability", href: "/insurance/business/general" },
+          { name: "Product liability insurance", href: "/insurance/business/product" },
+          { name: "Business interruption insurance", href: "/insurance/business/interruption" },
+          { name: "Contractor insurance", href: "/insurance/business/contractor" },
+          { name: "Non-profit insurance", href: "/insurance/business/non-profit" },
+          { name: "Cyber insurance", href: "/insurance/business/cyber" },
+          { name: "Technology insurance", href: "/insurance/business/technology" },
+          { name: "Fitness insurance", href: "/insurance/business/fitness" },
         ]
       }
     ]
   }
 ];
 
-const DesktopNavDropdown = () => {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-
+export function DesktopNavDropdown() {
   return (
-    <NavigationMenu className="hidden lg:flex">
-      <NavigationMenuList>
+    <NavigationMenu>
+      <NavigationMenuList className="gap-6">
         {navCategories.map((category) => (
           <NavigationMenuItem key={category.title}>
-            <NavigationMenuTrigger
-              className="text-sm font-medium"
-              onMouseEnter={() => setActiveCategory(category.title)}
-            >
-              {category.title}
-              <ChevronDown className="ml-1 h-3 w-3" />
+            <NavigationMenuTrigger className="text-sm font-medium transition-colors hover:text-primary bg-transparent">
+              <Link to={`/${category.title.toLowerCase().replace(' ', '-')}`}>
+                {category.title}
+              </Link>
             </NavigationMenuTrigger>
-            <NavigationMenuContent
-              className="w-screen max-w-6xl"
-              onMouseLeave={() => setActiveCategory(null)}
-            >
-              <div className="grid grid-cols-5 gap-6 p-6">
-                {category.sections.map((section, index) => (
-                  <div key={index} className="space-y-3">
-                    <h4 className="text-sm font-semibold text-gray-900">
-                      {section.title}
-                    </h4>
-                    <ul className="space-y-2">
-                      {section.links.map((link, linkIndex) => (
-                        <li key={linkIndex}>
-                          <Link
-                            to={link.href}
-                            className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
-                          >
-                            {link.name}
-                          </Link>
-                        </li>
+            <NavigationMenuContent>
+              <div className="w-[900px] p-8">
+                {/* Category header with main link */}
+                <div className="mb-6 pb-4 border-b border-gray-100">
+                  <Link 
+                    to={`/${category.title.toLowerCase().replace(' ', '-')}`}
+                    className="text-lg font-semibold text-gray-900 hover:text-primary transition-colors"
+                  >
+                    All {category.title}
+                  </Link>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Explore all {category.title.toLowerCase()} options and services
+                  </p>
+                </div>
+                
+                {/* Organized grid with better spacing */}
+                <div className="grid grid-cols-3 gap-8">
+                  {category.sections.slice(0, 3).map((section) => (
+                    <div key={section.title} className="space-y-4">
+                      <h4 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-2">
+                        {section.title}
+                      </h4>
+                      <ul className="space-y-2.5">
+                        {section.links.slice(0, 6).map((link) => (
+                          <li key={link.name}>
+                            <Link
+                              to={link.href}
+                              className="text-sm text-gray-600 hover:text-primary transition-colors block py-1 leading-relaxed"
+                            >
+                              {link.name}
+                            </Link>
+                          </li>
+                        ))}
+                        {section.links.length > 6 && (
+                          <li>
+                            <Link
+                              to={getViewAllLink(category.title, section.title)}
+                              className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
+                            >
+                              View all {section.title.toLowerCase()} →
+                            </Link>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Additional sections if any */}
+                {category.sections.length > 3 && (
+                  <div className="mt-8 pt-6 border-t border-gray-100">
+                    <div className="grid grid-cols-2 gap-8">
+                      {category.sections.slice(3, 5).map((section) => (
+                        <div key={section.title} className="space-y-4">
+                          <h4 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-2">
+                            {section.title}
+                          </h4>
+                          <ul className="space-y-2.5">
+                            {section.links.slice(0, 4).map((link) => (
+                              <li key={link.name}>
+                                <Link
+                                  to={link.href}
+                                  className="text-sm text-gray-600 hover:text-primary transition-colors block py-1 leading-relaxed"
+                                >
+                                  {link.name}
+                                </Link>
+                              </li>
+                            ))}
+                            {section.links.length > 4 && (
+                              <li>
+                                <Link
+                                  to={getViewAllLink(category.title, section.title)}
+                                  className="text-sm text-primary font-medium hover:text-primary/80 transition-colors block py-1"
+                                >
+                                  View more →
+                                </Link>
+                              </li>
+                            )}
+                          </ul>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
-                ))}
+                )}
               </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
         ))}
+        <NavigationMenuItem>
+          <Link 
+            to="/blog" 
+            className="text-sm font-medium transition-colors hover:text-primary px-4 py-2"
+          >
+            Blog
+          </Link>
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
-};
+}
 
-export default DesktopNavDropdown;
+// Helper function to generate the correct "View all" links for each section
+function getViewAllLink(categoryTitle: string, sectionTitle: string): string {
+  const category = categoryTitle.toLowerCase().replace(' ', '-');
+  
+  // Banking overview links
+  if (category === "banking") {
+    if (sectionTitle === "Best of") return "/banking";
+    if (sectionTitle === "Savings accounts") return "/banking/savings/compare";
+    if (sectionTitle === "Chequing accounts") return "/banking/chequing/compare";
+    if (sectionTitle === "Education centre") return "/guides/education-centre";
+    if (sectionTitle === "Calculators") return "/tools/tfsa-calculator";
+  }
+  
+  // Investing overview links
+  if (category === "investing") {
+    if (sectionTitle === "Best of") return "/investing";
+    if (sectionTitle === "GIC terms and types") return "/investing/gic/compare";
+    if (sectionTitle === "Stocks & ETFs") return "/investing";
+    if (sectionTitle === "Education centre") return "/guides/education-centre";
+    if (sectionTitle === "Calculators") return "/tools/compound-interest";
+  }
+  
+  // Insurance overview links
+  if (category === "insurance") {
+    if (sectionTitle === "Auto insurance") return "/insurance/auto/types";
+    if (sectionTitle === "Home insurance") return "/insurance/home/types";
+    if (sectionTitle === "Life insurance") return "/insurance/life/types";
+    if (sectionTitle === "Travel insurance") return "/insurance/travel/types";
+    if (sectionTitle === "Business insurance") return "/insurance/business/quotes";
+  }
+  
+  // Mortgage overview links
+  if (category === "mortgages") {
+    if (sectionTitle === "Compare mortgage rates") return "/mortgages/compare";
+    if (sectionTitle === "Mortgage terms") return "/mortgages/terms";
+    if (sectionTitle === "Calculators") return "/tools/calculators";
+    if (sectionTitle === "Mortgage providers") return "/mortgages/lenders";
+    if (sectionTitle === "Education centre") return "/guides/education-centre";
+  }
+  
+  // Credit Cards overview links
+  if (category === "credit-cards") {
+    if (sectionTitle === "Compare credit cards") return "/credit-cards";
+    if (sectionTitle === "Reward credit cards") return "/credit-cards";
+    if (sectionTitle === "Type of credit cards") return "/credit-cards";
+    if (sectionTitle === "Banks & Networks") return "/credit-cards";
+    if (sectionTitle === "Education centre") return "/guides/education-centre";
+  }
+  
+  // Default fallback
+  return `/${category}`;
+}

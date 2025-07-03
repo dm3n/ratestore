@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserMenu } from "./UserMenu";
-import DesktopNavDropdown from "./DesktopNavDropdown";
+import { DesktopNavDropdown } from "./DesktopNavDropdown";
 import {
   Sheet,
   SheetContent,
