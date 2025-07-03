@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -30,7 +31,7 @@ const navCategories: NavCategory[] = [
         links: [
           { name: "Best mortgage rates", href: "/mortgages/best-rates" },
           { name: "Best mortgage renewal rates", href: "/mortgages/renewal-rates" },
-          { name: "HELOC mortgage rates", href: "/mortgages/heloc" },
+          { name: "HELOC mortgage rates", href: "/mortgages/heloc-rates" },
           { name: "Best bank mortgage rates", href: "/mortgages/bank-rates" },
           { name: "Alberta mortgage rates", href: "/mortgages/alberta" },
           { name: "BC mortgage rates", href: "/mortgages/bc" },
@@ -41,11 +42,11 @@ const navCategories: NavCategory[] = [
       {
         title: "Mortgage terms",
         links: [
-          { name: "2-year fixed rates", href: "/mortgages/2-year-fixed" },
-          { name: "3-year fixed rates", href: "/mortgages/3-year-fixed" },
-          { name: "5-year fixed rates", href: "/mortgages/5-year-fixed" },
-          { name: "3-year variable rates", href: "/mortgages/3-year-variable" },
-          { name: "5-year variable rates", href: "/mortgages/5-year-variable" },
+          { name: "2-year fixed rates", href: "/mortgages/two-year-fixed" },
+          { name: "3-year fixed rates", href: "/mortgages/three-year-fixed" },
+          { name: "5-year fixed rates", href: "/mortgages/five-year-fixed" },
+          { name: "3-year variable rates", href: "/mortgages/three-year-variable" },
+          { name: "5-year variable rates", href: "/mortgages/five-year-variable" },
           { name: "Historical rates", href: "/mortgages/historical" },
           { name: "View all terms", href: "/mortgages/terms" },
         ]
@@ -54,13 +55,13 @@ const navCategories: NavCategory[] = [
         title: "Calculators",
         links: [
           { name: "Mortgage payment calculator", href: "/tools/mortgage-calculator" },
-          { name: "Mortgage affordability calculator", href: "/tools/affordability" },
-          { name: "Down payment calculator", href: "/tools/down-payment" },
-          { name: "Amortization schedule", href: "/tools/amortization" },
-          { name: "Extra payment calculator", href: "/tools/extra-payment" },
-          { name: "Mortgage renewal calculator", href: "/tools/renewal" },
+          { name: "Mortgage affordability calculator", href: "/tools/affordability-calculator" },
+          { name: "Down payment calculator", href: "/tools/down-payment-calculator" },
+          { name: "Amortization schedule", href: "/tools/amortization-schedule" },
+          { name: "Extra payment calculator", href: "/tools/extra-payment-calculator" },
+          { name: "Mortgage renewal calculator", href: "/tools/renewal-calculator" },
           { name: "Mortgage refinance calculator", href: "/refinance" },
-          { name: "Land transfer tax calculator", href: "/tools/land-transfer-tax" },
+          { name: "Land transfer tax calculator", href: "/tools/land-transfer-tax-calculator" },
         ]
       },
       {
@@ -91,7 +92,7 @@ const navCategories: NavCategory[] = [
         title: "Compare credit cards",
         links: [
           { name: "CardFinder", href: "/card-finder" },
-          { name: "Best overall credit cards", href: "/credit-cards/best-canadian" },
+          { name: "Best overall credit cards", href: "/credit-cards/best-overall" },
           { name: "Top credit card promotions", href: "/credit-cards/promotions" },
           { name: "RateStore's 2025 credit card awards", href: "/credit-cards/awards" },
         ]
@@ -142,7 +143,7 @@ const navCategories: NavCategory[] = [
       {
         title: "Education centre",
         links: [
-          { name: "Credit Cards Education Hub", href: "/guides/credit-cards" },
+          { name: "Credit Cards Education Hub", href: "/guides/credit-cards-education" },
           { name: "Credit card basics", href: "/guides/credit-card-basics" },
           { name: "Types of credit cards", href: "/guides/credit-card-types" },
           { name: "Rewards credit cards guide", href: "/guides/rewards-credit-cards" },
