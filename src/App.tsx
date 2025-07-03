@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -184,10 +185,6 @@ function App() {
               <Route path="/insurance/travel/multi-trip" element={<MultiTripInsurance />} />
               <Route path="/insurance/travel/cancellation" element={<TripCancellationInsurance />} />
               <Route path="/insurance/travel/senior" element={<SeniorTravelInsurance />} />
-              
-              {/* Business Insurance routes */}
-              <Route path="/insurance/business" element={<BusinessInsuranceQuotes />} />
-              <Route path="/insurance/business/quotes" element={<BusinessInsuranceQuotes />} />
               
               {/* Tools routes */}
               <Route path="/tools/compound-interest" element={<CompoundInterestCalculator />} />
