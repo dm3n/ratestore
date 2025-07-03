@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,40 +6,37 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, BarChart3, Calculator, BookOpen, PiggyBank, Target } from "lucide-react";
 import { Link } from "react-router-dom";
+import { GICRateEngine } from "@/components/GICRateEngine";
 
 const Investing = () => {
-  const bestGICRates = [
-    { institution: "Tangerine Bank", rate: "4.75%", term: "1 Year", type: "featured" },
-    { institution: "EQ Bank", rate: "4.65%", term: "1 Year", type: "featured" },
-    { institution: "Oaken Financial", rate: "4.85%", term: "2 Year", type: "featured" },
-    { institution: "Canadian Western Bank", rate: "4.55%", term: "1 Year", type: "regular" },
-    { institution: "Achieva Financial", rate: "4.60%", term: "1 Year", type: "regular" }
-  ];
-
   const investmentOptions = [
     {
       title: "GICs & Term Deposits",
       description: "Guaranteed returns with flexible terms",
       icon: PiggyBank,
-      color: "blue"
+      color: "blue",
+      link: "/investing/gic/best"
     },
     {
       title: "RRSPs & TFSAs",
       description: "Tax-advantaged investment accounts",
       icon: Target,
-      color: "green"
+      color: "green",
+      link: "/investing/resp/best"
     },
     {
       title: "Robo-Advisors",
       description: "Automated portfolio management",
       icon: BarChart3,
-      color: "purple"
+      color: "purple",
+      link: "/investing/robo-advisors"
     },
     {
       title: "Online Brokerages",
       description: "Self-directed investing platforms",
       icon: TrendingUp,
-      color: "orange"
+      color: "orange",
+      link: "/investing/brokerages"
     }
   ];
 
@@ -62,86 +60,29 @@ const Investing = () => {
                 top-rated robo-advisors and online brokerages to maximize your returns.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="gap-2">
-                  Compare GIC Rates <TrendingUp className="h-5 w-5" />
+                <Button size="lg" className="gap-2" asChild>
+                  <Link to="/investing/gic/compare">
+                    Compare GIC Rates <TrendingUp className="h-5 w-5" />
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
-                  Investment Calculator <Calculator className="h-5 w-5" />
+                <Button size="lg" variant="outline" className="gap-2" asChild>
+                  <Link to="/tools/compound-interest">
+                    Investment Calculator <Calculator className="h-5 w-5" />
+                  </Link>
                 </Button>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Best GIC Rates */}
+        {/* GIC Rate Engine */}
         <section className="py-16">
           <div className="container">
             <div className="max-w-6xl mx-auto">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-bold">Best GIC Rates Today</h2>
-                <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">
-                  Rates updated daily
-                </Badge>
-              </div>
-              
-              <div className="grid gap-6">
-                {/* Featured GIC Rates */}
-                <div className="grid md:grid-cols-3 gap-6 mb-8">
-                  {bestGICRates.filter(rate => rate.type === "featured").map((rate, index) => (
-                    <Card key={index} className="border-2 border-green-200 shadow-lg">
-                      <CardHeader className="text-center pb-4">
-                        <Badge variant="outline" className="self-center mb-2 bg-green-100 text-green-700">
-                          - best rate -
-                        </Badge>
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                            <PiggyBank className="h-4 w-4 text-green-600" />
-                          </div>
-                          <span className="font-medium text-sm">{rate.institution}</span>
-                        </div>
-                        <div className="text-3xl font-bold text-green-600">{rate.rate}</div>
-                        <div className="text-sm text-muted-foreground">{rate.term}</div>
-                      </CardHeader>
-                      <CardContent>
-                        <Button className="w-full bg-green-600 hover:bg-green-700">
-                          Get Rate
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-
-                {/* Other Competitive Rates */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>More Competitive GIC Rates</CardTitle>
-                    <CardDescription>Additional guaranteed investment options</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {bestGICRates.filter(rate => rate.type === "regular").map((rate, index) => (
-                        <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                          <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                              <PiggyBank className="h-5 w-5 text-green-600" />
-                            </div>
-                            <div>
-                              <div className="font-semibold">{rate.institution}</div>
-                              <div className="text-sm text-muted-foreground">{rate.term}</div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-green-600">{rate.rate}</div>
-                            <Button variant="outline" size="sm" className="mt-2">
-                              Compare
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              <GICRateEngine 
+                title="Best GIC Rates Today"
+                subtitle="Compare guaranteed investment certificates from Canada's top financial institutions"
+              />
             </div>
           </div>
         </section>
@@ -165,8 +106,8 @@ const Investing = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Button variant="outline" className="w-full">
-                        Learn More
+                      <Button variant="outline" className="w-full" asChild>
+                        <Link to={option.link}>Learn More</Link>
                       </Button>
                     </CardContent>
                   </Card>
@@ -188,14 +129,14 @@ const Investing = () => {
                     <div className="mb-2 bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center">
                       <BookOpen className="h-6 w-6 text-blue-600" />
                     </div>
-                    <CardTitle>TFSA vs RRSP Guide</CardTitle>
+                    <CardTitle>GIC Basics Guide</CardTitle>
                     <CardDescription>
-                      Understand the differences and choose the right account for your goals.
+                      Learn everything about guaranteed investment certificates and how they work.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Button variant="outline" className="w-full" asChild>
-                      <Link to="/guides/tfsa-vs-rrsp">Read Guide</Link>
+                      <Link to="/guides/gic">Read Guide</Link>
                     </Button>
                   </CardContent>
                 </Card>
