@@ -6,8 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
   Briefcase, Shield, Building, Users, CheckCircle, ArrowRight, 
-  Star, Phone, Mail, TrendingUp, Award, AlertCircle, DollarSign,
-  FileText, Zap, Globe, Home
+  Star, Phone, Mail, TrendingUp, Award, AlertCircle,
+  FileText, Zap, Scale
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -18,65 +18,75 @@ const Business = () => {
       description: "Protection against third-party claims and lawsuits",
       icon: Shield,
       price: "From $25/month",
-      features: ["Bodily injury coverage", "Property damage", "Personal injury claims"],
+      features: ["Bodily injury coverage", "Property damage", "Personal injury claims", "Legal defense costs"],
       href: "/insurance/business/general"
     },
     {
-      title: "Professional Liability",
-      description: "Coverage for professional errors and omissions",
+      title: "Professional Liability", 
+      description: "Coverage for professional errors & omissions",
       icon: FileText,
       price: "From $45/month",
-      features: ["Errors & omissions", "Negligence claims", "Defense costs"],
+      features: ["Errors & omissions", "Negligence claims", "Defense costs", "Regulatory proceedings"],
       href: "/insurance/business/professional"
     },
     {
+      title: "Directors & Officers",
+      description: "Protection for company leadership and executives",
+      icon: Users,
+      price: "From $85/month",
+      features: ["Personal liability protection", "Securities claims", "Employment practices", "Regulatory investigations"],
+      href: "/insurance/business/do"
+    },
+    {
       title: "Commercial Property",
-      description: "Protection for business property and equipment",
+      description: "Protection for business property & equipment",
       icon: Building,
-      price: "From $35/month",
-      features: ["Building coverage", "Equipment protection", "Business interruption"],
+      price: "From $35/month", 
+      features: ["Building coverage", "Equipment protection", "Inventory coverage", "Business interruption"],
       href: "/insurance/business/property"
     },
     {
       title: "Cyber Liability",
-      description: "Protection against cyber threats and data breaches",
+      description: "Protection against cyber threats & data breaches",
       icon: Zap,
       price: "From $55/month",
-      features: ["Data breach response", "Cyber extortion", "Regulatory fines"],
+      features: ["Data breach response", "Cyber extortion", "Business interruption", "Regulatory fines"],
       href: "/insurance/business/cyber"
     }
-  ];
-
-  const industries = [
-    { name: "Technology", icon: Zap, description: "Software, IT services, and tech startups" },
-    { name: "Healthcare", icon: Shield, description: "Medical practices and healthcare providers" },
-    { name: "Construction", icon: Building, description: "Contractors and construction companies" },
-    { name: "Professional Services", icon: FileText, description: "Consultants, lawyers, and advisors" },
-    { name: "Retail", icon: Home, description: "Stores and retail businesses" },
-    { name: "Manufacturing", icon: TrendingUp, description: "Production and manufacturing companies" }
   ];
 
   const benefits = [
     {
       icon: Shield,
       title: "Legal Protection",
-      description: "Defend against lawsuits and liability claims"
-    },
-    {
-      icon: DollarSign,
-      title: "Financial Security",
-      description: "Protect your business assets and cash flow"
+      description: "Defense against lawsuits and claims that could devastate your business"
     },
     {
       icon: TrendingUp,
       title: "Business Continuity",
-      description: "Keep operations running after incidents"
+      description: "Keep operations running smoothly even after covered incidents"
     },
     {
       icon: Award,
       title: "Professional Credibility",
-      description: "Build trust with clients and partners"
+      description: "Build trust with clients who require proof of insurance coverage"
+    },
+    {
+      icon: Building,
+      title: "Asset Protection",
+      description: "Safeguard your business assets and personal wealth from claims"
     }
+  ];
+
+  const industries = [
+    "Technology & Software",
+    "Healthcare & Medical",
+    "Construction & Contracting",
+    "Professional Services",
+    "Manufacturing",
+    "Retail & E-commerce",
+    "Real Estate",
+    "Financial Services"
   ];
 
   return (
@@ -92,17 +102,17 @@ const Business = () => {
             <div className="max-w-4xl mx-auto text-center">
               <Badge variant="outline" className="mb-6 bg-white/10 text-white border-white/20 backdrop-blur-sm">
                 <Briefcase className="h-4 w-4 mr-2" />
-                Business Insurance
+                Business Insurance Canada
               </Badge>
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6">
-                Protect Your Business
+                Protect Your Business with
                 <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                  Complete Coverage
+                  Comprehensive Coverage
                 </span>
               </h1>
               <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Comprehensive business insurance solutions to protect your company, employees, 
-                and assets. Get quotes from Canada's leading commercial insurers.
+                Get tailored business insurance quotes from Canada's leading commercial insurers. 
+                Protect your business, employees, and assets with the right coverage.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto" asChild>
@@ -111,7 +121,8 @@ const Business = () => {
                   </Link>
                 </Button>
                 <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20">
-                  Compare Policies <Building className="ml-2 h-5 w-5" />
+                  <Phone className="mr-2 h-5 w-5" />
+                  1-800-BIZ-INSURE
                 </Button>
               </div>
             </div>
@@ -125,23 +136,19 @@ const Business = () => {
               <div className="text-center mb-16">
                 <h2 className="text-4xl font-bold mb-4">Business Insurance Types</h2>
                 <p className="text-xl text-muted-foreground">
-                  Comprehensive coverage for every aspect of your business
+                  Comprehensive protection for every aspect of your business
                 </p>
               </div>
               
-              <div className="grid md:grid-cols-2 gap-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {insuranceTypes.map((type, index) => (
-                  <Card key={index} className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                  <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <CardHeader>
-                      <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors duration-300">
-                        <type.icon className="h-6 w-6 text-blue-600 group-hover:text-white transition-colors duration-300" />
+                      <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                        <type.icon className="h-6 w-6 text-blue-600" />
                       </div>
-                      <CardTitle className="text-xl group-hover:text-blue-600 transition-colors">
-                        {type.title}
-                      </CardTitle>
-                      <CardDescription className="text-base">
-                        {type.description}
-                      </CardDescription>
+                      <CardTitle className="text-xl">{type.title}</CardTitle>
+                      <CardDescription className="text-base">{type.description}</CardDescription>
                       <div className="text-2xl font-bold text-blue-600 mt-2">{type.price}</div>
                     </CardHeader>
                     <CardContent>
@@ -164,45 +171,14 @@ const Business = () => {
           </div>
         </section>
 
-        {/* Industries */}
-        <section className="py-20 bg-gradient-to-r from-gray-50 to-blue-50">
-          <div className="container">
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold mb-4">Coverage by Industry</h2>
-                <p className="text-xl text-muted-foreground">
-                  Specialized insurance solutions for different business sectors
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-3 gap-8">
-                {industries.map((industry, index) => (
-                  <Card key={index} className="text-center border-0 shadow-lg hover:shadow-xl transition-shadow">
-                    <CardContent className="pt-6">
-                      <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <industry.icon className="h-8 w-8 text-blue-600" />
-                      </div>
-                      <h3 className="text-xl font-bold mb-2">{industry.name}</h3>
-                      <p className="text-gray-600 mb-4">{industry.description}</p>
-                      <Button variant="outline" className="w-full" asChild>
-                        <Link to="/insurance/business/quotes">Get Quote</Link>
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Benefits */}
-        <section className="py-20">
+        <section className="py-20 bg-gradient-to-r from-gray-50 to-blue-50">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <h2 className="text-4xl font-bold mb-4">Why Your Business Needs Insurance</h2>
                 <p className="text-xl text-muted-foreground">
-                  Protect your investment and ensure business continuity
+                  Business insurance protects your investment and ensures continuity
                 </p>
               </div>
               
@@ -223,6 +199,26 @@ const Business = () => {
           </div>
         </section>
 
+        {/* Industries */}
+        <section className="py-20">
+          <div className="container">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl font-bold mb-4">Industries We Cover</h2>
+              <p className="text-xl text-muted-foreground mb-12">
+                Specialized insurance solutions for businesses across all sectors
+              </p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {industries.map((industry, index) => (
+                  <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-blue-300 transition-colors">
+                    <span className="text-gray-700 font-medium">{industry}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
           <div className="container">
@@ -231,17 +227,20 @@ const Business = () => {
               <p className="text-xl text-blue-100 mb-8">
                 Get comprehensive business insurance quotes and safeguard your company's future
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto" asChild>
                   <Link to="/insurance/business/quotes">
-                    Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
+                    Get Free Quote Now <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20">
                   <Phone className="mr-2 h-5 w-5" />
-                  Call Expert
+                  Call 1-800-BIZ-INSURE
                 </Button>
               </div>
+              <p className="text-blue-200">
+                Questions? Email us at <a href="mailto:business@ratestore.ca" className="underline hover:text-white">business@ratestore.ca</a>
+              </p>
             </div>
           </div>
         </section>

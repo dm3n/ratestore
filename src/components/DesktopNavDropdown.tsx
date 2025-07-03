@@ -329,6 +329,7 @@ const navCategories: NavCategory[] = [
           { name: "Business insurance quotes", href: "/insurance/business/quotes" },
           { name: "General liability insurance", href: "/insurance/business/general" },
           { name: "Professional liability insurance", href: "/insurance/business/professional" },
+          { name: "Directors & Officers insurance", href: "/insurance/business/do" },
           { name: "Commercial property insurance", href: "/insurance/business/property" },
           { name: "Cyber liability insurance", href: "/insurance/business/cyber" },
           { name: "All business insurance types", href: "/insurance/business" },

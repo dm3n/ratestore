@@ -100,12 +100,7 @@ import General from "./pages/insurance/business/General";
 import Professional from "./pages/insurance/business/Professional";
 import Property from "./pages/insurance/business/Property";
 import Cyber from "./pages/insurance/business/Cyber";
-
-// Business Insurance pages
-import General from "./pages/insurance/business/General";
-import Professional from "./pages/insurance/business/Professional";
-import Property from "./pages/insurance/business/Property";
-import Cyber from "./pages/insurance/business/Cyber";
+import DO from "./pages/insurance/business/DO";
 
 const queryClient = new QueryClient();
 
@@ -207,6 +202,7 @@ function App() {
               <Route path="/insurance/business/professional" element={<Professional />} />
               <Route path="/insurance/business/property" element={<Property />} />
               <Route path="/insurance/business/cyber" element={<Cyber />} />
+              <Route path="/insurance/business/do" element={<DO />} />
               
               {/* Tools routes */}
               <Route path="/tools/compound-interest" element={<CompoundInterestCalculator />} />
