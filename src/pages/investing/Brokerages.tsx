@@ -115,7 +115,7 @@ const Brokerages = () => {
                 <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
                   Compare All Brokerages
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button size="lg" variant="outline" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border-white/20">
                   Learn About Online Trading
                 </Button>
               </div>
@@ -367,7 +367,7 @@ const Brokerages = () => {
               <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
                 Compare Brokerages Now
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border-white/20">
                 <Link to="/guides/education-centre">Learn About Trading</Link>
               </Button>
             </div>
