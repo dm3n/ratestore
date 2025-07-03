@@ -189,6 +189,27 @@ const navCategories = [
           { name: "USD GIC rates", href: "/investing/gic/usd" },
           { name: "Compare all GICs", href: "/investing/gic/compare" },
         ]
+      },
+      {
+        title: "Education centre",
+        href: "/guides/education-centre",
+        links: [
+          { name: "GIC basics", href: "/guides/gic" },
+          { name: "RRSP basics", href: "/guides/rrsp" },
+          { name: "RRSP contribution", href: "/guides/rrsp-contribution" },
+          { name: "TFSA basics", href: "/guides/tfsa" },
+          { name: "TFSA contributions", href: "/guides/tfsa-contributions" },
+          { name: "RESP basics", href: "/guides/resp-basics" },
+        ]
+      },
+      {
+        title: "Calculators",
+        href: "/tools",
+        links: [
+          { name: "Compound interest calculator", href: "/tools/compound-interest" },
+          { name: "TFSA calculator", href: "/tools/tfsa-calculator" },
+          { name: "Retirement calculator", href: "/tools/retirement" },
+        ]
       }
     ]
   },
