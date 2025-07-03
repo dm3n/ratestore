@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -77,8 +76,10 @@ import GroupInsurance from "./pages/insurance/life/Group";
 // Travel Insurance
 import TravelInsuranceQuotes from "./pages/insurance/travel/Quotes";
 import TravelInsuranceTypes from "./pages/insurance/travel/Types";
-// Business Insurance
-import BusinessInsuranceQuotes from "./pages/insurance/business/Quotes";
+import TravelMedicalInsurance from "@/pages/insurance/travel/Medical";
+import MultiTripInsurance from "@/pages/insurance/travel/MultiTrip";
+import TripCancellationInsurance from "@/pages/insurance/travel/Cancellation";
+import SeniorTravelInsurance from "@/pages/insurance/travel/Senior";
 
 // Tools pages
 import CompoundInterestCalculator from "./pages/tools/CompoundInterestCalculator";
@@ -179,6 +180,10 @@ function App() {
               <Route path="/insurance/travel" element={<TravelInsuranceTypes />} />
               <Route path="/insurance/travel/quotes" element={<TravelInsuranceQuotes />} />
               <Route path="/insurance/travel/types" element={<TravelInsuranceTypes />} />
+              <Route path="/insurance/travel/medical" element={<TravelMedicalInsurance />} />
+              <Route path="/insurance/travel/multi-trip" element={<MultiTripInsurance />} />
+              <Route path="/insurance/travel/cancellation" element={<TripCancellationInsurance />} />
+              <Route path="/insurance/travel/senior" element={<SeniorTravelInsurance />} />
               
               {/* Business Insurance routes */}
               <Route path="/insurance/business" element={<BusinessInsuranceQuotes />} />
