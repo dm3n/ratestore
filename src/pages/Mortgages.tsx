@@ -40,8 +40,10 @@ const Mortgages = () => {
                 <Button size="lg" className="gap-2 px-6 md:px-8">
                   Compare Rates <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2 px-6 md:px-8">
-                  Calculate Payments <Calculator className="h-4 w-4 md:h-5 md:w-5" />
+                <Button size="lg" variant="outline" className="gap-2 px-6 md:px-8" asChild>
+                  <Link to="/tools/mortgage-calculator">
+                    Calculate Payments <Calculator className="h-4 w-4 md:h-5 md:w-5" />
+                  </Link>
                 </Button>
               </div>
             </div>
