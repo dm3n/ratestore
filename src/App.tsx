@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -99,6 +100,7 @@ import AmortizationSchedule from "@/pages/tools/AmortizationSchedule";
 import ExtraPaymentCalculator from "@/pages/tools/ExtraPaymentCalculator";
 import RenewalCalculator from "@/pages/tools/RenewalCalculator";
 import LandTransferTaxCalculator from "@/pages/tools/LandTransferTaxCalculator";
+import CalculatorsHub from "@/pages/tools/CalculatorsHub";
 
 // Guide pages
 import HomeBuying from "@/pages/guides/HomeBuying";
@@ -250,6 +252,7 @@ function App() {
             <Route path="/tools/extra-payment" element={<ExtraPaymentCalculator />} />
             <Route path="/tools/renewal" element={<RenewalCalculator />} />
             <Route path="/tools/land-transfer-tax" element={<LandTransferTaxCalculator />} />
+            <Route path="/tools/calculators" element={<CalculatorsHub />} />
 
             {/* Guide Routes */}
             <Route path="/guides/home-buying" element={<HomeBuying />} />

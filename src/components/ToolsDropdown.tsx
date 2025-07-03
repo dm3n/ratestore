@@ -100,7 +100,7 @@ export function ToolsDropdown() {
         {/* View All Link */}
         <DropdownMenuItem asChild className="p-0 mb-2">
           <Link 
-            to="/tools"
+            to="/tools/calculators"
             className="flex items-center gap-3 p-3 rounded-md bg-primary/5 hover:bg-primary/10 transition-colors cursor-pointer border border-primary/20"
             onClick={() => setIsOpen(false)}
           >
