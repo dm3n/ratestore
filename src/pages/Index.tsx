@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -19,7 +18,9 @@ import {
   MapPin,
   DollarSign,
   Users,
-  Award
+  Award,
+  CheckCircle,
+  Zap
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -74,108 +75,153 @@ const Index = () => {
       <Header />
       
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent py-12 md:py-20 lg:py-24">
-          <div className="container px-4 sm:px-6 lg:px-8">
+        {/* Modern SaaS Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-20 lg:py-32">
+          {/* Background decoration */}
+          <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
+          <div className="absolute top-0 right-0 -translate-y-12 translate-x-12 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 translate-y-12 -translate-x-12 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+          
+          <div className="container relative px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 md:mb-6 bg-blue-50 text-blue-600 border-blue-200 text-sm">
-                Compare rates from 100+ Canadian lenders
-              </Badge>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight mb-4 md:mb-6">
-                Find the Best Financial Products in Canada
+              {/* Status badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium mb-8 animate-fade-in">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                Live rates from 100+ Canadian lenders
+              </div>
+
+              {/* Main headline */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-slate-900 mb-6 animate-fade-in">
+                Find Canada's{" "}
+                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+                  best rates
+                </span>
+                <br />in seconds
               </h1>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
-                Compare mortgages, credit cards, savings accounts, and more. 
-                Get personalized quotes and expert advice to make informed financial decisions.
+
+              {/* Subtitle */}
+              <p className="text-xl lg:text-2xl text-slate-600 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in">
+                Compare mortgages, credit cards, savings accounts, and insurance. 
+                Get personalized quotes and save thousands with Canada's most trusted financial platform.
               </p>
-              
-              {/* Search Bar */}
-              <div className="max-w-2xl mx-auto mb-8 md:mb-12">
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                  <Input 
-                    className="pl-12 pr-4 py-4 text-lg rounded-xl border-2 focus:border-primary"
-                    placeholder="Search for mortgages, credit cards, savings accounts..."
-                  />
-                  <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-lg px-6">
-                    Search
-                  </Button>
+
+              {/* Trust indicators */}
+              <div className="flex flex-wrap justify-center items-center gap-8 mb-12 text-sm text-slate-500 animate-fade-in">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  500K+ users trust us
+                </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-yellow-500" />
+                  Instant comparisons
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-blue-500" />
+                  Bank-level security
                 </div>
               </div>
 
-              {/* Category Buttons */}
-              <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-                {categories.map((category) => (
-                  <Button
-                    key={category.id}
-                    variant={selectedCategory === category.id ? "default" : "outline"}
-                    size="lg"
-                    className={`gap-2 text-sm md:text-base px-4 md:px-6 py-2 md:py-3 ${
-                      selectedCategory === category.id 
-                        ? "bg-primary text-white" 
-                        : "hover:bg-primary/10"
-                    }`}
-                    onClick={() => setSelectedCategory(category.id)}
-                  >
-                    <category.icon className="h-4 w-4 md:h-5 md:w-5" />
-                    <span className="hidden sm:inline">{category.name}</span>
-                    <span className="sm:hidden">{category.name.split(' ')[0]}</span>
-                  </Button>
-                ))}
+              {/* Category selection */}
+              <div className="mb-10 animate-fade-in">
+                <p className="text-lg text-slate-600 mb-6">What are you looking for?</p>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {categories.map((category) => (
+                    <Button
+                      key={category.id}
+                      variant={selectedCategory === category.id ? "default" : "outline"}
+                      size="lg"
+                      className={`gap-3 px-6 py-4 text-base font-medium rounded-xl transition-all hover:scale-105 ${
+                        selectedCategory === category.id 
+                          ? "bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25" 
+                          : "hover:bg-slate-50 hover:border-slate-300"
+                      }`}
+                      onClick={() => setSelectedCategory(category.id)}
+                    >
+                      <category.icon className="h-5 w-5" />
+                      {category.name}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* CTA buttons */}
+              <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in">
+                <Button size="lg" className="px-8 py-4 text-lg font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all">
+                  Start Comparing Rates
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold rounded-xl border-2 hover:bg-slate-50 transition-all">
+                  View All Tools
+                </Button>
               </div>
             </div>
           </div>
         </section>
 
         {/* Featured Rates Section */}
-        <section className="py-12 md:py-16 lg:py-20">
+        <section className="py-16 lg:py-24 bg-white">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 md:mb-12 gap-4">
-                <div>
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2">
-                    Today's Best {categories.find(c => c.id === selectedCategory)?.name} 
-                  </h2>
-                  <p className="text-muted-foreground text-lg">Updated daily from top Canadian providers</p>
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 text-sm font-medium mb-4">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                  Updated every hour
                 </div>
-                <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 shrink-0">
-                  Live rates
-                </Badge>
+                <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+                  Today's Best {categories.find(c => c.id === selectedCategory)?.name}
+                </h2>
+                <p className="text-xl text-slate-600">Compare rates from Canada's top financial institutions</p>
               </div>
               
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {bestRates[selectedCategory as keyof typeof bestRates]?.map((rate, index) => (
-                  <Card key={index} className={`relative transition-all duration-200 hover:shadow-lg ${
-                    rate.special ? "border-2 border-primary/30 shadow-md" : "hover:border-primary/20"
+                  <Card key={index} className={`relative group hover:shadow-xl transition-all duration-300 border-0 shadow-md ${
+                    rate.special ? "ring-2 ring-blue-500/20 bg-gradient-to-br from-blue-50/50 to-white" : "hover:shadow-lg"
                   }`}>
                     {rate.special && (
-                      <Badge className="absolute -top-2 left-4 bg-primary text-white text-xs px-2 py-1">
-                        Featured
-                      </Badge>
+                      <div className="absolute -top-3 left-6">
+                        <Badge className="bg-blue-600 text-white px-3 py-1 text-xs font-semibold">
+                          ⭐ Featured Deal
+                        </Badge>
+                      </div>
                     )}
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <DollarSign className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <div className="font-semibold text-sm text-muted-foreground">{rate.provider}</div>
-                          <div className="font-medium">{rate.product}</div>
+                    <CardHeader className="pb-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                            rate.special ? "bg-blue-100" : "bg-slate-100"
+                          }`}>
+                            <DollarSign className={`h-6 w-6 ${rate.special ? "text-blue-600" : "text-slate-600"}`} />
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-slate-500">{rate.provider}</div>
+                            <div className="font-semibold text-slate-900">{rate.product}</div>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-2xl md:text-3xl font-bold text-primary">{rate.rate}</div>
+                      <div className={`text-3xl font-bold ${rate.special ? "text-blue-600" : "text-slate-900"}`}>
+                        {rate.rate}
+                      </div>
                     </CardHeader>
                     <CardContent>
-                      <Button className="w-full" variant={rate.special ? "default" : "outline"}>
+                      <Button 
+                        className={`w-full font-semibold ${
+                          rate.special 
+                            ? "bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25" 
+                            : ""
+                        }`}
+                        variant={rate.special ? "default" : "outline"}
+                      >
                         Get Quote
+                        <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </CardContent>
                   </Card>
                 ))}
               </div>
 
-              <div className="text-center mt-8 md:mt-12">
-                <Button variant="outline" size="lg" className="gap-2" asChild>
+              <div className="text-center mt-10">
+                <Button variant="outline" size="lg" className="gap-2 px-6 py-3 rounded-xl font-semibold" asChild>
                   <Link to={`/${selectedCategory}`}>
                     View All {categories.find(c => c.id === selectedCategory)?.name}
                     <ArrowRight className="h-4 w-4" />
@@ -187,28 +233,28 @@ const Index = () => {
         </section>
 
         {/* Tools Section */}
-        <section className="py-12 md:py-16 lg:py-20 bg-gray-50/50">
+        <section className="py-16 lg:py-24 bg-slate-50">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-8 md:mb-12">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Financial Calculators & Tools</h2>
-                <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Financial Calculators & Tools</h2>
+                <p className="text-xl text-slate-600 max-w-2xl mx-auto">
                   Make informed decisions with our comprehensive suite of financial calculators
                 </p>
               </div>
               
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {tools.map((tool, index) => (
-                  <Card key={index} className="text-center border-0 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02]">
-                    <CardHeader className="pb-3">
-                      <div className="mx-auto mb-3 bg-primary/10 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center">
-                        <tool.icon className="h-6 w-6 md:h-7 md:w-7 text-primary" />
+                  <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-md bg-white hover:-translate-y-1">
+                    <CardHeader className="text-center pb-4">
+                      <div className="mx-auto mb-4 bg-slate-100 group-hover:bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center transition-colors">
+                        <tool.icon className="h-8 w-8 text-slate-600 group-hover:text-blue-600 transition-colors" />
                       </div>
-                      <CardTitle className="text-lg md:text-xl">{tool.name}</CardTitle>
-                      <CardDescription className="text-sm md:text-base">{tool.description}</CardDescription>
+                      <CardTitle className="text-xl font-semibold text-slate-900">{tool.name}</CardTitle>
+                      <CardDescription className="text-slate-600">{tool.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Button variant="outline" className="w-full" asChild>
+                      <Button variant="outline" className="w-full font-semibold hover:bg-slate-50" asChild>
                         <Link to={tool.link}>Use Calculator</Link>
                       </Button>
                     </CardContent>
@@ -220,27 +266,27 @@ const Index = () => {
         </section>
 
         {/* Trust Indicators */}
-        <section className="py-12 md:py-16 lg:py-20">
+        <section className="py-16 lg:py-20 bg-white">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-12">Trusted by Canadians</h2>
+              <h2 className="text-3xl font-bold text-slate-900 mb-12">Trusted by Canadians</h2>
               
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="text-center">
-                  <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2">500K+</div>
-                  <div className="text-sm md:text-base text-muted-foreground">Monthly users</div>
+                  <div className="text-4xl lg:text-5xl font-bold text-blue-600 mb-2">500K+</div>
+                  <div className="text-slate-600">Monthly users</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2">100+</div>
-                  <div className="text-sm md:text-base text-muted-foreground">Partner lenders</div>
+                  <div className="text-4xl lg:text-5xl font-bold text-blue-600 mb-2">100+</div>
+                  <div className="text-slate-600">Partner lenders</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2">4.8★</div>
-                  <div className="text-sm md:text-base text-muted-foreground">User rating</div>
+                  <div className="text-4xl lg:text-5xl font-bold text-blue-600 mb-2">4.8★</div>
+                  <div className="text-slate-600">User rating</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2">15+</div>
-                  <div className="text-sm md:text-base text-muted-foreground">Years serving</div>
+                  <div className="text-4xl lg:text-5xl font-bold text-blue-600 mb-2">15+</div>
+                  <div className="text-slate-600">Years serving</div>
                 </div>
               </div>
             </div>
@@ -248,20 +294,22 @@ const Index = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-12 md:py-16 lg:py-20 bg-primary text-white">
-          <div className="container px-4 sm:px-6 lg:px-8">
+        <section className="py-16 lg:py-20 bg-slate-900 text-white relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+          <div className="container relative px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-6">
                 Ready to Find Your Perfect Financial Product?
               </h2>
-              <p className="text-lg md:text-xl mb-8 md:mb-10 opacity-90 max-w-2xl mx-auto">
+              <p className="text-xl mb-10 text-slate-300 max-w-2xl mx-auto">
                 Join thousands of Canadians who have saved money by comparing rates on our platform.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100 px-6 md:px-8">
+                <Button size="lg" className="px-8 py-4 text-lg font-semibold bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25">
                   Start Comparing
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-6 md:px-8">
+                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white">
                   Learn More
                 </Button>
               </div>
