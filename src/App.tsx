@@ -1,3 +1,8 @@
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
+
+createRoot(document.getElementById("root")!).render(<App />);
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -162,6 +167,8 @@ import BusinessInsuranceQuotes from "@/pages/insurance/business/Quotes";
 
 // Additional Guide Routes
 import SavingsAccountGuide from "@/pages/guides/SavingsAccount";
+import TieredSavingsGuide from "@/pages/guides/TieredSavings";
+import SavingsAlternativesGuide from "@/pages/guides/SavingsAlternatives";
 import GICGuide from "@/pages/guides/GIC";
 import TFSAGuide from "@/pages/guides/TFSA";
 import RRSPGuide from "@/pages/guides/RRSP";
@@ -385,6 +392,8 @@ function App() {
 
             {/* Additional Guide Routes */}
             <Route path="/guides/savings-account" element={<SavingsAccountGuide />} />
+            <Route path="/guides/tiered-savings" element={<TieredSavingsGuide />} />
+            <Route path="/guides/savings-alternatives" element={<SavingsAlternativesGuide />} />
             <Route path="/guides/gic" element={<GICGuide />} />
             <Route path="/guides/tfsa" element={<TFSAGuide />} />
             <Route path="/guides/rrsp" element={<RRSPGuide />} />
