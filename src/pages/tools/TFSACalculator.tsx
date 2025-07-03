@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -12,7 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Calculator, PiggyBank, TrendingUp, AlertCircle, BookOpen, Target, DollarSign } from "lucide-react";
-
 const TFSACalculator = () => {
   const [birthYear, setBirthYear] = useState<string>("");
   const [currentContributions, setCurrentContributions] = useState<string>("");
@@ -26,31 +24,42 @@ const TFSACalculator = () => {
   } | null>(null);
 
   // TFSA contribution limits by year
-  const contributionLimits: { [key: number]: number } = {
-    2009: 5000, 2010: 5000, 2011: 5000, 2012: 5000, 2013: 5500,
-    2014: 5500, 2015: 10000, 2016: 5500, 2017: 5500, 2018: 5500,
-    2019: 6000, 2020: 6000, 2021: 6000, 2022: 6000, 2023: 6500,
-    2024: 7000, 2025: 7000
+  const contributionLimits: {
+    [key: number]: number;
+  } = {
+    2009: 5000,
+    2010: 5000,
+    2011: 5000,
+    2012: 5000,
+    2013: 5500,
+    2014: 5500,
+    2015: 10000,
+    2016: 5500,
+    2017: 5500,
+    2018: 5500,
+    2019: 6000,
+    2020: 6000,
+    2021: 6000,
+    2022: 6000,
+    2023: 6500,
+    2024: 7000,
+    2025: 7000
   };
-
   const calculateTFSA = () => {
     if (!birthYear) return;
-
     const birth = parseInt(birthYear);
     const currentYear = new Date().getFullYear();
     const ageIn2009 = 2009 - birth;
     const eligibleYear = ageIn2009 >= 18 ? 2009 : birth + 18;
-    
+
     // Calculate total contribution room
     let totalRoom = 0;
     for (let year = Math.max(eligibleYear, 2009); year <= currentYear; year++) {
       totalRoom += contributionLimits[year] || 7000;
     }
-
     const contributions = parseFloat(currentContributions) || 0;
     const totalWithdrawals = parseFloat(withdrawals) || 0;
     const availableRoom = totalRoom - contributions + totalWithdrawals;
-
     setResults({
       totalRoom,
       availableRoom: Math.max(0, availableRoom),
@@ -58,47 +67,36 @@ const TFSACalculator = () => {
       ageEligible: Math.max(18, currentYear - birth)
     });
   };
-
   useEffect(() => {
     if (birthYear && results) {
       calculateTFSA();
     }
   }, [birthYear, currentContributions, withdrawals]);
-
-  const benefits = [
-    {
-      icon: DollarSign,
-      title: "Tax-Free Growth",
-      description: "All investment income earned in your TFSA is completely tax-free, including interest, dividends, and capital gains."
-    },
-    {
-      icon: PiggyBank,
-      title: "Flexible Withdrawals",
-      description: "Withdraw money anytime without tax penalties. Withdrawn amounts can be re-contributed in future years."
-    },
-    {
-      icon: TrendingUp,
-      title: "No Age Limit",
-      description: "Continue contributing to your TFSA throughout your lifetime with no forced withdrawals at any age."
-    },
-    {
-      icon: Target,
-      title: "Multiple Goals",
-      description: "Use your TFSA for any savings goal - emergency fund, vacation, home purchase, or retirement."
-    }
-  ];
-
-  return (
-    <div className="min-h-screen flex flex-col">
+  const benefits = [{
+    icon: DollarSign,
+    title: "Tax-Free Growth",
+    description: "All investment income earned in your TFSA is completely tax-free, including interest, dividends, and capital gains."
+  }, {
+    icon: PiggyBank,
+    title: "Flexible Withdrawals",
+    description: "Withdraw money anytime without tax penalties. Withdrawn amounts can be re-contributed in future years."
+  }, {
+    icon: TrendingUp,
+    title: "No Age Limit",
+    description: "Continue contributing to your TFSA throughout your lifetime with no forced withdrawals at any age."
+  }, {
+    icon: Target,
+    title: "Multiple Goals",
+    description: "Use your TFSA for any savings goal - emergency fund, vacation, home purchase, or retirement."
+  }];
+  return <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-green-50 to-emerald-100 py-16">
           <div className="container">
             <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="secondary" className="mb-4">
-                Free Financial Tool
-              </Badge>
+              
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 TFSA Contribution Room Calculator
               </h1>
@@ -148,39 +146,17 @@ const TFSACalculator = () => {
                       <CardContent className="space-y-6">
                         <div className="space-y-2">
                           <Label htmlFor="birthYear">Birth Year *</Label>
-                          <Input
-                            id="birthYear"
-                            type="number"
-                            placeholder="e.g., 1985"
-                            value={birthYear}
-                            onChange={(e) => setBirthYear(e.target.value)}
-                            min="1900"
-                            max={new Date().getFullYear() - 18}
-                          />
+                          <Input id="birthYear" type="number" placeholder="e.g., 1985" value={birthYear} onChange={e => setBirthYear(e.target.value)} min="1900" max={new Date().getFullYear() - 18} />
                         </div>
 
                         <div className="space-y-2">
                           <Label htmlFor="contributions">Total TFSA Contributions to Date</Label>
-                          <Input
-                            id="contributions"
-                            type="number"
-                            placeholder="e.g., 25000"
-                            value={currentContributions}
-                            onChange={(e) => setCurrentContributions(e.target.value)}
-                            min="0"
-                          />
+                          <Input id="contributions" type="number" placeholder="e.g., 25000" value={currentContributions} onChange={e => setCurrentContributions(e.target.value)} min="0" />
                         </div>
 
                         <div className="space-y-2">
                           <Label htmlFor="withdrawals">Total TFSA Withdrawals</Label>
-                          <Input
-                            id="withdrawals"
-                            type="number"
-                            placeholder="e.g., 5000"
-                            value={withdrawals}
-                            onChange={(e) => setWithdrawals(e.target.value)}
-                            min="0"
-                          />
+                          <Input id="withdrawals" type="number" placeholder="e.g., 5000" value={withdrawals} onChange={e => setWithdrawals(e.target.value)} min="0" />
                         </div>
 
                         <div className="space-y-2">
@@ -207,11 +183,7 @@ const TFSACalculator = () => {
                           </Select>
                         </div>
 
-                        <Button 
-                          onClick={calculateTFSA} 
-                          className="w-full"
-                          disabled={!birthYear}
-                        >
+                        <Button onClick={calculateTFSA} className="w-full" disabled={!birthYear}>
                           Calculate TFSA Room
                         </Button>
                       </CardContent>
@@ -226,8 +198,7 @@ const TFSACalculator = () => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        {results ? (
-                          <div className="space-y-6">
+                        {results ? <div className="space-y-6">
                             <div className="grid grid-cols-2 gap-4">
                               <div className="text-center p-4 bg-green-50 rounded-lg">
                                 <div className="text-2xl font-bold text-green-600">
@@ -269,13 +240,10 @@ const TFSACalculator = () => {
                                 for your exact contribution room, especially if you've made contributions or withdrawals.
                               </AlertDescription>
                             </Alert>
-                          </div>
-                        ) : (
-                          <div className="text-center py-8 text-gray-500">
+                          </div> : <div className="text-center py-8 text-gray-500">
                             <Calculator className="h-12 w-12 mx-auto mb-4 opacity-50" />
                             <p>Enter your birth year to calculate your TFSA contribution room</p>
-                          </div>
-                        )}
+                          </div>}
                       </CardContent>
                     </Card>
                   </div>
@@ -287,12 +255,10 @@ const TFSACalculator = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                        {Object.entries(contributionLimits).map(([year, limit]) => (
-                          <div key={year} className="text-center p-3 bg-gray-50 rounded-lg">
+                        {Object.entries(contributionLimits).map(([year, limit]) => <div key={year} className="text-center p-3 bg-gray-50 rounded-lg">
                             <div className="font-semibold text-sm">{year}</div>
                             <div className="text-xs text-gray-600">${limit.toLocaleString()}</div>
-                          </div>
-                        ))}
+                          </div>)}
                       </div>
                     </CardContent>
                   </Card>
@@ -302,8 +268,7 @@ const TFSACalculator = () => {
                   <div>
                     <h2 className="text-2xl font-bold mb-6">Why Use a TFSA?</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {benefits.map((benefit, index) => (
-                        <Card key={index}>
+                      {benefits.map((benefit, index) => <Card key={index}>
                           <CardContent className="p-6">
                             <div className="flex items-start gap-4">
                               <div className="p-2 bg-green-100 rounded-lg">
@@ -315,8 +280,7 @@ const TFSACalculator = () => {
                               </div>
                             </div>
                           </CardContent>
-                        </Card>
-                      ))}
+                        </Card>)}
                     </div>
                   </div>
 
@@ -474,8 +438,6 @@ const TFSACalculator = () => {
         </section>
       </main>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default TFSACalculator;
