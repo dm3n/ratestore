@@ -1,14 +1,12 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  Shield, Car, Home, Heart, Plane, Briefcase, Calculator, 
-  MapPin, Star, CheckCircle, ArrowRight, Users, Clock, 
-  TrendingUp, Award, Phone, Mail 
+  Shield, Car, Home, Heart, Plane, Briefcase, 
+  ArrowRight, CheckCircle, Star, TrendingUp, Users, 
+  Phone, Mail, Calculator, Award, Globe
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -16,84 +14,88 @@ const Insurance = () => {
   const insuranceTypes = [
     {
       title: "Auto Insurance",
-      description: "Comprehensive vehicle protection for Canadian drivers",
+      description: "Comprehensive car insurance coverage for all provinces",
       icon: Car,
-      color: "blue",
-      features: ["Collision & Comprehensive", "Liability Protection", "Accident Benefits"],
-      link: "/insurance/auto",
-      popular: true,
-      startingPrice: "From $89/month"
+      color: "bg-blue-600",
+      hoverColor: "hover:bg-blue-700",
+      features: ["Liability coverage", "Collision protection", "Comprehensive coverage"],
+      startingPrice: "From $89/month",
+      href: "/insurance/auto",
+      quoteHref: "/insurance/auto/quotes"
     },
     {
-      title: "Home Insurance",
-      description: "Complete protection for your property and belongings",
+      title: "Home Insurance", 
+      description: "Protect your home and belongings with comprehensive coverage",
       icon: Home,
-      color: "green",
-      features: ["Property Coverage", "Contents Protection", "Liability Insurance"],
-      link: "/insurance/home",
-      popular: true,
-      startingPrice: "From $45/month"
+      color: "bg-green-600",
+      hoverColor: "hover:bg-green-700",
+      features: ["Property protection", "Contents coverage", "Liability protection"],
+      startingPrice: "From $65/month",
+      href: "/insurance/home",
+      quoteHref: "/insurance/home/quotes"
     },
     {
       title: "Life Insurance",
-      description: "Financial security for your loved ones",
+      description: "Financial protection for your family's future",
       icon: Heart,
-      color: "red",
-      features: ["Term & Permanent Options", "Critical Illness", "Disability Coverage"],
-      link: "/insurance/life",
-      popular: false,
-      startingPrice: "From $25/month"
+      color: "bg-red-600",
+      hoverColor: "hover:bg-red-700",
+      features: ["Term life coverage", "Permanent life options", "Critical illness"],
+      startingPrice: "From $25/month",
+      href: "/insurance/life",
+      quoteHref: "/insurance/life/quotes"
     },
     {
       title: "Travel Insurance",
-      description: "Stay protected during your travels worldwide",
+      description: "Coverage for medical emergencies and trip protection",
       icon: Plane,
-      color: "purple",
-      features: ["Medical Coverage", "Trip Cancellation", "Emergency Evacuation"],
-      link: "/insurance/travel",
-      popular: false,
-      startingPrice: "From $15/trip"
+      color: "bg-purple-600",
+      hoverColor: "hover:bg-purple-700",
+      features: ["Medical coverage", "Trip cancellation", "Multi-trip plans"],
+      startingPrice: "From $15/trip",
+      href: "/insurance/travel",
+      quoteHref: "/insurance/travel/quotes"
+    },
+    {
+      title: "Business Insurance",
+      description: "Comprehensive protection for your business operations",
+      icon: Briefcase,
+      color: "bg-indigo-600",
+      hoverColor: "hover:bg-indigo-700",
+      features: ["General liability", "Professional liability", "Property coverage"],
+      startingPrice: "From $25/month",
+      href: "/insurance/business",
+      quoteHref: "/insurance/business/quotes"
     }
   ];
 
-  const provinces = [
-    { name: "Ontario", code: "ON", popular: true },
-    { name: "British Columbia", code: "BC", popular: true },
-    { name: "Alberta", code: "AB", popular: true },
-    { name: "Quebec", code: "QC", popular: true },
-    { name: "Manitoba", code: "MB", popular: false },
-    { name: "Saskatchewan", code: "SK", popular: false },
-    { name: "Nova Scotia", code: "NS", popular: false },
-    { name: "New Brunswick", code: "NB", popular: false },
-    { name: "Newfoundland", code: "NL", popular: false },
-    { name: "PEI", code: "PE", popular: false }
+  const stats = [
+    { number: "500,000+", label: "Policies Compared", icon: Shield },
+    { number: "98%", label: "Customer Satisfaction", icon: Star },
+    { number: "24/7", label: "Support Available", icon: Phone },
+    { number: "50+", label: "Insurance Partners", icon: Users }
   ];
 
-  const whyChooseUs = [
-    { icon: Star, title: "Expert Guidance", description: "Professional advice from licensed brokers" },
-    { icon: Shield, title: "Comprehensive Coverage", description: "Protection tailored to your needs" },
-    { icon: TrendingUp, title: "Competitive Rates", description: "Best prices from top Canadian insurers" },
-    { icon: Clock, title: "Quick Claims", description: "Fast and hassle-free claim processing" }
-  ];
-
-  const testimonials = [
+  const benefits = [
     {
-      name: "Sarah Johnson",
-      location: "Toronto, ON",
-      rating: 5,
-      text: "Saved over $300 on my auto insurance while getting better coverage!"
+      icon: Calculator,
+      title: "Compare & Save",
+      description: "Compare quotes from multiple insurers to find the best rates and coverage for your needs."
     },
     {
-      name: "Mike Chen",
-      location: "Vancouver, BC",
-      rating: 5,
-      text: "The home insurance comparison was incredibly helpful and easy to use."
+      icon: Shield,
+      title: "Expert Guidance",
+      description: "Our insurance experts help you understand your options and choose the right coverage."
     },
     {
-      name: "Emily Davis",
-      location: "Calgary, AB",
-      rating: 5,
-      text: "Great customer service and found me the perfect life insurance policy."
+      icon: TrendingUp,
+      title: "Best Rates",
+      description: "Access exclusive rates and discounts from Canada's top insurance providers."
+    },
+    {
+      icon: Award,
+      title: "Trusted Service",
+      description: "Award-winning service with thousands of satisfied customers across Canada."
     }
   ];
 
@@ -103,51 +105,33 @@ const Insurance = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white py-20 overflow-hidden">
+        <section className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white py-20 overflow-hidden">
           <div className="absolute inset-0 bg-black/20"></div>
           
           <div className="container relative z-10">
             <div className="max-w-4xl mx-auto text-center">
               <Badge variant="outline" className="mb-6 bg-white/10 text-white border-white/20 backdrop-blur-sm">
                 <Shield className="h-4 w-4 mr-2" />
-                Canada's Trusted Insurance Marketplace
+                Insurance Solutions
               </Badge>
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6">
-                Find the Perfect
-                <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                  Insurance Coverage
+                Find the Right Insurance
+                <span className="block bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text text-transparent">
+                  at the Best Price
                 </span>
               </h1>
               <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Compare quotes from Canada's top insurance providers. Get comprehensive coverage 
-                at competitive rates with our expert guidance.
+                Compare insurance quotes from Canada's top providers. Get comprehensive coverage 
+                for auto, home, life, travel, and business insurance - all in one place.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
-                  Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
+                  Compare All Insurance <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
-                  Compare Providers <Calculator className="ml-2 h-5 w-5" />
+                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20">
+                  <Phone className="mr-2 h-5 w-5" />
+                  Speak with Expert
                 </Button>
-              </div>
-              
-              <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div>
-                  <div className="text-3xl font-bold">50K+</div>
-                  <div className="text-blue-200 text-sm">Happy Customers</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold">$2M+</div>
-                  <div className="text-blue-200 text-sm">Total Savings</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold">15+</div>
-                  <div className="text-blue-200 text-sm">Insurance Partners</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold">24/7</div>
-                  <div className="text-blue-200 text-sm">Customer Support</div>
-                </div>
               </div>
             </div>
           </div>
@@ -158,66 +142,42 @@ const Insurance = () => {
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
-                <Badge variant="outline" className="mb-4">
-                  <Award className="h-4 w-4 mr-2" />
-                  Award-Winning Coverage
-                </Badge>
                 <h2 className="text-4xl font-bold mb-4">Insurance Coverage Options</h2>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Comprehensive protection for every aspect of your life, backed by Canada's most trusted insurers
+                <p className="text-xl text-muted-foreground">
+                  Comprehensive protection for every aspect of your life
                 </p>
               </div>
               
-              <div className="grid lg:grid-cols-2 gap-8">
-                {insuranceTypes.map((insurance, index) => (
-                  <Card key={index} className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                    {insurance.popular && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <Badge className="bg-gradient-to-r from-orange-500 to-red-500 text-white border-0">
-                          Most Popular
-                        </Badge>
+              <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+                {insuranceTypes.map((type, index) => (
+                  <Card key={index} className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                    <CardHeader className="text-center">
+                      <div className={`${type.color} w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                        <type.icon className="h-8 w-8 text-white" />
                       </div>
-                    )}
-                    
-                    <CardHeader className="relative z-10">
-                      <div className="flex items-center gap-4">
-                        <div className="bg-blue-100 w-16 h-16 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                          <insurance.icon className="h-8 w-8 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <CardTitle className="text-2xl group-hover:text-blue-600 transition-colors">
-                              {insurance.title}
-                            </CardTitle>
-                            <div className="text-right">
-                              <div className="text-lg font-bold text-blue-600">
-                                {insurance.startingPrice}
-                              </div>
-                            </div>
-                          </div>
-                          <CardDescription className="text-base mt-2">
-                            {insurance.description}
-                          </CardDescription>
-                        </div>
+                      <CardTitle className="text-xl">{type.title}</CardTitle>
+                      <CardDescription className="text-base">
+                        {type.description}
+                      </CardDescription>
+                      <div className="text-lg font-bold text-blue-600 mt-2">
+                        {type.startingPrice}
                       </div>
                     </CardHeader>
-                    <CardContent className="relative z-10">
-                      <ul className="space-y-3 mb-6">
-                        {insurance.features.map((feature, featureIndex) => (
-                          <li key={featureIndex} className="flex items-center gap-3">
-                            <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-                            <span className="text-gray-700">{feature}</span>
+                    <CardContent className="text-center">
+                      <ul className="space-y-2 mb-6">
+                        {type.features.map((feature, featureIndex) => (
+                          <li key={featureIndex} className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                            <span>{feature}</span>
                           </li>
                         ))}
                       </ul>
-                      <div className="flex gap-3">
-                        <Button className="flex-1 group-hover:bg-blue-600 transition-colors" asChild>
-                          <Link to={insurance.link}>
-                            Get Quote <ArrowRight className="ml-2 h-4 w-4" />
-                          </Link>
+                      <div className="flex flex-col gap-2">
+                        <Button className={`w-full ${type.color} ${type.hoverColor} text-white`} asChild>
+                          <Link to={type.quoteHref}>Get Quote</Link>
                         </Button>
-                        <Button variant="outline" className="flex-1 group-hover:border-blue-600 group-hover:text-blue-600 transition-colors">
-                          Learn More
+                        <Button variant="outline" className="w-full" asChild>
+                          <Link to={type.href}>Learn More</Link>
                         </Button>
                       </div>
                     </CardContent>
@@ -228,65 +188,35 @@ const Insurance = () => {
           </div>
         </section>
 
-        {/* Province Selection */}
+        {/* Stats Section */}
         <section className="py-20 bg-gradient-to-r from-gray-50 to-blue-50">
           <div className="container">
             <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold mb-4">Insurance by Province</h2>
+              <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold mb-4">Trusted by Canadians</h2>
                 <p className="text-xl text-muted-foreground">
-                  Get location-specific insurance quotes and information tailored to your province
+                  Join thousands of satisfied customers who trust us with their insurance needs
                 </p>
               </div>
               
-              <Tabs defaultValue="popular" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-8">
-                  <TabsTrigger value="popular">Popular Provinces</TabsTrigger>
-                  <TabsTrigger value="all">All Provinces</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="popular">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {provinces.filter(p => p.popular).map((province, index) => (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        className="h-16 text-base font-semibold hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 group"
-                        asChild
-                      >
-                        <Link to={`/insurance/${province.name.toLowerCase().replace(/\s+/g, '-')}`}>
-                          <div className="flex flex-col items-center gap-1">
-                            <MapPin className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                            <span>{province.name}</span>
-                          </div>
-                        </Link>
-                      </Button>
-                    ))}
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="all">
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    {provinces.map((province, index) => (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        className="h-14 text-sm hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300"
-                        asChild
-                      >
-                        <Link to={`/insurance/${province.name.toLowerCase().replace(/\s+/g, '-')}`}>
-                          {province.name}
-                        </Link>
-                      </Button>
-                    ))}
-                  </div>
-                </TabsContent>
-              </Tabs>
+              <div className="grid md:grid-cols-4 gap-8">
+                {stats.map((stat, index) => (
+                  <Card key={index} className="text-center border-0 shadow-lg hover:shadow-xl transition-shadow">
+                    <CardContent className="pt-8">
+                      <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <stat.icon className="h-8 w-8 text-blue-600" />
+                      </div>
+                      <div className="text-3xl font-bold text-blue-600 mb-2">{stat.number}</div>
+                      <p className="text-gray-600">{stat.label}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Why Choose Us */}
+        {/* Benefits Section */}
         <section className="py-20">
           <div className="container">
             <div className="max-w-6xl mx-auto">
@@ -298,52 +228,14 @@ const Insurance = () => {
               </div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {whyChooseUs.map((item, index) => (
+                {benefits.map((benefit, index) => (
                   <Card key={index} className="text-center border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
                     <CardContent className="pt-8">
                       <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-600 transition-colors duration-300">
-                        <item.icon className="h-8 w-8 text-blue-600 group-hover:text-white transition-colors duration-300" />
+                        <benefit.icon className="h-8 w-8 text-blue-600 group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                      <p className="text-muted-foreground">{item.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials */}
-        <section className="py-20 bg-gradient-to-r from-blue-50 to-indigo-50">
-          <div className="container">
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold mb-4">What Our Customers Say</h2>
-                <p className="text-xl text-muted-foreground">
-                  Join thousands of satisfied customers across Canada
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-3 gap-8">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="border-0 shadow-lg">
-                    <CardContent className="pt-6">
-                      <div className="flex items-center mb-4">
-                        {Array.from({ length: testimonial.rating }).map((_, i) => (
-                          <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                        ))}
-                      </div>
-                      <p className="text-gray-700 mb-4 italic">"{testimonial.text}"</p>
-                      <div className="flex items-center gap-3">
-                        <div className="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center">
-                          <Users className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <div className="font-semibold">{testimonial.name}</div>
-                          <div className="text-sm text-muted-foreground">{testimonial.location}</div>
-                        </div>
-                      </div>
+                      <h3 className="text-xl font-bold mb-3">{benefit.title}</h3>
+                      <p className="text-muted-foreground">{benefit.description}</p>
                     </CardContent>
                   </Card>
                 ))}
@@ -353,24 +245,24 @@ const Insurance = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+        <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-800 text-white">
           <div className="container">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-4xl font-bold mb-4">Ready to Save on Insurance?</h2>
               <p className="text-xl text-blue-100 mb-8">
-                Get personalized quotes from Canada's top insurance providers in minutes
+                Compare quotes from Canada's top insurance providers and find the perfect coverage for your needs
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
-                  Start Comparing Now <ArrowRight className="ml-2 h-5 w-5" />
+                  Get All Quotes Now <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
+                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20">
                   <Phone className="mr-2 h-5 w-5" />
-                  Call 1-800-INSURANCE
+                  Call 1-800-INSURE-CA
                 </Button>
               </div>
               <p className="text-blue-200">
-                Questions? Email us at <a href="mailto:info@ratestore.ca" className="underline hover:text-white">info@ratestore.ca</a>
+                Questions? Email us at <a href="mailto:insurance@ratestore.ca" className="underline hover:text-white">insurance@ratestore.ca</a>
               </p>
             </div>
           </div>

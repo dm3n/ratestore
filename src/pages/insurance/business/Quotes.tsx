@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,7 +41,7 @@ const BusinessInsuranceQuotes = () => {
       essential: true
     },
     {
-      title: "Professional Liability",
+      title: "Professional Liability", 
       description: "Coverage for professional errors & omissions",
       price: "From $45/month",
       features: ["Errors & omissions", "Negligence claims", "Defense costs", "Regulatory proceedings"],
@@ -51,7 +50,7 @@ const BusinessInsuranceQuotes = () => {
     {
       title: "Commercial Property",
       description: "Protection for business property & equipment",
-      price: "From $35/month",
+      price: "From $35/month", 
       features: ["Building coverage", "Equipment protection", "Inventory coverage", "Business interruption"],
       essential: true
     },
@@ -109,7 +108,7 @@ const BusinessInsuranceQuotes = () => {
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
                   Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
+                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20">
                   Compare Policies <Building className="ml-2 h-5 w-5" />
                 </Button>
               </div>
@@ -421,7 +420,7 @@ const BusinessInsuranceQuotes = () => {
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
                   Get Free Quote Now <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
+                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20">
                   <Phone className="mr-2 h-5 w-5" />
                   Call 1-800-BIZ-INSURE
                 </Button>

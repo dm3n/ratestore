@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -81,6 +80,9 @@ import TravelMedicalInsurance from "@/pages/insurance/travel/Medical";
 import MultiTripInsurance from "@/pages/insurance/travel/MultiTrip";
 import TripCancellationInsurance from "@/pages/insurance/travel/Cancellation";
 import SeniorTravelInsurance from "@/pages/insurance/travel/Senior";
+// Business Insurance
+import Business from "./pages/insurance/Business";
+import BusinessInsuranceQuotes from "./pages/insurance/business/Quotes";
 
 // Tools pages
 import CompoundInterestCalculator from "./pages/tools/CompoundInterestCalculator";
@@ -185,6 +187,10 @@ function App() {
               <Route path="/insurance/travel/multi-trip" element={<MultiTripInsurance />} />
               <Route path="/insurance/travel/cancellation" element={<TripCancellationInsurance />} />
               <Route path="/insurance/travel/senior" element={<SeniorTravelInsurance />} />
+              
+              {/* Business Insurance routes */}
+              <Route path="/insurance/business" element={<Business />} />
+              <Route path="/insurance/business/quotes" element={<BusinessInsuranceQuotes />} />
               
               {/* Tools routes */}
               <Route path="/tools/compound-interest" element={<CompoundInterestCalculator />} />

@@ -483,7 +483,7 @@ function getViewAllLink(categoryTitle: string, sectionTitle: string): string {
     if (sectionTitle === "Home insurance") return "/insurance/home/types";
     if (sectionTitle === "Life insurance") return "/insurance/life/types";
     if (sectionTitle === "Travel insurance") return "/insurance/travel/types";
-    if (sectionTitle === "Business insurance") return "/insurance/business/quotes";
+    if (sectionTitle === "Business insurance") return "/insurance/business";
   }
   
   // Mortgage overview links
