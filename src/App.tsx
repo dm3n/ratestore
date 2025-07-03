@@ -375,9 +375,17 @@ function App() {
               {/* Guide routes */}
               <Route path="/guides/education-centre" element={<EducationCentre />} />
               <Route path="/guides/gic" element={<GICGuide />} />
+              <Route path="/guides/gic-types" element={<GICGuide />} />
               <Route path="/guides/rrsp" element={<RRSPGuide />} />
               <Route path="/guides/rrsp-contribution" element={<RRSPContributionGuide />} />
+              <Route path="/guides/rrsp-withdrawals" element={<RRSPGuide />} />
               <Route path="/guides/tfsa" element={<TFSAGuide />} />
+              <Route path="/guides/tfsa-contributions" element={<TFSAGuide />} />
+              <Route path="/guides/tfsa-investments" element={<TFSAGuide />} />
+              <Route path="/guides/resp-basics" element={<RRSPGuide />} />
+              <Route path="/guides/resp" element={<RRSPGuide />} />
+              <Route path="/guides/resp-contributions" element={<RRSPGuide />} />
+              <Route path="/guides/resp-limit" element={<RRSPGuide />} />
               <Route path="/guides/home-buying" element={<HomeBuying />} />
               <Route path="/guides/mortgage-renewal" element={<MortgageRenewal />} />
               <Route path="/guides/refinancing" element={<Refinancing />} />
@@ -390,9 +398,13 @@ function App() {
               <Route path="/guides/credit-card-types" element={<CreditCardTypes />} />
               <Route path="/guides/rewards-credit-cards" element={<RewardsCreditCards />} />
               <Route path="/guides/credit-card-insurance" element={<CreditCardInsurance />} />
+              <Route path="/guides/credit-score" element={<CreditCardBasics />} />
               <Route path="/guides/savings-account" element={<SavingsAccount />} />
               <Route path="/guides/tiered-savings" element={<TieredSavings />} />
               <Route path="/guides/savings-alternatives" element={<SavingsAlternatives />} />
+              <Route path="/guides/chequing-basics" element={<SavingsAccount />} />
+              <Route path="/guides/chequing-types" element={<SavingsAccount />} />
+              <Route path="/guides/chequing-fees" element={<SavingsAccount />} />
               
               {/* Other routes */}
               <Route path="/refinance" element={<Refinance />} />
