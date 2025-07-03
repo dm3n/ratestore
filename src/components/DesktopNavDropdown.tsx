@@ -491,7 +491,7 @@ function getViewAllLink(categoryTitle: string, sectionTitle: string): string {
   if (category === "mortgages") {
     if (sectionTitle === "Compare mortgage rates") return "/mortgages/compare";
     if (sectionTitle === "Mortgage terms") return "/mortgages/terms";
-    if (sectionTitle === "Calculators") return "/tools/mortgage-calculator";
+    if (sectionTitle === "Calculators") return "/tools/calculators";
     if (sectionTitle === "Mortgage providers") return "/mortgages/lenders";
     if (sectionTitle === "Education centre") return "/guides/education-centre";
   }
