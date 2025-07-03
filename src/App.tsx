@@ -37,6 +37,11 @@ import RegisteredGIC from "./pages/investing/gic/Registered";
 import USDGIC from "./pages/investing/gic/USD";
 import CompareGIC from "./pages/investing/gic/Compare";
 
+// Stocks & ETFs pages - NEW
+import RoboAdvisors from "./pages/investing/RoboAdvisors";
+import Brokerages from "./pages/investing/Brokerages";
+import Crypto from "./pages/investing/Crypto";
+
 // Insurance pages
 import Insurance from "./pages/Insurance";
 // Auto Insurance
@@ -122,6 +127,11 @@ function App() {
               <Route path="/investing/gic/registered" element={<RegisteredGIC />} />
               <Route path="/investing/gic/usd" element={<USDGIC />} />
               <Route path="/investing/gic/compare" element={<CompareGIC />} />
+              
+              {/* Stocks & ETFs routes - NEW */}
+              <Route path="/investing/robo-advisors" element={<RoboAdvisors />} />
+              <Route path="/investing/brokerages" element={<Brokerages />} />
+              <Route path="/investing/crypto" element={<Crypto />} />
               
               {/* Insurance routes */}
               <Route path="/insurance" element={<Insurance />} />
