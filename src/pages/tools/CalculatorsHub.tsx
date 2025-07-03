@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,11 +37,11 @@ const calculators: CalculatorTool[] = [
   },
   {
     id: "affordability",
-    name: "Home Affordability Calculator",
+    name: "Home Affordability Calculator", 
     description: "Determine how much house you can afford",
     longDescription: "Calculate the maximum home price you can afford based on your income, debts, and down payment. Includes debt-to-income ratios.",
     icon: Home,
-    href: "/tools/affordability",
+    href: "/tools/affordability-calculator",
     category: "mortgage",
     difficulty: "beginner",
     popular: true,
@@ -54,7 +53,7 @@ const calculators: CalculatorTool[] = [
     description: "Plan your down payment strategy and timeline",
     longDescription: "Calculate how much you need to save for a down payment and create a savings timeline to reach your homeownership goals.",
     icon: PiggyBank,
-    href: "/tools/down-payment",
+    href: "/tools/down-payment-calculator",
     category: "planning",
     difficulty: "beginner",
     popular: true,
@@ -66,7 +65,7 @@ const calculators: CalculatorTool[] = [
     description: "Compare renewal options and maximize savings",
     longDescription: "Analyze your mortgage renewal options, compare rates from different lenders, and calculate potential savings.",
     icon: RefreshCw,
-    href: "/tools/renewal",
+    href: "/tools/renewal-calculator",
     category: "mortgage",
     difficulty: "intermediate",
     popular: true,
@@ -78,7 +77,7 @@ const calculators: CalculatorTool[] = [
     description: "See the impact of additional mortgage payments",
     longDescription: "Calculate how extra payments can reduce your mortgage term and save thousands in interest over the life of your loan.",
     icon: DollarSign,
-    href: "/tools/extra-payment",
+    href: "/tools/extra-payment-calculator",
     category: "mortgage",
     difficulty: "intermediate",
     popular: false,
@@ -90,7 +89,7 @@ const calculators: CalculatorTool[] = [
     description: "View detailed month-by-month payment breakdown",
     longDescription: "Generate a complete amortization schedule showing how much of each payment goes to principal vs interest over time.",
     icon: FileText,
-    href: "/tools/amortization",
+    href: "/tools/amortization-schedule",
     category: "analysis",
     difficulty: "advanced",
     popular: false,
@@ -102,7 +101,7 @@ const calculators: CalculatorTool[] = [
     description: "Calculate land transfer tax costs by province",
     longDescription: "Estimate the land transfer tax you'll pay when purchasing a home in different Canadian provinces and cities.",
     icon: Percent,
-    href: "/tools/land-transfer-tax",
+    href: "/tools/land-transfer-tax-calculator",
     category: "planning",
     difficulty: "beginner",
     popular: false,
