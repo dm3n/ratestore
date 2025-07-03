@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -66,8 +67,8 @@ const Index = () => {
   const tools = [
     { name: "Mortgage Calculator", description: "Calculate monthly payments", icon: Calculator, link: "/tools/mortgage-calculator" },
     { name: "Debt Payoff Calculator", description: "Plan your debt freedom", icon: TrendingUp, link: "/tools/debt-payoff" },
-    { name: "Compound Interest Calculator", description: "See your money grow", icon: DollarSign, link: "/tools/compound-interest" },
-    { name: "ROI Calculator", description: "Calculate investment returns", icon: Award, link: "/tools/roi-calculator" },
+    { name: "TFSA Calculator", description: "Calculate your contribution", icon: DollarSign, link: "/tools/tfsa-calculator" },
+    { name: "Calculators Hub", description: "All financial tools", icon: Award, link: "/tools/calculators" },
   ];
 
   return (
@@ -146,12 +147,16 @@ const Index = () => {
 
               {/* CTA buttons */}
               <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in">
-                <Button size="lg" className="px-8 py-4 text-lg font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all">
-                  Start Comparing Rates
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="px-8 py-4 text-lg font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all" asChild>
+                  <Link to={`/${selectedCategory}`}>
+                    Start Comparing Rates
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold rounded-xl border-2 hover:bg-slate-50 transition-all">
-                  View All Tools
+                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold rounded-xl border-2 hover:bg-slate-50 transition-all" asChild>
+                  <Link to="/tools/calculators">
+                    View All Tools
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -211,9 +216,12 @@ const Index = () => {
                             : ""
                         }`}
                         variant={rate.special ? "default" : "outline"}
+                        asChild
                       >
-                        Get Quote
-                        <ArrowRight className="ml-2 h-4 w-4" />
+                        <Link to={`/${selectedCategory}`}>
+                          Get Quote
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
                       </Button>
                     </CardContent>
                   </Card>
@@ -306,11 +314,15 @@ const Index = () => {
                 Join thousands of Canadians who have saved money by comparing rates on our platform.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="px-8 py-4 text-lg font-semibold bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25">
-                  Start Comparing
+                <Button size="lg" className="px-8 py-4 text-lg font-semibold bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25" asChild>
+                  <Link to="/mortgages">
+                    Start Comparing
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white">
-                  Learn More
+                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white" asChild>
+                  <Link to="/about">
+                    Learn More
+                  </Link>
                 </Button>
               </div>
             </div>

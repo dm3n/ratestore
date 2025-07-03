@@ -1,3 +1,4 @@
+
 import { createRoot } from 'react-dom/client'
 import './index.css'
 
@@ -103,6 +104,7 @@ import ExtraPaymentCalculator from "@/pages/tools/ExtraPaymentCalculator";
 import RenewalCalculator from "@/pages/tools/RenewalCalculator";
 import LandTransferTaxCalculator from "@/pages/tools/LandTransferTaxCalculator";
 import CalculatorsHub from "@/pages/tools/CalculatorsHub";
+import DebtPayoffCalculator from "@/pages/tools/DebtPayoffCalculator";
 
 // Guide pages
 import HomeBuying from "@/pages/guides/HomeBuying";
@@ -257,6 +259,7 @@ function App() {
             <Route path="/tools/renewal" element={<RenewalCalculator />} />
             <Route path="/tools/land-transfer-tax" element={<LandTransferTaxCalculator />} />
             <Route path="/tools/calculators" element={<CalculatorsHub />} />
+            <Route path="/tools/debt-payoff" element={<DebtPayoffCalculator />} />
 
             {/* Guide Routes */}
             <Route path="/guides/home-buying" element={<HomeBuying />} />
@@ -403,5 +406,8 @@ function App() {
     </QueryClientProvider>
   );
 }
+
+const root = createRoot(document.getElementById("root")!);
+root.render(<App />);
 
 export default App;
