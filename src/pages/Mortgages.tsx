@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calculator, Home, TrendingUp, FileText, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
-import { MortgageCalculator } from "@/components/MortgageCalculator";
 
 const Mortgages = () => {
   const bestRates = [
@@ -45,23 +44,6 @@ const Mortgages = () => {
                   Calculate Payments <Calculator className="h-4 w-4 md:h-5 md:w-5" />
                 </Button>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Mortgage Calculator Section */}
-        <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-8 md:mb-12">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-                  Mortgage Payment Calculator
-                </h2>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Calculate your monthly payments and see how different rates affect your mortgage costs.
-                </p>
-              </div>
-              <MortgageCalculator />
             </div>
           </div>
         </section>
