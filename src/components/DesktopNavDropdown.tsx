@@ -327,16 +327,11 @@ const navCategories: NavCategory[] = [
         title: "Business insurance",
         links: [
           { name: "Business insurance quotes", href: "/insurance/business/quotes" },
-          { name: "Professional liability", href: "/insurance/business/professional" },
-          { name: "D&O insurance", href: "/insurance/business/directors" },
-          { name: "Commercial general liability", href: "/insurance/business/general" },
-          { name: "Product liability insurance", href: "/insurance/business/product" },
-          { name: "Business interruption insurance", href: "/insurance/business/interruption" },
-          { name: "Contractor insurance", href: "/insurance/business/contractor" },
-          { name: "Non-profit insurance", href: "/insurance/business/non-profit" },
-          { name: "Cyber insurance", href: "/insurance/business/cyber" },
-          { name: "Technology insurance", href: "/insurance/business/technology" },
-          { name: "Fitness insurance", href: "/insurance/business/fitness" },
+          { name: "General liability insurance", href: "/insurance/business/general" },
+          { name: "Professional liability insurance", href: "/insurance/business/professional" },
+          { name: "Commercial property insurance", href: "/insurance/business/property" },
+          { name: "Cyber liability insurance", href: "/insurance/business/cyber" },
+          { name: "All business insurance types", href: "/insurance/business" },
         ]
       }
     ]

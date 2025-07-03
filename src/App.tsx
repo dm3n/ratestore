@@ -95,6 +95,18 @@ import RRSPGuide from "./pages/guides/RRSP";
 import RRSPContributionGuide from "./pages/guides/RRSPContribution";
 import TFSAGuide from "./pages/guides/TFSA";
 
+// Business Insurance pages
+import General from "./pages/insurance/business/General";
+import Professional from "./pages/insurance/business/Professional";
+import Property from "./pages/insurance/business/Property";
+import Cyber from "./pages/insurance/business/Cyber";
+
+// Business Insurance pages
+import General from "./pages/insurance/business/General";
+import Professional from "./pages/insurance/business/Professional";
+import Property from "./pages/insurance/business/Property";
+import Cyber from "./pages/insurance/business/Cyber";
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -191,6 +203,10 @@ function App() {
               {/* Business Insurance routes */}
               <Route path="/insurance/business" element={<Business />} />
               <Route path="/insurance/business/quotes" element={<BusinessInsuranceQuotes />} />
+              <Route path="/insurance/business/general" element={<General />} />
+              <Route path="/insurance/business/professional" element={<Professional />} />
+              <Route path="/insurance/business/property" element={<Property />} />
+              <Route path="/insurance/business/cyber" element={<Cyber />} />
               
               {/* Tools routes */}
               <Route path="/tools/compound-interest" element={<CompoundInterestCalculator />} />
