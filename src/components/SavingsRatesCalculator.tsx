@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,7 +20,7 @@ interface SavingsRateData {
   features: string[];
   promotionalRate?: number;
   promotionalPeriod?: number;
-  accountCategory: "savings" | "chequing" | "tfsa" | "rrsp";
+  accountCategory: "savings" | "chequing" | "tfsa" | "rrsp" | "resp" | "youth" | "fhsa";
   institutionType: "big5" | "credit-union" | "online" | "other";
 }
 
@@ -75,6 +74,98 @@ const mockSavingsRates: SavingsRateData[] = [
   }
 ];
 
+const mockTFSARates: SavingsRateData[] = [
+  {
+    id: "tfsa1",
+    bankName: "Tangerine Bank",
+    accountType: "TFSA Savings",
+    interestRate: 4.25,
+    minimumBalance: 0,
+    monthlyFee: 0,
+    features: ["Tax-free growth", "No minimum balance", "Online banking"],
+    accountCategory: "tfsa",
+    institutionType: "online"
+  },
+  {
+    id: "tfsa2",
+    bankName: "EQ Bank",
+    accountType: "TFSA Savings Plus",
+    interestRate: 4.00,
+    minimumBalance: 0,
+    monthlyFee: 0,
+    features: ["Tax-free earnings", "No fees", "Mobile app"],
+    accountCategory: "tfsa",
+    institutionType: "online"
+  }
+];
+
+const mockRRSPRates: SavingsRateData[] = [
+  {
+    id: "rrsp1",
+    bankName: "Tangerine Bank",
+    accountType: "RRSP Savings",
+    interestRate: 4.00,
+    minimumBalance: 0,
+    monthlyFee: 0,
+    features: ["Tax deductible", "No minimum balance", "Online banking"],
+    accountCategory: "rrsp",
+    institutionType: "online"
+  },
+  {
+    id: "rrsp2",
+    bankName: "EQ Bank",
+    accountType: "RRSP Savings Plus",
+    interestRate: 3.75,
+    minimumBalance: 0,
+    monthlyFee: 0,
+    features: ["Retirement focused", "No fees", "Tax benefits"],
+    accountCategory: "rrsp",
+    institutionType: "online"
+  }
+];
+
+const mockRESPRates: SavingsRateData[] = [
+  {
+    id: "resp1",
+    bankName: "RBC",
+    accountType: "RESP Savings",
+    interestRate: 3.75,
+    minimumBalance: 0,
+    monthlyFee: 0,
+    features: ["Government grants", "Educational focus", "Branch access"],
+    accountCategory: "resp",
+    institutionType: "big5"
+  }
+];
+
+const mockYouthRates: SavingsRateData[] = [
+  {
+    id: "youth1",
+    bankName: "RBC",
+    accountType: "Youth Savings",
+    interestRate: 3.50,
+    minimumBalance: 0,
+    monthlyFee: 0,
+    features: ["No monthly fees", "Financial education", "Parental oversight"],
+    accountCategory: "youth",
+    institutionType: "big5"
+  }
+];
+
+const mockFHSARates: SavingsRateData[] = [
+  {
+    id: "fhsa1",
+    bankName: "TD Canada Trust",
+    accountType: "First Home Savings Account",
+    interestRate: 4.10,
+    minimumBalance: 0,
+    monthlyFee: 0,
+    features: ["Tax deductible", "Tax-free withdrawal", "First-time buyers"],
+    accountCategory: "fhsa",
+    institutionType: "big5"
+  }
+];
+
 const mockChequingRates: SavingsRateData[] = [
   {
     id: "5",
@@ -112,7 +203,7 @@ const mockChequingRates: SavingsRateData[] = [
 ];
 
 interface SavingsRatesCalculatorProps {
-  accountType: "savings" | "chequing";
+  accountType: "savings" | "chequing" | "tfsa" | "rrsp" | "resp" | "youth" | "fhsa";
   title: string;
   description: string;
 }
@@ -126,7 +217,28 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
-  const rates = accountType === "savings" ? mockSavingsRates : mockChequingRates;
+  const getRatesForAccountType = () => {
+    switch (accountType) {
+      case "savings":
+        return mockSavingsRates;
+      case "chequing":
+        return mockChequingRates;
+      case "tfsa":
+        return mockTFSARates;
+      case "rrsp":
+        return mockRRSPRates;
+      case "resp":
+        return mockRESPRates;
+      case "youth":
+        return mockYouthRates;
+      case "fhsa":
+        return mockFHSARates;
+      default:
+        return mockSavingsRates;
+    }
+  };
+
+  const rates = getRatesForAccountType();
 
   // Filter rates based on current selections
   const filteredRates = rates.filter(rate => {
