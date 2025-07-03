@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -288,4 +289,83 @@ const navCategories: NavCategory[] = [
           { name: "Condo insurance", href: "/insurance/home/condo" },
           { name: "Landlord insurance", href: "/insurance/home/landlord" },
           { name: "Ontario home insurance", href: "/insurance/home/ontario" },
-          { name: "Alberta home insurance", href:
+          { name: "Alberta home insurance", href: "/insurance/home/alberta" },
+          { name: "BC home insurance", href: "/insurance/home/bc" },
+          { name: "Quebec home insurance", href: "/insurance/home/quebec" },
+        ]
+      },
+      {
+        title: "Life insurance",
+        links: [
+          { name: "Life insurance quotes", href: "/insurance/life/quotes" },
+          { name: "Term life insurance", href: "/insurance/life/term" },
+          { name: "Permanent life insurance", href: "/insurance/life/permanent" },
+          { name: "Life insurance types", href: "/insurance/life/types" },
+        ]
+      },
+      {
+        title: "Travel insurance",
+        links: [
+          { name: "Travel insurance quotes", href: "/insurance/travel/quotes" },
+          { name: "Travel insurance types", href: "/insurance/travel/types" },
+        ]
+      },
+      {
+        title: "Business insurance",
+        links: [
+          { name: "Business insurance quotes", href: "/insurance/business/quotes" },
+        ]
+      }
+    ]
+  }
+];
+
+const DesktopNavDropdown = () => {
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  return (
+    <NavigationMenu className="hidden lg:flex">
+      <NavigationMenuList>
+        {navCategories.map((category) => (
+          <NavigationMenuItem key={category.title}>
+            <NavigationMenuTrigger
+              className="text-sm font-medium"
+              onMouseEnter={() => setActiveCategory(category.title)}
+            >
+              {category.title}
+              <ChevronDown className="ml-1 h-3 w-3" />
+            </NavigationMenuTrigger>
+            <NavigationMenuContent
+              className="w-screen max-w-6xl"
+              onMouseLeave={() => setActiveCategory(null)}
+            >
+              <div className="grid grid-cols-5 gap-6 p-6">
+                {category.sections.map((section, index) => (
+                  <div key={index} className="space-y-3">
+                    <h4 className="text-sm font-semibold text-gray-900">
+                      {section.title}
+                    </h4>
+                    <ul className="space-y-2">
+                      {section.links.map((link, linkIndex) => (
+                        <li key={linkIndex}>
+                          <Link
+                            to={link.href}
+                            className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                          >
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        ))}
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
+};
+
+export default DesktopNavDropdown;
