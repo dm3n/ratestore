@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -70,6 +71,9 @@ import LifeInsuranceQuotes from "./pages/insurance/life/Quotes";
 import LifeInsuranceTypes from "./pages/insurance/life/Types";
 import TermLifeInsurance from "./pages/insurance/life/Term";
 import PermanentLifeInsurance from "./pages/insurance/life/Permanent";
+import DisabilityInsurance from "./pages/insurance/life/Disability";
+import CriticalIllnessInsurance from "./pages/insurance/life/CriticalIllness";
+import GroupInsurance from "./pages/insurance/life/Group";
 // Travel Insurance
 import TravelInsuranceQuotes from "./pages/insurance/travel/Quotes";
 import TravelInsuranceTypes from "./pages/insurance/travel/Types";
@@ -167,6 +171,9 @@ function App() {
               <Route path="/insurance/life/types" element={<LifeInsuranceTypes />} />
               <Route path="/insurance/life/term" element={<TermLifeInsurance />} />
               <Route path="/insurance/life/permanent" element={<PermanentLifeInsurance />} />
+              <Route path="/insurance/life/disability" element={<DisabilityInsurance />} />
+              <Route path="/insurance/life/critical-illness" element={<CriticalIllnessInsurance />} />
+              <Route path="/insurance/life/group" element={<GroupInsurance />} />
               
               {/* Travel Insurance routes */}
               <Route path="/insurance/travel" element={<TravelInsuranceTypes />} />
