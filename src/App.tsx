@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -128,7 +127,7 @@ function App() {
               <Route path="/investing/gic/usd" element={<USDGIC />} />
               <Route path="/investing/gic/compare" element={<CompareGIC />} />
               
-              {/* Stocks & ETFs routes - NEW */}
+              {/* Stocks & ETFs routes */}
               <Route path="/investing/robo-advisors" element={<RoboAdvisors />} />
               <Route path="/investing/brokerages" element={<Brokerages />} />
               <Route path="/investing/crypto" element={<Crypto />} />
