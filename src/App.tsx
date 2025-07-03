@@ -16,9 +16,9 @@ import AuthPage from "./pages/Auth";
 import Banking from "./pages/Banking";
 import BestSavings from "./pages/banking/BestSavings";
 import BestChequing from "./pages/banking/BestChequing";
-import HighInterestSavings from "./pages/banking/savings/HighInterestSavings";
-import TFSASavings from "./pages/banking/savings/TFSASavings";
-import RRSPSavings from "./pages/banking/savings/RRSPSavings";
+import HighInterestSavings from "./pages/banking/savings/HighInterest";
+import TFSASavings from "./pages/banking/savings/TFSA";
+import RRSPSavings from "./pages/banking/savings/RRSP";
 
 // Credit Cards pages
 import CreditCards from "./pages/CreditCards";
