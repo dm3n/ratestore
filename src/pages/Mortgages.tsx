@@ -37,10 +37,12 @@ const Mortgages = () => {
                 and expert advice to find the perfect mortgage for your home purchase or renewal.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="gap-2 px-6 md:px-8">
-                  Compare Rates <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />
-                </Button>
                 <Button size="lg" variant="outline" className="gap-2 px-6 md:px-8" asChild>
+                  <Link to="/mortgages/best-rates">
+                    Compare Rates <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />
+                  </Link>
+                </Button>
+                <Button size="lg" className="gap-2 px-6 md:px-8" asChild>
                   <Link to="/tools/mortgage-calculator">
                     Calculate Payments <Calculator className="h-4 w-4 md:h-5 md:w-5" />
                   </Link>
