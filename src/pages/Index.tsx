@@ -153,7 +153,7 @@ const Index = () => {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold rounded-xl border-2 hover:bg-slate-50 transition-all" asChild>
+                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold rounded-xl border-2 bg-slate-50 text-slate-900 transition-all" asChild>
                   <Link to="/tools/calculators">
                     View All Tools
                   </Link>
@@ -319,7 +319,7 @@ const Index = () => {
                     Start Comparing
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white" asChild>
+                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold border-slate-600 bg-slate-800 text-white transition-all" asChild>
                   <Link to="/about">
                     Learn More
                   </Link>
