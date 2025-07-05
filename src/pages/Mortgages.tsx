@@ -5,9 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calculator, Home, TrendingUp, FileText, BookOpen } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Mortgages = () => {
+  const navigate = useNavigate();
+
   const bestRates = [
     { lender: "Canadian Lender", rate: "3.84%", term: "5-yr Fixed", type: "featured" },
     { lender: "Canadian Lender", rate: "3.95%", term: "5-yr Variable", type: "featured" },
@@ -16,6 +18,19 @@ const Mortgages = () => {
     { lender: "RBC", rate: "4.25%", term: "5-yr Fixed", type: "regular" },
     { lender: "BMO", rate: "4.18%", term: "5-yr Variable", type: "regular" }
   ];
+
+  const handleCompareRate = (rate: any) => {
+    // Navigate to best rates page with the selected rate for comparison
+    navigate('/mortgages/best-rates', { 
+      state: { 
+        compareRate: {
+          lender: rate.lender,
+          rate: rate.rate,
+          term: rate.term
+        }
+      }
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -111,7 +126,12 @@ const Mortgages = () => {
                           </div>
                           <div className="flex items-center gap-4 w-full sm:w-auto">
                             <div className="text-xl md:text-2xl font-bold text-primary">{rate.rate}</div>
-                            <Button variant="outline" size="sm" className="shrink-0">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="shrink-0"
+                              onClick={() => handleCompareRate(rate)}
+                            >
                               Compare
                             </Button>
                           </div>

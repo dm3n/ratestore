@@ -7,13 +7,26 @@ import { Button } from "@/components/ui/button";
 import { Award, TrendingDown, Clock, CheckCircle, RefreshCw } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 import { useMortgageRates } from "@/hooks/useMortgageRates";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const BestRates = () => {
+  const location = useLocation();
+  const [compareRate, setCompareRate] = useState(null);
+  
   const { rates, isLoading, lastUpdated, refetch } = useMortgageRates({
     rateType: 'fixed',
     term: '5-yr',
     autoRefresh: true
   });
+
+  // Check if we have a rate to compare from navigation state
+  useEffect(() => {
+    if (location.state?.compareRate) {
+      setCompareRate(location.state.compareRate);
+    }
+  }, [location.state]);
 
   // Get the top 3 best rates for display
   const bestRates = rates.slice(0, 3).map((rate, index) => ({
@@ -85,6 +98,30 @@ const BestRates = () => {
           </div>
         </section>
 
+        {/* Comparison Alert */}
+        {compareRate && (
+          <section className="py-8 bg-blue-50">
+            <div className="container px-4 sm:px-6 lg:px-8">
+              <div className="max-w-6xl mx-auto">
+                <Alert className="border-blue-200 bg-blue-50">
+                  <CheckCircle className="h-4 w-4 text-blue-600" />
+                  <AlertDescription className="text-blue-800">
+                    <strong>Comparing with:</strong> {compareRate.lender} - {compareRate.rate} ({compareRate.term})
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="ml-4 text-blue-600 hover:text-blue-800"
+                      onClick={() => setCompareRate(null)}
+                    >
+                      Clear comparison
+                    </Button>
+                  </AlertDescription>
+                </Alert>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Interactive Rate Calculator */}
         <section className="py-16 bg-gray-50">
           <div className="container px-4 sm:px-6 lg:px-8">
@@ -102,6 +139,11 @@ const BestRates = () => {
                 <h2 className="text-3xl font-bold mb-4">Today's Best Rates</h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                   Live rates from our database, updated automatically when admins make changes.
+                  {compareRate && (
+                    <span className="block mt-2 text-blue-600 font-medium">
+                      Compare these rates with {compareRate.lender} ({compareRate.rate})
+                    </span>
+                  )}
                 </p>
               </div>
 
@@ -121,10 +163,22 @@ const BestRates = () => {
               ) : (
                 <div className="grid lg:grid-cols-3 gap-8 mb-16">
                   {bestRates.map((rate, index) => (
-                    <Card key={index} className="relative border-2 border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <Card 
+                      key={index} 
+                      className={`relative border-2 shadow-lg hover:shadow-xl transition-all duration-300 ${
+                        compareRate && compareRate.rate === rate.rate ? 
+                        'border-blue-500 bg-blue-50' : 
+                        'border-primary/20'
+                      }`}
+                    >
                       <Badge className="absolute -top-3 left-6 bg-primary text-white px-3 py-1">
                         {rate.special}
                       </Badge>
+                      {compareRate && compareRate.rate === rate.rate && (
+                        <Badge className="absolute -top-3 right-6 bg-blue-600 text-white px-3 py-1">
+                          Comparing
+                        </Badge>
+                      )}
                       <CardHeader className="text-center pb-4">
                         <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                           <Award className="h-8 w-8 text-primary" />
