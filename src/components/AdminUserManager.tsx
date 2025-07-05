@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import { UserPlus, Shield, ShieldOff } from "lucide-react";
+import { UserPlus, Shield, ShieldOff, Search, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserWithRole {
@@ -20,7 +20,8 @@ interface UserWithRole {
 
 export function AdminUserManager() {
   const [users, setUsers] = useState<UserWithRole[]>([]);
-  const [newAdminEmail, setNewAdminEmail] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState<UserWithRole[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -51,6 +52,7 @@ export function AdminUserManager() {
       })) || [];
 
       setUsers(usersWithRoles);
+      setFilteredUsers(usersWithRoles);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
@@ -67,7 +69,20 @@ export function AdminUserManager() {
     fetchUsersWithRoles();
   }, []);
 
-  const makeUserAdmin = async (email: string) => {
+  // Filter users based on search query
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredUsers(users);
+    } else {
+      const filtered = users.filter(user => 
+        user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (user.full_name && user.full_name.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+      setFilteredUsers(filtered);
+    }
+  }, [searchQuery, users]);
+
+  const makeUserAdmin = async (email: string, userId: string) => {
     try {
       const { error } = await supabase.rpc('make_user_admin', {
         user_email: email
@@ -91,7 +106,7 @@ export function AdminUserManager() {
     }
   };
 
-  const removeAdminRole = async (userId: string) => {
+  const removeAdminRole = async (userId: string, email: string) => {
     try {
       const { error } = await supabase
         .from('user_roles')
@@ -103,7 +118,7 @@ export function AdminUserManager() {
 
       toast({
         title: "Success",
-        description: "Admin role removed successfully"
+        description: `Admin role removed from ${email}`
       });
 
       fetchUsersWithRoles();
@@ -117,94 +132,122 @@ export function AdminUserManager() {
     }
   };
 
-  const handleAddAdmin = async () => {
-    if (!newAdminEmail) return;
-    
-    await makeUserAdmin(newAdminEmail);
-    setNewAdminEmail('');
-  };
-
   return (
     <Card>
       <CardHeader>
-        <CardTitle>User Management</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="flex items-center gap-2">
+            User Management
+            {isLoading && <RefreshCw className="h-4 w-4 animate-spin" />}
+          </CardTitle>
+          <Button variant="outline" onClick={fetchUsersWithRoles} disabled={isLoading}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="mb-6 p-4 border rounded-lg">
-          <h3 className="text-lg font-semibold mb-4">Add New Admin</h3>
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <Label htmlFor="adminEmail">Email Address</Label>
+        <div className="mb-6 space-y-4">
+          <div>
+            <Label htmlFor="userSearch" className="text-base font-semibold">Search Users</Label>
+            <div className="relative mt-2">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                id="adminEmail"
-                type="email"
-                value={newAdminEmail}
-                onChange={(e) => setNewAdminEmail(e.target.value)}
-                placeholder="Enter email address"
+                id="userSearch"
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by email or name..."
+                className="pl-10"
               />
             </div>
-            <div className="flex items-end">
-              <Button onClick={handleAddAdmin} disabled={!newAdminEmail}>
-                <UserPlus className="h-4 w-4 mr-2" />
-                Make Admin
-              </Button>
-            </div>
+            <p className="text-sm text-muted-foreground mt-1">
+              Find users to assign admin privileges
+            </p>
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{user.full_name || 'No name'}</div>
-                    </div>
-                  </TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
-                      {user.role === 'admin' ? 'Admin' : 'User'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {new Date(user.created_at).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    {user.role === 'admin' ? (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => removeAdminRole(user.id)}
-                      >
-                        <ShieldOff className="h-3 w-3 mr-1" />
-                        Remove Admin
-                      </Button>
-                    ) : (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => makeUserAdmin(user.email)}
-                      >
-                        <Shield className="h-3 w-3 mr-1" />
-                        Make Admin
-                      </Button>
-                    )}
-                  </TableCell>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold">
+              All Users ({filteredUsers.length})
+            </h3>
+            <div className="flex gap-2">
+              <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                {filteredUsers.filter(u => u.role === 'admin').length} Admins
+              </Badge>
+              <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
+                {filteredUsers.filter(u => u.role === 'user').length} Users
+              </Badge>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>User</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Joined</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredUsers.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{user.full_name || 'No name'}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-mono text-sm">{user.email}</div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
+                        {user.role === 'admin' ? 'Admin' : 'User'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(user.created_at).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      {user.role === 'admin' ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => removeAdminRole(user.id, user.email)}
+                          disabled={isLoading}
+                        >
+                          <ShieldOff className="h-3 w-3 mr-1" />
+                          Remove Admin
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => makeUserAdmin(user.email, user.id)}
+                          disabled={isLoading}
+                        >
+                          <Shield className="h-3 w-3 mr-1" />
+                          Make Admin
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          {filteredUsers.length === 0 && !isLoading && (
+            <div className="text-center py-8">
+              <div className="text-muted-foreground">
+                {searchQuery ? 'No users found matching your search.' : 'No users found.'}
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
