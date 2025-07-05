@@ -128,18 +128,56 @@ export function GICRateEngine({
     fetchGICRates();
   };
 
+  // Skeleton loading component for smooth animations
+  const LoadingSkeleton = ({ index }: { index: number }) => (
+    <Card 
+      className="border-2 animate-fade-in opacity-0" 
+      style={{ 
+        animationDelay: `${index * 100}ms`,
+        animationFillMode: 'forwards'
+      }}
+    >
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Skeleton className="w-12 h-12 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-4 w-48" />
+            </div>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="text-right">
+              <Skeleton className="h-8 w-20 mb-2" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-28" />
+            </div>
+            <Skeleton className="h-10 w-28" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="text-center">
+      <div className="text-center animate-fade-in">
         <h2 className="text-3xl font-bold mb-4">{title}</h2>
         <p className="text-lg text-muted-foreground mb-6">{subtitle}</p>
         <div className="flex items-center justify-center gap-4">
-          <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">
+          <Badge 
+            variant="outline" 
+            className="bg-green-50 text-green-600 border-green-200 transition-all duration-300 hover:bg-green-100"
+          >
             Rates updated: {lastUpdated.toLocaleTimeString()}
           </Badge>
           {isLoading && (
-            <div className="flex items-center gap-2 text-primary">
+            <div className="flex items-center gap-2 text-primary animate-fade-in">
               <RefreshCw className="h-4 w-4 animate-spin" />
               <span className="text-sm">Updating rates...</span>
             </div>
@@ -148,7 +186,7 @@ export function GICRateEngine({
       </div>
 
       {/* Filters */}
-      <Card className="border-2">
+      <Card className="border-2 animate-fade-in transition-all duration-300 hover:shadow-md">
         <CardHeader>
           <div className="flex justify-between items-center">
             <div>
@@ -157,8 +195,13 @@ export function GICRateEngine({
                 Last updated: {lastUpdated.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })}
               </CardDescription>
             </div>
-            <Button variant="outline" onClick={refreshRates} disabled={isLoading}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <Button 
+              variant="outline" 
+              onClick={refreshRates} 
+              disabled={isLoading}
+              className="transition-all duration-200 hover:scale-105"
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 transition-transform duration-300 ${isLoading ? 'animate-spin' : ''}`} />
               Refresh Rates
             </Button>
           </div>
@@ -166,10 +209,10 @@ export function GICRateEngine({
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {showTypeFilter && (
-              <div className="space-y-2">
+              <div className="space-y-2 animate-fade-in" style={{ animationDelay: '100ms' }}>
                 <Label htmlFor="type">Type</Label>
                 <Select value={selectedType} onValueChange={setSelectedType}>
-                  <SelectTrigger>
+                  <SelectTrigger className="transition-all duration-200 hover:border-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -183,10 +226,10 @@ export function GICRateEngine({
               </div>
             )}
             
-            <div className="space-y-2">
+            <div className="space-y-2 animate-fade-in" style={{ animationDelay: '200ms' }}>
               <Label htmlFor="term">Term</Label>
               <Select value={selectedTerm} onValueChange={setSelectedTerm}>
-                <SelectTrigger>
+                <SelectTrigger className="transition-all duration-200 hover:border-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -205,10 +248,10 @@ export function GICRateEngine({
               </Select>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 animate-fade-in" style={{ animationDelay: '300ms' }}>
               <Label htmlFor="balance">Balance</Label>
               <Select value={selectedBalance} onValueChange={setSelectedBalance}>
-                <SelectTrigger>
+                <SelectTrigger className="transition-all duration-200 hover:border-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -222,10 +265,10 @@ export function GICRateEngine({
             </div>
 
             {showLocationFilter && (
-              <div className="space-y-2">
+              <div className="space-y-2 animate-fade-in" style={{ animationDelay: '400ms' }}>
                 <Label htmlFor="location">Location</Label>
                 <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                  <SelectTrigger>
+                  <SelectTrigger className="transition-all duration-200 hover:border-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -245,47 +288,39 @@ export function GICRateEngine({
       {/* Loading State */}
       {isLoading && (
         <div className="space-y-6">
-          <Card className="border-2">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <Skeleton className="w-12 h-12 rounded-full" />
-                  <div>
-                    <Skeleton className="h-6 w-32 mb-2" />
-                    <Skeleton className="h-4 w-48" />
-                  </div>
-                </div>
-                <div className="flex items-center gap-6">
-                  <Skeleton className="h-12 w-20" />
-                  <Skeleton className="h-8 w-24" />
-                  <Skeleton className="h-10 w-28" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <LoadingSkeleton key={index} index={index} />
+          ))}
         </div>
       )}
 
       {/* Featured Rates */}
       {!isLoading && featuredRates.length > 0 && (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fade-in">
           <h3 className="text-2xl font-bold">Featured Rates</h3>
           <div className="grid gap-6">
-            {featuredRates.map((rate) => (
-              <Card key={rate.id} className={`border-2 transition-all duration-200 hover:shadow-lg ${
-                rate.is_sponsored ? 'border-primary/20 bg-primary/5' : 'border-green-200'
-              }`}>
+            {featuredRates.map((rate, index) => (
+              <Card 
+                key={rate.id} 
+                className={`border-2 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] animate-fade-in ${
+                  rate.is_sponsored ? 'border-primary/20 bg-primary/5' : 'border-green-200'
+                }`}
+                style={{ 
+                  animationDelay: `${index * 150}ms`,
+                  animationFillMode: 'backwards'
+                }}
+              >
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-green-200">
                         <PiggyBank className="h-6 w-6 text-green-600" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <h4 className="font-semibold text-lg">{rate.institution}</h4>
                           {rate.is_sponsored && (
-                            <Badge variant="secondary" className="text-xs">sponsored</Badge>
+                            <Badge variant="secondary" className="text-xs animate-fade-in">sponsored</Badge>
                           )}
                         </div>
                         <p className="text-sm text-muted-foreground">
@@ -296,7 +331,7 @@ export function GICRateEngine({
 
                     <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
                       <div className="text-center lg:text-right">
-                        <div className="text-3xl font-bold text-green-600 mb-1">
+                        <div className="text-3xl font-bold text-green-600 mb-1 transition-all duration-300 hover:scale-110">
                           {(rate.rate * 100).toFixed(2)}%
                         </div>
                         <div className="text-sm text-muted-foreground">interest rate</div>
@@ -308,7 +343,7 @@ export function GICRateEngine({
                         <div><strong>Minimum investment:</strong> ${rate.min_investment.toLocaleString()}</div>
                       </div>
 
-                      <Button className="bg-green-600 hover:bg-green-700 whitespace-nowrap">
+                      <Button className="bg-green-600 hover:bg-green-700 whitespace-nowrap transition-all duration-200 hover:scale-105">
                         get this rate
                       </Button>
                     </div>
@@ -316,21 +351,21 @@ export function GICRateEngine({
 
                   <Collapsible>
                     <CollapsibleTrigger asChild>
-                      <Button variant="ghost" className="w-full mt-4 p-0 h-auto font-normal">
+                      <Button variant="ghost" className="w-full mt-4 p-0 h-auto font-normal transition-all duration-200 hover:bg-gray-50">
                         <div className="flex items-center justify-center gap-2">
                           <span>Details</span>
-                          <ChevronDown className="h-4 w-4" />
+                          <ChevronDown className="h-4 w-4 transition-transform duration-200" />
                         </div>
                       </Button>
                     </CollapsibleTrigger>
-                    <CollapsibleContent className="mt-4">
+                    <CollapsibleContent className="mt-4 animate-accordion-down">
                       <Separator className="mb-4" />
                       <div className="grid md:grid-cols-2 gap-4">
                         <div>
                           <h5 className="font-medium mb-2">Features</h5>
                           <ul className="space-y-1 text-sm text-muted-foreground">
                             {rate.special_features?.map((feature, index) => (
-                              <li key={index} className="flex items-center gap-2">
+                              <li key={index} className="flex items-center gap-2 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
                                 <Shield className="h-3 w-3 text-green-600" />
                                 {feature}
                               </li>
@@ -356,16 +391,16 @@ export function GICRateEngine({
 
       {/* Regular Rates */}
       {!isLoading && regularRates.length > 0 && (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fade-in">
           <h3 className="text-2xl font-bold">More Competitive Rates</h3>
-          <Card>
+          <Card className="transition-all duration-300 hover:shadow-md">
             <CardContent className="p-6">
               <div className="space-y-4">
                 {regularRates.map((rate, index) => (
-                  <div key={rate.id}>
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-colors gap-4">
+                  <div key={rate.id} className="animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-all duration-200 hover:scale-[1.01] gap-4">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-green-200">
                           <PiggyBank className="h-5 w-5 text-green-600" />
                         </div>
                         <div>
@@ -375,10 +410,10 @@ export function GICRateEngine({
                       </div>
                       <div className="flex items-center gap-4 w-full md:w-auto">
                         <div className="text-right flex-1 md:flex-none">
-                          <div className="text-2xl font-bold text-green-600">{(rate.rate * 100).toFixed(2)}%</div>
+                          <div className="text-2xl font-bold text-green-600 transition-all duration-300 hover:scale-110">{(rate.rate * 100).toFixed(2)}%</div>
                           <div className="text-xs text-muted-foreground">interest rate</div>
                         </div>
-                        <Button variant="outline" size="sm" className="shrink-0">
+                        <Button variant="outline" size="sm" className="shrink-0 transition-all duration-200 hover:scale-105">
                           Compare
                         </Button>
                       </div>
@@ -394,12 +429,12 @@ export function GICRateEngine({
 
       {/* No Results */}
       {!isLoading && filteredRates.length === 0 && (
-        <Card>
+        <Card className="animate-fade-in">
           <CardContent className="p-8 text-center">
-            <PiggyBank className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <PiggyBank className="h-12 w-12 text-muted-foreground mx-auto mb-4 transition-all duration-300 hover:scale-110" />
             <h3 className="text-lg font-semibold mb-2">No GIC rates found</h3>
             <p className="text-muted-foreground mb-4">Try adjusting your filters to see more results.</p>
-            <Button onClick={refreshRates}>
+            <Button onClick={refreshRates} className="transition-all duration-200 hover:scale-105">
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh Rates
             </Button>
