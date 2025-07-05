@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -199,37 +198,33 @@ const Blog = () => {
                         </div>
                       )}
                     </div>
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Badge variant="outline" className="text-xs font-medium">
-                          {post.category}
-                        </Badge>
-                        <span className="text-xs text-slate-500">{post.readTime}</span>
-                      </div>
-                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight">
-                        <Link to={`/blog/${post.id}`}>
-                          {post.title}
-                        </Link>
-                      </h3>
-                      <p className="text-slate-600 mb-4 leading-relaxed line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 text-sm text-slate-500">
-                          <span className="font-medium">{post.author}</span>
-                          <span>•</span>
-                          <span>{new Date(post.date).toLocaleDateString('en-CA', { 
-                            month: 'short', 
-                            day: 'numeric' 
-                          })}</span>
+                    <Link to={`/blog/${post.id}`} className="block">
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Badge variant="outline" className="text-xs font-medium">
+                            {post.category}
+                          </Badge>
+                          <span className="text-xs text-slate-500">{post.readTime}</span>
                         </div>
-                        <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 p-2" asChild>
-                          <Link to={`/blog/${post.id}`}>
-                            <ArrowRight className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </div>
-                    </CardContent>
+                        <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight">
+                          {post.title}
+                        </h3>
+                        <p className="text-slate-600 mb-4 leading-relaxed line-clamp-3">
+                          {post.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3 text-sm text-slate-500">
+                            <span className="font-medium">{post.author}</span>
+                            <span>•</span>
+                            <span>{new Date(post.date).toLocaleDateString('en-CA', { 
+                              month: 'short', 
+                              day: 'numeric' 
+                            })}</span>
+                          </div>
+                          <ArrowRight className="h-4 w-4 text-blue-600 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </CardContent>
+                    </Link>
                   </Card>
                 ))}
               </div>
