@@ -66,7 +66,7 @@ const Index = () => {
 
   const tools = [
     { name: "Mortgage Calculator", description: "Calculate monthly payments", icon: Calculator, link: "/tools/mortgage-calculator" },
-    { name: "Debt Payoff Calculator", description: "Plan your debt freedom", icon: TrendingUp, link: "/tools/debt-payoff" },
+    { name: "Debt Payoff Calculator", description: "Plan your debt freedom", icon: TrendingUp, link: "/tools/debt-payoff-calculator" },
     { name: "TFSA Calculator", description: "Calculate your contribution", icon: DollarSign, link: "/tools/tfsa-calculator" },
     { name: "Calculators Hub", description: "All financial tools", icon: Award, link: "/tools/calculators" },
   ];

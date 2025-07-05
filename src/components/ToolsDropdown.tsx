@@ -40,35 +40,35 @@ const tools: Tool[] = [
     name: "Renewal Calculator",
     description: "Compare renewal options and maximize savings",
     icon: RefreshCw,
-    href: "/tools/renewal",
+    href: "/tools/renewal-calculator",
     category: "calculators"
   },
   {
     name: "Affordability Calculator",
     description: "Determine how much house you can afford",
     icon: Home,
-    href: "/tools/affordability",
+    href: "/tools/affordability-calculator",
     category: "planning"
   },
   {
     name: "Down Payment Calculator",
     description: "Plan your down payment strategy",
     icon: PiggyBank,
-    href: "/tools/down-payment",
+    href: "/tools/down-payment-calculator",
     category: "planning"
   },
   {
     name: "Amortization Schedule",
     description: "View detailed payment breakdown",
     icon: FileText,
-    href: "/tools/amortization",
+    href: "/tools/amortization-schedule",
     category: "analysis"
   },
   {
     name: "Extra Payment Calculator",
     description: "See impact of additional payments",
     icon: DollarSign,
-    href: "/tools/extra-payment",
+    href: "/tools/extra-payment-calculator",
     category: "analysis"
   }
 ];
