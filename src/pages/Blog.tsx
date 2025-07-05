@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -184,53 +183,51 @@ const Blog = () => {
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {blogPosts.map((post) => (
-                  <Card key={post.id} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden">
-                    <div className="aspect-[16/10] bg-gradient-to-br from-slate-100 to-slate-200 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
-                        <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">
-                          <TrendingUp className="h-8 w-8 text-slate-600" />
+                  <Link key={post.id} to={`/blog/${post.id}`} className="block">
+                    <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden h-full">
+                      <div className="aspect-[16/10] bg-gradient-to-br from-slate-100 to-slate-200 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
+                          <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">
+                            <TrendingUp className="h-8 w-8 text-slate-600" />
+                          </div>
                         </div>
+                        {post.trending && (
+                          <div className="absolute top-4 left-4">
+                            <Badge className="bg-orange-100 text-orange-700 border-orange-200 font-semibold">
+                              Trending
+                            </Badge>
+                          </div>
+                        )}
                       </div>
-                      {post.trending && (
-                        <div className="absolute top-4 left-4">
-                          <Badge className="bg-orange-100 text-orange-700 border-orange-200 font-semibold">
-                            Trending
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Badge variant="outline" className="text-xs font-medium">
+                            {post.category}
                           </Badge>
+                          <span className="text-xs text-slate-500">{post.readTime}</span>
                         </div>
-                      )}
-                    </div>
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Badge variant="outline" className="text-xs font-medium">
-                          {post.category}
-                        </Badge>
-                        <span className="text-xs text-slate-500">{post.readTime}</span>
-                      </div>
-                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight">
-                        <Link to={`/blog/${post.id}`}>
+                        <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight">
                           {post.title}
-                        </Link>
-                      </h3>
-                      <p className="text-slate-600 mb-4 leading-relaxed line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 text-sm text-slate-500">
-                          <span className="font-medium">{post.author}</span>
-                          <span>•</span>
-                          <span>{new Date(post.date).toLocaleDateString('en-CA', { 
-                            month: 'short', 
-                            day: 'numeric' 
-                          })}</span>
-                        </div>
-                        <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 p-2" asChild>
-                          <Link to={`/blog/${post.id}`}>
+                        </h3>
+                        <p className="text-slate-600 mb-4 leading-relaxed line-clamp-3">
+                          {post.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3 text-sm text-slate-500">
+                            <span className="font-medium">{post.author}</span>
+                            <span>•</span>
+                            <span>{new Date(post.date).toLocaleDateString('en-CA', { 
+                              month: 'short', 
+                              day: 'numeric' 
+                            })}</span>
+                          </div>
+                          <div className="text-blue-600 group-hover:text-blue-700 p-2">
                             <ArrowRight className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 ))}
               </div>
 
