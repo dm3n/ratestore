@@ -6,8 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Percent, Calculator, PiggyBank, CheckCircle, DollarSign } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const HighInterestSavings = () => {
+  const scrollToCalculator = () => {
+    const calculatorSection = document.getElementById('savings-calculator');
+    if (calculatorSection) {
+      calculatorSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -29,11 +37,11 @@ const HighInterestSavings = () => {
                 and flexible terms from Canada's top financial institutions.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
                   <Calculator className="h-5 w-5" />
                   Compare High Rates
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
+                <Button size="lg" variant="outline" className="gap-2" onClick={scrollToCalculator}>
                   <PiggyBank className="h-5 w-5" />
                   Calculate Earnings
                 </Button>
@@ -43,7 +51,7 @@ const HighInterestSavings = () => {
         </section>
         
         {/* Interactive Calculator */}
-        <section className="py-16">
+        <section className="py-16" id="savings-calculator">
           <div className="container">
             <div className="max-w-7xl mx-auto">
               <SavingsRatesCalculator 
