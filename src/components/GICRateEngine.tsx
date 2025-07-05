@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,10 +54,11 @@ export function GICRateEngine({
   const [selectedLocation, setSelectedLocation] = useState("all");
   const [gicRates, setGicRates] = useState<GICRate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFilterLoading, setIsFilterLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const { toast } = useToast();
 
-  const transformDbRate = (dbRate: DbGICRate): GICRate => {
+  const transformDbRate = useCallback((dbRate: DbGICRate): GICRate => {
     return {
       id: dbRate.id,
       institution: dbRate.institution,
@@ -74,10 +75,15 @@ export function GICRateEngine({
       is_sponsored: dbRate.is_sponsored || false,
       is_active: dbRate.is_active || true
     };
-  };
+  }, []);
 
-  const fetchGICRates = async () => {
-    setIsLoading(true);
+  const fetchGICRates = useCallback(async (showMainLoading = false) => {
+    if (showMainLoading) {
+      setIsLoading(true);
+    } else {
+      setIsFilterLoading(true);
+    }
+    
     try {
       const { data, error } = await supabase
         .from('gic_rates')
@@ -97,35 +103,42 @@ export function GICRateEngine({
         variant: "destructive"
       });
     } finally {
-      setIsLoading(false);
+      if (showMainLoading) {
+        setIsLoading(false);
+      } else {
+        // Add a small delay to prevent flickering
+        setTimeout(() => setIsFilterLoading(false), 200);
+      }
     }
-  };
+  }, [transformDbRate, toast]);
 
   useEffect(() => {
-    fetchGICRates();
-  }, []);
+    fetchGICRates(true);
+  }, [fetchGICRates]);
 
-  // Trigger reload when filters change
+  // Debounced filter effect with smoother transitions
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      fetchGICRates();
-    }, 500);
+      fetchGICRates(false);
+    }, 300); // Reduced delay for better responsiveness
 
     return () => clearTimeout(timeoutId);
-  }, [selectedType, selectedTerm, selectedBalance, selectedLocation]);
+  }, [selectedType, selectedTerm, selectedBalance, selectedLocation, fetchGICRates]);
 
-  const filteredRates = gicRates.filter(rate => {
-    if (filterType && rate.gic_type !== filterType) return false;
-    if (selectedType !== "all" && rate.gic_type !== selectedType) return false;
-    if (selectedTerm !== "all" && rate.term !== selectedTerm) return false;
-    return true;
-  });
+  const filteredRates = useMemo(() => {
+    return gicRates.filter(rate => {
+      if (filterType && rate.gic_type !== filterType) return false;
+      if (selectedType !== "all" && rate.gic_type !== selectedType) return false;
+      if (selectedTerm !== "all" && rate.term !== selectedTerm) return false;
+      return true;
+    });
+  }, [gicRates, filterType, selectedType, selectedTerm]);
 
-  const featuredRates = filteredRates.filter(rate => rate.is_featured);
-  const regularRates = filteredRates.filter(rate => !rate.is_featured);
+  const featuredRates = useMemo(() => filteredRates.filter(rate => rate.is_featured), [filteredRates]);
+  const regularRates = useMemo(() => filteredRates.filter(rate => !rate.is_featured), [filteredRates]);
 
   const refreshRates = () => {
-    fetchGICRates();
+    fetchGICRates(true);
   };
 
   // Skeleton loading component for smooth animations
@@ -176,10 +189,12 @@ export function GICRateEngine({
           >
             Rates updated: {lastUpdated.toLocaleTimeString()}
           </Badge>
-          {isLoading && (
+          {(isLoading || isFilterLoading) && (
             <div className="flex items-center gap-2 text-primary animate-fade-in">
               <RefreshCw className="h-4 w-4 animate-spin" />
-              <span className="text-sm">Updating rates...</span>
+              <span className="text-sm">
+                {isLoading ? 'Loading rates...' : 'Filtering...'}
+              </span>
             </div>
           )}
         </div>
@@ -285,162 +300,165 @@ export function GICRateEngine({
         </CardContent>
       </Card>
 
-      {/* Loading State */}
-      {isLoading && (
-        <div className="space-y-6">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <LoadingSkeleton key={index} index={index} />
-          ))}
-        </div>
-      )}
+      {/* Content with smooth transitions */}
+      <div className={`transition-opacity duration-300 ${isFilterLoading ? 'opacity-50' : 'opacity-100'}`}>
+        {/* Loading State */}
+        {isLoading && (
+          <div className="space-y-6">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <LoadingSkeleton key={index} index={index} />
+            ))}
+          </div>
+        )}
 
-      {/* Featured Rates */}
-      {!isLoading && featuredRates.length > 0 && (
-        <div className="space-y-6 animate-fade-in">
-          <h3 className="text-2xl font-bold">Featured Rates</h3>
-          <div className="grid gap-6">
-            {featuredRates.map((rate, index) => (
-              <Card 
-                key={rate.id} 
-                className={`border-2 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] animate-fade-in ${
-                  rate.is_sponsored ? 'border-primary/20 bg-primary/5' : 'border-green-200'
-                }`}
-                style={{ 
-                  animationDelay: `${index * 150}ms`,
-                  animationFillMode: 'backwards'
-                }}
-              >
-                <CardContent className="p-6">
-                  <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-green-200">
-                        <PiggyBank className="h-6 w-6 text-green-600" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-lg">{rate.institution}</h4>
-                          {rate.is_sponsored && (
-                            <Badge variant="secondary" className="text-xs animate-fade-in">sponsored</Badge>
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {rate.gic_type.charAt(0).toUpperCase() + rate.gic_type.slice(1)} GIC
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
-                      <div className="text-center lg:text-right">
-                        <div className="text-3xl font-bold text-green-600 mb-1 transition-all duration-300 hover:scale-110">
-                          {(rate.rate * 100).toFixed(2)}%
-                        </div>
-                        <div className="text-sm text-muted-foreground">interest rate</div>
-                      </div>
-                      
-                      <div className="space-y-2 text-sm">
-                        <div><strong>Term:</strong> {rate.term}</div>
-                        <div><strong>Type:</strong> {rate.gic_type.charAt(0).toUpperCase() + rate.gic_type.slice(1)}</div>
-                        <div><strong>Minimum investment:</strong> ${rate.min_investment.toLocaleString()}</div>
-                      </div>
-
-                      <Button className="bg-green-600 hover:bg-green-700 whitespace-nowrap transition-all duration-200 hover:scale-105">
-                        get this rate
-                      </Button>
-                    </div>
-                  </div>
-
-                  <Collapsible>
-                    <CollapsibleTrigger asChild>
-                      <Button variant="ghost" className="w-full mt-4 p-0 h-auto font-normal transition-all duration-200 hover:bg-gray-50">
-                        <div className="flex items-center justify-center gap-2">
-                          <span>Details</span>
-                          <ChevronDown className="h-4 w-4 transition-transform duration-200" />
-                        </div>
-                      </Button>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="mt-4 animate-accordion-down">
-                      <Separator className="mb-4" />
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <h5 className="font-medium mb-2">Features</h5>
-                          <ul className="space-y-1 text-sm text-muted-foreground">
-                            {rate.special_features?.map((feature, index) => (
-                              <li key={index} className="flex items-center gap-2 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
-                                <Shield className="h-3 w-3 text-green-600" />
-                                {feature}
-                              </li>
-                            ))}
-                          </ul>
+        {/* Featured Rates */}
+        {!isLoading && featuredRates.length > 0 && (
+          <div className="space-y-6 animate-fade-in">
+            <h3 className="text-2xl font-bold">Featured Rates</h3>
+            <div className="grid gap-6">
+              {featuredRates.map((rate, index) => (
+                <Card 
+                  key={rate.id} 
+                  className={`border-2 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] animate-fade-in ${
+                    rate.is_sponsored ? 'border-primary/20 bg-primary/5' : 'border-green-200'
+                  }`}
+                  style={{ 
+                    animationDelay: `${index * 150}ms`,
+                    animationFillMode: 'backwards'
+                  }}
+                >
+                  <CardContent className="p-6">
+                    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-green-200">
+                          <PiggyBank className="h-6 w-6 text-green-600" />
                         </div>
                         <div>
-                          <h5 className="font-medium mb-2">Total Return</h5>
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="font-semibold text-lg">{rate.institution}</h4>
+                            {rate.is_sponsored && (
+                              <Badge variant="secondary" className="text-xs animate-fade-in">sponsored</Badge>
+                            )}
+                          </div>
                           <p className="text-sm text-muted-foreground">
-                            ${(parseInt(selectedBalance) * (rate.rate + 1)).toLocaleString()} 
-                            <span className="block">based on ${parseInt(selectedBalance).toLocaleString()} investment</span>
+                            {rate.gic_type.charAt(0).toUpperCase() + rate.gic_type.slice(1)} GIC
                           </p>
                         </div>
                       </div>
-                    </CollapsibleContent>
-                  </Collapsible>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
 
-      {/* Regular Rates */}
-      {!isLoading && regularRates.length > 0 && (
-        <div className="space-y-6 animate-fade-in">
-          <h3 className="text-2xl font-bold">More Competitive Rates</h3>
-          <Card className="transition-all duration-300 hover:shadow-md">
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                {regularRates.map((rate, index) => (
-                  <div key={rate.id} className="animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-all duration-200 hover:scale-[1.01] gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-green-200">
-                          <PiggyBank className="h-5 w-5 text-green-600" />
+                      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+                        <div className="text-center lg:text-right">
+                          <div className="text-3xl font-bold text-green-600 mb-1 transition-all duration-300 hover:scale-110">
+                            {(rate.rate * 100).toFixed(2)}%
+                          </div>
+                          <div className="text-sm text-muted-foreground">interest rate</div>
                         </div>
-                        <div>
-                          <div className="font-semibold">{rate.institution}</div>
-                          <div className="text-sm text-muted-foreground">{rate.term} • {rate.gic_type}</div>
+                        
+                        <div className="space-y-2 text-sm">
+                          <div><strong>Term:</strong> {rate.term}</div>
+                          <div><strong>Type:</strong> {rate.gic_type.charAt(0).toUpperCase() + rate.gic_type.slice(1)}</div>
+                          <div><strong>Minimum investment:</strong> ${rate.min_investment.toLocaleString()}</div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-4 w-full md:w-auto">
-                        <div className="text-right flex-1 md:flex-none">
-                          <div className="text-2xl font-bold text-green-600 transition-all duration-300 hover:scale-110">{(rate.rate * 100).toFixed(2)}%</div>
-                          <div className="text-xs text-muted-foreground">interest rate</div>
-                        </div>
-                        <Button variant="outline" size="sm" className="shrink-0 transition-all duration-200 hover:scale-105">
-                          Compare
+
+                        <Button className="bg-green-600 hover:bg-green-700 whitespace-nowrap transition-all duration-200 hover:scale-105">
+                          get this rate
                         </Button>
                       </div>
                     </div>
-                    {index < regularRates.length - 1 && <Separator />}
-                  </div>
-                ))}
-              </div>
+
+                    <Collapsible>
+                      <CollapsibleTrigger asChild>
+                        <Button variant="ghost" className="w-full mt-4 p-0 h-auto font-normal transition-all duration-200 hover:bg-gray-50">
+                          <div className="flex items-center justify-center gap-2">
+                            <span>Details</span>
+                            <ChevronDown className="h-4 w-4 transition-transform duration-200" />
+                          </div>
+                        </Button>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="mt-4 animate-accordion-down">
+                        <Separator className="mb-4" />
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <h5 className="font-medium mb-2">Features</h5>
+                            <ul className="space-y-1 text-sm text-muted-foreground">
+                              {rate.special_features?.map((feature, index) => (
+                                <li key={index} className="flex items-center gap-2 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                                  <Shield className="h-3 w-3 text-green-600" />
+                                  {feature}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div>
+                            <h5 className="font-medium mb-2">Total Return</h5>
+                            <p className="text-sm text-muted-foreground">
+                              ${(parseInt(selectedBalance) * (rate.rate + 1)).toLocaleString()} 
+                              <span className="block">based on ${parseInt(selectedBalance).toLocaleString()} investment</span>
+                            </p>
+                          </div>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Regular Rates */}
+        {!isLoading && regularRates.length > 0 && (
+          <div className="space-y-6 animate-fade-in">
+            <h3 className="text-2xl font-bold">More Competitive Rates</h3>
+            <Card className="transition-all duration-300 hover:shadow-md">
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  {regularRates.map((rate, index) => (
+                    <div key={rate.id} className="animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                      <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-all duration-200 hover:scale-[1.01] gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-green-200">
+                            <PiggyBank className="h-5 w-5 text-green-600" />
+                          </div>
+                          <div>
+                            <div className="font-semibold">{rate.institution}</div>
+                            <div className="text-sm text-muted-foreground">{rate.term} • {rate.gic_type}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4 w-full md:w-auto">
+                          <div className="text-right flex-1 md:flex-none">
+                            <div className="text-2xl font-bold text-green-600 transition-all duration-300 hover:scale-110">{(rate.rate * 100).toFixed(2)}%</div>
+                            <div className="text-xs text-muted-foreground">interest rate</div>
+                          </div>
+                          <Button variant="outline" size="sm" className="shrink-0 transition-all duration-200 hover:scale-105">
+                            Compare
+                          </Button>
+                        </div>
+                      </div>
+                      {index < regularRates.length - 1 && <Separator />}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* No Results */}
+        {!isLoading && filteredRates.length === 0 && (
+          <Card className="animate-fade-in">
+            <CardContent className="p-8 text-center">
+              <PiggyBank className="h-12 w-12 text-muted-foreground mx-auto mb-4 transition-all duration-300 hover:scale-110" />
+              <h3 className="text-lg font-semibold mb-2">No GIC rates found</h3>
+              <p className="text-muted-foreground mb-4">Try adjusting your filters to see more results.</p>
+              <Button onClick={refreshRates} className="transition-all duration-200 hover:scale-105">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh Rates
+              </Button>
             </CardContent>
           </Card>
-        </div>
-      )}
-
-      {/* No Results */}
-      {!isLoading && filteredRates.length === 0 && (
-        <Card className="animate-fade-in">
-          <CardContent className="p-8 text-center">
-            <PiggyBank className="h-12 w-12 text-muted-foreground mx-auto mb-4 transition-all duration-300 hover:scale-110" />
-            <h3 className="text-lg font-semibold mb-2">No GIC rates found</h3>
-            <p className="text-muted-foreground mb-4">Try adjusting your filters to see more results.</p>
-            <Button onClick={refreshRates} className="transition-all duration-200 hover:scale-105">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh Rates
-            </Button>
-          </CardContent>
-        </Card>
-      )}
+        )}
+      </div>
     </div>
   );
 }
