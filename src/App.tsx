@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import AuthPage from "./pages/Auth";
+import Blog from "./pages/Blog";
 
 // Banking pages
 import Banking from "./pages/Banking";
@@ -217,6 +218,7 @@ function App() {
                 </ProtectedRoute>
               } />
               <Route path="/auth" element={<AuthPage />} />
+              <Route path="/blog" element={<Blog />} />
               
               {/* Banking routes */}
               <Route path="/banking" element={<Banking />} />
