@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -5,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, ArrowRight, Clock, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const featuredPost = {
   id: 1,
@@ -70,6 +72,12 @@ const blogPosts = [
 const categories = ["All", "Mortgage News", "Savings", "Credit Cards", "Home Buying", "Investing", "Mortgages"];
 
 const Blog = () => {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const filteredPosts = selectedCategory === "All" 
+    ? blogPosts 
+    : blogPosts.filter(post => post.category === selectedCategory);
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
@@ -96,13 +104,14 @@ const Blog = () => {
                 {categories.map((category) => (
                   <Button 
                     key={category}
-                    variant={category === "All" ? "default" : "outline"}
+                    variant={category === selectedCategory ? "default" : "outline"}
                     size="sm"
                     className={`rounded-full px-4 py-2 font-medium transition-all ${
-                      category === "All" 
+                      category === selectedCategory
                         ? "bg-slate-900 hover:bg-slate-800 text-white" 
                         : "hover:bg-slate-50 border-slate-200"
                     }`}
+                    onClick={() => setSelectedCategory(category)}
                   >
                     {category}
                   </Button>
@@ -182,9 +191,9 @@ const Blog = () => {
               </div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {blogPosts.map((post) => (
+                {filteredPosts.map((post) => (
                   <Link key={post.id} to={`/blog/${post.id}`} className="block">
-                    <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden h-full">
+                    <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden h-full cursor-pointer">
                       <div className="aspect-[16/10] bg-gradient-to-br from-slate-100 to-slate-200 relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
                           <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">

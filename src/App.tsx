@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import AuthPage from "./pages/Auth";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 // Banking pages
 import Banking from "./pages/Banking";
@@ -219,6 +220,7 @@ function App() {
               } />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:id" element={<BlogPost />} />
               
               {/* Banking routes */}
               <Route path="/banking" element={<Banking />} />
