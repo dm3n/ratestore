@@ -108,6 +108,13 @@ export default function CashBack() {
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [monthlySpending, setMonthlySpending] = useState(cashbackCalculator.monthlySpending);
 
+  const scrollToCalculator = () => {
+    const calculatorSection = document.getElementById('cash-back-calculator');
+    if (calculatorSection) {
+      calculatorSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const filteredCards = cashBackCards.filter(card => {
     if (filterBy === "all") return true;
     if (filterBy === "no-fee") return card.annualFee === 0;
@@ -169,6 +176,17 @@ export default function CashBack() {
               <p className="text-gray-600">Earn on all your regular purchases and monthly bills</p>
             </div>
           </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
+              <Calculator className="h-5 w-5" />
+              Calculate Cash Back
+            </Button>
+            <Button size="lg" variant="outline" className="gap-2" onClick={scrollToCalculator}>
+              <Target className="h-5 w-5" />
+              Compare Rates
+            </Button>
+          </div>
         </div>
 
         <Tabs defaultValue="browse" className="mb-8">
@@ -211,20 +229,20 @@ export default function CashBack() {
               {sortedCards.map((card) => (
                 <Card key={card.id} className="relative overflow-hidden hover:shadow-lg transition-shadow">
                   {card.isPromoted && (
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute top-4 right-4 z-10">
                       <Badge variant="destructive">Featured</Badge>
                     </div>
                   )}
                   
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-lg">{card.name}</CardTitle>
+                  <CardHeader className="pb-4">
+                    <div className="flex justify-between items-start gap-3">
+                      <div className="flex-1 min-w-0">
+                        <CardTitle className="text-lg leading-tight">{card.name}</CardTitle>
                         <CardDescription className="text-sm text-gray-600">{card.issuer}</CardDescription>
                       </div>
                       <button
                         onClick={() => toggleCardSelection(card.id)}
-                        className={`p-2 rounded-full ${
+                        className={`p-2 rounded-full shrink-0 ${
                           selectedCards.includes(card.id) 
                             ? 'bg-primary text-white' 
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -304,7 +322,7 @@ export default function CashBack() {
             </div>
           </TabsContent>
 
-          <TabsContent value="calculator" className="space-y-6">
+          <TabsContent value="calculator" className="space-y-6" id="cash-back-calculator">
             <div className="bg-white p-6 rounded-lg">
               <h3 className="text-xl font-bold mb-4">Cash Back Calculator</h3>
               <p className="text-gray-600 mb-6">Enter your monthly spending to see potential cash back earnings</p>
