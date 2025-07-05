@@ -1,94 +1,231 @@
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowRight } from "lucide-react";
+import { Calendar, User, ArrowRight, Clock, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+
+const featuredPost = {
+  id: 1,
+  title: "Bank of Canada Cuts Interest Rates: What This Means for Your Mortgage",
+  excerpt: "The latest rate cut could save homeowners thousands. Our analysis breaks down the immediate impact on mortgage payments, renewal strategies, and what to expect next.",
+  author: "Sarah Johnson",
+  date: "2024-01-15",
+  category: "Mortgage News",
+  readTime: "8 min read",
+  image: "/placeholder.svg",
+  featured: true
+};
 
 const blogPosts = [
   {
-    id: 1,
-    title: "5 Ways to Maximize Your Savings Account Returns",
-    excerpt: "Discover strategies to get the most out of your savings with high-yield accounts and smart banking choices.",
-    author: "Sarah Johnson",
-    date: "2024-01-15",
-    category: "Savings",
-    readTime: "5 min read"
-  },
-  {
     id: 2,
-    title: "Understanding Compound Interest: Your Money's Best Friend",
-    excerpt: "Learn how compound interest works and why starting early can dramatically impact your financial future.",
+    title: "5 Strategies to Maximize Your High-Interest Savings Returns in 2024",
+    excerpt: "With rates at multi-year highs, now's the time to optimize your savings strategy. Discover proven methods to boost your returns while maintaining liquidity.",
     author: "Michael Chen",
-    date: "2024-01-10",
-    category: "Investment",
-    readTime: "7 min read"
+    date: "2024-01-12",
+    category: "Savings",
+    readTime: "6 min read",
+    trending: true
   },
   {
     id: 3,
-    title: "Personal Loan vs Credit Card: Which Is Right for You?",
-    excerpt: "Compare the pros and cons of personal loans and credit cards to make the best borrowing decision.",
+    title: "Credit Card Rewards Revolution: New Programs Worth Switching For",
+    excerpt: "Major Canadian banks have launched competitive rewards programs. We analyze which cards offer the best value for different spending patterns.",
     author: "Emily Rodriguez",
+    date: "2024-01-10",
+    category: "Credit Cards",
+    readTime: "7 min read"
+  },
+  {
+    id: 4,
+    title: "First-Time Home Buyer Programs: $40,000 in Government Assistance Available",
+    excerpt: "Navigate federal and provincial programs designed to help you enter the housing market. Complete guide to qualification requirements and application processes.",
+    author: "David Park",
+    date: "2024-01-08",
+    category: "Home Buying",
+    readTime: "10 min read"
+  },
+  {
+    id: 5,
+    title: "Investment Outlook 2024: GICs vs. High-Yield Savings vs. Market Investments",
+    excerpt: "Interest rate uncertainty makes asset allocation crucial. Our comprehensive analysis helps you balance safety, liquidity, and growth potential.",
+    author: "Jennifer Liu",
     date: "2024-01-05",
-    category: "Loans",
-    readTime: "6 min read"
+    category: "Investing",
+    readTime: "9 min read"
+  },
+  {
+    id: 6,
+    title: "Mortgage Renewal Strategies: Lock in Rates or Wait?",
+    excerpt: "With your renewal approaching, timing is everything. Expert insights on rate predictions, negotiation tactics, and alternative lender options.",
+    author: "Robert Kim",
+    date: "2024-01-03",
+    category: "Mortgages",
+    readTime: "5 min read"
   }
 ];
 
+const categories = ["All", "Mortgage News", "Savings", "Credit Cards", "Home Buying", "Investing", "Mortgages"];
+
 const Blog = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <Header />
       
       <main className="flex-1">
-        <section className="bg-primary/5 py-12 md:py-16">
-          <div className="container">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-                Financial Insights Blog
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-slate-50 via-white to-blue-50/20 border-b">
+          <div className="container py-16 lg:py-20">
+            <div className="max-w-4xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium mb-6">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                Financial Intelligence
+              </div>
+              <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-slate-900 mb-6">
+                Stay Ahead of the
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Market</span>
               </h1>
-              <p className="text-lg text-muted-foreground">
-                Expert tips, market insights, and financial guidance to help you make smarter money decisions.
+              <p className="text-xl lg:text-2xl text-slate-600 mb-8 max-w-3xl leading-relaxed">
+                Expert insights, market analysis, and actionable advice to help you make smarter financial decisions in Canada's evolving economic landscape.
               </p>
+              
+              {/* Category Pills */}
+              <div className="flex flex-wrap gap-3">
+                {categories.map((category) => (
+                  <Button 
+                    key={category}
+                    variant={category === "All" ? "default" : "outline"}
+                    size="sm"
+                    className={`rounded-full px-4 py-2 font-medium transition-all ${
+                      category === "All" 
+                        ? "bg-slate-900 hover:bg-slate-800 text-white" 
+                        : "hover:bg-slate-50 border-slate-200"
+                    }`}
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="py-12">
+        {/* Featured Article */}
+        <section className="py-12 lg:py-16 border-b bg-white">
           <div className="container">
-            <div className="max-w-4xl mx-auto">
-              <div className="grid gap-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="order-2 lg:order-1">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Badge className="bg-red-100 text-red-700 border-red-200 font-semibold">
+                      Featured
+                    </Badge>
+                    <Badge variant="outline" className="font-medium">
+                      {featuredPost.category}
+                    </Badge>
+                  </div>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+                    {featuredPost.title}
+                  </h2>
+                  <p className="text-lg text-slate-600 mb-6 leading-relaxed">
+                    {featuredPost.excerpt}
+                  </p>
+                  <div className="flex items-center gap-6 mb-8 text-sm text-slate-500">
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      <span className="font-medium">{featuredPost.author}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      <span>{new Date(featuredPost.date).toLocaleDateString('en-CA', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      })}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      <span>{featuredPost.readTime}</span>
+                    </div>
+                  </div>
+                  <Button size="lg" className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-lg font-semibold" asChild>
+                    <Link to={`/blog/${featuredPost.id}`}>
+                      Read Full Analysis
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                </div>
+                <div className="order-1 lg:order-2">
+                  <div className="relative group overflow-hidden rounded-2xl bg-slate-100">
+                    <div className="aspect-[4/3] bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                      <TrendingUp className="h-24 w-24 text-blue-400" />
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Articles Grid */}
+        <section className="py-16 lg:py-20 bg-slate-50/50">
+          <div className="container">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex items-center justify-between mb-12">
+                <div>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">Latest Insights</h2>
+                  <p className="text-lg text-slate-600">Stay informed with our latest financial analysis and market updates</p>
+                </div>
+              </div>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {blogPosts.map((post) => (
-                  <Card key={post.id} className="overflow-hidden">
-                    <CardHeader>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline">{post.category}</Badge>
-                        <span className="text-sm text-muted-foreground">{post.readTime}</span>
-                      </div>
-                      <CardTitle className="text-2xl hover:text-primary transition-colors">
-                        <Link to={`/blog/${post.id}`}>{post.title}</Link>
-                      </CardTitle>
-                      <CardDescription className="text-base">
-                        {post.excerpt}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <User className="h-4 w-4" />
-                            {post.author}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            {new Date(post.date).toLocaleDateString()}
-                          </div>
+                  <Card key={post.id} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden">
+                    <div className="aspect-[16/10] bg-gradient-to-br from-slate-100 to-slate-200 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
+                        <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">
+                          <TrendingUp className="h-8 w-8 text-slate-600" />
                         </div>
-                        <Button variant="ghost" size="sm" asChild>
+                      </div>
+                      {post.trending && (
+                        <div className="absolute top-4 left-4">
+                          <Badge className="bg-orange-100 text-orange-700 border-orange-200 font-semibold">
+                            Trending
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Badge variant="outline" className="text-xs font-medium">
+                          {post.category}
+                        </Badge>
+                        <span className="text-xs text-slate-500">{post.readTime}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight">
+                        <Link to={`/blog/${post.id}`}>
+                          {post.title}
+                        </Link>
+                      </h3>
+                      <p className="text-slate-600 mb-4 leading-relaxed line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3 text-sm text-slate-500">
+                          <span className="font-medium">{post.author}</span>
+                          <span>•</span>
+                          <span>{new Date(post.date).toLocaleDateString('en-CA', { 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })}</span>
+                        </div>
+                        <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 p-2" asChild>
                           <Link to={`/blog/${post.id}`}>
-                            Read More <ArrowRight className="h-4 w-4 ml-1" />
+                            <ArrowRight className="h-4 w-4" />
                           </Link>
                         </Button>
                       </div>
@@ -96,6 +233,40 @@ const Blog = () => {
                   </Card>
                 ))}
               </div>
+
+              {/* Load More */}
+              <div className="text-center mt-12">
+                <Button variant="outline" size="lg" className="px-8 py-3 font-semibold border-2 hover:bg-slate-50">
+                  Load More Articles
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Newsletter CTA */}
+        <section className="py-16 lg:py-20 bg-slate-900 text-white">
+          <div className="container">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+                Never Miss a Market Update
+              </h2>
+              <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+                Get weekly insights on rates, market trends, and financial strategies delivered to your inbox.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email address"
+                  className="flex-1 px-4 py-3 rounded-lg text-slate-900 font-medium"
+                />
+                <Button className="bg-blue-600 hover:bg-blue-700 px-8 py-3 font-semibold">
+                  Subscribe
+                </Button>
+              </div>
+              <p className="text-sm text-slate-400 mt-4">
+                Join 50,000+ Canadians who trust our financial insights
+              </p>
             </div>
           </div>
         </section>
