@@ -237,6 +237,63 @@ export type Database = {
         }
         Relationships: []
       }
+      gic_rates: {
+        Row: {
+          created_at: string
+          gic_type: string
+          id: string
+          institution: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          is_sponsored: boolean | null
+          max_investment: number | null
+          min_investment: number | null
+          promotional_expires_at: string | null
+          promotional_rate: boolean | null
+          province: string | null
+          rate: number
+          special_features: Json | null
+          term: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          gic_type: string
+          id?: string
+          institution: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          is_sponsored?: boolean | null
+          max_investment?: number | null
+          min_investment?: number | null
+          promotional_expires_at?: string | null
+          promotional_rate?: boolean | null
+          province?: string | null
+          rate: number
+          special_features?: Json | null
+          term: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          gic_type?: string
+          id?: string
+          institution?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          is_sponsored?: boolean | null
+          max_investment?: number | null
+          min_investment?: number | null
+          promotional_expires_at?: string | null
+          promotional_rate?: boolean | null
+          province?: string | null
+          rate?: number
+          special_features?: Json | null
+          term?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mortgage_rates: {
         Row: {
           base_rate: number

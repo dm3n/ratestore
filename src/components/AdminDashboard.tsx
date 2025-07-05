@@ -1,9 +1,11 @@
+
 import { AdminRateManager } from "./AdminRateManager";
 import { AdminUserManager } from "./AdminUserManager";
+import { AdminGICRateManager } from "./AdminGICRateManager";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Settings, Users, TrendingUp, ArrowLeft } from "lucide-react";
+import { Settings, Users, TrendingUp, ArrowLeft, PiggyBank } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function AdminDashboard() {
@@ -32,16 +34,20 @@ export function AdminDashboard() {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
-            Manage mortgage rates across the entire site and user permissions. All rate changes will automatically update across all calculators and rate displays.
+            Manage mortgage rates, GIC rates, and user permissions across the entire site. All rate changes will automatically update across all calculators and rate displays.
           </p>
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="rates" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="rates" className="flex items-center gap-2">
+      <Tabs defaultValue="mortgage-rates" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="mortgage-rates" className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
-            Rate Management
+            Mortgage Rates
+          </TabsTrigger>
+          <TabsTrigger value="gic-rates" className="flex items-center gap-2">
+            <PiggyBank className="h-4 w-4" />
+            GIC Rates
           </TabsTrigger>
           <TabsTrigger value="users" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
@@ -49,8 +55,12 @@ export function AdminDashboard() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="rates" className="space-y-6">
+        <TabsContent value="mortgage-rates" className="space-y-6">
           <AdminRateManager />
+        </TabsContent>
+
+        <TabsContent value="gic-rates" className="space-y-6">
+          <AdminGICRateManager />
         </TabsContent>
 
         <TabsContent value="users" className="space-y-6">
