@@ -7,7 +7,14 @@ import { Calendar, User, Clock, ArrowLeft, Share2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 
 // Mock blog post data - in a real app this would come from an API
-const blogPostData = {
+const blogPostData: Record<number, {
+  title: string;
+  content: string;
+  author: string;
+  date: string;
+  category: string;
+  readTime: string;
+}> = {
   1: {
     title: "Bank of Canada Cuts Interest Rates: What This Means for Your Mortgage",
     content: `
@@ -48,7 +55,8 @@ const blogPostData = {
 
 const BlogPost = () => {
   const { id } = useParams();
-  const post = blogPostData[id as keyof typeof blogPostData];
+  const postId = id ? parseInt(id, 10) : null;
+  const post = postId ? blogPostData[postId] : null;
 
   if (!post) {
     return (
