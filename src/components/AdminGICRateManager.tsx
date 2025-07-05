@@ -11,6 +11,9 @@ import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { Pencil, Trash2, Plus, Save, X, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
+
+type DbGICRate = Database['public']['Tables']['gic_rates']['Row'];
 
 interface GICRate {
   id: string;
@@ -52,6 +55,25 @@ export function AdminGICRateManager() {
     is_active: true
   });
 
+  const transformDbRate = (dbRate: DbGICRate): GICRate => {
+    return {
+      id: dbRate.id,
+      institution: dbRate.institution,
+      rate: Number(dbRate.rate),
+      term: dbRate.term,
+      gic_type: dbRate.gic_type,
+      min_investment: Number(dbRate.min_investment || 0),
+      max_investment: dbRate.max_investment ? Number(dbRate.max_investment) : null,
+      province: dbRate.province || 'All',
+      special_features: Array.isArray(dbRate.special_features) ? dbRate.special_features as string[] : [],
+      promotional_rate: dbRate.promotional_rate || false,
+      promotional_expires_at: dbRate.promotional_expires_at,
+      is_featured: dbRate.is_featured || false,
+      is_sponsored: dbRate.is_sponsored || false,
+      is_active: dbRate.is_active || true
+    };
+  };
+
   const fetchRates = async () => {
     setIsLoading(true);
     try {
@@ -61,7 +83,8 @@ export function AdminGICRateManager() {
         .order('institution', { ascending: true });
 
       if (error) throw error;
-      setRates(data || []);
+      const transformedRates = (data || []).map(transformDbRate);
+      setRates(transformedRates);
     } catch (error) {
       console.error('Error fetching GIC rates:', error);
       toast({

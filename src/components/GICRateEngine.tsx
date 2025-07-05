@@ -12,6 +12,9 @@ import { PiggyBank, TrendingUp, Shield, Clock, ChevronDown, RefreshCw } from "lu
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
+
+type DbGICRate = Database['public']['Tables']['gic_rates']['Row'];
 
 interface GICRate {
   id: string;
@@ -54,6 +57,25 @@ export function GICRateEngine({
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const { toast } = useToast();
 
+  const transformDbRate = (dbRate: DbGICRate): GICRate => {
+    return {
+      id: dbRate.id,
+      institution: dbRate.institution,
+      rate: Number(dbRate.rate),
+      term: dbRate.term,
+      gic_type: dbRate.gic_type,
+      min_investment: Number(dbRate.min_investment || 0),
+      max_investment: dbRate.max_investment ? Number(dbRate.max_investment) : null,
+      province: dbRate.province || 'All',
+      special_features: Array.isArray(dbRate.special_features) ? dbRate.special_features as string[] : [],
+      promotional_rate: dbRate.promotional_rate || false,
+      promotional_expires_at: dbRate.promotional_expires_at,
+      is_featured: dbRate.is_featured || false,
+      is_sponsored: dbRate.is_sponsored || false,
+      is_active: dbRate.is_active || true
+    };
+  };
+
   const fetchGICRates = async () => {
     setIsLoading(true);
     try {
@@ -64,7 +86,8 @@ export function GICRateEngine({
         .order('rate', { ascending: false });
 
       if (error) throw error;
-      setGicRates(data || []);
+      const transformedRates = (data || []).map(transformDbRate);
+      setGicRates(transformedRates);
       setLastUpdated(new Date());
     } catch (error) {
       console.error('Error fetching GIC rates:', error);
