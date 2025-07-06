@@ -122,7 +122,7 @@ const Crypto = () => {
                 <Button size="lg" className="bg-white text-orange-700 hover:bg-orange-50">
                   Compare All Exchanges
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button size="lg" variant="outline" className="bg-orange-700 border-white text-white hover:bg-orange-600">
                   Learn About Crypto
                 </Button>
               </div>
