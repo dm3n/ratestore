@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowRight, Clock, TrendingUp } from "lucide-react";
+import { Calendar, User, ArrowRight, Clock, TrendingUp, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
@@ -12,7 +12,7 @@ import { useBlogPosts } from "@/hooks/useBlogPosts";
 const categories = ["All", "Mortgage News", "Savings", "Credit Cards", "Home Buying", "Investing", "Mortgages"];
 
 const Blog = () => {
-  const { posts, loading, error } = useBlogPosts();
+  const { posts, loading, error, refetch } = useBlogPosts();
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const featuredPost = posts.find(post => post.is_featured) || posts[0];
@@ -27,7 +27,10 @@ const Blog = () => {
       <div className="min-h-screen flex flex-col bg-white">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading blog posts...</p>
+          </div>
         </main>
         <Footer />
       </div>
@@ -39,9 +42,33 @@ const Blog = () => {
       <div className="min-h-screen flex flex-col bg-white">
         <Header />
         <main className="flex-1 flex items-center justify-center">
+          <div className="text-center max-w-md mx-auto px-4">
+            <h1 className="text-2xl font-bold text-slate-900 mb-4">Unable to Load Blog</h1>
+            <p className="text-slate-600 mb-6">We're having trouble loading the blog posts. Please try again.</p>
+            <p className="text-sm text-slate-500 mb-6">Error: {error}</p>
+            <Button onClick={refetch} className="inline-flex items-center gap-2">
+              <RefreshCw className="h-4 w-4" />
+              Try Again
+            </Button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!posts || posts.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col bg-white">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-slate-900 mb-4">Error Loading Blog</h1>
-            <p className="text-slate-600">{error}</p>
+            <h1 className="text-2xl font-bold text-slate-900 mb-4">No Blog Posts Found</h1>
+            <p className="text-slate-600 mb-8">Check back soon for new content!</p>
+            <Button onClick={refetch} className="inline-flex items-center gap-2">
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </Button>
           </div>
         </main>
         <Footer />

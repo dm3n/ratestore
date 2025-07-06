@@ -25,16 +25,27 @@ export const useBlogPosts = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true);
+      setError(null);
+      console.log('Fetching blog posts...');
+      
       const { data, error } = await (supabase as any)
         .from('blog_posts')
         .select('*')
         .eq('is_published', true)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      console.log('Blog posts response:', { data, error });
+
+      if (error) {
+        console.error('Error fetching blog posts:', error);
+        throw error;
+      }
+      
       setPosts(data || []);
+      console.log('Successfully set posts:', data?.length || 0, 'posts');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Error in fetchPosts:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred while fetching blog posts');
     } finally {
       setLoading(false);
     }
@@ -56,6 +67,9 @@ export const useBlogPost = (id: string) => {
     const fetchPost = async () => {
       try {
         setLoading(true);
+        setError(null);
+        console.log('Fetching blog post with id:', id);
+        
         const { data, error } = await (supabase as any)
           .from('blog_posts')
           .select('*')
@@ -63,10 +77,18 @@ export const useBlogPost = (id: string) => {
           .eq('is_published', true)
           .single();
 
-        if (error) throw error;
+        console.log('Single blog post response:', { data, error });
+
+        if (error) {
+          console.error('Error fetching blog post:', error);
+          throw error;
+        }
+        
         setPost(data);
+        console.log('Successfully set post:', data?.title);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error in fetchPost:', err);
+        setError(err instanceof Error ? err.message : 'An error occurred while fetching the blog post');
       } finally {
         setLoading(false);
       }
