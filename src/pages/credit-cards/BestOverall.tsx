@@ -272,6 +272,48 @@ const BestOverallCreditCards = () => {
           </div>
         </section>
 
+        {/* Categories Section */}
+        <section className="py-12 md:py-16 bg-gray-50">
+          <div className="container">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                  Browse by Category
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Find the perfect card for your specific needs and spending habits.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {categories.map((category) => {
+                  const Icon = category.icon;
+                  return (
+                    <Card key={category.name} className="hover:shadow-md transition-shadow cursor-pointer group">
+                      <CardContent className="p-6">
+                        <Link to={category.href} className="block">
+                          <div className="flex items-center gap-4">
+                            <div className="p-3 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+                              <Icon className="h-6 w-6 text-primary" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-semibold mb-1">{category.name}</h3>
+                              <p className="text-sm text-muted-foreground">
+                                {category.count} cards available
+                              </p>
+                            </div>
+                            <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                          </div>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Awards Banner */}
         <section className="py-8 bg-primary/5 border-y">
           <div className="container">
@@ -426,48 +468,6 @@ const BestOverallCreditCards = () => {
                     </CardContent>
                   </Card>
                 ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Categories Section */}
-        <section className="py-12 md:py-16 bg-gray-50">
-          <div className="container">
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  Browse by Category
-                </h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Find the perfect card for your specific needs and spending habits.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categories.map((category) => {
-                  const Icon = category.icon;
-                  return (
-                    <Card key={category.name} className="hover:shadow-md transition-shadow cursor-pointer group">
-                      <CardContent className="p-6">
-                        <Link to={category.href} className="block">
-                          <div className="flex items-center gap-4">
-                            <div className="p-3 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                              <Icon className="h-6 w-6 text-primary" />
-                            </div>
-                            <div className="flex-1">
-                              <h3 className="font-semibold mb-1">{category.name}</h3>
-                              <p className="text-sm text-muted-foreground">
-                                {category.count} cards available
-                              </p>
-                            </div>
-                            <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                          </div>
-                        </Link>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
               </div>
             </div>
           </div>
