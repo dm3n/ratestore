@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -229,12 +228,12 @@ export default function CashBack() {
               {sortedCards.map((card) => (
                 <Card key={card.id} className="relative overflow-hidden hover:shadow-lg transition-shadow">
                   {card.isPromoted && (
-                    <div className="absolute top-4 right-4 z-10">
-                      <Badge variant="destructive">Featured</Badge>
+                    <div className="absolute top-2 right-2 z-10">
+                      <Badge variant="destructive" className="text-xs">Featured</Badge>
                     </div>
                   )}
                   
-                  <CardHeader className="pb-4">
+                  <CardHeader className="pb-4 pt-8">
                     <div className="flex justify-between items-start gap-3">
                       <div className="flex-1 min-w-0">
                         <CardTitle className="text-lg leading-tight">{card.name}</CardTitle>
