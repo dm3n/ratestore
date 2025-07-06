@@ -37,21 +37,24 @@ const LifeInsuranceQuotes = () => {
       description: "Affordable coverage for a specific period",
       price: "From $25/month",
       features: ["Fixed premiums", "Renewable terms", "Convertible options"],
-      popular: true
+      popular: true,
+      link: "/insurance/life/term"
     },
     {
       title: "Whole Life Insurance",
       description: "Permanent coverage with cash value",
       price: "From $85/month",
       features: ["Lifetime coverage", "Cash value growth", "Dividend potential"],
-      popular: false
+      popular: false,
+      link: "/insurance/life/permanent"
     },
     {
       title: "Universal Life Insurance",
       description: "Flexible premiums and death benefits",
       price: "From $65/month",
       features: ["Flexible premiums", "Investment options", "Tax advantages"],
-      popular: false
+      popular: false,
+      link: "/insurance/life/permanent"
     }
   ];
 
@@ -98,8 +101,10 @@ const LifeInsuranceQuotes = () => {
                 <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 font-semibold px-8 py-4 h-auto">
                   Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
-                  Compare Providers <Calculator className="ml-2 h-5 w-5" />
+                <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/insurance/life/types">
+                    Compare Providers <Calculator className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -277,8 +282,8 @@ const LifeInsuranceQuotes = () => {
                           </li>
                         ))}
                       </ul>
-                      <Button className="w-full bg-red-600 hover:bg-red-700">
-                        Get Quote
+                      <Button className="w-full bg-red-600 hover:bg-red-700" asChild>
+                        <Link to={type.link}>Get Quote</Link>
                       </Button>
                     </CardContent>
                   </Card>
@@ -365,9 +370,11 @@ const LifeInsuranceQuotes = () => {
                 <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 font-semibold px-8 py-4 h-auto">
                   Get Free Quote Now <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
-                  <Phone className="mr-2 h-5 w-5" />
-                  Call 1-800-LIFE-INS
+                <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="tel:1-800-543-3467">
+                    <Phone className="mr-2 h-5 w-5" />
+                    Call 1-800-LIFE-INS
+                  </Link>
                 </Button>
               </div>
               <p className="text-red-200">
