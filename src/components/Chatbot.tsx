@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X, Send, MessageCircle, Loader2 } from "lucide-react";
+import { X, Send, MessageCircle, Loader2, ArrowUp, Maximize2, Minimize2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
@@ -19,17 +19,28 @@ interface ChatbotProps {
   onClose: () => void;
 }
 
+const suggestedQuestions = [
+  "What's the lowest mortgage rate in Canada today?",
+  "How much can I afford with a $100k salary?",
+  "Should I refinance before my renewal?",
+  "Show me first-time buyer programs",
+  "What are the best savings account rates?",
+  "How do I improve my credit score?",
+];
+
 export function Chatbot({ isOpen, onClose }: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "Hello! I'm your RateStore financial assistant. I can help you with questions about mortgages, credit cards, banking, insurance, and other financial products in Canada. How can I assist you today?",
+      text: "Welcome to RateStore Financial Services\n\nHere at RateStore, we're dedicated to finding the best financial solution for your needs. Our website offers tools and resources to help guide your financial journey.\n\nHow may I assist you today?",
       isUser: false,
       timestamp: new Date()
     }
   ]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -40,12 +51,13 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (!inputText.trim() || isLoading) return;
+  const handleSendMessage = async (messageText?: string) => {
+    const textToSend = messageText || inputText;
+    if (!textToSend.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: inputText,
+      text: textToSend,
       isUser: true,
       timestamp: new Date()
     };
@@ -53,10 +65,11 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
     setMessages(prev => [...prev, userMessage]);
     setInputText("");
     setIsLoading(true);
+    setShowSuggestions(false);
 
     try {
       const { data, error } = await supabase.functions.invoke('chat-groq', {
-        body: { message: inputText }
+        body: { message: textToSend }
       });
 
       if (error) {
@@ -85,6 +98,10 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
     }
   };
 
+  const handleSuggestedQuestion = (question: string) => {
+    handleSendMessage(question);
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -95,18 +112,36 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-end justify-end p-4 z-50 md:items-center md:justify-center">
-      <Card className="w-full max-w-md h-[80vh] md:h-[600px] flex flex-col animate-in slide-in-from-bottom-4 md:slide-in-from-right-4">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-              <MessageCircle className="w-4 h-4 text-white" />
+    <div className="fixed inset-0 bg-black/20 flex items-end justify-end p-4 z-50 md:items-end md:justify-end">
+      <Card className={`${isExpanded ? 'w-full max-w-2xl h-[90vh]' : 'w-full max-w-md h-[600px]'} flex flex-col animate-in slide-in-from-bottom-4 md:slide-in-from-right-4 shadow-2xl border-0`}>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+              <MessageCircle className="w-5 h-5 text-white" />
             </div>
-            <CardTitle className="text-lg">Financial Assistant</CardTitle>
+            <div>
+              <CardTitle className="text-lg font-semibold">RateStore Assistant</CardTitle>
+              <p className="text-xs text-blue-100 mt-1">Financial Assistant</p>
+            </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="w-4 h-4" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-white hover:bg-white/20 h-8 w-8"
+            >
+              {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={onClose}
+              className="text-white hover:bg-white/20 h-8 w-8"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
         </CardHeader>
         
         <CardContent className="flex-1 flex flex-col p-0">
@@ -118,14 +153,14 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
                   className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-lg px-3 py-2 ${
+                    className={`max-w-[85%] rounded-2xl px-4 py-3 ${
                       message.isUser
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-900 border'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{message.text}</p>
-                    <p className="text-xs opacity-70 mt-1">
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.text}</p>
+                    <p className={`text-xs mt-2 opacity-70 ${message.isUser ? 'text-blue-100' : 'text-gray-500'}`}>
                       {message.timestamp.toLocaleTimeString([], { 
                         hour: '2-digit', 
                         minute: '2-digit' 
@@ -134,11 +169,34 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
                   </div>
                 </div>
               ))}
+              
+              {/* Suggested Questions */}
+              {showSuggestions && messages.length === 1 && (
+                <div className="space-y-3">
+                  <div className="flex justify-start">
+                    <div className="bg-gray-50 rounded-2xl px-4 py-3 border max-w-[85%]">
+                      <p className="text-sm font-medium text-gray-700 mb-3">Suggested questions:</p>
+                      <div className="grid gap-2">
+                        {suggestedQuestions.map((question, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleSuggestedQuestion(question)}
+                            className="text-left text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 rounded-lg border border-blue-200 hover:border-blue-300 transition-colors"
+                          >
+                            {question}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-muted rounded-lg px-3 py-2 flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span className="text-sm">Thinking...</span>
+                  <div className="bg-gray-100 rounded-2xl px-4 py-3 flex items-center gap-2 border">
+                    <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                    <span className="text-sm text-gray-600">Thinking...</span>
                   </div>
                 </div>
               )}
@@ -146,28 +204,34 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
             <div ref={messagesEndRef} />
           </ScrollArea>
           
-          <div className="border-t p-4">
-            <div className="flex gap-2">
-              <Input
-                placeholder="Ask me about mortgages, credit cards, banking..."
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={handleKeyPress}
-                disabled={isLoading}
-                className="flex-1"
-              />
-              <Button 
-                onClick={handleSendMessage} 
-                disabled={!inputText.trim() || isLoading}
-                size="icon"
-              >
-                {isLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Send className="w-4 h-4" />
-                )}
-              </Button>
+          <div className="border-t p-4 bg-gray-50/50">
+            <div className="flex gap-2 items-end">
+              <div className="flex-1 relative">
+                <Input
+                  placeholder="Type your message..."
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  disabled={isLoading}
+                  className="pr-12 rounded-full border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                />
+                <Button 
+                  onClick={() => handleSendMessage()}
+                  disabled={!inputText.trim() || isLoading}
+                  size="icon"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <ArrowUp className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
             </div>
+            <p className="text-xs text-gray-500 mt-2 text-center">
+              RateStore AI can make mistakes. Please verify important information.
+            </p>
           </div>
         </CardContent>
       </Card>
