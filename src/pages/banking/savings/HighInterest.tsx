@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SavingsRatesCalculator } from "@/components/SavingsRatesCalculator";
@@ -7,17 +6,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Percent, Calculator, PiggyBank, CheckCircle, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
-
 const HighInterestSavings = () => {
   const scrollToCalculator = () => {
     const calculatorSection = document.getElementById('savings-calculator');
     if (calculatorSection) {
-      calculatorSection.scrollIntoView({ behavior: 'smooth' });
+      calculatorSection.scrollIntoView({
+        behavior: 'smooth'
+      });
     }
   };
-
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-1">
@@ -41,10 +39,7 @@ const HighInterestSavings = () => {
                   <Calculator className="h-5 w-5" />
                   Compare High Rates
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2" onClick={scrollToCalculator}>
-                  <PiggyBank className="h-5 w-5" />
-                  Calculate Earnings
-                </Button>
+                
               </div>
             </div>
           </div>
@@ -54,11 +49,7 @@ const HighInterestSavings = () => {
         <section className="py-16" id="savings-calculator">
           <div className="container">
             <div className="max-w-7xl mx-auto">
-              <SavingsRatesCalculator 
-                accountType="savings"
-                title="High-Interest Savings Account Rates"
-                description="Compare the highest savings account rates and maximize your earning potential"
-              />
+              <SavingsRatesCalculator accountType="savings" title="High-Interest Savings Account Rates" description="Compare the highest savings account rates and maximize your earning potential" />
             </div>
           </div>
         </section>
@@ -176,8 +167,6 @@ const HighInterestSavings = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default HighInterestSavings;
