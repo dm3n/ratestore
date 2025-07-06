@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,7 +27,11 @@ const cashBackCards = [{
   isPromoted: true,
   rating: 4.3,
   reviewCount: 1250,
-  estimatedAnnualCashback: 180
+  estimatedAnnualCashback: 180,
+  groceryRate: 2.0,
+  gasRate: 2.0,
+  restaurantRate: 2.0,
+  otherRate: 0.5
 }, {
   id: 2,
   name: "Simplii Financial Cash Back Visa",
@@ -47,7 +50,11 @@ const cashBackCards = [{
   isPromoted: false,
   rating: 4.2,
   reviewCount: 1100,
-  estimatedAnnualCashback: 220
+  estimatedAnnualCashback: 220,
+  groceryRate: 1.5,
+  gasRate: 1.5,
+  restaurantRate: 4.0,
+  otherRate: 0.5
 }, {
   id: 3,
   name: "Rogers World Elite Mastercard",
@@ -66,52 +73,24 @@ const cashBackCards = [{
   isPromoted: true,
   rating: 4.0,
   reviewCount: 750,
-  estimatedAnnualCashback: 280
-}, {
-  id: 4,
-  name: "MBNA Rewards Platinum Plus Mastercard",
-  issuer: "MBNA",
-  annualFee: 89,
-  welcomeBonus: "$120 cash back",
-  welcomeRequirement: "$1,500 in 3 months",
-  cashBackRate: "2% gas/grocery, 1% elsewhere",
-  categories: ["Gas", "Groceries"],
-  maxCategories: 2,
-  features: ["Enhanced cash back", "Purchase protection", "Extended warranty", "Fraud protection"],
-  pros: ["Good gas/grocery rates", "Solid welcome bonus", "Purchase protection"],
-  cons: ["Annual fee", "Limited bonus categories", "Average base rate"],
-  creditScore: "Good to Excellent",
-  applyUrl: "#",
-  isPromoted: false,
-  rating: 3.8,
-  reviewCount: 520,
-  estimatedAnnualCashback: 240
+  estimatedAnnualCashback: 280,
+  groceryRate: 1.75,
+  gasRate: 1.75,
+  restaurantRate: 1.75,
+  otherRate: 1.75
 }];
-
-const cashbackCalculator = {
-  monthlySpending: {
-    groceries: 500,
-    gas: 200,
-    restaurants: 300,
-    other: 1000
-  }
-};
 
 export default function CashBack() {
   const [sortBy, setSortBy] = useState("cash-back-rate");
   const [filterBy, setFilterBy] = useState("all");
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
-  const [monthlySpending, setMonthlySpending] = useState(cashbackCalculator.monthlySpending);
+  const [monthlySpending, setMonthlySpending] = useState({
+    groceries: 500,
+    gas: 200,
+    restaurants: 300,
+    other: 1000
+  });
   const [activeTab, setActiveTab] = useState("browse");
-
-  const scrollToCalculator = () => {
-    const calculatorSection = document.getElementById('cash-back-calculator');
-    if (calculatorSection) {
-      calculatorSection.scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
-  };
 
   const filteredCards = cashBackCards.filter(card => {
     if (filterBy === "all") return true;
@@ -133,9 +112,12 @@ export default function CashBack() {
   };
 
   const calculateCashback = (card: typeof cashBackCards[0]) => {
-    const totalSpending = Object.values(monthlySpending).reduce((sum, val) => sum + val, 0);
-    // Simplified calculation - in reality this would be more complex
-    return Math.round(totalSpending * 12 * 0.015); // Average 1.5% return
+    const groceryEarnings = (monthlySpending.groceries * 12 * card.groceryRate) / 100;
+    const gasEarnings = (monthlySpending.gas * 12 * card.gasRate) / 100;
+    const restaurantEarnings = (monthlySpending.restaurants * 12 * card.restaurantRate) / 100;
+    const otherEarnings = (monthlySpending.other * 12 * card.otherRate) / 100;
+    
+    return Math.round(groceryEarnings + gasEarnings + restaurantEarnings + otherEarnings - card.annualFee);
   };
 
   return <div className="min-h-screen bg-gray-50">
@@ -259,10 +241,10 @@ export default function CashBack() {
 
                     <div className="text-sm">
                       <span className="font-medium text-gray-900">Estimated Annual Cash Back:</span>
-                      <p className="text-green-600 font-semibold">${card.estimatedAnnualCashback}</p>
+                      <p className="text-green-600 font-semibold">${calculateCashback(card)}</p>
                       <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                         <div className="bg-green-500 h-2 rounded-full" style={{
-                      width: `${Math.min(card.estimatedAnnualCashback / 300 * 100, 100)}%`
+                      width: `${Math.min(calculateCashback(card) / 300 * 100, 100)}%`
                     }}></div>
                       </div>
                     </div>
@@ -288,123 +270,192 @@ export default function CashBack() {
             </div>
           </TabsContent>
 
-          <TabsContent value="calculator" className="space-y-6" id="cash-back-calculator">
-            <div className="bg-white p-6 rounded-lg">
-              <h3 className="text-xl font-bold mb-4">Cash Back Calculator</h3>
-              <p className="text-gray-600 mb-6">Enter your monthly spending to see potential cash back earnings</p>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Monthly Groceries: ${monthlySpending.groceries}
-                    </label>
-                    <input type="range" min="0" max="1000" value={monthlySpending.groceries} onChange={e => setMonthlySpending(prev => ({
-                    ...prev,
-                    groceries: parseInt(e.target.value)
-                  }))} className="w-full" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Monthly Gas: ${monthlySpending.gas}
-                    </label>
-                    <input type="range" min="0" max="500" value={monthlySpending.gas} onChange={e => setMonthlySpending(prev => ({
-                    ...prev,
-                    gas: parseInt(e.target.value)
-                  }))} className="w-full" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Monthly Restaurants: ${monthlySpending.restaurants}
-                    </label>
-                    <input type="range" min="0" max="800" value={monthlySpending.restaurants} onChange={e => setMonthlySpending(prev => ({
-                    ...prev,
-                    restaurants: parseInt(e.target.value)
-                  }))} className="w-full" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Monthly Other: ${monthlySpending.other}
-                    </label>
-                    <input type="range" min="0" max="2000" value={monthlySpending.other} onChange={e => setMonthlySpending(prev => ({
-                    ...prev,
-                    other: parseInt(e.target.value)
-                  }))} className="w-full" />
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-2">Estimated Annual Cash Back</h4>
-                    {cashBackCards.slice(0, 3).map(card => <div key={card.id} className="flex justify-between items-center py-2">
-                        <span className="text-sm text-gray-600">{card.name}</span>
-                        <span className="font-semibold text-green-600">${calculateCashback(card)}</span>
-                      </div>)}
+          <TabsContent value="calculator" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calculator className="h-5 w-5" />
+                  Cash Back Calculator
+                </CardTitle>
+                <CardDescription>
+                  Enter your monthly spending to see potential cash back earnings
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Monthly Groceries: ${monthlySpending.groceries}
+                      </label>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="1000" 
+                        value={monthlySpending.groceries} 
+                        onChange={e => setMonthlySpending(prev => ({
+                          ...prev,
+                          groceries: parseInt(e.target.value)
+                        }))} 
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Monthly Gas: ${monthlySpending.gas}
+                      </label>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="500" 
+                        value={monthlySpending.gas} 
+                        onChange={e => setMonthlySpending(prev => ({
+                          ...prev,
+                          gas: parseInt(e.target.value)
+                        }))} 
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Monthly Restaurants: ${monthlySpending.restaurants}
+                      </label>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="800" 
+                        value={monthlySpending.restaurants} 
+                        onChange={e => setMonthlySpending(prev => ({
+                          ...prev,
+                          restaurants: parseInt(e.target.value)
+                        }))} 
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Monthly Other: ${monthlySpending.other}
+                      </label>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="2000" 
+                        value={monthlySpending.other} 
+                        onChange={e => setMonthlySpending(prev => ({
+                          ...prev,
+                          other: parseInt(e.target.value)
+                        }))} 
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
                   </div>
                   
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">Total Monthly Spending</h4>
-                    <p className="text-2xl font-bold text-blue-900">
-                      ${Object.values(monthlySpending).reduce((sum, val) => sum + val, 0)}
-                    </p>
-                    <p className="text-sm text-blue-700">
-                      ${Object.values(monthlySpending).reduce((sum, val) => sum + val, 0) * 12} annually
-                    </p>
+                  <div className="space-y-4">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-2">Total Monthly Spending</h4>
+                      <p className="text-2xl font-bold text-blue-900">
+                        ${Object.values(monthlySpending).reduce((sum, val) => sum + val, 0)}
+                      </p>
+                      <p className="text-sm text-blue-700">
+                        ${Object.values(monthlySpending).reduce((sum, val) => sum + val, 0) * 12} annually
+                      </p>
+                    </div>
+                    
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-green-900 mb-3">Estimated Annual Cash Back</h4>
+                      <div className="space-y-2">
+                        {cashBackCards.map(card => (
+                          <div key={card.id} className="flex justify-between items-center py-1">
+                            <span className="text-sm text-green-700 truncate pr-2">{card.name}</span>
+                            <span className="font-semibold text-green-900">${calculateCashback(card)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="compare" className="space-y-6">
-            <div className="bg-white p-6 rounded-lg">
-              <h3 className="text-xl font-bold mb-4">Compare Cash Back Cards</h3>
-              {selectedCards.length === 0 ? <p className="text-gray-600">Select cards from the browse tab to compare them here.</p> : <div className="overflow-x-auto">
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="text-left p-3">Feature</th>
-                        {selectedCards.map(cardId => {
-                      const card = cashBackCards.find(c => c.id === cardId);
-                      return <th key={cardId} className="text-left p-3 min-w-48">
-                              {card?.name}
-                            </th>;
-                    })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b">
-                        <td className="p-3 font-medium">Annual Fee</td>
-                        {selectedCards.map(cardId => {
-                      const card = cashBackCards.find(c => c.id === cardId);
-                      return <td key={cardId} className="p-3">${card?.annualFee}</td>;
-                    })}
-                      </tr>
-                      <tr className="border-b">
-                        <td className="p-3 font-medium">Cash Back Rate</td>
-                        {selectedCards.map(cardId => {
-                      const card = cashBackCards.find(c => c.id === cardId);
-                      return <td key={cardId} className="p-3">{card?.cashBackRate}</td>;
-                    })}
-                      </tr>
-                      <tr className="border-b">
-                        <td className="p-3 font-medium">Welcome Bonus</td>
-                        {selectedCards.map(cardId => {
-                      const card = cashBackCards.find(c => c.id === cardId);
-                      return <td key={cardId} className="p-3">{card?.welcomeBonus}</td>;
-                    })}
-                      </tr>
-                      <tr className="border-b">
-                        <td className="p-3 font-medium">Estimated Annual Cash Back</td>
-                        {selectedCards.map(cardId => {
-                      const card = cashBackCards.find(c => c.id === cardId);
-                      return <td key={cardId} className="p-3 text-green-600 font-semibold">${card?.estimatedAnnualCashback}</td>;
-                    })}
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>}
-            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5" />
+                  Compare Cash Back Cards
+                </CardTitle>
+                <CardDescription>
+                  Select up to 3 cards from the browse tab to compare them side by side
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {selectedCards.length === 0 ? (
+                  <div className="text-center py-8">
+                    <CreditCard className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 mb-4">No cards selected for comparison</p>
+                    <Button onClick={() => setActiveTab("browse")} variant="outline">
+                      Browse Cards to Compare
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-3 font-medium">Feature</th>
+                          {selectedCards.map(cardId => {
+                            const card = cashBackCards.find(c => c.id === cardId);
+                            return (
+                              <th key={cardId} className="text-left p-3 min-w-48 font-medium">
+                                {card?.name}
+                              </th>
+                            );
+                          })}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b">
+                          <td className="p-3 font-medium">Annual Fee</td>
+                          {selectedCards.map(cardId => {
+                            const card = cashBackCards.find(c => c.id === cardId);
+                            return <td key={cardId} className="p-3">${card?.annualFee}</td>;
+                          })}
+                        </tr>
+                        <tr className="border-b">
+                          <td className="p-3 font-medium">Cash Back Rate</td>
+                          {selectedCards.map(cardId => {
+                            const card = cashBackCards.find(c => c.id === cardId);
+                            return <td key={cardId} className="p-3 text-sm">{card?.cashBackRate}</td>;
+                          })}
+                        </tr>
+                        <tr className="border-b">
+                          <td className="p-3 font-medium">Welcome Bonus</td>
+                          {selectedCards.map(cardId => {
+                            const card = cashBackCards.find(c => c.id === cardId);
+                            return <td key={cardId} className="p-3">{card?.welcomeBonus}</td>;
+                          })}
+                        </tr>
+                        <tr className="border-b">
+                          <td className="p-3 font-medium">Your Estimated Annual Cash Back</td>
+                          {selectedCards.map(cardId => {
+                            const card = cashBackCards.find(c => c.id === cardId);
+                            return <td key={cardId} className="p-3 text-green-600 font-semibold">${card ? calculateCashback(card) : 0}</td>;
+                          })}
+                        </tr>
+                        <tr>
+                          <td className="p-3 font-medium">Credit Score Required</td>
+                          {selectedCards.map(cardId => {
+                            const card = cashBackCards.find(c => c.id === cardId);
+                            return <td key={cardId} className="p-3">{card?.creditScore}</td>;
+                          })}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="guide" className="space-y-6">
