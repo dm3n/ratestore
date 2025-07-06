@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -101,6 +102,7 @@ export default function CashBack() {
   const [filterBy, setFilterBy] = useState("all");
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [monthlySpending, setMonthlySpending] = useState(cashbackCalculator.monthlySpending);
+  const [activeTab, setActiveTab] = useState("browse");
 
   const scrollToCalculator = () => {
     const calculatorSection = document.getElementById('cash-back-calculator');
@@ -169,18 +171,18 @@ export default function CashBack() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
+            <Button size="lg" className="gap-2" onClick={() => setActiveTab("calculator")}>
               <Calculator className="h-5 w-5" />
               Calculate Cash Back
             </Button>
-            <Button size="lg" variant="outline" className="gap-2" onClick={scrollToCalculator}>
+            <Button size="lg" variant="outline" className="gap-2" onClick={() => setActiveTab("compare")}>
               <Target className="h-5 w-5" />
               Compare Rates
             </Button>
           </div>
         </div>
 
-        <Tabs defaultValue="browse" className="mb-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="browse">Browse Cards</TabsTrigger>
             <TabsTrigger value="calculator">Calculator</TabsTrigger>
