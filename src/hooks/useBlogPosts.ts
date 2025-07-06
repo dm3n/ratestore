@@ -28,7 +28,7 @@ export const useBlogPosts = () => {
       setError(null);
       console.log('Fetching blog posts...');
       
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
         .eq('is_published', true)
@@ -70,7 +70,7 @@ export const useBlogPost = (id: string) => {
         setError(null);
         console.log('Fetching blog post with id:', id);
         
-        const { data, error } = await (supabase as any)
+        const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
           .eq('id', id)

@@ -34,7 +34,7 @@ export const AdminBlogManager = () => {
 
   const fetchPosts = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
         .order('created_at', { ascending: false });
@@ -92,7 +92,7 @@ export const AdminBlogManager = () => {
     
     try {
       if (editingPost) {
-        const { error } = await (supabase as any)
+        const { error } = await supabase
           .from('blog_posts')
           .update(formData)
           .eq('id', editingPost.id);
@@ -104,7 +104,7 @@ export const AdminBlogManager = () => {
           description: "Blog post updated successfully"
         });
       } else {
-        const { error } = await (supabase as any)
+        const { error } = await supabase
           .from('blog_posts')
           .insert([formData]);
         
@@ -132,7 +132,7 @@ export const AdminBlogManager = () => {
     if (!confirm('Are you sure you want to delete this blog post?')) return;
     
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('blog_posts')
         .delete()
         .eq('id', id);
@@ -156,7 +156,7 @@ export const AdminBlogManager = () => {
 
   const togglePublished = async (post: BlogPost) => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('blog_posts')
         .update({ is_published: !post.is_published })
         .eq('id', post.id);
