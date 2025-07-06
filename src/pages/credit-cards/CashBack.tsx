@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { DollarSign, Star, CreditCard, Filter, Calculator, TrendingUp, Target } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+
 const cashBackCards = [{
   id: 1,
   name: "Tangerine Money-Back Credit Card",
@@ -85,6 +86,7 @@ const cashBackCards = [{
   reviewCount: 520,
   estimatedAnnualCashback: 240
 }];
+
 const cashbackCalculator = {
   monthlySpending: {
     groceries: 500,
@@ -93,11 +95,13 @@ const cashbackCalculator = {
     other: 1000
   }
 };
+
 export default function CashBack() {
   const [sortBy, setSortBy] = useState("cash-back-rate");
   const [filterBy, setFilterBy] = useState("all");
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [monthlySpending, setMonthlySpending] = useState(cashbackCalculator.monthlySpending);
+
   const scrollToCalculator = () => {
     const calculatorSection = document.getElementById('cash-back-calculator');
     if (calculatorSection) {
@@ -106,6 +110,7 @@ export default function CashBack() {
       });
     }
   };
+
   const filteredCards = cashBackCards.filter(card => {
     if (filterBy === "all") return true;
     if (filterBy === "no-fee") return card.annualFee === 0;
@@ -113,20 +118,24 @@ export default function CashBack() {
     if (filterBy === "promoted") return card.isPromoted;
     return true;
   });
+
   const sortedCards = [...filteredCards].sort((a, b) => {
     if (sortBy === "cash-back-rate") return b.estimatedAnnualCashback - a.estimatedAnnualCashback;
     if (sortBy === "annual-fee") return a.annualFee - b.annualFee;
     if (sortBy === "welcome-bonus") return b.reviewCount - a.reviewCount;
     return 0;
   });
+
   const toggleCardSelection = (cardId: number) => {
     setSelectedCards(prev => prev.includes(cardId) ? prev.filter(id => id !== cardId) : [...prev, cardId].slice(0, 3));
   };
+
   const calculateCashback = (card: typeof cashBackCards[0]) => {
     const totalSpending = Object.values(monthlySpending).reduce((sum, val) => sum + val, 0);
     // Simplified calculation - in reality this would be more complex
     return Math.round(totalSpending * 12 * 0.015); // Average 1.5% return
   };
+
   return <div className="min-h-screen bg-gray-50">
       <Header />
       
@@ -209,10 +218,6 @@ export default function CashBack() {
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {sortedCards.map(card => <Card key={card.id} className="relative overflow-hidden hover:shadow-lg transition-shadow">
-                  {card.isPromoted && <div className="absolute top-4 right-4 z-10 py-px px-[10px] mx-0 my-[57px]">
-                      <Badge variant="destructive">Featured</Badge>
-                    </div>}
-                  
                   <CardHeader className="pb-4">
                     <div className="flex justify-between items-start gap-3">
                       <div className="flex-1 min-w-0">
