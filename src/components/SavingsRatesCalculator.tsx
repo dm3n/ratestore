@@ -364,9 +364,7 @@ export function SavingsRatesCalculator({
                         {rate.institutionType === "big5" ? <Building2 className="h-4 w-4 text-blue-600" /> : <Landmark className="h-4 w-4 text-green-600" />}
                         <div>
                           <span className="font-medium">{rate.bankName}</span>
-                          {rate.promotionalRate && <Badge variant="secondary" className="ml-2 text-xs bg-orange-100 text-orange-700 py-[2px] px-[6px] mx-[10px] my-[6px]">
-                              Promo: {rate.promotionalRate}% for {rate.promotionalPeriod} months
-                            </Badge>}
+                          {rate.promotionalRate}
                         </div>
                       </div>
                     </TableCell>
