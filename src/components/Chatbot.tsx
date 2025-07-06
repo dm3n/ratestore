@@ -112,55 +112,61 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/20 flex items-end justify-end p-4 z-50 md:items-end md:justify-end">
-      <Card className={`${isExpanded ? 'w-full max-w-2xl h-[90vh]' : 'w-full max-w-md h-[600px]'} flex flex-col animate-in slide-in-from-bottom-4 md:slide-in-from-right-4 shadow-2xl border-0`}>
+    <div className="fixed bottom-24 right-6 z-50">
+      <Card 
+        className={`${
+          isExpanded ? 'w-96 h-[700px]' : 'w-80 h-[550px]'
+        } flex flex-col shadow-2xl border-0 transition-all duration-300 ease-out transform ${
+          isOpen ? 'animate-in slide-in-from-bottom-8 fade-in-0' : 'animate-out slide-out-to-bottom-8 fade-out-0'
+        }`}
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-              <MessageCircle className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <MessageCircle className="w-4 h-4 text-white" />
             </div>
             <div>
-              <CardTitle className="text-lg font-semibold">RateStore Assistant</CardTitle>
-              <p className="text-xs text-blue-100 mt-1">Financial Assistant</p>
+              <CardTitle className="text-base font-semibold">RateStore Assistant</CardTitle>
+              <p className="text-xs text-blue-100 mt-0.5">Financial Assistant</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-white hover:bg-white/20 h-8 w-8"
+              className="text-white hover:bg-white/20 h-7 w-7"
             >
-              {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              {isExpanded ? <Minimize2 className="w-3 h-3" /> : <Maximize2 className="w-3 h-3" />}
             </Button>
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={onClose}
-              className="text-white hover:bg-white/20 h-8 w-8"
+              className="text-white hover:bg-white/20 h-7 w-7"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3 h-3" />
             </Button>
           </div>
         </CardHeader>
         
         <CardContent className="flex-1 flex flex-col p-0">
-          <ScrollArea className="flex-1 p-4">
-            <div className="space-y-4">
+          <ScrollArea className="flex-1 p-3">
+            <div className="space-y-3">
               {messages.map((message) => (
                 <div
                   key={message.id}
                   className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+                    className={`max-w-[85%] rounded-xl px-3 py-2 text-sm transition-all duration-200 ${
                       message.isUser
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-900 border'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'bg-gray-50 text-gray-900 border shadow-sm'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.text}</p>
-                    <p className={`text-xs mt-2 opacity-70 ${message.isUser ? 'text-blue-100' : 'text-gray-500'}`}>
+                    <p className="whitespace-pre-wrap leading-relaxed">{message.text}</p>
+                    <p className={`text-xs mt-1.5 opacity-70 ${message.isUser ? 'text-blue-100' : 'text-gray-500'}`}>
                       {message.timestamp.toLocaleTimeString([], { 
                         hour: '2-digit', 
                         minute: '2-digit' 
@@ -172,16 +178,16 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
               
               {/* Suggested Questions */}
               {showSuggestions && messages.length === 1 && (
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <div className="flex justify-start">
-                    <div className="bg-gray-50 rounded-2xl px-4 py-3 border max-w-[85%]">
-                      <p className="text-sm font-medium text-gray-700 mb-3">Suggested questions:</p>
-                      <div className="grid gap-2">
+                    <div className="bg-gray-50 rounded-xl px-3 py-2 border shadow-sm max-w-[90%]">
+                      <p className="text-xs font-medium text-gray-700 mb-2">Suggested questions:</p>
+                      <div className="grid gap-1.5">
                         {suggestedQuestions.map((question, index) => (
                           <button
                             key={index}
                             onClick={() => handleSuggestedQuestion(question)}
-                            className="text-left text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 rounded-lg border border-blue-200 hover:border-blue-300 transition-colors"
+                            className="text-left text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1.5 rounded-md border border-blue-200 hover:border-blue-300 transition-all duration-200"
                           >
                             {question}
                           </button>
@@ -194,9 +200,9 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
               
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-100 rounded-2xl px-4 py-3 flex items-center gap-2 border">
-                    <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
-                    <span className="text-sm text-gray-600">Thinking...</span>
+                  <div className="bg-gray-50 rounded-xl px-3 py-2 flex items-center gap-2 border shadow-sm">
+                    <Loader2 className="w-3 h-3 animate-spin text-blue-600" />
+                    <span className="text-xs text-gray-600">Thinking...</span>
                   </div>
                 </div>
               )}
@@ -204,7 +210,7 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
             <div ref={messagesEndRef} />
           </ScrollArea>
           
-          <div className="border-t p-4 bg-gray-50/50">
+          <div className="border-t p-3 bg-white">
             <div className="flex gap-2 items-end">
               <div className="flex-1 relative">
                 <Input
@@ -213,23 +219,23 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyPress={handleKeyPress}
                   disabled={isLoading}
-                  className="pr-12 rounded-full border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  className="pr-10 rounded-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm h-9"
                 />
                 <Button 
                   onClick={() => handleSendMessage()}
                   disabled={!inputText.trim() || isLoading}
                   size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300"
                 >
                   {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-3 h-3 animate-spin" />
                   ) : (
-                    <ArrowUp className="w-4 h-4" />
+                    <ArrowUp className="w-3 h-3" />
                   )}
                 </Button>
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2 text-center">
+            <p className="text-xs text-gray-500 mt-1.5 text-center">
               RateStore AI can make mistakes. Please verify important information.
             </p>
           </div>
