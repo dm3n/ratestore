@@ -88,7 +88,7 @@ const TermLifeInsurance = () => {
                     Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
+                <Button size="lg" variant="outline" className="bg-red-700 border-white text-white hover:bg-red-600 font-semibold px-8 py-4 h-auto">
                   Compare Rates <Calculator className="ml-2 h-5 w-5" />
                 </Button>
               </div>
