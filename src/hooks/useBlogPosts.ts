@@ -25,7 +25,7 @@ export const useBlogPosts = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('blog_posts')
         .select('*')
         .eq('is_published', true)
@@ -56,7 +56,7 @@ export const useBlogPost = (id: string) => {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from('blog_posts')
           .select('*')
           .eq('id', id)
