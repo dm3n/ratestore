@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -36,6 +35,13 @@ import YouthChequing from "./pages/banking/chequing/Youth";
 import SeniorChequing from "./pages/banking/chequing/Senior";
 import NewcomerChequing from "./pages/banking/chequing/Newcomer";
 
+// Personal Loans pages
+import PersonalLoans from "./pages/PersonalLoans";
+import ComparePersonalLoans from "./pages/personal-loans/Compare";
+import BestPersonalLoanRates from "./pages/personal-loans/BestRates";
+import DebtConsolidationLoans from "./pages/personal-loans/DebtConsolidation";
+import BadCreditLoans from "./pages/personal-loans/BadCredit";
+
 // Credit Cards pages
 import CreditCards from "./pages/CreditCards";
 import CardFinder from "./pages/CardFinder";
@@ -70,6 +76,10 @@ import Scotiabank from "./pages/credit-cards/Scotiabank";
 import TD from "./pages/credit-cards/TD";
 import Tangerine from "./pages/credit-cards/Tangerine";
 import Visa from "./pages/credit-cards/Visa";
+
+// Credit Cards pages - new additions
+import CompareCreditCards from "./pages/credit-cards/Compare";
+import CardFinderPage from "./pages/credit-cards/CardFinder";
 
 // Mortgages pages
 import Mortgages from "./pages/Mortgages";
@@ -243,8 +253,17 @@ const App = () => (
             <Route path="/banking/chequing/senior" element={<SeniorChequing />} />
             <Route path="/banking/chequing/newcomer" element={<NewcomerChequing />} />
             
+            {/* Personal Loans routes */}
+            <Route path="/personal-loans" element={<PersonalLoans />} />
+            <Route path="/personal-loans/compare" element={<ComparePersonalLoans />} />
+            <Route path="/personal-loans/best-rates" element={<BestPersonalLoanRates />} />
+            <Route path="/personal-loans/debt-consolidation" element={<DebtConsolidationLoans />} />
+            <Route path="/personal-loans/bad-credit" element={<BadCreditLoans />} />
+            
             {/* Credit Cards routes */}
             <Route path="/credit-cards" element={<CreditCards />} />
+            <Route path="/credit-cards/compare" element={<CompareCreditCards />} />
+            <Route path="/credit-cards/card-finder" element={<CardFinderPage />} />
             <Route path="/card-finder" element={<CardFinder />} />
             <Route path="/credit-cards/best-overall" element={<BestOverall />} />
             <Route path="/credit-cards/promotions" element={<Promotions />} />
