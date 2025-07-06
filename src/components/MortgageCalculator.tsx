@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { calculateMonthlyPayment, calculateTotalPayment, calculateTotalInterest } from "@/lib/calculator";
-import { DollarSign, Percent, Calendar } from "lucide-react";
+import { DollarSign, Percent, Calendar, RefreshCw } from "lucide-react";
 import { CalculationResults } from "@/components/CalculationResults";
 
 export function MortgageCalculator() {
@@ -15,6 +15,7 @@ export function MortgageCalculator() {
   const [monthlyPayment, setMonthlyPayment] = useState<number>(0);
   const [totalPayment, setTotalPayment] = useState<number>(0);
   const [totalInterest, setTotalInterest] = useState<number>(0);
+  const [isCalculating, setIsCalculating] = useState(false);
 
   // Handle loan amount input
   const handleLoanAmountInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,29 +62,50 @@ export function MortgageCalculator() {
     setLoanTerm(value[0]);
   };
 
-  // Calculate mortgage details automatically
+  // Calculate mortgage details automatically with smooth loading animation
   useEffect(() => {
-    const monthly = calculateMonthlyPayment(loanAmount, interestRate, loanTerm);
-    setMonthlyPayment(monthly);
-    
-    const total = calculateTotalPayment(monthly, loanTerm);
-    setTotalPayment(total);
-    
-    const interest = calculateTotalInterest(total, loanAmount);
-    setTotalInterest(interest);
+    const calculateWithAnimation = async () => {
+      setIsCalculating(true);
+      
+      // Add a small delay to show the animation
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      const monthly = calculateMonthlyPayment(loanAmount, interestRate, loanTerm);
+      setMonthlyPayment(monthly);
+      
+      const total = calculateTotalPayment(monthly, loanTerm);
+      setTotalPayment(total);
+      
+      const interest = calculateTotalInterest(total, loanAmount);
+      setTotalInterest(interest);
+      
+      setIsCalculating(false);
+    };
+
+    calculateWithAnimation();
   }, [loanAmount, interestRate, loanTerm]);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      <Card className="border-0 shadow-lg">
+    <div className={`grid gap-6 lg:grid-cols-2 transition-opacity duration-300 ${isCalculating ? 'opacity-50' : 'opacity-100'}`}>
+      <Card className="border-0 shadow-lg animate-fade-in">
         <CardHeader className="bg-primary/5 rounded-t-lg">
-          <CardTitle className="text-2xl font-bold">Mortgage Calculator</CardTitle>
-          <CardDescription>Adjust values to see updated payment estimates</CardDescription>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="text-2xl font-bold">Mortgage Calculator</CardTitle>
+              <CardDescription>Adjust values to see updated payment estimates</CardDescription>
+            </div>
+            {isCalculating && (
+              <div className="flex items-center gap-2 text-primary animate-fade-in">
+                <RefreshCw className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Calculating...</span>
+              </div>
+            )}
+          </div>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="space-y-8">
             {/* Loan Amount */}
-            <div className="space-y-3">
+            <div className="space-y-3 animate-fade-in" style={{ animationDelay: '100ms' }}>
               <div className="flex items-center justify-between">
                 <Label htmlFor="loan-amount" className="text-base font-medium">
                   Loan Amount
@@ -93,7 +115,7 @@ export function MortgageCalculator() {
                   <Input
                     id="loan-amount"
                     type="text"
-                    className="w-[140px] pl-8 text-right"
+                    className="w-[140px] pl-8 text-right transition-all duration-200 hover:border-primary"
                     value={loanAmount.toLocaleString()}
                     onChange={handleLoanAmountInput}
                   />
@@ -115,7 +137,7 @@ export function MortgageCalculator() {
             </div>
 
             {/* Interest Rate */}
-            <div className="space-y-3">
+            <div className="space-y-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
               <div className="flex items-center justify-between">
                 <Label htmlFor="interest-rate" className="text-base font-medium">
                   Interest Rate
@@ -125,7 +147,7 @@ export function MortgageCalculator() {
                   <Input
                     id="interest-rate"
                     type="number"
-                    className="w-[120px] pl-8 text-right"
+                    className="w-[120px] pl-8 text-right transition-all duration-200 hover:border-primary"
                     value={interestRate}
                     onChange={handleInterestRateInput}
                     step={0.125}
@@ -148,7 +170,7 @@ export function MortgageCalculator() {
             </div>
 
             {/* Loan Term */}
-            <div className="space-y-3">
+            <div className="space-y-3 animate-fade-in" style={{ animationDelay: '300ms' }}>
               <div className="flex items-center justify-between">
                 <Label htmlFor="loan-term" className="text-base font-medium">
                   Loan Term (Years)
@@ -158,7 +180,7 @@ export function MortgageCalculator() {
                   <Input
                     id="loan-term"
                     type="number"
-                    className="w-[120px] pl-8 text-right"
+                    className="w-[120px] pl-8 text-right transition-all duration-200 hover:border-primary"
                     value={loanTerm}
                     onChange={handleLoanTermInput}
                   />
@@ -182,14 +204,16 @@ export function MortgageCalculator() {
         </CardContent>
       </Card>
 
-      <CalculationResults
-        monthlyPayment={monthlyPayment}
-        loanAmount={loanAmount}
-        interestRate={interestRate}
-        loanTerm={loanTerm}
-        totalPayment={totalPayment}
-        totalInterest={totalInterest}
-      />
+      <div className={`transition-opacity duration-300 ${isCalculating ? 'opacity-50' : 'opacity-100'}`}>
+        <CalculationResults
+          monthlyPayment={monthlyPayment}
+          loanAmount={loanAmount}
+          interestRate={interestRate}
+          loanTerm={loanTerm}
+          totalPayment={totalPayment}
+          totalInterest={totalInterest}
+        />
+      </div>
     </div>
   );
 }
