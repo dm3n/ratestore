@@ -5,97 +5,93 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plane, Star, CreditCard, Filter, Calculator, TrendingUp, Target, Gift } from "lucide-react";
+import { Utensils, Star, CreditCard, Filter, Calculator, TrendingUp, Target, Gift } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
-const travelCards = [
+const diningCards = [
   {
     id: 1,
-    name: "Chase Sapphire Preferred",
-    issuer: "Chase",
-    annualFee: 95,
-    welcomeBonus: "60,000 points",
-    welcomeRequirement: "Spend $4,000 in first 3 months",
-    earnRate: "2x points on travel & dining, 1x on everything else",
-    features: ["25% more value when you redeem for travel", "Transfer to airline partners", "Trip insurance", "No foreign transaction fees"],
-    pros: ["Excellent transfer partners", "Strong welcome bonus", "Good travel protections", "Flexible redemption"],
-    cons: ["Annual fee", "Limited bonus categories", "Requires good credit"],
-    creditScore: "Good to Excellent",
-    applyUrl: "#",
-    isPromoted: true,
-    rating: 4.8,
-    reviewCount: 1250,
-    estimatedAnnualValue: 750,
-    travelRate: 2.0,
-    diningRate: 2.0,
-    otherRate: 1.0
-  },
-  {
-    id: 2,
-    name: "Capital One Venture X",
-    issuer: "Capital One",
-    annualFee: 395,
-    welcomeBonus: "75,000 miles",
-    welcomeRequirement: "Spend $4,000 in first 3 months",
-    earnRate: "2x miles on all purchases",
-    features: ["$300 annual travel credit", "Priority Pass lounge access", "10,000 anniversary miles", "No foreign transaction fees"],
-    pros: ["Flat 2x rate everywhere", "Excellent travel benefits", "Easy to use miles", "Premium perks"],
-    cons: ["High annual fee", "Limited transfer partners", "Requires excellent credit"],
-    creditScore: "Excellent",
-    applyUrl: "#",
-    isPromoted: true,
-    rating: 4.7,
-    reviewCount: 980,
-    estimatedAnnualValue: 650,
-    travelRate: 2.0,
-    diningRate: 2.0,
-    otherRate: 2.0
-  },
-  {
-    id: 3,
     name: "American Express Gold Card",
     issuer: "American Express",
     annualFee: 250,
     welcomeBonus: "60,000 points",
     welcomeRequirement: "Spend $4,000 in first 6 months",
-    earnRate: "4x points at restaurants, 3x on flights, 1x everything else",
-    features: ["$10 monthly dining credit", "$10 monthly Uber credit", "Excellent transfer partners", "Travel insurance"],
-    pros: ["High dining rate", "Valuable monthly credits", "Great transfer partners", "Strong welcome bonus"],
+    earnRate: "4x points at restaurants, 1x everything else",
+    features: ["$10 monthly dining credit", "$10 monthly Uber credit", "Excellent transfer partners", "No foreign transaction fees"],
+    pros: ["Highest dining rate", "Valuable monthly credits", "Great transfer partners", "Strong welcome bonus"],
     cons: ["Annual fee", "Limited acceptance", "Credits require activation"],
     creditScore: "Good to Excellent",
     applyUrl: "#",
-    isPromoted: false,
+    isPromoted: true,
     rating: 4.6,
     reviewCount: 1580,
-    estimatedAnnualValue: 600,
-    travelRate: 3.0,
+    estimatedAnnualValue: 480,
     diningRate: 4.0,
+    otherRate: 1.0
+  },
+  {
+    id: 2,
+    name: "Simplii Financial Cash Back Visa",
+    issuer: "Simplii Financial",
+    annualFee: 0,
+    welcomeBonus: "$100 cash back",
+    welcomeRequirement: "Spend $500 in 4 months",
+    earnRate: "4% cash back on restaurants, 0.5% elsewhere",
+    features: ["No annual fee", "High restaurant rate", "No spending caps", "Online banking integration"],
+    pros: ["Excellent restaurant rate", "No annual fee", "No category limits", "Simple cash back"],
+    cons: ["Lower rate on other categories", "Basic benefits", "No premium perks"],
+    creditScore: "Good to Excellent",
+    applyUrl: "#",
+    isPromoted: true,
+    rating: 4.2,
+    reviewCount: 1100,
+    estimatedAnnualValue: 240,
+    diningRate: 4.0,
+    otherRate: 0.5
+  },
+  {
+    id: 3,
+    name: "Chase Sapphire Preferred",
+    issuer: "Chase",
+    annualFee: 95,
+    welcomeBonus: "60,000 points",
+    welcomeRequirement: "Spend $4,000 in first 3 months",
+    earnRate: "2x points on dining & travel, 1x elsewhere",
+    features: ["25% bonus on travel redemptions", "Transfer to partners", "Trip insurance", "No foreign transaction fees"],
+    pros: ["Good dining rate", "Flexible redemptions", "Travel benefits", "Strong welcome bonus"],
+    cons: ["Annual fee", "Lower dining rate than specialists", "Requires good credit"],
+    creditScore: "Good to Excellent",
+    applyUrl: "#",
+    isPromoted: false,
+    rating: 4.8,
+    reviewCount: 1250,
+    estimatedAnnualValue: 320,
+    diningRate: 2.0,
     otherRate: 1.0
   }
 ];
 
-export default function Travel() {
-  const [sortBy, setSortBy] = useState("value");
+export default function Dining() {
+  const [sortBy, setSortBy] = useState("dining-rate");
   const [filterBy, setFilterBy] = useState("all");
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [monthlySpending, setMonthlySpending] = useState({
-    travel: 800,
-    dining: 400,
-    other: 1200
+    dining: 600,
+    other: 1400
   });
   const [activeTab, setActiveTab] = useState("browse");
 
-  const filteredCards = travelCards.filter(card => {
+  const filteredCards = diningCards.filter(card => {
     if (filterBy === "all") return true;
     if (filterBy === "no-fee") return card.annualFee === 0;
-    if (filterBy === "premium") return card.annualFee > 200;
+    if (filterBy === "high-rate") return card.diningRate >= 4;
     if (filterBy === "promoted") return card.isPromoted;
     return true;
   });
 
   const sortedCards = [...filteredCards].sort((a, b) => {
-    if (sortBy === "value") return b.estimatedAnnualValue - a.estimatedAnnualValue;
+    if (sortBy === "dining-rate") return b.diningRate - a.diningRate;
     if (sortBy === "annual-fee") return a.annualFee - b.annualFee;
     if (sortBy === "rating") return b.rating - a.rating;
     return 0;
@@ -105,12 +101,11 @@ export default function Travel() {
     setSelectedCards(prev => prev.includes(cardId) ? prev.filter(id => id !== cardId) : [...prev, cardId].slice(0, 3));
   };
 
-  const calculateValue = (card: typeof travelCards[0]) => {
-    const travelEarnings = (monthlySpending.travel * 12 * card.travelRate) / 100;
+  const calculateValue = (card: typeof diningCards[0]) => {
     const diningEarnings = (monthlySpending.dining * 12 * card.diningRate) / 100;
     const otherEarnings = (monthlySpending.other * 12 * card.otherRate) / 100;
     
-    return Math.round((travelEarnings + diningEarnings + otherEarnings) * 1.25 - card.annualFee);
+    return Math.round(diningEarnings + otherEarnings - card.annualFee);
   };
 
   return (
@@ -120,36 +115,36 @@ export default function Travel() {
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Plane className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold text-gray-900">Travel Credit Cards</h1>
+            <Utensils className="h-8 w-8 text-primary" />
+            <h1 className="text-4xl font-bold text-gray-900">Dining Credit Cards</h1>
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Earn points and miles on travel purchases, enjoy premium travel benefits, 
-            and get access to airport lounges with the best travel credit cards.
+            Earn maximum rewards on your restaurant spending with credit cards that offer 
+            enhanced rates and valuable dining benefits.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <Gift className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Travel Rewards</h3>
-              <p className="text-gray-600">Earn bonus points and miles on flights, hotels, and travel</p>
+              <h3 className="font-semibold text-gray-900 mb-2">High Earning Rates</h3>
+              <p className="text-gray-600">Up to 4x points or 4% cash back on restaurant purchases</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <TrendingUp className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Premium Benefits</h3>
-              <p className="text-gray-600">Access to airport lounges, travel insurance, and elite status</p>
+              <h3 className="font-semibold text-gray-900 mb-2">Dining Credits</h3>
+              <p className="text-gray-600">Monthly statement credits for dining and food delivery</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <Target className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Transfer Partners</h3>
-              <p className="text-gray-600">Transfer points to airline and hotel loyalty programs</p>
+              <h3 className="font-semibold text-gray-900 mb-2">Restaurant Benefits</h3>
+              <p className="text-gray-600">Access to exclusive dining experiences and reservations</p>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
             <Button size="lg" className="gap-2" onClick={() => setActiveTab("calculator")}>
               <Calculator className="h-5 w-5" />
-              Calculate Value
+              Calculate Rewards
             </Button>
             <Button size="lg" variant="outline" className="gap-2" onClick={() => setActiveTab("compare")}>
               <Target className="h-5 w-5" />
@@ -177,7 +172,7 @@ export default function Travel() {
                   <SelectContent>
                     <SelectItem value="all">All Cards</SelectItem>
                     <SelectItem value="no-fee">No Annual Fee</SelectItem>
-                    <SelectItem value="premium">Premium Cards</SelectItem>
+                    <SelectItem value="high-rate">4%+ Dining Rate</SelectItem>
                     <SelectItem value="promoted">Featured Cards</SelectItem>
                   </SelectContent>
                 </Select>
@@ -187,7 +182,7 @@ export default function Travel() {
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="value">Travel Value</SelectItem>
+                  <SelectItem value="dining-rate">Dining Rate</SelectItem>
                   <SelectItem value="annual-fee">Annual Fee</SelectItem>
                   <SelectItem value="rating">Rating</SelectItem>
                 </SelectContent>
@@ -235,8 +230,8 @@ export default function Travel() {
                     </div>
                     
                     <div className="text-sm">
-                      <span className="font-medium text-gray-900">Earn Rate:</span>
-                      <p className="text-gray-600">{card.earnRate}</p>
+                      <span className="font-medium text-gray-900">Dining Rate:</span>
+                      <p className="text-gray-600">{card.diningRate}x points/% back</p>
                     </div>
 
                     <div className="text-sm">
@@ -244,7 +239,7 @@ export default function Travel() {
                       <p className="text-green-600 font-semibold">${calculateValue(card)}</p>
                       <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                         <div className="bg-green-500 h-2 rounded-full" style={{
-                          width: `${Math.min(calculateValue(card) / 800 * 100, 100)}%`
+                          width: `${Math.min(calculateValue(card) / 400 * 100, 100)}%`
                         }}></div>
                       </div>
                     </div>
@@ -275,10 +270,10 @@ export default function Travel() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Calculator className="h-5 w-5" />
-                  Travel Value Calculator
+                  Dining Rewards Calculator
                 </CardTitle>
                 <CardDescription>
-                  Enter your monthly spending to see potential travel rewards value
+                  Enter your monthly spending to see potential dining rewards
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -286,28 +281,12 @@ export default function Travel() {
                   <div className="space-y-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Monthly Travel: ${monthlySpending.travel}
-                      </label>
-                      <input 
-                        type="range" 
-                        min="0" 
-                        max="2000" 
-                        value={monthlySpending.travel} 
-                        onChange={e => setMonthlySpending(prev => ({
-                          ...prev,
-                          travel: parseInt(e.target.value)
-                        }))} 
-                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Monthly Dining: ${monthlySpending.dining}
                       </label>
                       <input 
                         type="range" 
                         min="0" 
-                        max="1000" 
+                        max="1500" 
                         value={monthlySpending.dining} 
                         onChange={e => setMonthlySpending(prev => ({
                           ...prev,
@@ -348,7 +327,7 @@ export default function Travel() {
                     <div className="bg-green-50 p-4 rounded-lg">
                       <h4 className="font-semibold text-green-900 mb-3">Estimated Annual Value</h4>
                       <div className="space-y-2">
-                        {travelCards.map(card => (
+                        {diningCards.map(card => (
                           <div key={card.id} className="flex justify-between items-center py-1">
                             <span className="text-sm text-green-700 truncate pr-2">{card.name}</span>
                             <span className="font-semibold text-green-900">${calculateValue(card)}</span>
@@ -367,7 +346,7 @@ export default function Travel() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5" />
-                  Compare Travel Cards
+                  Compare Dining Cards
                 </CardTitle>
                 <CardDescription>
                   Select up to 3 cards from the browse tab to compare them side by side
@@ -389,7 +368,7 @@ export default function Travel() {
                         <tr className="border-b">
                           <th className="text-left p-3 font-medium">Feature</th>
                           {selectedCards.map(cardId => {
-                            const card = travelCards.find(c => c.id === cardId);
+                            const card = diningCards.find(c => c.id === cardId);
                             return (
                               <th key={cardId} className="text-left p-3 min-w-48 font-medium">
                                 {card?.name}
@@ -402,35 +381,35 @@ export default function Travel() {
                         <tr className="border-b">
                           <td className="p-3 font-medium">Annual Fee</td>
                           {selectedCards.map(cardId => {
-                            const card = travelCards.find(c => c.id === cardId);
+                            const card = diningCards.find(c => c.id === cardId);
                             return <td key={cardId} className="p-3">${card?.annualFee}</td>;
                           })}
                         </tr>
                         <tr className="border-b">
-                          <td className="p-3 font-medium">Earn Rate</td>
+                          <td className="p-3 font-medium">Dining Rate</td>
                           {selectedCards.map(cardId => {
-                            const card = travelCards.find(c => c.id === cardId);
-                            return <td key={cardId} className="p-3 text-sm">{card?.earnRate}</td>;
+                            const card = diningCards.find(c => c.id === cardId);
+                            return <td key={cardId} className="p-3">{card?.diningRate}x</td>;
                           })}
                         </tr>
                         <tr className="border-b">
                           <td className="p-3 font-medium">Welcome Bonus</td>
                           {selectedCards.map(cardId => {
-                            const card = travelCards.find(c => c.id === cardId);
+                            const card = diningCards.find(c => c.id === cardId);
                             return <td key={cardId} className="p-3">{card?.welcomeBonus}</td>;
                           })}
                         </tr>
                         <tr className="border-b">
                           <td className="p-3 font-medium">Your Estimated Annual Value</td>
                           {selectedCards.map(cardId => {
-                            const card = travelCards.find(c => c.id === cardId);
+                            const card = diningCards.find(c => c.id === cardId);
                             return <td key={cardId} className="p-3 text-green-600 font-semibold">${card ? calculateValue(card) : 0}</td>;
                           })}
                         </tr>
                         <tr>
                           <td className="p-3 font-medium">Credit Score Required</td>
                           {selectedCards.map(cardId => {
-                            const card = travelCards.find(c => c.id === cardId);
+                            const card = diningCards.find(c => c.id === cardId);
                             return <td key={cardId} className="p-3">{card?.creditScore}</td>;
                           })}
                         </tr>
@@ -444,34 +423,34 @@ export default function Travel() {
 
           <TabsContent value="guide" className="space-y-6">
             <div className="bg-white rounded-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Travel Credit Card Selection Guide</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Dining Credit Card Selection Guide</h2>
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Maximizing Travel Rewards</h3>
+                  <h3 className="font-semibold text-gray-900 mb-3">Maximizing Dining Rewards</h3>
                   <ul className="space-y-2 text-gray-600">
-                    <li>• Use cards that earn bonus points on travel and dining</li>
-                    <li>• Take advantage of transfer partners for maximum value</li>
-                    <li>• Redeem points for travel to get better value</li>
-                    <li>• Use travel benefits like lounge access and insurance</li>
-                    <li>• Pay annual fees only if benefits exceed the cost</li>
+                    <li>• Choose cards with highest dining rates for your spending</li>
+                    <li>• Take advantage of monthly dining credits</li>
+                    <li>• Use for food delivery and takeout too</li>
+                    <li>• Consider cards with grocery bonuses for home cooking</li>
+                    <li>• Stack with restaurant loyalty programs</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Travel Benefits to Look For</h3>
+                  <h3 className="font-semibold text-gray-900 mb-3">What Counts as Dining</h3>
                   <ul className="space-y-2 text-gray-600">
-                    <li>• <strong>Airport Lounges:</strong> Priority Pass or airline lounges</li>
-                    <li>• <strong>Travel Insurance:</strong> Trip cancellation and medical</li>
-                    <li>• <strong>No Foreign Fees:</strong> Save on international purchases</li>
-                    <li>• <strong>Transfer Partners:</strong> Airlines and hotel programs</li>
+                    <li>• <strong>Restaurants:</strong> Fast food to fine dining</li>
+                    <li>• <strong>Delivery:</strong> DoorDash, Uber Eats, etc.</li>
+                    <li>• <strong>Bars & Cafes:</strong> Coffee shops and bars</li>
+                    <li>• <strong>Food Trucks:</strong> Mobile food vendors</li>
                   </ul>
                 </div>
               </div>
               
-              <div className="mt-8 p-6 bg-blue-50 rounded-lg">
-                <h3 className="font-semibold text-blue-900 mb-3">✈️ Travel Card Tip</h3>
-                <p className="text-blue-800">
-                  The best travel card depends on your travel patterns. Frequent travelers benefit from premium cards 
-                  with high annual fees, while occasional travelers might prefer no-fee cards with good travel rates.
+              <div className="mt-8 p-6 bg-orange-50 rounded-lg">
+                <h3 className="font-semibold text-orange-900 mb-3">🍽️ Dining Card Tip</h3>
+                <p className="text-orange-800">
+                  If you spend over $500/month on dining, a card with dining bonuses will likely earn more 
+                  than a flat-rate card, even with an annual fee. Calculate your specific scenario to be sure.
                 </p>
               </div>
             </div>
