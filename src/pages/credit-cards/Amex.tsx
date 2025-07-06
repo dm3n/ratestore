@@ -72,23 +72,25 @@ const Amex = () => {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {amexCards.map((card, index) => (
                   <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow">
-                    {card.featured && (
-                      <Badge className="absolute top-4 right-4 bg-yellow-500 text-yellow-900">
-                        <Star className="h-3 w-3 mr-1" />
-                        Featured
-                      </Badge>
-                    )}
-                    {card.premium && (
-                      <Badge className="absolute top-4 right-4 bg-purple-600 text-white">
-                        Premium
-                      </Badge>
-                    )}
                     <CardHeader>
                       <div className="flex items-center justify-between mb-2">
                         <CreditCard className="h-6 w-6 text-blue-600" />
-                        <div className="flex items-center">
-                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
-                          <span className="text-sm font-medium">{card.rating}</span>
+                        <div className="flex flex-col items-end gap-2">
+                          {card.featured && (
+                            <Badge className="bg-yellow-500 text-yellow-900">
+                              <Star className="h-3 w-3 mr-1" />
+                              Featured
+                            </Badge>
+                          )}
+                          {card.premium && (
+                            <Badge className="bg-purple-600 text-white">
+                              Premium
+                            </Badge>
+                          )}
+                          <div className="flex items-center">
+                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
+                            <span className="text-sm font-medium">{card.rating}</span>
+                          </div>
                         </div>
                       </div>
                       <CardTitle className="text-lg">{card.name}</CardTitle>
