@@ -13,28 +13,28 @@ const LifeInsuranceTypes = () => {
       title: "Term Life Insurance",
       description: "Affordable temporary coverage for specific periods",
       icon: Heart,
-      link: "/insurance/life/term",
+      link: "/contact",
       features: ["Fixed premiums", "Specific term lengths", "Death benefit protection"]
     },
     {
       title: "Permanent Life Insurance",
       description: "Lifelong coverage with investment component",
       icon: Shield,
-      link: "/insurance/life/permanent",
+      link: "/contact",
       features: ["Lifetime coverage", "Cash value growth", "Investment options"]
     },
     {
       title: "Group Insurance",
       description: "Employer-sponsored life insurance benefits",
       icon: Users,
-      link: "/insurance/life/group",
+      link: "/contact",
       features: ["Group rates", "Employer benefits", "Basic coverage"]
     },
     {
       title: "Critical Illness Insurance",
       description: "Coverage for serious medical conditions",
       icon: Activity,
-      link: "/insurance/life/critical-illness",
+      link: "/contact",
       features: ["Lump sum benefits", "Serious illness coverage", "Treatment support"]
     }
   ];
@@ -92,8 +92,8 @@ const LifeInsuranceTypes = () => {
                         <Button className="flex-1" asChild>
                           <Link to={insurance.link}>Get Quote</Link>
                         </Button>
-                        <Button variant="outline" className="flex-1 border-gray-300 text-gray-700 bg-transparent">
-                          Learn More
+                        <Button variant="outline" className="flex-1 border-gray-300 text-gray-700 bg-transparent" asChild>
+                          <Link to="/contact">Learn More</Link>
                         </Button>
                       </div>
                     </CardContent>

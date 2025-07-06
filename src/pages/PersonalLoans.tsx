@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TrendingDown, Calculator, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const PersonalLoans = () => {
   const loanRates = [
@@ -52,8 +53,10 @@ const PersonalLoans = () => {
               <p className="text-lg text-muted-foreground mb-6">
                 Compare personal loan rates from top lenders and find the best deal for your needs.
               </p>
-              <Button size="lg" className="gap-2">
-                Calculate My Payment <Calculator className="h-5 w-5" />
+              <Button size="lg" className="gap-2" asChild>
+                <Link to="/tools/calculators">
+                  Calculate My Payment <Calculator className="h-5 w-5" />
+                </Link>
               </Button>
             </div>
           </div>
@@ -91,7 +94,9 @@ const PersonalLoans = () => {
                           <TableCell>{loan.amount}</TableCell>
                           <TableCell>{loan.term}</TableCell>
                           <TableCell>
-                            <Button size="sm">Learn More</Button>
+                            <Button size="sm" asChild>
+                              <Link to="/contact">Learn More</Link>
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}

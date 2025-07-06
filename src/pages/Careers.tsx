@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, DollarSign } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const jobOpenings = [
   {
@@ -98,7 +99,9 @@ const Careers = () => {
                           <CardTitle className="text-xl">{job.title}</CardTitle>
                           <Badge variant="outline" className="mt-2">{job.department}</Badge>
                         </div>
-                        <Button>Apply Now</Button>
+                        <Button asChild>
+                          <Link to="/contact">Apply Now</Link>
+                        </Button>
                       </div>
                     </CardHeader>
                     <CardContent>

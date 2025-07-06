@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SavingsRatesTable } from "@/components/SavingsRatesTable";
@@ -6,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Shield, CheckCircle, Calculator } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const SavingsRates = () => {
   return (
@@ -26,8 +26,10 @@ const SavingsRates = () => {
               <p className="text-lg text-muted-foreground mb-6">
                 Compare the highest savings account interest rates from top banks and credit unions.
               </p>
-              <Button size="lg" className="gap-2">
-                Calculate My Earnings <Calculator className="h-5 w-5" />
+              <Button size="lg" className="gap-2" asChild>
+                <Link to="/tools/calculators">
+                  Calculate My Earnings <Calculator className="h-5 w-5" />
+                </Link>
               </Button>
             </div>
           </div>

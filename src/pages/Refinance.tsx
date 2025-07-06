@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, RefreshCw, TrendingDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Refinance = () => {
   return (
@@ -26,8 +27,10 @@ const Refinance = () => {
               <p className="text-lg text-muted-foreground mb-6">
                 Lower your monthly payments or access your home's equity with competitive refinance rates.
               </p>
-              <Button size="lg" className="gap-2">
-                Check Refinance Rates <RefreshCw className="h-5 w-5" />
+              <Button size="lg" className="gap-2" asChild>
+                <Link to="/contact">
+                  Check Refinance Rates <RefreshCw className="h-5 w-5" />
+                </Link>
               </Button>
             </div>
           </div>

@@ -1,10 +1,10 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Users, Award, Shield, Clock, TrendingUp } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const About = () => {
   const stats = [
@@ -55,8 +55,10 @@ const About = () => {
               <p className="text-lg text-muted-foreground mb-8">
                 For over 15 years, RateStore has been helping Americans find the best mortgage rates and achieve their homeownership dreams. We've processed over $50 billion in loans and helped more than 1 million families.
               </p>
-              <Button size="lg" className="gap-2">
-                Get Started Today <CheckCircle className="h-5 w-5" />
+              <Button size="lg" className="gap-2" asChild>
+                <Link to="/contact">
+                  Get Started Today <CheckCircle className="h-5 w-5" />
+                </Link>
               </Button>
             </div>
           </div>
@@ -134,14 +136,11 @@ const About = () => {
               <h2 className="text-3xl font-bold mb-4">Our Values</h2>
               <p className="text-muted-foreground">The principles that guide everything we do</p>
             </div>
-            
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {values.map((value, index) => (
-                <Card key={index} className="text-center border-0 shadow-sm hover:shadow-md transition-shadow">
+                <Card key={index} className="text-center border-0 shadow-sm">
                   <CardHeader>
-                    <div className="mb-2 bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto">
-                      <value.icon className="h-6 w-6 text-primary" />
-                    </div>
+                    <value.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
                     <CardTitle className="text-lg">{value.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -149,22 +148,6 @@ const About = () => {
                   </CardContent>
                 </Card>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Contact CTA */}
-        <section className="py-16 bg-primary/5">
-          <div className="container">
-            <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-              <p className="text-muted-foreground mb-8">
-                Join over 1 million Americans who have trusted RateStore with their mortgage needs.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg">Calculate Your Payment</Button>
-                <Button size="lg" variant="outline">Contact an Expert</Button>
-              </div>
             </div>
           </div>
         </section>
