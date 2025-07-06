@@ -110,7 +110,7 @@ const RoboAdvisors = () => {
                 <Button size="lg" className="bg-white text-purple-700 hover:bg-purple-50">
                   Compare All Robo-Advisors
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button size="lg" variant="outline" className="border-white text-white bg-transparent">
                   Learn About Robo-Advisors
                 </Button>
               </div>
@@ -305,7 +305,7 @@ const RoboAdvisors = () => {
               <Button size="lg" className="bg-white text-purple-700 hover:bg-purple-50">
                 Start Comparing Now
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="border-white text-white bg-transparent">
                 <Link to="/guides/education-centre">Learn More About Investing</Link>
               </Button>
             </div>
