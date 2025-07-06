@@ -32,14 +32,36 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ 
+        behavior: "smooth",
+        block: "end"
+      });
+    }
   };
 
+  // Auto-scroll when messages change or loading state changes
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 100); // Small delay to ensure DOM is updated
+    
+    return () => clearTimeout(timer);
+  }, [messages, isLoading]);
+
+  // Auto-scroll when chatbot opens
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        scrollToBottom();
+      }, 300); // Wait for open animation
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || inputText;
@@ -108,7 +130,7 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
     >
       <Card className="w-[380px] h-[650px] flex flex-col shadow-2xl border-0 bg-white/95 backdrop-blur-xl rounded-2xl overflow-hidden">
         {/* Header */}
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 p-5 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 p-5 bg-gradient-to-r from-blue-600 to-blue-700 text-white shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
               <Sparkles className="w-5 h-5 text-white" />
@@ -128,10 +150,10 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
           </Button>
         </CardHeader>
         
-        <CardContent className="flex-1 flex flex-col p-0">
+        <CardContent className="flex-1 flex flex-col p-0 min-h-0">
           {/* Welcome Screen */}
           {showWelcome && messages.length === 0 && (
-            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center animate-fade-in overflow-y-auto">
               <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center mb-6 animate-pulse">
                 <MessageCircle className="w-10 h-10 text-white" />
               </div>
@@ -141,12 +163,13 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
               <div className="w-full space-y-4">
                 <p className="text-gray-800 font-semibold text-sm">Popular Questions</p>
                 
-                <div className="space-y-3">
+                <div className="space-y-3 max-h-80 overflow-y-auto">
                   {suggestedQuestions.map((question, index) => (
                     <button
                       key={index}
                       onClick={() => handleSendMessage(question)}
-                      className="w-full text-left p-4 text-blue-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl transition-all duration-300 text-sm font-medium hover:shadow-md transform hover:scale-[1.02] border border-blue-200/50"
+                      className="w-full text-left p-4 text-blue-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl transition-all duration-300 text-sm font-medium hover:shadow-md transform hover:scale-[1.02] border border-blue-200/50 animate-fade-in"
+                      style={{ animationDelay: `${index * 100}ms` }}
                     >
                       {question}
                     </button>
@@ -158,40 +181,44 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
 
           {/* Chat Messages */}
           {(messages.length > 0 || !showWelcome) && (
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.isUser ? 'justify-end' : 'justify-start'} animate-fade-in`}
-                  >
+            <div className="flex-1 min-h-0">
+              <ScrollArea className="h-full" ref={scrollAreaRef}>
+                <div className="p-4 space-y-4">
+                  {messages.map((message, index) => (
                     <div
-                      className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                        message.isUser
-                          ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg'
-                          : 'bg-gray-100 text-gray-900 shadow-sm border border-gray-200'
-                      }`}
+                      key={message.id}
+                      className={`flex ${message.isUser ? 'justify-end' : 'justify-start'} animate-fade-in`}
+                      style={{ animationDelay: `${index * 50}ms` }}
                     >
-                      <p className="whitespace-pre-wrap">{message.text}</p>
+                      <div
+                        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed transition-all duration-300 ${
+                          message.isUser
+                            ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform hover:scale-[1.02]'
+                            : 'bg-gray-100 text-gray-900 shadow-sm border border-gray-200 transform hover:scale-[1.01]'
+                        }`}
+                      >
+                        <p className="whitespace-pre-wrap">{message.text}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-                
-                {isLoading && (
-                  <div className="flex justify-start animate-fade-in">
-                    <div className="bg-gray-100 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm border border-gray-200">
-                      <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
-                      <span className="text-sm text-gray-600">Thinking...</span>
+                  ))}
+                  
+                  {isLoading && (
+                    <div className="flex justify-start animate-fade-in">
+                      <div className="bg-gray-100 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm border border-gray-200 animate-pulse">
+                        <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                        <span className="text-sm text-gray-600">Thinking...</span>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-              <div ref={messagesEndRef} />
-            </ScrollArea>
+                  )}
+                  
+                  <div ref={messagesEndRef} className="h-1" />
+                </div>
+              </ScrollArea>
+            </div>
           )}
           
           {/* Input Area */}
-          <div className="p-4 border-t bg-gray-50/50 backdrop-blur-sm">
+          <div className="p-4 border-t bg-gray-50/50 backdrop-blur-sm shrink-0">
             <div className="flex gap-3 items-center">
               <div className="flex-1 relative">
                 <Input
@@ -200,13 +227,13 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyPress={handleKeyPress}
                   disabled={isLoading}
-                  className="pr-24 rounded-full border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 text-sm h-12 bg-white shadow-sm"
+                  className="pr-24 rounded-full border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 text-sm h-12 bg-white shadow-sm transition-all duration-200 focus:shadow-md"
                 />
                 <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
                   <Button 
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                    className="h-8 w-8 rounded-full hover:bg-gray-100 transition-all duration-200 hover:scale-110"
                     disabled={isLoading}
                   >
                     <Mic className="w-4 h-4 text-gray-500" />
@@ -215,7 +242,7 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
                     onClick={() => handleSendMessage()}
                     disabled={!inputText.trim() || isLoading}
                     size="icon"
-                    className="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                    className="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 transition-all duration-200 shadow-sm hover:shadow-md hover:scale-110 disabled:hover:scale-100"
                   >
                     {isLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin text-white" />
@@ -226,7 +253,7 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
                 </div>
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-3 text-center">
+            <p className="text-xs text-gray-500 mt-3 text-center transition-opacity duration-200 hover:opacity-80">
               Powered by RateStore AI • Secure & Private
             </p>
           </div>
