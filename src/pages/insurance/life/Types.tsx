@@ -92,7 +92,7 @@ const LifeInsuranceTypes = () => {
                         <Button className="flex-1" asChild>
                           <Link to={insurance.link}>Get Quote</Link>
                         </Button>
-                        <Button variant="outline" className="flex-1">
+                        <Button variant="outline" className="flex-1 border-gray-300 text-gray-700 bg-transparent">
                           Learn More
                         </Button>
                       </div>

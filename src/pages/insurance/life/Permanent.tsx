@@ -116,7 +116,7 @@ const PermanentLifeInsurance = () => {
                     Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
+                <Button size="lg" variant="outline" className="border-white text-white bg-transparent font-semibold px-8 py-4 h-auto">
                   Compare Options <Calculator className="ml-2 h-5 w-5" />
                 </Button>
               </div>
@@ -320,7 +320,7 @@ const PermanentLifeInsurance = () => {
                     Get Free Quote Now <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto" asChild>
+                <Button size="lg" variant="outline" className="border-white text-white bg-transparent font-semibold px-8 py-4 h-auto" asChild>
                   <Link to="/insurance/life/term">
                     Compare vs Term <Calculator className="ml-2 h-5 w-5" />
                   </Link>
