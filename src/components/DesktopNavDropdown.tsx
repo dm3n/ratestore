@@ -101,6 +101,8 @@ const navCategories: NavCategory[] = [
         links: [
           { name: "Aeroplan", href: "/credit-cards/aeroplan" },
           { name: "Cash back", href: "/credit-cards/cash-back" },
+          { name: "Dining", href: "/credit-cards/dining" },
+          { name: "Gas", href: "/credit-cards/gas" },
           { name: "Grocery", href: "/credit-cards/grocery" },
           { name: "Rewards", href: "/credit-cards/rewards" },
           { name: "Store", href: "/credit-cards/store" },

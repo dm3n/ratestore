@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Star, CreditCard, Gift, Shield, Plane, ShoppingCart, Car, Utensils, ArrowRight } from "lucide-react";
+import { Star, CreditCard, Gift, Shield, Plane, ShoppingCart, Car, Utensils, ArrowRight, Store, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const BestOverallCreditCards = () => {
@@ -217,6 +217,24 @@ const BestOverallCreditCards = () => {
       icon: Shield,
       count: 18,
       href: "/credit-cards/no-fee"
+    },
+    {
+      name: "Store Cards",
+      icon: Store,
+      count: 12,
+      href: "/credit-cards/store"
+    },
+    {
+      name: "Rewards",
+      icon: Award,
+      count: 20,
+      href: "/credit-cards/rewards"
+    },
+    {
+      name: "Aeroplan",
+      icon: Plane,
+      count: 8,
+      href: "/credit-cards/aeroplan"
     }
   ];
 
