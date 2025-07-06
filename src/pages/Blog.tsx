@@ -7,76 +7,47 @@ import { Button } from "@/components/ui/button";
 import { Calendar, User, ArrowRight, Clock, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
-const featuredPost = {
-  id: 1,
-  title: "Bank of Canada Cuts Interest Rates: What This Means for Your Mortgage",
-  excerpt: "The latest rate cut could save homeowners thousands. Our analysis breaks down the immediate impact on mortgage payments, renewal strategies, and what to expect next.",
-  author: "Sarah Johnson",
-  date: "2024-01-15",
-  category: "Mortgage News",
-  readTime: "8 min read",
-  image: "/placeholder.svg",
-  featured: true
-};
-
-const blogPosts = [
-  {
-    id: 2,
-    title: "5 Strategies to Maximize Your High-Interest Savings Returns in 2024",
-    excerpt: "With rates at multi-year highs, now's the time to optimize your savings strategy. Discover proven methods to boost your returns while maintaining liquidity.",
-    author: "Michael Chen",
-    date: "2024-01-12",
-    category: "Savings",
-    readTime: "6 min read",
-    trending: true
-  },
-  {
-    id: 3,
-    title: "Credit Card Rewards Revolution: New Programs Worth Switching For",
-    excerpt: "Major Canadian banks have launched competitive rewards programs. We analyze which cards offer the best value for different spending patterns.",
-    author: "Emily Rodriguez",
-    date: "2024-01-10",
-    category: "Credit Cards",
-    readTime: "7 min read"
-  },
-  {
-    id: 4,
-    title: "First-Time Home Buyer Programs: $40,000 in Government Assistance Available",
-    excerpt: "Navigate federal and provincial programs designed to help you enter the housing market. Complete guide to qualification requirements and application processes.",
-    author: "David Park",
-    date: "2024-01-08",
-    category: "Home Buying",
-    readTime: "10 min read"
-  },
-  {
-    id: 5,
-    title: "Investment Outlook 2024: GICs vs. High-Yield Savings vs. Market Investments",
-    excerpt: "Interest rate uncertainty makes asset allocation crucial. Our comprehensive analysis helps you balance safety, liquidity, and growth potential.",
-    author: "Jennifer Liu",
-    date: "2024-01-05",
-    category: "Investing",
-    readTime: "9 min read"
-  },
-  {
-    id: 6,
-    title: "Mortgage Renewal Strategies: Lock in Rates or Wait?",
-    excerpt: "With your renewal approaching, timing is everything. Expert insights on rate predictions, negotiation tactics, and alternative lender options.",
-    author: "Robert Kim",
-    date: "2024-01-03",
-    category: "Mortgages",
-    readTime: "5 min read"
-  }
-];
+import { useBlogPosts } from "@/hooks/useBlogPosts";
 
 const categories = ["All", "Mortgage News", "Savings", "Credit Cards", "Home Buying", "Investing", "Mortgages"];
 
 const Blog = () => {
+  const { posts, loading, error } = useBlogPosts();
   const [selectedCategory, setSelectedCategory] = useState("All");
 
+  const featuredPost = posts.find(post => post.is_featured) || posts[0];
+  const regularPosts = posts.filter(post => post.id !== featuredPost?.id);
+
   const filteredPosts = selectedCategory === "All" 
-    ? blogPosts 
-    : blogPosts.filter(post => post.category === selectedCategory);
+    ? regularPosts 
+    : regularPosts.filter(post => post.category === selectedCategory);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-white">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col bg-white">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-slate-900 mb-4">Error Loading Blog</h1>
+            <p className="text-slate-600">{error}</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -122,62 +93,66 @@ const Blog = () => {
         </section>
 
         {/* Featured Article */}
-        <section className="py-12 lg:py-16 border-b bg-white">
-          <div className="container">
-            <div className="max-w-7xl mx-auto">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div className="order-2 lg:order-1">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Badge className="bg-red-100 text-red-700 border-red-200 font-semibold">
-                      Featured
-                    </Badge>
-                    <Badge variant="outline" className="font-medium">
-                      {featuredPost.category}
-                    </Badge>
+        {featuredPost && (
+          <section className="py-12 lg:py-16 border-b bg-white">
+            <div className="container">
+              <div className="max-w-7xl mx-auto">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  <div className="order-2 lg:order-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Badge className="bg-red-100 text-red-700 border-red-200 font-semibold">
+                        Featured
+                      </Badge>
+                      <Badge variant="outline" className="font-medium">
+                        {featuredPost.category}
+                      </Badge>
+                    </div>
+                    <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+                      {featuredPost.title}
+                    </h2>
+                    {featuredPost.excerpt && (
+                      <p className="text-lg text-slate-600 mb-6 leading-relaxed">
+                        {featuredPost.excerpt}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-6 mb-8 text-sm text-slate-500">
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        <span className="font-medium">{featuredPost.author}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        <span>{new Date(featuredPost.created_at).toLocaleDateString('en-CA', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        <span>{featuredPost.read_time}</span>
+                      </div>
+                    </div>
+                    <Button size="lg" className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-lg font-semibold" asChild>
+                      <Link to={`/blog/${featuredPost.id}`}>
+                        Read Full Analysis
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Link>
+                    </Button>
                   </div>
-                  <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
-                    {featuredPost.title}
-                  </h2>
-                  <p className="text-lg text-slate-600 mb-6 leading-relaxed">
-                    {featuredPost.excerpt}
-                  </p>
-                  <div className="flex items-center gap-6 mb-8 text-sm text-slate-500">
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      <span className="font-medium">{featuredPost.author}</span>
+                  <div className="order-1 lg:order-2">
+                    <div className="relative group overflow-hidden rounded-2xl bg-slate-100">
+                      <div className="aspect-[4/3] bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                        <TrendingUp className="h-24 w-24 text-blue-400" />
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      <span>{new Date(featuredPost.date).toLocaleDateString('en-CA', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      <span>{featuredPost.readTime}</span>
-                    </div>
-                  </div>
-                  <Button size="lg" className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-lg font-semibold" asChild>
-                    <Link to={`/blog/${featuredPost.id}`}>
-                      Read Full Analysis
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                </div>
-                <div className="order-1 lg:order-2">
-                  <div className="relative group overflow-hidden rounded-2xl bg-slate-100">
-                    <div className="aspect-[4/3] bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
-                      <TrendingUp className="h-24 w-24 text-blue-400" />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Articles Grid */}
         <section className="py-16 lg:py-20 bg-slate-50/50">
@@ -200,32 +175,27 @@ const Blog = () => {
                             <TrendingUp className="h-8 w-8 text-slate-600" />
                           </div>
                         </div>
-                        {post.trending && (
-                          <div className="absolute top-4 left-4">
-                            <Badge className="bg-orange-100 text-orange-700 border-orange-200 font-semibold">
-                              Trending
-                            </Badge>
-                          </div>
-                        )}
                       </div>
                       <CardContent className="p-6">
                         <div className="flex items-center gap-2 mb-3">
                           <Badge variant="outline" className="text-xs font-medium">
                             {post.category}
                           </Badge>
-                          <span className="text-xs text-slate-500">{post.readTime}</span>
+                          <span className="text-xs text-slate-500">{post.read_time}</span>
                         </div>
                         <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight">
                           {post.title}
                         </h3>
-                        <p className="text-slate-600 mb-4 leading-relaxed line-clamp-3">
-                          {post.excerpt}
-                        </p>
+                        {post.excerpt && (
+                          <p className="text-slate-600 mb-4 leading-relaxed line-clamp-3">
+                            {post.excerpt}
+                          </p>
+                        )}
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3 text-sm text-slate-500">
                             <span className="font-medium">{post.author}</span>
                             <span>•</span>
-                            <span>{new Date(post.date).toLocaleDateString('en-CA', { 
+                            <span>{new Date(post.created_at).toLocaleDateString('en-CA', { 
                               month: 'short', 
                               day: 'numeric' 
                             })}</span>
@@ -241,11 +211,13 @@ const Blog = () => {
               </div>
 
               {/* Load More */}
-              <div className="text-center mt-12">
-                <Button variant="outline" size="lg" className="px-8 py-3 font-semibold border-2 hover:bg-slate-50">
-                  Load More Articles
-                </Button>
-              </div>
+              {filteredPosts.length > 6 && (
+                <div className="text-center mt-12">
+                  <Button variant="outline" size="lg" className="px-8 py-3 font-semibold border-2 hover:bg-slate-50">
+                    Load More Articles
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </section>
