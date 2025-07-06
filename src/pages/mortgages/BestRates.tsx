@@ -79,19 +79,34 @@ const BestRates = () => {
                 Live mortgage rates updated automatically from our database. 
                 See the absolute best rates available right now.
               </p>
-              <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+              
+              {/* Refresh Section - Same as GIC calculators */}
+              <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-6">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
+                  <span>
+                    {isLoading ? 'Updating rates...' : 'Rates updated'}
+                  </span>
+                </div>
                 {lastUpdated && (
-                  <span>Last updated: {lastUpdated.toLocaleTimeString()}</span>
+                  <span>
+                    {lastUpdated.toLocaleString('en-CA', {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </span>
                 )}
                 <Button 
-                  variant="outline" 
+                  variant="ghost" 
                   size="sm" 
                   onClick={refetch}
                   disabled={isLoading}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-1 h-6 px-2 text-xs hover:bg-primary/5"
                 >
-                  <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-                  Refresh Rates
+                  <RefreshCw className={`h-3 w-3 ${isLoading ? 'animate-spin' : ''}`} />
+                  Refresh
                 </Button>
               </div>
             </div>
