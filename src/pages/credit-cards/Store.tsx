@@ -1,11 +1,10 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Store, Star, CreditCard, Filter, Calculator, TrendingUp, Target, Gift } from "lucide-react";
+import { Store as StoreIcon, Star, CreditCard, Filter, Calculator, TrendingUp, Target, Gift } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
@@ -95,7 +94,7 @@ export default function Store() {
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Store className="h-8 w-8 text-primary" />
+            <StoreIcon className="h-8 w-8 text-primary" />
             <h1 className="text-4xl font-bold text-gray-900">Store Credit Cards</h1>
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
