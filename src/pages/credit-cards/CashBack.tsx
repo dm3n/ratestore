@@ -258,11 +258,19 @@ export default function CashBack() {
                       </div>
                     </div>
                     
-                    <div className="pt-4 border-t">
+                    <div className="pt-4 border-t space-y-2">
                       <Button className="w-full" asChild>
                         <a href={card.applyUrl} target="_blank" rel="noopener noreferrer">
                           Apply Now
                         </a>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full"
+                        onClick={() => toggleCardSelection(card.id)}
+                      >
+                        {selectedCards.includes(card.id) ? 'Remove from Compare' : 'Add to Compare'}
                       </Button>
                     </div>
                   </CardContent>
