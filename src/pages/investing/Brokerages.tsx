@@ -163,7 +163,7 @@ const Brokerages = () => {
               {brokerages.map((brokerage, index) => (
                 <Card key={index} className="relative overflow-hidden hover:shadow-xl transition-shadow duration-300">
                   {brokerage.badge && (
-                    <div className="absolute top-4 right-4 z-10">
+                    <div className="absolute top-4 left-4 z-10">
                       <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                         {brokerage.badge}
                       </Badge>
