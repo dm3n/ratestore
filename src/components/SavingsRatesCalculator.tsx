@@ -65,7 +65,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   const fetchRates = async () => {
     setIsLoading(true);
     try {
-      console.log('Fetching rates for account type:', accountType);
+      console.log('🔍 Fetching rates for account type:', accountType);
       
       const { data, error } = await supabase
         .from('banking_rates')
@@ -75,12 +75,26 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
         .order('interest_rate', { ascending: false });
 
       if (error) {
-        console.error('Supabase error:', error);
+        console.error('❌ Supabase error:', error);
         throw error;
       }
 
-      console.log('Raw fetched data:', data);
-      console.log('Data length:', data?.length || 0);
+      console.log('📊 Raw fetched data for', accountType, ':', data);
+      console.log('📈 Data length:', data?.length || 0);
+
+      if (data && data.length > 0) {
+        console.log('✅ Sample rate data:', data[0]);
+        data.forEach((rate, index) => {
+          console.log(`Rate ${index + 1}:`, {
+            institution: rate.institution,
+            account_name: rate.account_name,
+            interest_rate: rate.interest_rate,
+            account_type: rate.account_type
+          });
+        });
+      } else {
+        console.log('⚠️ No rates found for account type:', accountType);
+      }
 
       // Transform database data to match our interface
       const transformedRates: SavingsRateData[] = (data || []).map(rate => ({
@@ -102,12 +116,25 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
         institutionType: getInstitutionType(rate.institution)
       }));
 
-      console.log('Transformed rates:', transformedRates);
-      console.log('Transformed rates length:', transformedRates.length);
+      console.log('🔄 Transformed rates for', accountType, ':', transformedRates);
+      console.log('📊 Transformed rates length:', transformedRates.length);
+      
+      if (transformedRates.length > 0) {
+        console.log('✅ Top transformed rate:', transformedRates[0]);
+      }
+      
       setRates(transformedRates);
       setLastUpdated(new Date());
+      
+      if (transformedRates.length === 0) {
+        toast({
+          title: "No rates found",
+          description: `No ${accountType.toUpperCase()} rates found in the database.`,
+          variant: "destructive"
+        });
+      }
     } catch (error) {
-      console.error('Error fetching rates:', error);
+      console.error('💥 Error fetching rates:', error);
       toast({
         title: "Error",
         description: "Failed to fetch banking rates. Please try again.",
@@ -120,12 +147,13 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
 
   // Initial load
   useEffect(() => {
+    console.log('🚀 Component mounted/accountType changed:', accountType);
     fetchRates();
   }, [accountType]);
 
   // Filter rates based on current selections
   const filteredRates = rates.filter(rate => {
-    console.log('Filtering rate:', rate.institution, 'with filters:', {
+    console.log('🔍 Filtering rate:', rate.institution, 'with filters:', {
       institutionFilter,
       minBalanceFilter,
       categoryFilter,
@@ -135,41 +163,41 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
 
     // Institution type filter
     if (institutionFilter !== "all" && rate.institutionType !== institutionFilter) {
-      console.log('Filtered out by institution type:', rate.institutionType, 'vs', institutionFilter);
+      console.log('❌ Filtered out by institution type:', rate.institutionType, 'vs', institutionFilter);
       return false;
     }
     
     // Minimum balance filter
     if (minBalanceFilter === "no-minimum" && rate.minimum_balance > 0) {
-      console.log('Filtered out by no-minimum balance:', rate.minimum_balance);
+      console.log('❌ Filtered out by no-minimum balance:', rate.minimum_balance);
       return false;
     }
     if (minBalanceFilter === "low-minimum" && rate.minimum_balance > 1000) {
-      console.log('Filtered out by low-minimum balance:', rate.minimum_balance);
+      console.log('❌ Filtered out by low-minimum balance:', rate.minimum_balance);
       return false;
     }
     
     // Category filter
     if (categoryFilter !== "all" && rate.account_category !== categoryFilter) {
-      console.log('Filtered out by category:', rate.account_category, 'vs', categoryFilter);
+      console.log('❌ Filtered out by category:', rate.account_category, 'vs', categoryFilter);
       return false;
     }
     
     // Tab-specific filtering
     if (activeTab === "big5-banks" && rate.institutionType !== "big5") {
-      console.log('Filtered out by big5 tab:', rate.institutionType);
+      console.log('❌ Filtered out by big5 tab:', rate.institutionType);
       return false;
     }
     
-    console.log('Rate passed all filters:', rate.institution);
+    console.log('✅ Rate passed all filters:', rate.institution);
     return true;
   }).sort((a, b) => {
     // Sort by interest rate (highest first)
     return b.interest_rate - a.interest_rate;
   });
 
-  console.log('Final filtered rates count:', filteredRates.length);
-  console.log('Final filtered rates:', filteredRates);
+  console.log('📋 Final filtered rates count:', filteredRates.length);
+  console.log('📋 Final filtered rates:', filteredRates);
 
   const calculateEarnings = (rate: SavingsRateData) => {
     const monthlyRate = rate.interest_rate / 12;
@@ -180,6 +208,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   };
 
   const refreshRates = () => {
+    console.log('🔄 Manual refresh triggered');
     fetchRates();
   };
 
@@ -200,7 +229,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
             <p className="text-muted-foreground mt-1">
               {description}
               <span className="block text-xs text-muted-foreground/70 mt-1">
-                Last updated: {lastUpdated.toLocaleTimeString()} • {rates.length} rates loaded • {filteredRates.length} showing
+                Last updated: {lastUpdated.toLocaleTimeString()} • {rates.length} rates loaded • {filteredRates.length} showing • Account type: {accountType}
               </span>
             </p>
           </div>
@@ -350,7 +379,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
                   <TableRow>
                     <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                       {rates.length === 0 
-                        ? "No rates found for this account type. Please check the admin dashboard."
+                        ? `No ${accountType.toUpperCase()} rates found in the database. Please check the admin dashboard or refresh the page.`
                         : "No accounts match your criteria. Try adjusting your filters."
                       }
                     </TableCell>
