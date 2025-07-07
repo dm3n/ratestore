@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SavingsRatesCalculator } from "@/components/SavingsRatesCalculator";
@@ -39,10 +38,6 @@ const PersonalChequing = () => {
                 <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
                   <Calculator className="h-5 w-5" />
                   Compare Accounts
-                </Button>
-                <Button size="lg" variant="outline" className="gap-2">
-                  <Users className="h-5 w-5" />
-                  Find Your Plan
                 </Button>
               </div>
             </div>
