@@ -7,26 +7,38 @@ import { ChevronDown, ChevronUp, Home, Award, TrendingUp, RefreshCw } from "luci
 import { useMortgageRates } from "@/hooks/useMortgageRates";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export function InteractiveRateCalculator() {
+interface InteractiveRateCalculatorProps {
+  provinceFilter?: string;
+  defaultTransactionType?: string;
+  termFilter?: string;
+}
+
+export function InteractiveRateCalculator({ 
+  provinceFilter, 
+  defaultTransactionType = "buying", 
+  termFilter 
+}: InteractiveRateCalculatorProps) {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const [showMoreRates, setShowMoreRates] = useState(false);
   
-  // Fetch different types of rates
+  // Fetch different types of rates based on termFilter or default to 5-yr
+  const defaultTerm = termFilter || '5-yr';
+  
   const { rates: fixedRates, isLoading: loadingFixed, refetch: refetchFixed } = useMortgageRates({
     rateType: 'fixed',
-    term: '5-yr',
+    term: defaultTerm,
     autoRefresh: true
   });
 
   const { rates: variableRates, isLoading: loadingVariable } = useMortgageRates({
     rateType: 'variable',
-    term: '5-yr',
+    term: defaultTerm,
     autoRefresh: true
   });
 
   const { rates: shortTermRates, isLoading: loadingShort } = useMortgageRates({
     rateType: 'fixed',
-    term: '3-yr',
+    term: termFilter === '5-yr' ? '3-yr' : defaultTerm,
     autoRefresh: true
   });
 
@@ -42,47 +54,50 @@ export function InteractiveRateCalculator() {
 
   const formatRate = (rate: number) => `${(rate * 100).toFixed(2)}%`;
 
-  const getRatesByType = (rates: any[], type: string) => {
-    return rates
-      .filter(rate => rate.lender_type === type)
-      .slice(0, showMoreRates ? rates.length : 3)
-      .map(rate => ({
-        lender: rate.lender_name,
-        rate: formatRate(rate.base_rate),
-        term: rate.term.replace('-', ' ').replace('yr', 'Year'),
-        type: rate.rate_type,
-        province: rate.province,
-        transactionTypes: rate.transaction_types,
-        primeDiscount: rate.prime_discount
-      }));
+  // Filter rates by province if provinceFilter is provided
+  const filterRatesByProvince = (rates: any[]) => {
+    if (!provinceFilter) return rates;
+    return rates.filter(rate => 
+      rate.province === provinceFilter || 
+      rate.province === 'Canada Wide' || 
+      !rate.province
+    );
   };
 
   const rateCategories = [
     {
       id: 'fixed-5yr',
-      title: '5-Year Fixed Rates',
-      description: 'Locked-in rates for 5 years - most popular choice',
+      title: termFilter === '3-yr' ? '3-Year Fixed Rates' : termFilter === '2-yr' ? '2-Year Fixed Rates' : '5-Year Fixed Rates',
+      description: termFilter === '3-yr' ? 'Shorter-term fixed rates for quicker renewal' : termFilter === '2-yr' ? 'Short-term fixed rates with lower initial rates' : 'Locked-in rates for 5 years - most popular choice',
       icon: <Home className="h-5 w-5 text-blue-600" />,
-      rates: fixedRates.slice(0, showMoreRates ? 12 : 6),
-      badge: 'Most Popular'
+      rates: filterRatesByProvince(fixedRates).slice(0, showMoreRates ? 12 : 6),
+      badge: termFilter === '3-yr' ? 'Short Term' : termFilter === '2-yr' ? 'Very Short' : 'Most Popular'
     },
     {
       id: 'variable-5yr',
-      title: '5-Year Variable Rates',
+      title: termFilter === '3-yr' ? '3-Year Variable Rates' : termFilter === '2-yr' ? '2-Year Variable Rates' : '5-Year Variable Rates',
       description: 'Rates that fluctuate with prime rate changes',
       icon: <TrendingUp className="h-5 w-5 text-green-600" />,
-      rates: variableRates.slice(0, showMoreRates ? 12 : 6),
+      rates: filterRatesByProvince(variableRates).slice(0, showMoreRates ? 12 : 6),
       badge: 'Flexible'
     },
     {
       id: 'fixed-3yr',
-      title: '3-Year Fixed Rates',
-      description: 'Shorter-term fixed rates for quicker renewal',
+      title: termFilter === '2-yr' ? '1-Year Fixed Rates' : '3-Year Fixed Rates',
+      description: termFilter === '2-yr' ? 'Very short-term fixed rates' : 'Shorter-term fixed rates for quicker renewal',
       icon: <Award className="h-5 w-5 text-purple-600" />,
-      rates: shortTermRates.slice(0, showMoreRates ? 12 : 6),
+      rates: filterRatesByProvince(shortTermRates).slice(0, showMoreRates ? 12 : 6),
       badge: 'Short Term'
     }
   ];
+
+  // Filter categories based on termFilter - if specific term is requested, show only relevant categories
+  const filteredCategories = termFilter ? 
+    rateCategories.filter(category => 
+      (termFilter === '5-yr' && (category.id === 'fixed-5yr' || category.id === 'variable-5yr')) ||
+      (termFilter === '3-yr' && (category.id === 'fixed-5yr' || category.id === 'variable-5yr')) ||
+      (termFilter === '2-yr' && (category.id === 'fixed-5yr' || category.id === 'variable-5yr'))
+    ) : rateCategories;
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
@@ -93,8 +108,22 @@ export function InteractiveRateCalculator() {
             <RefreshCw className="h-3 w-3 mr-1" />
             Live Rates
           </Badge>
+          {provinceFilter && (
+            <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+              {provinceFilter === 'BC' ? 'British Columbia' : 
+               provinceFilter === 'ON' ? 'Ontario' : 
+               provinceFilter === 'QC' ? 'Quebec' : 
+               provinceFilter === 'AB' ? 'Alberta' : provinceFilter}
+            </Badge>
+          )}
         </div>
-        <h2 className="text-2xl md:text-3xl font-bold">Best Mortgage Rates in Canada</h2>
+        <h2 className="text-2xl md:text-3xl font-bold">
+          {provinceFilter ? `Best Mortgage Rates in ${provinceFilter === 'BC' ? 'British Columbia' : 
+                            provinceFilter === 'ON' ? 'Ontario' : 
+                            provinceFilter === 'QC' ? 'Quebec' : 
+                            provinceFilter === 'AB' ? 'Alberta' : provinceFilter}` : 
+           'Best Mortgage Rates in Canada'}
+        </h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
           Compare live mortgage rates from Canada's top lenders. Updated automatically from our database.
         </p>
@@ -133,7 +162,7 @@ export function InteractiveRateCalculator() {
       {/* Rate Categories */}
       {!isLoading && (
         <div className="space-y-6">
-          {rateCategories.map((category) => (
+          {filteredCategories.map((category) => (
             <Card key={category.id} className="border-2 hover:border-primary/20 transition-colors">
               <CardHeader>
                 <div className="flex items-center justify-between">
