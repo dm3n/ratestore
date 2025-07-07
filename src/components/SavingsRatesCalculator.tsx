@@ -58,7 +58,6 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   const [activeTab, setActiveTab] = useState("best-rates");
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  const [isCalculating, setIsCalculating] = useState(false);
   const [rates, setRates] = useState<SavingsRateData[]>([]);
   const { toast } = useToast();
 
@@ -66,6 +65,8 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   const fetchRates = async () => {
     setIsLoading(true);
     try {
+      console.log('Fetching rates for account type:', accountType);
+      
       const { data, error } = await supabase
         .from('banking_rates')
         .select('*')
@@ -73,7 +74,12 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
         .eq('is_active', true)
         .order('interest_rate', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Fetched rates data:', data);
 
       // Transform database data to match our interface
       const transformedRates: SavingsRateData[] = (data || []).map(rate => ({
@@ -95,7 +101,9 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
         institutionType: getInstitutionType(rate.institution)
       }));
 
+      console.log('Transformed rates:', transformedRates);
       setRates(transformedRates);
+      setLastUpdated(new Date());
     } catch (error) {
       console.error('Error fetching rates:', error);
       toast({
@@ -113,28 +121,22 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
     fetchRates();
   }, [accountType]);
 
-  // Auto-refresh when inputs change
-  useEffect(() => {
-    setIsCalculating(true);
-    const timer = setTimeout(() => {
-      setIsCalculating(false);
-      setLastUpdated(new Date());
-    }, 800);
-
-    return () => clearTimeout(timer);
-  }, [depositAmount, timeHorizon, institutionFilter, minBalanceFilter, categoryFilter, activeTab]);
-
   // Filter rates based on current selections and deposit amount
   const filteredRates = rates.filter(rate => {
+    // Institution type filter
     if (institutionFilter !== "all" && rate.institutionType !== institutionFilter) return false;
+    
+    // Minimum balance filter
     if (minBalanceFilter === "no-minimum" && rate.minimum_balance > 0) return false;
     if (minBalanceFilter === "low-minimum" && rate.minimum_balance > 1000) return false;
+    
+    // Category filter
     if (categoryFilter !== "all" && rate.account_category !== categoryFilter) return false;
     
-    // Filter by deposit amount vs minimum balance
+    // Deposit amount vs minimum balance - only filter out if deposit is less than minimum
     if (depositAmount < rate.minimum_balance) return false;
     
-    // Show only big5 banks for big5-banks tab
+    // Tab-specific filtering
     if (activeTab === "big5-banks" && rate.institutionType !== "big5") return false;
     
     return true;
@@ -162,6 +164,10 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   // Get unique categories for filter
   const availableCategories = [...new Set(rates.map(rate => rate.account_category).filter(Boolean))];
 
+  console.log('Current rates:', rates.length);
+  console.log('Filtered rates:', filteredRates.length);
+  console.log('Current filters:', { institutionFilter, minBalanceFilter, categoryFilter, activeTab, depositAmount });
+
   return (
     <Card className="border-2 border-primary/20 shadow-lg">
       <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
@@ -170,14 +176,8 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
             <CardTitle className="text-2xl font-bold">{title}</CardTitle>
             <p className="text-muted-foreground mt-1">
               {description}
-              {(isLoading || isCalculating) && (
-                <span className="inline-flex items-center ml-2 text-primary animate-pulse">
-                  <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
-                  {isLoading ? "Loading rates..." : "Calculating..."}
-                </span>
-              )}
               <span className="block text-xs text-muted-foreground/70 mt-1">
-                Last updated: {lastUpdated.toLocaleTimeString()}
+                Last updated: {lastUpdated.toLocaleTimeString()} • {rates.length} rates loaded
               </span>
             </p>
           </div>
@@ -290,12 +290,12 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
             <h3 className="text-lg font-semibold">
               {activeTab === "big5-banks" ? "Big 5 Banks" : "Best Available Rates"}
             </h3>
-            <Badge variant="secondary" className={`bg-green-100 text-green-700 transition-all duration-300 ${isCalculating ? 'animate-pulse' : ''}`}>
+            <Badge variant="secondary" className="bg-green-100 text-green-700">
               {filteredRates.length} accounts found
             </Badge>
           </div>
 
-          <div className={`transition-all duration-500 ${isCalculating ? 'opacity-50' : 'opacity-100'}`}>
+          <div className="transition-all duration-500">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -310,7 +310,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {(isLoading || isCalculating) ? (
+                {isLoading ? (
                   Array.from({ length: 5 }).map((_, i) => (
                     <TableRow key={i}>
                       <TableCell><Skeleton className="h-6 w-32" /></TableCell>
@@ -326,7 +326,10 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
                 ) : filteredRates.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No accounts match your criteria. Try adjusting your deposit amount or filters.
+                      {rates.length === 0 
+                        ? "No rates found for this account type. Please check the admin dashboard."
+                        : "No accounts match your criteria. Try adjusting your deposit amount or filters."
+                      }
                     </TableCell>
                   </TableRow>
                 ) : (
