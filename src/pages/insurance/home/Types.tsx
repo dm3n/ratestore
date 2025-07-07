@@ -144,19 +144,21 @@ const HomeInsuranceTypes = () => {
                           <coverage.icon className="h-8 w-8 text-green-600" />
                         </div>
                         <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <CardTitle className="text-2xl group-hover:text-green-600 transition-colors">
-                              {coverage.title}
-                            </CardTitle>
-                            <div className="text-right">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <CardTitle className="text-2xl group-hover:text-green-600 transition-colors">
+                                {coverage.title}
+                              </CardTitle>
+                              <CardDescription className="text-base mt-2">
+                                {coverage.description}
+                              </CardDescription>
+                            </div>
+                            <div className={`text-right ${coverage.popular ? 'mt-8' : ''}`}>
                               <div className="text-lg font-bold text-green-600">
                                 {coverage.price}
                               </div>
                             </div>
                           </div>
-                          <CardDescription className="text-base mt-2">
-                            {coverage.description}
-                          </CardDescription>
                         </div>
                       </div>
                     </CardHeader>
