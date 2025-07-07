@@ -124,20 +124,27 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   // Filter rates based on current selections and deposit amount
   const filteredRates = rates.filter(rate => {
     // Institution type filter
-    if (institutionFilter !== "all" && rate.institutionType !== institutionFilter) return false;
+    if (institutionFilter !== "all" && rate.institutionType !== institutionFilter) {
+      return false;
+    }
     
     // Minimum balance filter
-    if (minBalanceFilter === "no-minimum" && rate.minimum_balance > 0) return false;
-    if (minBalanceFilter === "low-minimum" && rate.minimum_balance > 1000) return false;
+    if (minBalanceFilter === "no-minimum" && rate.minimum_balance > 0) {
+      return false;
+    }
+    if (minBalanceFilter === "low-minimum" && rate.minimum_balance > 1000) {
+      return false;
+    }
     
     // Category filter
-    if (categoryFilter !== "all" && rate.account_category !== categoryFilter) return false;
-    
-    // Deposit amount vs minimum balance - only filter out if deposit is less than minimum
-    if (depositAmount < rate.minimum_balance) return false;
+    if (categoryFilter !== "all" && rate.account_category !== categoryFilter) {
+      return false;
+    }
     
     // Tab-specific filtering
-    if (activeTab === "big5-banks" && rate.institutionType !== "big5") return false;
+    if (activeTab === "big5-banks" && rate.institutionType !== "big5") {
+      return false;
+    }
     
     return true;
   }).sort((a, b) => {
@@ -146,10 +153,12 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   });
 
   const calculateEarnings = (rate: SavingsRateData) => {
-    const monthlyRate = rate.interest_rate / 12;
+    const annualRate = rate.interest_rate;
+    const monthlyRate = annualRate / 12;
     const compoundedAmount = depositAmount * Math.pow(1 + monthlyRate, timeHorizon);
     const totalFees = rate.monthly_fee * timeHorizon;
-    return compoundedAmount - depositAmount - totalFees;
+    const earnings = compoundedAmount - depositAmount - totalFees;
+    return Math.max(0, earnings);
   };
 
   const refreshRates = () => {
@@ -328,84 +337,90 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
                     <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                       {rates.length === 0 
                         ? "No rates found for this account type. Please check the admin dashboard."
-                        : "No accounts match your criteria. Try adjusting your deposit amount or filters."
+                        : "No accounts match your criteria. Try adjusting your filters."
                       }
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredRates.map((rate, index) => (
-                    <TableRow key={rate.id} className={`transition-all duration-300 ${index === 0 ? "bg-green-50 animate-fade-in" : ""}`}>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          {rate.institutionType === "big5" ? (
-                            <Building2 className="h-4 w-4 text-blue-600" />
-                          ) : (
-                            <Landmark className="h-4 w-4 text-green-600" />
-                          )}
-                          <div>
-                            <span className="font-medium">{rate.institution}</span>
-                            {rate.special_offers && (
-                              <Badge variant="secondary" className="ml-2 text-xs bg-orange-100 text-orange-700 animate-pulse">
-                                Special Offer
-                              </Badge>
+                  filteredRates.map((rate, index) => {
+                    const meetsMinBalance = depositAmount >= rate.minimum_balance;
+                    return (
+                      <TableRow 
+                        key={rate.id} 
+                        className={`transition-all duration-300 ${index === 0 ? "bg-green-50 animate-fade-in" : ""} ${!meetsMinBalance ? "opacity-60" : ""}`}
+                      >
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            {rate.institutionType === "big5" ? (
+                              <Building2 className="h-4 w-4 text-blue-600" />
+                            ) : (
+                              <Landmark className="h-4 w-4 text-green-600" />
                             )}
-                            {rate.is_featured && (
-                              <Badge variant="secondary" className="ml-2 text-xs bg-blue-100 text-blue-700">
-                                Featured
+                            <div>
+                              <span className="font-medium">{rate.institution}</span>
+                              {rate.special_offers && (
+                                <Badge variant="secondary" className="ml-2 text-xs bg-orange-100 text-orange-700 animate-pulse">
+                                  Special Offer
+                                </Badge>
+                              )}
+                              {rate.is_featured && (
+                                <Badge variant="secondary" className="ml-2 text-xs bg-blue-100 text-blue-700">
+                                  Featured
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="font-medium">{rate.account_name}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            <span className="text-2xl font-bold text-primary">{(rate.interest_rate * 100).toFixed(2)}%</span>
+                            {index === 0 && <TrendingUp className="h-4 w-4 text-green-600 animate-bounce" />}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <span className={`font-bold transition-all duration-300 ${meetsMinBalance ? "text-green-600" : "text-gray-400"}`}>
+                            ${calculateEarnings(rate).toFixed(2)}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {rate.monthly_fee === 0 ? (
+                            <Badge variant="secondary" className="bg-green-100 text-green-700">Free</Badge>
+                          ) : (
+                            <span>${rate.monthly_fee}</span>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {rate.minimum_balance === 0 ? (
+                            <Badge variant="secondary" className="bg-green-100 text-green-700">No minimum</Badge>
+                          ) : (
+                            <span className={meetsMinBalance ? "text-green-600 font-medium" : "text-red-500"}>
+                              ${rate.minimum_balance.toLocaleString()}
+                            </span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1">
+                            {rate.features.slice(0, 2).map((feature, i) => (
+                              <Badge key={i} variant="outline" className="text-xs">
+                                {feature}
+                              </Badge>
+                            ))}
+                            {rate.features.length > 2 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{rate.features.length - 2} more
                               </Badge>
                             )}
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-medium">{rate.account_name}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <span className="text-2xl font-bold text-primary">{(rate.interest_rate * 100).toFixed(2)}%</span>
-                          {index === 0 && <TrendingUp className="h-4 w-4 text-green-600 animate-bounce" />}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <span className="font-bold text-green-600 transition-all duration-300">
-                          ${calculateEarnings(rate).toFixed(2)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {rate.monthly_fee === 0 ? (
-                          <Badge variant="secondary" className="bg-green-100 text-green-700">Free</Badge>
-                        ) : (
-                          <span>${rate.monthly_fee}</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {rate.minimum_balance === 0 ? (
-                          <Badge variant="secondary" className="bg-green-100 text-green-700">No minimum</Badge>
-                        ) : (
-                          <span className={depositAmount >= rate.minimum_balance ? "text-green-600 font-medium" : "text-red-500"}>
-                            ${rate.minimum_balance.toLocaleString()}
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap gap-1">
-                          {rate.features.slice(0, 2).map((feature, i) => (
-                            <Badge key={i} variant="outline" className="text-xs">
-                              {feature}
-                            </Badge>
-                          ))}
-                          {rate.features.length > 2 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{rate.features.length - 2} more
-                            </Badge>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 transition-colors duration-200">
-                          Apply Now
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                        </TableCell>
+                        <TableCell>
+                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 transition-colors duration-200">
+                            Apply Now
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 )}
               </TableBody>
             </Table>
