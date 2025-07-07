@@ -288,21 +288,6 @@ const navCategories = [
     ]
   },
   {
-    title: "Personal Loans",
-    href: "/personal-loans",
-    sections: [
-      {
-        title: "Compare loans",
-        href: "/personal-loans/compare",
-        links: [
-          { name: "Best personal loan rates", href: "/personal-loans/best-rates" },
-          { name: "Debt consolidation loans", href: "/personal-loans/debt-consolidation" },
-          { name: "Bad credit loans", href: "/personal-loans/bad-credit" },
-        ]
-      }
-    ]
-  },
-  {
     title: "Insurance",
     href: "/insurance",
     sections: [
