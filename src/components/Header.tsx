@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -448,6 +449,16 @@ function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
         className="flex items-center justify-between px-3 py-3 text-sm sm:text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
       >
         <span>Blog</span>
+        <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
+      </Link>
+      
+      {/* Contact link */}
+      <Link
+        to="/contact"
+        onClick={onLinkClick}
+        className="flex items-center justify-between px-3 py-3 text-sm sm:text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+      >
+        <span>Contact</span>
         <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
       </Link>
     </div>
