@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -85,6 +84,13 @@ const PermanentLifeInsurance = () => {
     }
   ];
 
+  const scrollToTypes = () => {
+    const typesSection = document.getElementById('permanent-types');
+    if (typesSection) {
+      typesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-blue-50">
       <Header />
@@ -116,7 +122,7 @@ const PermanentLifeInsurance = () => {
                     Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white bg-transparent font-semibold px-8 py-4 h-auto">
+                <Button size="lg" variant="outline" className="border-white text-white bg-transparent font-semibold px-8 py-4 h-auto" onClick={scrollToTypes}>
                   Compare Options <Calculator className="ml-2 h-5 w-5" />
                 </Button>
               </div>
@@ -125,7 +131,7 @@ const PermanentLifeInsurance = () => {
         </section>
 
         {/* Permanent Types */}
-        <section className="py-20">
+        <section id="permanent-types" className="py-20">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
