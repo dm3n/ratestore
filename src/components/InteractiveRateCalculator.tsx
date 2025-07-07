@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Plus, Home, Building2, RefreshCw } from "lucide-react";
+import { Plus, Home, Building2, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface RateData {
@@ -46,9 +46,11 @@ export function InteractiveRateCalculator({
   const [downPaymentPercent, setDownPaymentPercent] = useState(5);
   const [activeTab, setActiveTab] = useState("best-market");
   const [rates, setRates] = useState<RateData[]>([]);
+  const [allRates, setAllRates] = useState<RateData[]>([]);
   const [bankRates, setBankRates] = useState<BankRateData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [showMoreRates, setShowMoreRates] = useState<{[key: string]: boolean}>({});
 
   // Big 5 Canadian banks
   const big5Banks = [
@@ -133,6 +135,9 @@ export function InteractiveRateCalculator({
       } else if (activeTab === "best-bank") {
         filteredRates = transformedRates.filter(rate => rate.lenderType === 'bank');
       }
+
+      // Store all rates for show more functionality
+      setAllRates(filteredRates);
 
       // Process Big 5 bank rates for preset boxes
       if (termFilter) {
@@ -222,6 +227,47 @@ export function InteractiveRateCalculator({
 
   // Get available terms - if termFilter is specified, only show that term
   const availableTerms = termFilter ? [termFilter] : ["2-yr", "3-yr", "5-yr"];
+
+  // Toggle show more rates for a specific term and type
+  const toggleShowMore = (term: string, type: "fixed" | "variable") => {
+    const key = `${term}-${type}`;
+    setShowMoreRates(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
+
+  // Get additional rates for a term and type (excluding the best rate)
+  const getAdditionalRates = (term: string, type: "fixed" | "variable") => {
+    const termRates = allRates.filter(rate => rate.term === term && rate.type === type);
+    const bestRate = rates.find(r => r.term === term && r.type === type);
+    return termRates.filter(rate => rate.id !== bestRate?.id).slice(0, 5); // Show up to 5 additional rates
+  };
+
+  const renderRateItem = (rate: RateData, isAdditional = false) => (
+    <div key={rate.id} className={`text-center ${isAdditional ? 'py-2 border-t border-gray-100' : ''}`}>
+      <div className={`${isAdditional ? 'text-lg' : 'text-2xl'} font-bold text-primary`}>
+        {(rate.rate * 100).toFixed(2)}%
+      </div>
+      {rate.prime && (
+        <div className="text-sm text-muted-foreground">{rate.prime}</div>
+      )}
+      <div className="flex items-center justify-center gap-2 mt-2">
+        {rate.lenderType === "home" || rate.lenderType !== "bank" ? (
+          <Home className="h-4 w-4" />
+        ) : (
+          <Building2 className="h-4 w-4" />
+        )}
+        <span className="text-sm">{rate.lender}</span>
+        <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+          inquire
+        </Button>
+      </div>
+      <button className="text-sm text-muted-foreground hover:underline mt-1">
+        More details +
+      </button>
+    </div>
+  );
 
   return (
     <Card className="border-2 border-primary/20 shadow-lg">
@@ -423,80 +469,107 @@ export function InteractiveRateCalculator({
           {availableTerms.map((term) => {
             const fixedRate = rates.find(r => r.term === term && r.type === "fixed");
             const variableRate = rates.find(r => r.term === term && r.type === "variable");
+            const additionalFixedRates = getAdditionalRates(term, "fixed");
+            const additionalVariableRates = getAdditionalRates(term, "variable");
+            const showMoreFixed = showMoreRates[`${term}-fixed`];
+            const showMoreVariable = showMoreRates[`${term}-variable`];
 
             return (
               <div key={term} className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 border rounded-lg">
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between">
                   <div>
                     <span className="text-lg font-bold">{term}</span>
                     <button className="block text-primary text-sm hover:underline">
                       compare all rates
                     </button>
                   </div>
+                  <div className="flex-1">
+                    {isLoading ? (
+                      <div className="text-center space-y-2">
+                        <Skeleton className="h-8 w-20 mx-auto" />
+                        <Skeleton className="h-6 w-32 mx-auto" />
+                        <Skeleton className="h-8 w-16 mx-auto" />
+                      </div>
+                    ) : fixedRate ? (
+                      <>
+                        {renderRateItem(fixedRate)}
+                        {showMoreFixed && additionalFixedRates.map(rate => 
+                          renderRateItem(rate, true)
+                        )}
+                        {additionalFixedRates.length > 0 && (
+                          <div className="text-center mt-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => toggleShowMore(term, "fixed")}
+                              className="text-primary hover:text-primary/80"
+                            >
+                              {showMoreFixed ? (
+                                <>
+                                  <ChevronUp className="h-4 w-4 mr-1" />
+                                  Show less
+                                </>
+                              ) : (
+                                <>
+                                  <ChevronDown className="h-4 w-4 mr-1" />
+                                  Show {additionalFixedRates.length} more
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="text-center text-muted-foreground">
+                        No rates available
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="lg:border-l lg:pl-4">
                   {isLoading ? (
                     <div className="text-center space-y-2">
-                      <Skeleton className="h-8 w-20" />
-                      <Skeleton className="h-6 w-32" />
-                      <Skeleton className="h-8 w-16" />
+                      <Skeleton className="h-8 w-20 mx-auto" />
+                      <Skeleton className="h-4 w-24 mx-auto" />
+                      <Skeleton className="h-6 w-32 mx-auto" />
+                      <Skeleton className="h-8 w-16 mx-auto" />
                     </div>
-                  ) : fixedRate ? (
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-primary">{(fixedRate.rate * 100).toFixed(2)}%</div>
-                      <div className="flex items-center gap-2 mt-2">
-                        {fixedRate.lenderType === "home" || fixedRate.lenderType !== "bank" ? (
-                          <Home className="h-4 w-4" />
-                        ) : (
-                          <Building2 className="h-4 w-4" />
-                        )}
-                        <span className="text-sm">{fixedRate.lender}</span>
-                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                          inquire
-                        </Button>
-                      </div>
-                      <button className="text-sm text-muted-foreground hover:underline mt-1">
-                        More details +
-                      </button>
-                    </div>
+                  ) : variableRate ? (
+                    <>
+                      {renderRateItem(variableRate)}
+                      {showMoreVariable && additionalVariableRates.map(rate => 
+                        renderRateItem(rate, true)
+                      )}
+                      {additionalVariableRates.length > 0 && (
+                        <div className="text-center mt-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => toggleShowMore(term, "variable")}
+                            className="text-primary hover:text-primary/80"
+                          >
+                            {showMoreVariable ? (
+                              <>
+                                <ChevronUp className="h-4 w-4 mr-1" />
+                                Show less
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="h-4 w-4 mr-1" />
+                                Show {additionalVariableRates.length} more
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <div className="text-center text-muted-foreground">
                       No rates available
                     </div>
                   )}
                 </div>
-
-                {isLoading ? (
-                  <div className="text-center lg:border-l lg:pl-4 space-y-2">
-                    <Skeleton className="h-8 w-20 mx-auto" />
-                    <Skeleton className="h-4 w-24 mx-auto" />
-                    <Skeleton className="h-6 w-32 mx-auto" />
-                    <Skeleton className="h-8 w-16 mx-auto" />
-                  </div>
-                ) : variableRate ? (
-                  <div className="text-center lg:border-l lg:pl-4">
-                    <div className="text-2xl font-bold text-primary">{(variableRate.rate * 100).toFixed(2)}%</div>
-                    {variableRate.prime && (
-                      <div className="text-sm text-muted-foreground">{variableRate.prime}</div>
-                    )}
-                    <div className="flex items-center justify-center gap-2 mt-2">
-                      {variableRate.lenderType === "home" || variableRate.lenderType !== "bank" ? (
-                        <Home className="h-4 w-4" />
-                      ) : (
-                        <Building2 className="h-4 w-4" />
-                      )}
-                      <span className="text-sm">{variableRate.lender}</span>
-                      <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                        inquire
-                      </Button>
-                    </div>
-                    <button className="text-sm text-muted-foreground hover:underline mt-1">
-                      More details +
-                    </button>
-                  </div>
-                ) : (
-                  <div className="text-center lg:border-l lg:pl-4 text-muted-foreground">
-                    No rates available
-                  </div>
-                )}
               </div>
             );
           })}
