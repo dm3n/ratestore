@@ -8,6 +8,20 @@ import { Button } from "@/components/ui/button";
 import { BarChart3, Calculator, Filter, Users, DollarSign, CheckCircle } from "lucide-react";
 
 const CompareChequing = () => {
+  const scrollToCalculator = () => {
+    const calculatorSection = document.getElementById('chequing-calculator');
+    if (calculatorSection) {
+      calculatorSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToCategories = () => {
+    const categoriesSection = document.getElementById('comparison-categories');
+    if (categoriesSection) {
+      categoriesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -29,11 +43,11 @@ const CompareChequing = () => {
                 Find the perfect account for your banking needs with our comprehensive comparison tool.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
                   <Calculator className="h-5 w-5" />
                   Start Comparison
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
+                <Button size="lg" variant="outline" className="gap-2" onClick={scrollToCategories}>
                   <Filter className="h-5 w-5" />
                   Advanced Filters
                 </Button>
@@ -43,7 +57,7 @@ const CompareChequing = () => {
         </section>
         
         {/* Interactive Calculator */}
-        <section className="py-16">
+        <section className="py-16" id="chequing-calculator">
           <div className="container">
             <div className="max-w-7xl mx-auto">
               <SavingsRatesCalculator 
@@ -56,7 +70,7 @@ const CompareChequing = () => {
         </section>
 
         {/* Comparison Categories */}
-        <section className="py-16 bg-primary/5">
+        <section className="py-16 bg-primary/5" id="comparison-categories">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
