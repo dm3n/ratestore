@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -162,15 +163,14 @@ const Brokerages = () => {
             <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-8">
               {brokerages.map((brokerage, index) => (
                 <Card key={index} className="relative overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                  {brokerage.badge && (
-                    <div className="absolute top-4 left-4 z-10">
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                        {brokerage.badge}
-                      </Badge>
-                    </div>
-                  )}
-                  
-                  <CardHeader>
+                  <CardHeader className="relative">
+                    {brokerage.badge && (
+                      <div className="mb-3">
+                        <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                          {brokerage.badge}
+                        </Badge>
+                      </div>
+                    )}
                     <div className="flex items-center justify-between mb-2">
                       <CardTitle className="text-2xl">{brokerage.name}</CardTitle>
                       <div className="flex items-center gap-1">
