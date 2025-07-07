@@ -286,7 +286,7 @@ const BestOverallCreditCards = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="gap-2" asChild>
-                  <Link to="/credit-cards/card-finder">
+                  <Link to="/card-finder">
                     Find My Perfect Card <ArrowRight className="h-5 w-5" />
                   </Link>
                 </Button>
