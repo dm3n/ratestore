@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SavingsRatesCalculator } from "@/components/SavingsRatesCalculator";
@@ -6,8 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, Star, Calculator, PiggyBank, CheckCircle, GraduationCap } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const YouthSavings = () => {
+  const scrollToCalculator = () => {
+    const element = document.getElementById('calculator-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -29,13 +36,15 @@ const YouthSavings = () => {
                 with competitive rates and educational tools.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
                   <Calculator className="h-5 w-5" />
                   Compare Youth Accounts
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
-                  <PiggyBank className="h-5 w-5" />
-                  Start Saving Early
+                <Button size="lg" variant="outline" className="gap-2" asChild>
+                  <Link to="/tools/calculators">
+                    <PiggyBank className="h-5 w-5" />
+                    Start Saving Early
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -43,7 +52,7 @@ const YouthSavings = () => {
         </section>
         
         {/* Interactive Calculator */}
-        <section className="py-16">
+        <section id="calculator-section" className="py-16">
           <div className="container">
             <div className="max-w-7xl mx-auto">
               <SavingsRatesCalculator 
