@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,44 +6,37 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RefreshCw, Star, CreditCard, Filter } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-
-const balanceTransferCards = [
-  {
-    id: 1,
-    name: "MBNA True Line Mastercard",
-    issuer: "MBNA",
-    annualFee: 0,
-    promoRate: "0.99% for 12 months",
-    regularRate: "22.99%",
-    balanceTransferFee: "1% (min $7.50)",
-    features: ["Low promo rate", "No annual fee", "Online account management"],
-    pros: ["Very low promotional rate", "No annual fee", "Long promotional period"],
-    cons: ["High regular rate", "Balance transfer fee applies"],
-    applyUrl: "#",
-    isPromoted: true
-  },
-  {
-    id: 2,
-    name: "BMO Preferred Rate Mastercard",
-    issuer: "BMO",
-    annualFee: 20,
-    promoRate: "2.99% for 9 months",
-    regularRate: "12.99%",
-    balanceTransferFee: "3%",
-    features: ["Low ongoing rate", "Balance transfer offers", "Fraud protection"],
-    pros: ["Low ongoing interest rate", "Regular promotional offers"],
-    cons: ["Annual fee", "Higher transfer fee"],
-    applyUrl: "#",
-    isPromoted: false
-  }
-];
-
+const balanceTransferCards = [{
+  id: 1,
+  name: "MBNA True Line Mastercard",
+  issuer: "MBNA",
+  annualFee: 0,
+  promoRate: "0.99% for 12 months",
+  regularRate: "22.99%",
+  balanceTransferFee: "1% (min $7.50)",
+  features: ["Low promo rate", "No annual fee", "Online account management"],
+  pros: ["Very low promotional rate", "No annual fee", "Long promotional period"],
+  cons: ["High regular rate", "Balance transfer fee applies"],
+  applyUrl: "#",
+  isPromoted: true
+}, {
+  id: 2,
+  name: "BMO Preferred Rate Mastercard",
+  issuer: "BMO",
+  annualFee: 20,
+  promoRate: "2.99% for 9 months",
+  regularRate: "12.99%",
+  balanceTransferFee: "3%",
+  features: ["Low ongoing rate", "Balance transfer offers", "Fraud protection"],
+  pros: ["Low ongoing interest rate", "Regular promotional offers"],
+  cons: ["Annual fee", "Higher transfer fee"],
+  applyUrl: "#",
+  isPromoted: false
+}];
 export default function BalanceTransfer() {
   const [sortBy, setSortBy] = useState("promo-rate");
   const [filterBy, setFilterBy] = useState("all");
-
-  return (
-    <div className="min-h-screen bg-gray-50">
+  return <div className="min-h-screen bg-gray-50">
       <Header />
       
       <main className="container mx-auto px-4 py-8">
@@ -87,13 +79,10 @@ export default function BalanceTransfer() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {balanceTransferCards.map((card) => (
-            <Card key={card.id} className="relative overflow-hidden hover:shadow-lg transition-shadow">
-              {card.isPromoted && (
-                <div className="absolute top-4 right-4">
-                  <Badge variant="destructive">Featured</Badge>
-                </div>
-              )}
+          {balanceTransferCards.map(card => <Card key={card.id} className="relative overflow-hidden hover:shadow-lg transition-shadow">
+              {card.isPromoted && <div className="absolute top-4 right-4">
+                  
+                </div>}
               
               <CardHeader>
                 <div className="flex items-start justify-between">
@@ -125,12 +114,10 @@ export default function BalanceTransfer() {
                 <div className="text-sm">
                   <span className="font-medium text-gray-900">Key Features:</span>
                   <ul className="text-gray-600 mt-1">
-                    {card.features.slice(0, 2).map((feature, index) => (
-                      <li key={index} className="flex items-center gap-1">
+                    {card.features.slice(0, 2).map((feature, index) => <li key={index} className="flex items-center gap-1">
                         <Star className="h-3 w-3 text-yellow-500" />
                         {feature}
-                      </li>
-                    ))}
+                      </li>)}
                   </ul>
                 </div>
                 
@@ -142,8 +129,7 @@ export default function BalanceTransfer() {
                   </Button>
                 </div>
               </CardContent>
-            </Card>
-          ))}
+            </Card>)}
         </div>
 
         <div className="mt-16 bg-white rounded-lg p-8">
@@ -172,6 +158,5 @@ export default function BalanceTransfer() {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 }
