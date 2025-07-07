@@ -9,6 +9,66 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      banking_rates: {
+        Row: {
+          account_category: string | null
+          account_name: string
+          account_type: string
+          created_at: string
+          features: Json | null
+          fee_waiver_conditions: string | null
+          id: string
+          institution: string
+          interest_rate: number | null
+          is_active: boolean | null
+          is_featured: boolean | null
+          minimum_balance: number | null
+          monthly_fee: number | null
+          province: string | null
+          special_offers: string | null
+          transaction_limit: number | null
+          updated_at: string
+        }
+        Insert: {
+          account_category?: string | null
+          account_name: string
+          account_type: string
+          created_at?: string
+          features?: Json | null
+          fee_waiver_conditions?: string | null
+          id?: string
+          institution: string
+          interest_rate?: number | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          minimum_balance?: number | null
+          monthly_fee?: number | null
+          province?: string | null
+          special_offers?: string | null
+          transaction_limit?: number | null
+          updated_at?: string
+        }
+        Update: {
+          account_category?: string | null
+          account_name?: string
+          account_type?: string
+          created_at?: string
+          features?: Json | null
+          fee_waiver_conditions?: string | null
+          id?: string
+          institution?: string
+          interest_rate?: number | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          minimum_balance?: number | null
+          monthly_fee?: number | null
+          province?: string | null
+          special_offers?: string | null
+          transaction_limit?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string

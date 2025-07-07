@@ -6,7 +6,8 @@ import { AdminUserManager } from './AdminUserManager';
 import { AdminRateManager } from './AdminRateManager';
 import { AdminGICRateManager } from './AdminGICRateManager';
 import { AdminBlogManager } from './AdminBlogManager';
-import { Users, TrendingUp, Database, FileText } from 'lucide-react';
+import { AdminBankingRateManager } from './AdminBankingRateManager';
+import { Users, TrendingUp, Database, FileText, Building2 } from 'lucide-react';
 
 export const AdminDashboard = () => {
   return (
@@ -17,10 +18,11 @@ export const AdminDashboard = () => {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="rates">Mortgage Rates</TabsTrigger>
+          <TabsTrigger value="banking-rates">Banking Rates</TabsTrigger>
           <TabsTrigger value="gic-rates">GIC Rates</TabsTrigger>
           <TabsTrigger value="blog">Blog Posts</TabsTrigger>
         </TabsList>
@@ -49,12 +51,12 @@ export const AdminDashboard = () => {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">GIC Products</CardTitle>
-                <Database className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Banking Products</CardTitle>
+                <Building2 className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">128</div>
-                <p className="text-xs text-muted-foreground">+12% from last month</p>
+                <div className="text-2xl font-bold">85</div>
+                <p className="text-xs text-muted-foreground">Chequing & Savings</p>
               </CardContent>
             </Card>
             <Card>
@@ -79,7 +81,7 @@ export const AdminDashboard = () => {
                   <div className="text-sm">New user registration: john.doe@example.com</div>
                   <div className="text-sm">Rate update: BMO 5-year fixed rate changed to 5.24%</div>
                   <div className="text-sm">New blog post published: "Market Analysis Q1 2024"</div>
-                  <div className="text-sm">GIC rate updated: Tangerine 1-year GIC now 4.85%</div>
+                  <div className="text-sm">Banking rate updated: RBC Day to Day Banking fee increased</div>
                 </div>
               </CardContent>
             </Card>
@@ -92,9 +94,9 @@ export const AdminDashboard = () => {
               <CardContent>
                 <div className="space-y-2">
                   <div className="text-sm cursor-pointer hover:underline">Update mortgage rates</div>
+                  <div className="text-sm cursor-pointer hover:underline">Add banking products</div>
                   <div className="text-sm cursor-pointer hover:underline">Create new blog post</div>
                   <div className="text-sm cursor-pointer hover:underline">Review user feedback</div>
-                  <div className="text-sm cursor-pointer hover:underline">Export user data</div>
                 </div>
               </CardContent>
             </Card>
@@ -107,6 +109,10 @@ export const AdminDashboard = () => {
 
         <TabsContent value="rates">
           <AdminRateManager />
+        </TabsContent>
+
+        <TabsContent value="banking-rates">
+          <AdminBankingRateManager />
         </TabsContent>
         
         <TabsContent value="gic-rates">
