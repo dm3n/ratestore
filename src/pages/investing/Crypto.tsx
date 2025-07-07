@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -101,6 +100,13 @@ const popularCryptos = [
 ];
 
 const Crypto = () => {
+  const scrollToExchanges = () => {
+    const exchangesSection = document.getElementById('exchanges-comparison');
+    if (exchangesSection) {
+      exchangesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -119,11 +125,11 @@ const Crypto = () => {
                 Enter the world of cryptocurrency. Compare Canada's top crypto exchanges and start trading digital assets safely.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-white text-orange-700 hover:bg-orange-50">
+                <Button size="lg" className="bg-white text-orange-700 hover:bg-orange-50" onClick={scrollToExchanges}>
                   Compare All Exchanges
                 </Button>
-                <Button size="lg" variant="outline" className="bg-orange-700 border-white text-white hover:bg-orange-600">
-                  Learn About Crypto
+                <Button size="lg" variant="outline" className="bg-orange-700 border-white text-white hover:bg-orange-600" asChild>
+                  <Link to="/guides/education-centre">Learn About Crypto</Link>
                 </Button>
               </div>
             </div>
@@ -170,7 +176,7 @@ const Crypto = () => {
         </section>
 
         {/* Exchanges Comparison */}
-        <section className="py-16">
+        <section id="exchanges-comparison" className="py-16">
           <div className="container">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Top Crypto Exchanges Comparison</h2>
