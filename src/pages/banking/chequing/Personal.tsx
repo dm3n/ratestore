@@ -8,6 +8,13 @@ import { Button } from "@/components/ui/button";
 import { CreditCard, Smartphone, Globe, Calculator, Users, DollarSign } from "lucide-react";
 
 const PersonalChequing = () => {
+  const scrollToCalculator = () => {
+    const calculatorSection = document.getElementById('personal-chequing-calculator');
+    if (calculatorSection) {
+      calculatorSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -29,7 +36,7 @@ const PersonalChequing = () => {
                 Compare fees, transaction limits, and features from Canada's top banks.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
                   <Calculator className="h-5 w-5" />
                   Compare Accounts
                 </Button>
@@ -43,7 +50,7 @@ const PersonalChequing = () => {
         </section>
         
         {/* Interactive Calculator */}
-        <section className="py-16">
+        <section className="py-16" id="personal-chequing-calculator">
           <div className="container">
             <div className="max-w-7xl mx-auto">
               <SavingsRatesCalculator 
