@@ -587,12 +587,6 @@ export function InteractiveRateCalculator({
             );
           })}
 
-          <div className="text-center pt-4">
-            <Button variant="outline" className="text-primary border-primary hover:bg-primary/5">
-              <Plus className="h-4 w-4 mr-2" />
-              show more
-            </Button>
-          </div>
         </div>
       </CardContent>
     </Card>
