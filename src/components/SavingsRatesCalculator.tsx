@@ -41,7 +41,7 @@ interface SavingsRatesCalculatorProps {
 const getInstitutionType = (institution: string): "big5" | "credit-union" | "online" | "other" => {
   const big5Banks = ["RBC", "TD Canada Trust", "Scotiabank", "BMO", "CIBC"];
   const onlineBanks = ["Tangerine Bank", "EQ Bank", "Simplii Financial", "Motusbank", "Koodo Mobile Banking", "PC Financial"];
-  const creditUnions = ["Vancity", "ATB Financial", "Desjardins"];
+  const creditUnions = ["Vancity", "ATB Financial", "Desjardins", "Coast Capital Savings", "Meridian Credit Union"];
   
   if (big5Banks.includes(institution)) return "big5";
   if (onlineBanks.includes(institution)) return "online";
@@ -80,6 +80,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
       }
 
       console.log('Raw fetched data:', data);
+      console.log('Data length:', data?.length || 0);
 
       // Transform database data to match our interface
       const transformedRates: SavingsRateData[] = (data || []).map(rate => ({
@@ -102,6 +103,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
       }));
 
       console.log('Transformed rates:', transformedRates);
+      console.log('Transformed rates length:', transformedRates.length);
       setRates(transformedRates);
       setLastUpdated(new Date());
     } catch (error) {
@@ -167,6 +169,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   });
 
   console.log('Final filtered rates count:', filteredRates.length);
+  console.log('Final filtered rates:', filteredRates);
 
   const calculateEarnings = (rate: SavingsRateData) => {
     const monthlyRate = rate.interest_rate / 12;
