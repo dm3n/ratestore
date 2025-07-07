@@ -6,8 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Shield, CheckCircle, Calculator, Percent, PiggyBank } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const BestSavings = () => {
+  const scrollToCalculator = () => {
+    const element = document.getElementById('calculator-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -29,13 +37,15 @@ const BestSavings = () => {
                 Find accounts with up to 5.25% APY and no monthly fees.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
                   <Calculator className="h-5 w-5" />
                   Compare Rates Now
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
-                  <PiggyBank className="h-5 w-5" />
-                  Calculate Earnings
+                <Button size="lg" variant="outline" className="gap-2" asChild>
+                  <Link to="/tools/calculators">
+                    <PiggyBank className="h-5 w-5" />
+                    Calculate Earnings
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -43,7 +53,7 @@ const BestSavings = () => {
         </section>
         
         {/* Interactive Calculator */}
-        <section className="py-16">
+        <section id="calculator-section" className="py-16">
           <div className="container">
             <div className="max-w-7xl mx-auto">
               <SavingsRatesCalculator 
