@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -216,6 +217,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   const [activeTab, setActiveTab] = useState("best-rates");
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [isCalculating, setIsCalculating] = useState(false);
 
   const getRatesForAccountType = () => {
     switch (accountType) {
@@ -240,18 +242,43 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
 
   const rates = getRatesForAccountType();
 
-  // Filter rates based on current selections
+  // Auto-refresh when inputs change
+  useEffect(() => {
+    setIsCalculating(true);
+    const timer = setTimeout(() => {
+      setIsCalculating(false);
+      setLastUpdated(new Date());
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [depositAmount, timeHorizon, institutionFilter, minBalanceFilter, activeTab]);
+
+  // Filter rates based on current selections and deposit amount
   const filteredRates = rates.filter(rate => {
     if (institutionFilter !== "all" && rate.institutionType !== institutionFilter) return false;
     if (minBalanceFilter === "no-minimum" && rate.minimumBalance > 0) return false;
     if (minBalanceFilter === "low-minimum" && rate.minimumBalance > 1000) return false;
+    
+    // Filter by deposit amount vs minimum balance
+    if (depositAmount < rate.minimumBalance) return false;
+    
+    // Show only big5 banks for big5-banks tab
+    if (activeTab === "big5-banks" && rate.institutionType !== "big5") return false;
+    
     return true;
-  }).sort((a, b) => b.interestRate - a.interestRate);
+  }).sort((a, b) => {
+    // Sort by promotional rate first if available, then by regular rate
+    const aRate = a.promotionalRate || a.interestRate;
+    const bRate = b.promotionalRate || b.interestRate;
+    return bRate - aRate;
+  });
 
   const calculateEarnings = (rate: SavingsRateData) => {
-    const monthlyRate = rate.interestRate / 100 / 12;
+    const effectiveRate = rate.promotionalRate || rate.interestRate;
+    const monthlyRate = effectiveRate / 100 / 12;
     const compoundedAmount = depositAmount * Math.pow(1 + monthlyRate, timeHorizon);
-    return compoundedAmount - depositAmount;
+    const totalFees = rate.monthlyFee * timeHorizon;
+    return compoundedAmount - depositAmount - totalFees;
   };
 
   const refreshRates = () => {
@@ -262,6 +289,11 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
     }, 1000);
   };
 
+  const handleDepositChange = (value: string) => {
+    const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+    setDepositAmount(numericValue);
+  };
+
   return (
     <Card className="border-2 border-primary/20 shadow-lg">
       <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
@@ -270,10 +302,10 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
             <CardTitle className="text-2xl font-bold">{title}</CardTitle>
             <p className="text-muted-foreground mt-1">
               {description}
-              {isLoading && (
-                <span className="inline-flex items-center ml-2 text-primary">
+              {(isLoading || isCalculating) && (
+                <span className="inline-flex items-center ml-2 text-primary animate-pulse">
                   <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
-                  Loading rates...
+                  {isLoading ? "Loading rates..." : "Calculating..."}
                 </span>
               )}
               <span className="block text-xs text-muted-foreground/70 mt-1">
@@ -304,7 +336,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
       
       <CardContent className="p-6">
         {/* Calculator Inputs */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 p-4 bg-gray-50 rounded-lg transition-all duration-300">
           <div className="space-y-2">
             <Label htmlFor="deposit-amount" className="text-sm font-medium">Deposit Amount</Label>
             <div className="relative">
@@ -313,11 +345,8 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
                 id="deposit-amount"
                 type="text"
                 value={depositAmount.toLocaleString()}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value.replace(/,/g, '')) || 0;
-                  setDepositAmount(value);
-                }}
-                className="pl-8"
+                onChange={(e) => handleDepositChange(e.target.value)}
+                className="pl-8 transition-all duration-200 focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
@@ -325,7 +354,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
           <div className="space-y-2">
             <Label htmlFor="time-horizon" className="text-sm font-medium">Time Period (months)</Label>
             <Select value={timeHorizon.toString()} onValueChange={(value) => setTimeHorizon(parseInt(value))}>
-              <SelectTrigger>
+              <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-primary/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -341,7 +370,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
           <div className="space-y-2">
             <Label htmlFor="institution-filter" className="text-sm font-medium">Institution Type</Label>
             <Select value={institutionFilter} onValueChange={setInstitutionFilter}>
-              <SelectTrigger>
+              <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-primary/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -356,7 +385,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
           <div className="space-y-2">
             <Label htmlFor="balance-filter" className="text-sm font-medium">Minimum Balance</Label>
             <Select value={minBalanceFilter} onValueChange={setMinBalanceFilter}>
-              <SelectTrigger>
+              <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-primary/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -374,108 +403,118 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
             <h3 className="text-lg font-semibold">
               {activeTab === "big5-banks" ? "Big 5 Banks" : "Best Available Rates"}
             </h3>
-            <Badge variant="secondary" className="bg-green-100 text-green-700">
+            <Badge variant="secondary" className={`bg-green-100 text-green-700 transition-all duration-300 ${isCalculating ? 'animate-pulse' : ''}`}>
               {filteredRates.length} accounts found
             </Badge>
           </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Institution</TableHead>
-                <TableHead>Account Type</TableHead>
-                <TableHead className="text-right">Interest Rate</TableHead>
-                <TableHead className="text-right">Projected Earnings</TableHead>
-                <TableHead className="text-right">Monthly Fee</TableHead>
-                <TableHead className="text-right">Min. Balance</TableHead>
-                <TableHead>Features</TableHead>
-                <TableHead></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                Array.from({ length: 5 }).map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell><Skeleton className="h-6 w-32" /></TableCell>
-                    <TableCell><Skeleton className="h-6 w-40" /></TableCell>
-                    <TableCell><Skeleton className="h-6 w-16" /></TableCell>
-                    <TableCell><Skeleton className="h-6 w-20" /></TableCell>
-                    <TableCell><Skeleton className="h-6 w-16" /></TableCell>
-                    <TableCell><Skeleton className="h-6 w-20" /></TableCell>
-                    <TableCell><Skeleton className="h-6 w-32" /></TableCell>
-                    <TableCell><Skeleton className="h-8 w-20" /></TableCell>
+          <div className={`transition-all duration-500 ${isCalculating ? 'opacity-50' : 'opacity-100'}`}>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Institution</TableHead>
+                  <TableHead>Account Type</TableHead>
+                  <TableHead className="text-right">Interest Rate</TableHead>
+                  <TableHead className="text-right">Projected Earnings</TableHead>
+                  <TableHead className="text-right">Monthly Fee</TableHead>
+                  <TableHead className="text-right">Min. Balance</TableHead>
+                  <TableHead>Features</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(isLoading || isCalculating) ? (
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <TableRow key={i}>
+                      <TableCell><Skeleton className="h-6 w-32" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-40" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-16" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-20" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-16" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-20" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-32" /></TableCell>
+                      <TableCell><Skeleton className="h-8 w-20" /></TableCell>
+                    </TableRow>
+                  ))
+                ) : filteredRates.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                      No accounts match your criteria. Try adjusting your deposit amount or filters.
+                    </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                filteredRates.map((rate, index) => (
-                  <TableRow key={rate.id} className={index === 0 ? "bg-green-50" : ""}>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {rate.institutionType === "big5" ? (
-                          <Building2 className="h-4 w-4 text-blue-600" />
+                ) : (
+                  filteredRates.map((rate, index) => (
+                    <TableRow key={rate.id} className={`transition-all duration-300 ${index === 0 ? "bg-green-50 animate-fade-in" : ""}`}>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          {rate.institutionType === "big5" ? (
+                            <Building2 className="h-4 w-4 text-blue-600" />
+                          ) : (
+                            <Landmark className="h-4 w-4 text-green-600" />
+                          )}
+                          <div>
+                            <span className="font-medium">{rate.bankName}</span>
+                            {rate.promotionalRate && (
+                              <Badge variant="secondary" className="ml-2 text-xs bg-orange-100 text-orange-700 animate-pulse">
+                                Promo: {rate.promotionalRate}% for {rate.promotionalPeriod} months
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-medium">{rate.accountType}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <span className="text-2xl font-bold text-primary">{(rate.promotionalRate || rate.interestRate).toFixed(2)}%</span>
+                          {index === 0 && <TrendingUp className="h-4 w-4 text-green-600 animate-bounce" />}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <span className="font-bold text-green-600 transition-all duration-300">
+                          ${calculateEarnings(rate).toFixed(2)}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {rate.monthlyFee === 0 ? (
+                          <Badge variant="secondary" className="bg-green-100 text-green-700">Free</Badge>
                         ) : (
-                          <Landmark className="h-4 w-4 text-green-600" />
+                          <span>${rate.monthlyFee}</span>
                         )}
-                        <div>
-                          <span className="font-medium">{rate.bankName}</span>
-                          {rate.promotionalRate && (
-                            <Badge variant="secondary" className="ml-2 text-xs bg-orange-100 text-orange-700">
-                              Promo: {rate.promotionalRate}% for {rate.promotionalPeriod} months
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {rate.minimumBalance === 0 ? (
+                          <Badge variant="secondary" className="bg-green-100 text-green-700">No minimum</Badge>
+                        ) : (
+                          <span className={depositAmount >= rate.minimumBalance ? "text-green-600 font-medium" : "text-red-500"}>
+                            ${rate.minimumBalance.toLocaleString()}
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-wrap gap-1">
+                          {rate.features.slice(0, 2).map((feature, i) => (
+                            <Badge key={i} variant="outline" className="text-xs">
+                              {feature}
+                            </Badge>
+                          ))}
+                          {rate.features.length > 2 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{rate.features.length - 2} more
                             </Badge>
                           )}
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-medium">{rate.accountType}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <span className="text-2xl font-bold text-primary">{rate.interestRate.toFixed(2)}%</span>
-                        {index === 0 && <TrendingUp className="h-4 w-4 text-green-600" />}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <span className="font-bold text-green-600">
-                        ${calculateEarnings(rate).toFixed(2)}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {rate.monthlyFee === 0 ? (
-                        <Badge variant="secondary" className="bg-green-100 text-green-700">Free</Badge>
-                      ) : (
-                        <span>${rate.monthlyFee}</span>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {rate.minimumBalance === 0 ? (
-                        <Badge variant="secondary" className="bg-green-100 text-green-700">No minimum</Badge>
-                      ) : (
-                        <span>${rate.minimumBalance.toLocaleString()}</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1">
-                        {rate.features.slice(0, 2).map((feature, i) => (
-                          <Badge key={i} variant="outline" className="text-xs">
-                            {feature}
-                          </Badge>
-                        ))}
-                        {rate.features.length > 2 && (
-                          <Badge variant="outline" className="text-xs">
-                            +{rate.features.length - 2} more
-                          </Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                        Apply Now
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                      </TableCell>
+                      <TableCell>
+                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 transition-colors duration-200">
+                          Apply Now
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </CardContent>
     </Card>
