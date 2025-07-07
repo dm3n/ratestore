@@ -515,7 +515,7 @@ const Promotions = () => {
                     Find My Perfect Card
                   </a>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary" asChild>
+                <Button size="lg" variant="ghost" className="bg-primary text-white border-2 border-white hover:bg-white hover:text-primary" asChild>
                   <a href="/credit-cards/best-overall">
                     View All Cards
                   </a>
