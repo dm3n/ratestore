@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SavingsRatesCalculator } from "@/components/SavingsRatesCalculator";
@@ -6,10 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, DollarSign, Calculator, PiggyBank, CheckCircle, Percent } from "lucide-react";
-
 const RRSPSavings = () => {
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-1">
@@ -33,10 +30,7 @@ const RRSPSavings = () => {
                   <Calculator className="h-5 w-5" />
                   Compare RRSP Rates
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
-                  <PiggyBank className="h-5 w-5" />
-                  Calculate Tax Savings
-                </Button>
+                
               </div>
             </div>
           </div>
@@ -46,11 +40,7 @@ const RRSPSavings = () => {
         <section className="py-16">
           <div className="container">
             <div className="max-w-7xl mx-auto">
-              <SavingsRatesCalculator 
-                accountType="rrsp"
-                title="Best RRSP Savings Account Rates"
-                description="Compare registered retirement savings account rates and plan your retirement"
-              />
+              <SavingsRatesCalculator accountType="rrsp" title="Best RRSP Savings Account Rates" description="Compare registered retirement savings account rates and plan your retirement" />
             </div>
           </div>
         </section>
@@ -153,8 +143,6 @@ const RRSPSavings = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default RRSPSavings;
