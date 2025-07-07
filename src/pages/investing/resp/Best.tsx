@@ -299,9 +299,11 @@ const BestRESP = () => {
                     Compare RESP Savings Rates <TrendingUp className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
-                  <Calculator className="mr-2 h-5 w-5" />
-                  RESP Calculator
+                <Button size="lg" variant="ghost" className="bg-purple-600 border-2 border-white text-white hover:bg-white hover:text-purple-600 font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/tools/tfsa-calculator">
+                    <Calculator className="mr-2 h-5 w-5" />
+                    RESP Calculator
+                  </Link>
                 </Button>
               </div>
             </div>
