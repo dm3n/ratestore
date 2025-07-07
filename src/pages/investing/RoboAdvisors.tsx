@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -89,6 +88,20 @@ const keyFeatures = [
 ];
 
 const RoboAdvisors = () => {
+  const scrollToComparison = () => {
+    const element = document.getElementById('robo-advisors-comparison');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToFeatures = () => {
+    const element = document.getElementById('key-features');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -107,10 +120,10 @@ const RoboAdvisors = () => {
                 Automated investing made simple. Compare Canada's top robo-advisors and find the perfect fit for your investment goals.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-white text-purple-700 hover:bg-purple-50">
+                <Button size="lg" className="bg-white text-purple-700 hover:bg-purple-50" onClick={scrollToComparison}>
                   Compare All Robo-Advisors
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white bg-transparent">
+                <Button size="lg" variant="outline" className="border-white text-white bg-transparent" onClick={scrollToFeatures}>
                   Learn About Robo-Advisors
                 </Button>
               </div>
@@ -119,7 +132,7 @@ const RoboAdvisors = () => {
         </section>
 
         {/* Key Features */}
-        <section className="py-16 bg-gray-50">
+        <section id="key-features" className="py-16 bg-gray-50">
           <div className="container">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Why Choose a Robo-Advisor?</h2>
@@ -141,7 +154,7 @@ const RoboAdvisors = () => {
         </section>
 
         {/* Robo-Advisors Comparison */}
-        <section className="py-16">
+        <section id="robo-advisors-comparison" className="py-16">
           <div className="container">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Top Robo-Advisors Comparison</h2>
@@ -302,7 +315,7 @@ const RoboAdvisors = () => {
               Compare robo-advisors and find the one that matches your investment goals and budget.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-purple-700 hover:bg-purple-50">
+              <Button size="lg" className="bg-white text-purple-700 hover:bg-purple-50" onClick={scrollToComparison}>
                 Start Comparing Now
               </Button>
               <Button size="lg" variant="outline" className="border-white text-white bg-transparent">
