@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -238,6 +239,13 @@ const BestOverallCreditCards = () => {
     }
   ];
 
+  const scrollToCategories = () => {
+    const element = document.getElementById('categories-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const renderStars = (rating: number) => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
@@ -282,7 +290,7 @@ const BestOverallCreditCards = () => {
                     Find My Perfect Card <ArrowRight className="h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
+                <Button size="lg" variant="outline" className="gap-2" onClick={scrollToCategories}>
                   Compare All Cards <CreditCard className="h-5 w-5" />
                 </Button>
               </div>
@@ -291,7 +299,7 @@ const BestOverallCreditCards = () => {
         </section>
 
         {/* Categories Section */}
-        <section className="py-12 md:py-16 bg-gray-50">
+        <section id="categories-section" className="py-12 md:py-16 bg-gray-50">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
