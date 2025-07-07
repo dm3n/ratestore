@@ -26,6 +26,24 @@ const suggestedQuestions = [
   "What insurance do I need as a first-time homeowner?"
 ];
 
+// Function to format AI responses by removing markdown and improving readability
+const formatAIResponse = (text: string): string => {
+  return text
+    // Remove markdown headers (# ## ###)
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remove bold markdown (**text** or __text__)
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/__(.*?)__/g, '$1')
+    // Remove italic markdown (*text* or _text_)
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/_(.*?)_/g, '$1')
+    // Remove strikethrough (~~text~~)
+    .replace(/~~(.*?)~~/g, '$1')
+    // Clean up extra whitespace
+    .replace(/\n\s*\n/g, '\n\n')
+    .trim();
+};
+
 export function Chatbot({ isOpen, onClose }: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
@@ -91,7 +109,7 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.response,
+        text: formatAIResponse(data.response),
         isUser: false,
         timestamp: new Date()
       };
@@ -197,7 +215,7 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
                             : 'bg-gray-100 text-gray-900 shadow-sm border border-gray-200 transform hover:scale-[1.01]'
                         }`}
                       >
-                        <p className="whitespace-pre-wrap">{message.text}</p>
+                        <p className="whitespace-pre-wrap leading-relaxed">{message.text}</p>
                       </div>
                     </div>
                   ))}
