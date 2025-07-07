@@ -10,198 +10,27 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Landmark, RefreshCw, TrendingUp } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface SavingsRateData {
   id: string;
-  bankName: string;
-  accountType: string;
-  interestRate: number;
-  minimumBalance: number;
-  monthlyFee: number;
+  institution: string;
+  account_name: string;
+  account_type: string;
+  account_category: string | null;
+  interest_rate: number;
+  monthly_fee: number;
+  minimum_balance: number;
+  transaction_limit: number | null;
   features: string[];
-  promotionalRate?: number;
-  promotionalPeriod?: number;
-  accountCategory: "savings" | "chequing" | "tfsa" | "rrsp" | "resp" | "youth" | "fhsa";
+  special_offers: string | null;
+  fee_waiver_conditions: string | null;
+  province: string;
+  is_featured: boolean;
+  is_active: boolean;
   institutionType: "big5" | "credit-union" | "online" | "other";
 }
-
-// Mock data - in a real app this would come from Supabase
-const mockSavingsRates: SavingsRateData[] = [
-  {
-    id: "1",
-    bankName: "Tangerine Bank",
-    accountType: "High Interest Savings",
-    interestRate: 4.25,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["No minimum balance", "No monthly fees", "Online banking"],
-    promotionalRate: 5.25,
-    promotionalPeriod: 6,
-    accountCategory: "savings",
-    institutionType: "online"
-  },
-  {
-    id: "2",
-    bankName: "EQ Bank",
-    accountType: "Savings Plus Account",
-    interestRate: 4.00,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["No fees", "Unlimited transactions", "Mobile deposit"],
-    accountCategory: "savings",
-    institutionType: "online"
-  },
-  {
-    id: "3",
-    bankName: "RBC",
-    accountType: "High Interest eSavings",
-    interestRate: 2.75,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["Online only", "No minimum balance", "CDIC insured"],
-    accountCategory: "savings",
-    institutionType: "big5"
-  },
-  {
-    id: "4",
-    bankName: "TD Canada Trust",
-    accountType: "High Interest Savings",
-    interestRate: 2.50,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["Branch access", "Online banking", "Mobile app"],
-    accountCategory: "savings",
-    institutionType: "big5"
-  }
-];
-
-const mockTFSARates: SavingsRateData[] = [
-  {
-    id: "tfsa1",
-    bankName: "Tangerine Bank",
-    accountType: "TFSA Savings",
-    interestRate: 4.25,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["Tax-free growth", "No minimum balance", "Online banking"],
-    accountCategory: "tfsa",
-    institutionType: "online"
-  },
-  {
-    id: "tfsa2",
-    bankName: "EQ Bank",
-    accountType: "TFSA Savings Plus",
-    interestRate: 4.00,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["Tax-free earnings", "No fees", "Mobile app"],
-    accountCategory: "tfsa",
-    institutionType: "online"
-  }
-];
-
-const mockRRSPRates: SavingsRateData[] = [
-  {
-    id: "rrsp1",
-    bankName: "Tangerine Bank",
-    accountType: "RRSP Savings",
-    interestRate: 4.00,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["Tax deductible", "No minimum balance", "Online banking"],
-    accountCategory: "rrsp",
-    institutionType: "online"
-  },
-  {
-    id: "rrsp2",
-    bankName: "EQ Bank",
-    accountType: "RRSP Savings Plus",
-    interestRate: 3.75,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["Retirement focused", "No fees", "Tax benefits"],
-    accountCategory: "rrsp",
-    institutionType: "online"
-  }
-];
-
-const mockRESPRates: SavingsRateData[] = [
-  {
-    id: "resp1",
-    bankName: "RBC",
-    accountType: "RESP Savings",
-    interestRate: 3.75,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["Government grants", "Educational focus", "Branch access"],
-    accountCategory: "resp",
-    institutionType: "big5"
-  }
-];
-
-const mockYouthRates: SavingsRateData[] = [
-  {
-    id: "youth1",
-    bankName: "RBC",
-    accountType: "Youth Savings",
-    interestRate: 3.50,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["No monthly fees", "Financial education", "Parental oversight"],
-    accountCategory: "youth",
-    institutionType: "big5"
-  }
-];
-
-const mockFHSARates: SavingsRateData[] = [
-  {
-    id: "fhsa1",
-    bankName: "TD Canada Trust",
-    accountType: "First Home Savings Account",
-    interestRate: 4.10,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["Tax deductible", "Tax-free withdrawal", "First-time buyers"],
-    accountCategory: "fhsa",
-    institutionType: "big5"
-  }
-];
-
-const mockChequingRates: SavingsRateData[] = [
-  {
-    id: "5",
-    bankName: "RBC",
-    accountType: "VIP Banking Package",
-    interestRate: 0.05,
-    minimumBalance: 6000,
-    monthlyFee: 31.95,
-    features: ["Unlimited transactions", "Premium services", "Investment advice"],
-    accountCategory: "chequing",
-    institutionType: "big5"
-  },
-  {
-    id: "6",
-    bankName: "TD Canada Trust",
-    accountType: "All-Inclusive Banking Plan",
-    interestRate: 0.05,
-    minimumBalance: 5000,
-    monthlyFee: 29.95,
-    features: ["Unlimited transactions", "Premium features", "Global ATM access"],
-    accountCategory: "chequing",
-    institutionType: "big5"
-  },
-  {
-    id: "7",
-    bankName: "Tangerine Bank",
-    accountType: "Chequing Account",
-    interestRate: 0.25,
-    minimumBalance: 0,
-    monthlyFee: 0,
-    features: ["No monthly fee", "Free e-Transfers", "Mobile banking"],
-    accountCategory: "chequing",
-    institutionType: "online"
-  }
-];
 
 interface SavingsRatesCalculatorProps {
   accountType: "savings" | "chequing" | "tfsa" | "rrsp" | "resp" | "youth" | "fhsa";
@@ -209,38 +38,80 @@ interface SavingsRatesCalculatorProps {
   description: string;
 }
 
+const getInstitutionType = (institution: string): "big5" | "credit-union" | "online" | "other" => {
+  const big5Banks = ["RBC", "TD Canada Trust", "Scotiabank", "BMO", "CIBC"];
+  const onlineBanks = ["Tangerine Bank", "EQ Bank", "Simplii Financial", "Motusbank", "Koodo Mobile Banking", "PC Financial"];
+  const creditUnions = ["Vancity", "ATB Financial", "Desjardins"];
+  
+  if (big5Banks.includes(institution)) return "big5";
+  if (onlineBanks.includes(institution)) return "online";
+  if (creditUnions.includes(institution)) return "credit-union";
+  return "other";
+};
+
 export function SavingsRatesCalculator({ accountType, title, description }: SavingsRatesCalculatorProps) {
   const [depositAmount, setDepositAmount] = useState(10000);
   const [timeHorizon, setTimeHorizon] = useState(12);
   const [institutionFilter, setInstitutionFilter] = useState("all");
   const [minBalanceFilter, setMinBalanceFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("best-rates");
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isCalculating, setIsCalculating] = useState(false);
+  const [rates, setRates] = useState<SavingsRateData[]>([]);
+  const { toast } = useToast();
 
-  const getRatesForAccountType = () => {
-    switch (accountType) {
-      case "savings":
-        return mockSavingsRates;
-      case "chequing":
-        return mockChequingRates;
-      case "tfsa":
-        return mockTFSARates;
-      case "rrsp":
-        return mockRRSPRates;
-      case "resp":
-        return mockRESPRates;
-      case "youth":
-        return mockYouthRates;
-      case "fhsa":
-        return mockFHSARates;
-      default:
-        return mockSavingsRates;
+  // Fetch rates from database
+  const fetchRates = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('banking_rates')
+        .select('*')
+        .eq('account_type', accountType)
+        .eq('is_active', true)
+        .order('interest_rate', { ascending: false });
+
+      if (error) throw error;
+
+      // Transform database data to match our interface
+      const transformedRates: SavingsRateData[] = (data || []).map(rate => ({
+        id: rate.id,
+        institution: rate.institution,
+        account_name: rate.account_name,
+        account_type: rate.account_type,
+        account_category: rate.account_category,
+        interest_rate: rate.interest_rate || 0,
+        monthly_fee: rate.monthly_fee || 0,
+        minimum_balance: rate.minimum_balance || 0,
+        transaction_limit: rate.transaction_limit,
+        features: Array.isArray(rate.features) ? rate.features as string[] : [],
+        special_offers: rate.special_offers,
+        fee_waiver_conditions: rate.fee_waiver_conditions,
+        province: rate.province || 'All',
+        is_featured: rate.is_featured || false,
+        is_active: rate.is_active || true,
+        institutionType: getInstitutionType(rate.institution)
+      }));
+
+      setRates(transformedRates);
+    } catch (error) {
+      console.error('Error fetching rates:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch banking rates. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const rates = getRatesForAccountType();
+  // Initial load
+  useEffect(() => {
+    fetchRates();
+  }, [accountType]);
 
   // Auto-refresh when inputs change
   useEffect(() => {
@@ -251,48 +122,45 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
     }, 800);
 
     return () => clearTimeout(timer);
-  }, [depositAmount, timeHorizon, institutionFilter, minBalanceFilter, activeTab]);
+  }, [depositAmount, timeHorizon, institutionFilter, minBalanceFilter, categoryFilter, activeTab]);
 
   // Filter rates based on current selections and deposit amount
   const filteredRates = rates.filter(rate => {
     if (institutionFilter !== "all" && rate.institutionType !== institutionFilter) return false;
-    if (minBalanceFilter === "no-minimum" && rate.minimumBalance > 0) return false;
-    if (minBalanceFilter === "low-minimum" && rate.minimumBalance > 1000) return false;
+    if (minBalanceFilter === "no-minimum" && rate.minimum_balance > 0) return false;
+    if (minBalanceFilter === "low-minimum" && rate.minimum_balance > 1000) return false;
+    if (categoryFilter !== "all" && rate.account_category !== categoryFilter) return false;
     
     // Filter by deposit amount vs minimum balance
-    if (depositAmount < rate.minimumBalance) return false;
+    if (depositAmount < rate.minimum_balance) return false;
     
     // Show only big5 banks for big5-banks tab
     if (activeTab === "big5-banks" && rate.institutionType !== "big5") return false;
     
     return true;
   }).sort((a, b) => {
-    // Sort by promotional rate first if available, then by regular rate
-    const aRate = a.promotionalRate || a.interestRate;
-    const bRate = b.promotionalRate || b.interestRate;
-    return bRate - aRate;
+    // Sort by interest rate (highest first)
+    return b.interest_rate - a.interest_rate;
   });
 
   const calculateEarnings = (rate: SavingsRateData) => {
-    const effectiveRate = rate.promotionalRate || rate.interestRate;
-    const monthlyRate = effectiveRate / 100 / 12;
+    const monthlyRate = rate.interest_rate / 12;
     const compoundedAmount = depositAmount * Math.pow(1 + monthlyRate, timeHorizon);
-    const totalFees = rate.monthlyFee * timeHorizon;
+    const totalFees = rate.monthly_fee * timeHorizon;
     return compoundedAmount - depositAmount - totalFees;
   };
 
   const refreshRates = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setLastUpdated(new Date());
-    }, 1000);
+    fetchRates();
   };
 
   const handleDepositChange = (value: string) => {
     const numericValue = parseInt(value.replace(/,/g, '')) || 0;
     setDepositAmount(numericValue);
   };
+
+  // Get unique categories for filter
+  const availableCategories = [...new Set(rates.map(rate => rate.account_category).filter(Boolean))];
 
   return (
     <Card className="border-2 border-primary/20 shadow-lg">
@@ -336,7 +204,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
       
       <CardContent className="p-6">
         {/* Calculator Inputs */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 p-4 bg-gray-50 rounded-lg transition-all duration-300">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8 p-4 bg-gray-50 rounded-lg transition-all duration-300">
           <div className="space-y-2">
             <Label htmlFor="deposit-amount" className="text-sm font-medium">Deposit Amount</Label>
             <div className="relative">
@@ -395,6 +263,25 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
               </SelectContent>
             </Select>
           </div>
+
+          {availableCategories.length > 0 && (
+            <div className="space-y-2">
+              <Label htmlFor="category-filter" className="text-sm font-medium">Account Category</Label>
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-primary/20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All categories</SelectItem>
+                  {availableCategories.map(category => (
+                    <SelectItem key={category} value={category!}>
+                      {category!.charAt(0).toUpperCase() + category!.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
 
         {/* Rates Table */}
@@ -453,19 +340,24 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
                             <Landmark className="h-4 w-4 text-green-600" />
                           )}
                           <div>
-                            <span className="font-medium">{rate.bankName}</span>
-                            {rate.promotionalRate && (
+                            <span className="font-medium">{rate.institution}</span>
+                            {rate.special_offers && (
                               <Badge variant="secondary" className="ml-2 text-xs bg-orange-100 text-orange-700 animate-pulse">
-                                Promo: {rate.promotionalRate}% for {rate.promotionalPeriod} months
+                                Special Offer
+                              </Badge>
+                            )}
+                            {rate.is_featured && (
+                              <Badge variant="secondary" className="ml-2 text-xs bg-blue-100 text-blue-700">
+                                Featured
                               </Badge>
                             )}
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium">{rate.accountType}</TableCell>
+                      <TableCell className="font-medium">{rate.account_name}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">
-                          <span className="text-2xl font-bold text-primary">{(rate.promotionalRate || rate.interestRate).toFixed(2)}%</span>
+                          <span className="text-2xl font-bold text-primary">{(rate.interest_rate * 100).toFixed(2)}%</span>
                           {index === 0 && <TrendingUp className="h-4 w-4 text-green-600 animate-bounce" />}
                         </div>
                       </TableCell>
@@ -475,18 +367,18 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
-                        {rate.monthlyFee === 0 ? (
+                        {rate.monthly_fee === 0 ? (
                           <Badge variant="secondary" className="bg-green-100 text-green-700">Free</Badge>
                         ) : (
-                          <span>${rate.monthlyFee}</span>
+                          <span>${rate.monthly_fee}</span>
                         )}
                       </TableCell>
                       <TableCell className="text-right">
-                        {rate.minimumBalance === 0 ? (
+                        {rate.minimum_balance === 0 ? (
                           <Badge variant="secondary" className="bg-green-100 text-green-700">No minimum</Badge>
                         ) : (
-                          <span className={depositAmount >= rate.minimumBalance ? "text-green-600 font-medium" : "text-red-500"}>
-                            ${rate.minimumBalance.toLocaleString()}
+                          <span className={depositAmount >= rate.minimum_balance ? "text-green-600 font-medium" : "text-red-500"}>
+                            ${rate.minimum_balance.toLocaleString()}
                           </span>
                         )}
                       </TableCell>
