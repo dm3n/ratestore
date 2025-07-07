@@ -76,6 +76,7 @@ export function InteractiveRateCalculator({
   // Fetch rates from database based on current inputs
   const updateRates = async () => {
     setIsLoading(true);
+    console.log('Fetching rates for transaction type:', transactionType);
     
     try {
       const loanAmount = purchasePrice - downPayment;
@@ -108,8 +109,10 @@ export function InteractiveRateCalculator({
         return;
       }
 
+      console.log('Fetched rates from database:', dbRates?.length || 0, 'rates');
+
       // Transform database rates to component format
-      const transformedRates: RateData[] = dbRates.map(rate => ({
+      const transformedRates: RateData[] = dbRates?.map(rate => ({
         id: rate.id,
         lender: rate.lender_name,
         rate: Number(rate.base_rate),
@@ -120,7 +123,9 @@ export function InteractiveRateCalculator({
         minDownPayment: Number(rate.min_down_payment),
         maxLoanToValue: Number(rate.max_loan_to_value),
         transactionTypes: rate.transaction_types || []
-      }));
+      })) || [];
+
+      console.log('Transformed rates:', transformedRates.length);
 
       // Filter for Big 5 banks if termFilter is provided (indicating this is for bank rates page)
       let filteredRates = transformedRates;
@@ -135,6 +140,8 @@ export function InteractiveRateCalculator({
       } else if (activeTab === "best-bank") {
         filteredRates = transformedRates.filter(rate => rate.lenderType === 'bank');
       }
+
+      console.log('Filtered rates:', filteredRates.length);
 
       // Store all rates for show more functionality
       setAllRates(filteredRates);
@@ -178,14 +185,13 @@ export function InteractiveRateCalculator({
       // Select the best rate for each group (lowest rate)
       const bestRates: RateData[] = [];
       Object.values(rateGroups).forEach(group => {
-        const bestRate = group.reduce((best, current) => 
-          current.rate < best.rate ? current : best
-        );
-        bestRates.push(bestRate);
+        const sortedGroup = group.sort((a, b) => a.rate - b.rate);
+        bestRates.push(sortedGroup[0]); // Add the best rate
       });
 
       setRates(bestRates);
       setLastUpdated(new Date());
+      console.log('Set best rates:', bestRates.length);
     } catch (error) {
       console.error('Error updating rates:', error);
     } finally {
@@ -231,6 +237,7 @@ export function InteractiveRateCalculator({
   // Toggle show more rates for a specific term and type
   const toggleShowMore = (term: string, type: "fixed" | "variable") => {
     const key = `${term}-${type}`;
+    console.log('Toggling show more for:', key, 'current state:', showMoreRates[key]);
     setShowMoreRates(prev => ({
       ...prev,
       [key]: !prev[key]
@@ -239,9 +246,15 @@ export function InteractiveRateCalculator({
 
   // Get additional rates for a term and type (excluding the best rate)
   const getAdditionalRates = (term: string, type: "fixed" | "variable") => {
-    const termRates = allRates.filter(rate => rate.term === term && rate.type === type);
+    const termRates = allRates
+      .filter(rate => rate.term === term && rate.type === type)
+      .sort((a, b) => a.rate - b.rate); // Sort by rate ascending
+    
     const bestRate = rates.find(r => r.term === term && r.type === type);
-    return termRates.filter(rate => rate.id !== bestRate?.id).slice(0, 5); // Show up to 5 additional rates
+    const additionalRates = termRates.filter(rate => rate.id !== bestRate?.id).slice(0, 5); // Show up to 5 additional rates
+    
+    console.log(`Additional rates for ${term} ${type}:`, additionalRates.length);
+    return additionalRates;
   };
 
   const renderRateItem = (rate: RateData, isAdditional = false) => (
