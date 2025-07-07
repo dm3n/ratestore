@@ -79,7 +79,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
         throw error;
       }
 
-      console.log('Fetched rates data:', data);
+      console.log('Raw fetched data:', data);
 
       // Transform database data to match our interface
       const transformedRates: SavingsRateData[] = (data || []).map(rate => ({
@@ -121,40 +121,55 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
     fetchRates();
   }, [accountType]);
 
-  // Filter rates based on current selections and deposit amount
+  // Filter rates based on current selections
   const filteredRates = rates.filter(rate => {
+    console.log('Filtering rate:', rate.institution, 'with filters:', {
+      institutionFilter,
+      minBalanceFilter,
+      categoryFilter,
+      activeTab,
+      depositAmount
+    });
+
     // Institution type filter
     if (institutionFilter !== "all" && rate.institutionType !== institutionFilter) {
+      console.log('Filtered out by institution type:', rate.institutionType, 'vs', institutionFilter);
       return false;
     }
     
     // Minimum balance filter
     if (minBalanceFilter === "no-minimum" && rate.minimum_balance > 0) {
+      console.log('Filtered out by no-minimum balance:', rate.minimum_balance);
       return false;
     }
     if (minBalanceFilter === "low-minimum" && rate.minimum_balance > 1000) {
+      console.log('Filtered out by low-minimum balance:', rate.minimum_balance);
       return false;
     }
     
     // Category filter
     if (categoryFilter !== "all" && rate.account_category !== categoryFilter) {
+      console.log('Filtered out by category:', rate.account_category, 'vs', categoryFilter);
       return false;
     }
     
     // Tab-specific filtering
     if (activeTab === "big5-banks" && rate.institutionType !== "big5") {
+      console.log('Filtered out by big5 tab:', rate.institutionType);
       return false;
     }
     
+    console.log('Rate passed all filters:', rate.institution);
     return true;
   }).sort((a, b) => {
     // Sort by interest rate (highest first)
     return b.interest_rate - a.interest_rate;
   });
 
+  console.log('Final filtered rates count:', filteredRates.length);
+
   const calculateEarnings = (rate: SavingsRateData) => {
-    const annualRate = rate.interest_rate;
-    const monthlyRate = annualRate / 12;
+    const monthlyRate = rate.interest_rate / 12;
     const compoundedAmount = depositAmount * Math.pow(1 + monthlyRate, timeHorizon);
     const totalFees = rate.monthly_fee * timeHorizon;
     const earnings = compoundedAmount - depositAmount - totalFees;
@@ -173,10 +188,6 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
   // Get unique categories for filter
   const availableCategories = [...new Set(rates.map(rate => rate.account_category).filter(Boolean))];
 
-  console.log('Current rates:', rates.length);
-  console.log('Filtered rates:', filteredRates.length);
-  console.log('Current filters:', { institutionFilter, minBalanceFilter, categoryFilter, activeTab, depositAmount });
-
   return (
     <Card className="border-2 border-primary/20 shadow-lg">
       <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
@@ -186,7 +197,7 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
             <p className="text-muted-foreground mt-1">
               {description}
               <span className="block text-xs text-muted-foreground/70 mt-1">
-                Last updated: {lastUpdated.toLocaleTimeString()} • {rates.length} rates loaded
+                Last updated: {lastUpdated.toLocaleTimeString()} • {rates.length} rates loaded • {filteredRates.length} showing
               </span>
             </p>
           </div>
