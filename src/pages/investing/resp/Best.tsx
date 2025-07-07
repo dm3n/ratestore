@@ -128,10 +128,19 @@ const BestRESP = () => {
                 education. Get up to $7,200 in free money from the government.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="bg-white text-purple-600 hover:bg-purple-50 font-semibold px-8 py-4 h-auto">
+                <Button 
+                  size="lg" 
+                  className="bg-white text-purple-600 hover:bg-purple-50 font-semibold px-8 py-4 h-auto"
+                  onClick={() => document.getElementById('resp-providers')?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   Compare RESPs <Calculator className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="bg-transparent border-white text-white hover:bg-white/10 font-semibold px-8 py-4 h-auto"
+                  onClick={() => document.getElementById('government-grants')?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   Learn About Grants <Gift className="ml-2 h-5 w-5" />
                 </Button>
               </div>
@@ -168,7 +177,7 @@ const BestRESP = () => {
         </section>
 
         {/* RESP Providers Comparison */}
-        <section className="py-16 bg-gradient-to-r from-gray-50 to-purple-50">
+        <section id="resp-providers" className="py-16 bg-gradient-to-r from-gray-50 to-purple-50">
           <div className="container">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
@@ -246,7 +255,7 @@ const BestRESP = () => {
         </section>
 
         {/* Government Grants */}
-        <section className="py-16">
+        <section id="government-grants" className="py-16">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
