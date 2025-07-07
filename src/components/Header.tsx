@@ -21,7 +21,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-// Import the navigation data from DesktopNavDropdown
+// Import the exact navigation data from DesktopNavDropdown
 const navCategories = [
   {
     title: "Mortgages",
@@ -33,7 +33,7 @@ const navCategories = [
         links: [
           { name: "Best mortgage rates", href: "/mortgages/best-rates" },
           { name: "Best mortgage renewal rates", href: "/mortgages/renewal-rates" },
-          { name: "HELOC mortgage rates", href: "/mortgages/heloc" },
+          { name: "HELOC mortgage rates", href: "/mortgages/heloc-rates" },
           { name: "Best bank mortgage rates", href: "/mortgages/bank-rates" },
           { name: "Alberta mortgage rates", href: "/mortgages/alberta" },
           { name: "BC mortgage rates", href: "/mortgages/bc" },
@@ -45,13 +45,13 @@ const navCategories = [
         title: "Mortgage terms",
         href: "/mortgages/terms",
         links: [
-          { name: "2-year fixed rates", href: "/mortgages/2-year-fixed" },
-          { name: "3-year fixed rates", href: "/mortgages/3-year-fixed" },
-          { name: "5-year fixed rates", href: "/mortgages/5-year-fixed" },
-          { name: "3-year variable rates", href: "/mortgages/3-year-variable" },
-          { name: "5-year variable rates", href: "/mortgages/5-year-variable" },
-          { name: "Compare all rates", href: "/mortgages/compare" },
+          { name: "2-year fixed rates", href: "/mortgages/two-year-fixed" },
+          { name: "3-year fixed rates", href: "/mortgages/three-year-fixed" },
+          { name: "5-year fixed rates", href: "/mortgages/five-year-fixed" },
+          { name: "3-year variable rates", href: "/mortgages/three-year-variable" },
+          { name: "5-year variable rates", href: "/mortgages/five-year-variable" },
           { name: "Historical rates", href: "/mortgages/historical" },
+          { name: "View all terms", href: "/mortgages/terms" },
         ]
       },
       {
@@ -59,11 +59,34 @@ const navCategories = [
         href: "/mortgages/calculators",
         links: [
           { name: "Mortgage payment calculator", href: "/tools/mortgage-calculator" },
-          { name: "Mortgage affordability calculator", href: "/tools/affordability" },
-          { name: "Mortgage renewal calculator", href: "/tools/renewal" },
-          { name: "Mortgage refinance calculator", href: "/tools/refinance" },
-          { name: "Mortgage down payment calculator", href: "/tools/down-payment" },
-          { name: "Land transfer tax calculator", href: "/tools/land-transfer-tax" },
+          { name: "Mortgage affordability calculator", href: "/tools/affordability-calculator" },
+          { name: "Down payment calculator", href: "/tools/down-payment-calculator" },
+          { name: "Amortization schedule", href: "/tools/amortization-schedule" },
+          { name: "Extra payment calculator", href: "/tools/extra-payment-calculator" },
+          { name: "Mortgage renewal calculator", href: "/tools/renewal-calculator" },
+          { name: "Mortgage refinance calculator", href: "/refinance" },
+          { name: "Land transfer tax calculator", href: "/tools/land-transfer-tax-calculator" },
+        ]
+      },
+      {
+        title: "Mortgage providers",
+        href: "/mortgages/providers",
+        links: [
+          { name: "Popular mortgage lenders", href: "/mortgages/lenders" },
+          { name: "Find a mortgage broker", href: "/mortgages/brokers" },
+        ]
+      },
+      {
+        title: "Education centre",
+        href: "/guides/mortgages",
+        links: [
+          { name: "Home buying guide", href: "/guides/home-buying" },
+          { name: "Mortgage renewal guide", href: "/guides/mortgage-renewal" },
+          { name: "Mortgage refinancing guide", href: "/guides/refinancing" },
+          { name: "First time home buyer programs", href: "/guides/first-time-buyer" },
+          { name: "Prime rate", href: "/guides/prime-rate" },
+          { name: "Variable vs. fixed mortgage rates", href: "/guides/variable-vs-fixed" },
+          { name: "Bank of Canada Overnight rate", href: "/guides/overnight-rate" },
         ]
       }
     ]
@@ -76,8 +99,8 @@ const navCategories = [
         title: "Compare credit cards",
         href: "/credit-cards/compare",
         links: [
-          { name: "CardFinder", href: "/credit-cards/card-finder" },
-          { name: "Best overall credit cards", href: "/credit-cards/best" },
+          { name: "CardFinder", href: "/card-finder" },
+          { name: "Best overall credit cards", href: "/credit-cards/best-overall" },
           { name: "Top credit card promotions", href: "/credit-cards/promotions" },
           { name: "RateStore's 2025 credit card awards", href: "/credit-cards/awards" },
         ]
@@ -88,12 +111,12 @@ const navCategories = [
         links: [
           { name: "Aeroplan", href: "/credit-cards/aeroplan" },
           { name: "Cash back", href: "/credit-cards/cash-back" },
+          { name: "Dining", href: "/credit-cards/dining" },
+          { name: "Gas", href: "/credit-cards/gas" },
           { name: "Grocery", href: "/credit-cards/grocery" },
           { name: "Rewards", href: "/credit-cards/rewards" },
           { name: "Store", href: "/credit-cards/store" },
           { name: "Travel", href: "/credit-cards/travel" },
-          { name: "Dining", href: "/credit-cards/dining" },
-          { name: "Gas", href: "/credit-cards/gas" },
         ]
       },
       {
@@ -110,6 +133,37 @@ const navCategories = [
           { name: "Secured", href: "/credit-cards/secured" },
           { name: "Student", href: "/credit-cards/student" },
           { name: "Travel Insurance", href: "/credit-cards/travel-insurance" },
+        ]
+      },
+      {
+        title: "Banks & Networks",
+        href: "/credit-cards/banks",
+        links: [
+          { name: "American Express", href: "/credit-cards/amex" },
+          { name: "BMO", href: "/credit-cards/bmo" },
+          { name: "CIBC", href: "/credit-cards/cibc" },
+          { name: "Mastercard", href: "/credit-cards/mastercard" },
+          { name: "MBNA", href: "/credit-cards/mbna" },
+          { name: "National Bank", href: "/credit-cards/national-bank" },
+          { name: "PC Financial", href: "/credit-cards/pc-financial" },
+          { name: "RBC", href: "/credit-cards/rbc" },
+          { name: "Scotiabank", href: "/credit-cards/scotiabank" },
+          { name: "Tangerine", href: "/credit-cards/tangerine" },
+          { name: "TD", href: "/credit-cards/td" },
+          { name: "Visa", href: "/credit-cards/visa" },
+        ]
+      },
+      {
+        title: "Education centre",
+        href: "/guides/credit-cards",
+        links: [
+          { name: "Credit Cards Education Hub", href: "/guides/credit-cards-education" },
+          { name: "Credit card basics", href: "/guides/credit-card-basics" },
+          { name: "Types of credit cards", href: "/guides/credit-card-types" },
+          { name: "Rewards credit cards guide", href: "/guides/rewards-credit-cards" },
+          { name: "Credit card insurance guide", href: "/guides/credit-card-insurance" },
+          { name: "Credit score and fraud guide", href: "/guides/credit-score" },
+          { name: "Credit card interest calculator", href: "/tools/credit-card-calculator" },
         ]
       }
     ]
@@ -151,20 +205,26 @@ const navCategories = [
           { name: "Senior chequing accounts", href: "/banking/chequing/senior" },
           { name: "Newcomer chequing accounts", href: "/banking/chequing/newcomer" },
         ]
-      }
-    ]
-  },
-  {
-    title: "Personal Loans",
-    href: "/personal-loans",
-    sections: [
+      },
       {
-        title: "Compare loans",
-        href: "/personal-loans/compare",
+        title: "Education centre",
+        href: "/guides/banking",
         links: [
-          { name: "Best personal loan rates", href: "/personal-loans/best-rates" },
-          { name: "Debt consolidation loans", href: "/personal-loans/debt-consolidation" },
-          { name: "Bad credit loans", href: "/personal-loans/bad-credit" },
+          { name: "What is a savings account", href: "/guides/savings-account" },
+          { name: "Tiered savings accounts", href: "/guides/tiered-savings" },
+          { name: "Savings account alternatives", href: "/guides/savings-alternatives" },
+          { name: "Chequing account basics", href: "/guides/chequing-basics" },
+          { name: "Chequing account types", href: "/guides/chequing-types" },
+          { name: "Chequing account fees", href: "/guides/chequing-fees" },
+          { name: "RESP basics", href: "/guides/resp" },
+          { name: "RESP contribution limit and withdrawals", href: "/guides/resp-contributions" },
+        ]
+      },
+      {
+        title: "Calculators",
+        href: "/tools/banking",
+        links: [
+          { name: "TFSA contribution room calculator", href: "/tools/tfsa-calculator" },
         ]
       }
     ]
@@ -194,24 +254,50 @@ const navCategories = [
         ]
       },
       {
+        title: "Stocks & ETFs",
+        href: "/investing/stocks",
+        links: [
+          { name: "Best robo-advisors 2025", href: "/investing/robo-advisors" },
+          { name: "Best online brokerages 2025", href: "/investing/brokerages" },
+          { name: "Best crypto exchanges 2025", href: "/investing/crypto" },
+        ]
+      },
+      {
         title: "Education centre",
-        href: "/guides/education-centre",
+        href: "/guides/investing",
         links: [
           { name: "GIC basics", href: "/guides/gic" },
+          { name: "GIC types", href: "/guides/gic-types" },
           { name: "RRSP basics", href: "/guides/rrsp" },
           { name: "RRSP contribution", href: "/guides/rrsp-contribution" },
+          { name: "RRSP withdrawals", href: "/guides/rrsp-withdrawals" },
           { name: "TFSA basics", href: "/guides/tfsa" },
-          { name: "TFSA contributions", href: "/guides/tfsa-contributions" },
+          { name: "TFSA contributions, withdrawals, transfers", href: "/guides/tfsa-contributions" },
           { name: "RESP basics", href: "/guides/resp-basics" },
+          { name: "TFSA investments", href: "/guides/tfsa-investments" },
+          { name: "RESP contribution limit and withdrawals", href: "/guides/resp-limit" },
         ]
       },
       {
         title: "Calculators",
-        href: "/tools",
+        href: "/tools/investing",
         links: [
           { name: "Compound interest calculator", href: "/tools/compound-interest" },
-          { name: "TFSA calculator", href: "/tools/tfsa-calculator" },
-          { name: "Retirement calculator", href: "/tools/retirement" },
+        ]
+      }
+    ]
+  },
+  {
+    title: "Personal Loans",
+    href: "/personal-loans",
+    sections: [
+      {
+        title: "Compare loans",
+        href: "/personal-loans/compare",
+        links: [
+          { name: "Best personal loan rates", href: "/personal-loans/best-rates" },
+          { name: "Debt consolidation loans", href: "/personal-loans/debt-consolidation" },
+          { name: "Bad credit loans", href: "/personal-loans/bad-credit" },
         ]
       }
     ]
@@ -226,8 +312,14 @@ const navCategories = [
         links: [
           { name: "Auto insurance quotes", href: "/insurance/auto/quotes" },
           { name: "Motorcycle insurance", href: "/insurance/auto/motorcycle" },
+          { name: "All auto insurance types", href: "/insurance/auto/types" },
           { name: "Ontario car insurance", href: "/insurance/auto/ontario" },
+          { name: "Toronto car insurance", href: "/insurance/auto/toronto" },
           { name: "Alberta car insurance", href: "/insurance/auto/alberta" },
+          { name: "Calgary car insurance", href: "/insurance/auto/calgary" },
+          { name: "Quebec car insurance", href: "/insurance/auto/quebec" },
+          { name: "Montreal car insurance", href: "/insurance/auto/montreal" },
+          { name: "All car insurance regions", href: "/insurance/auto/regions" },
         ]
       },
       {
@@ -238,6 +330,12 @@ const navCategories = [
           { name: "Tenant insurance", href: "/insurance/home/tenant" },
           { name: "Condo insurance", href: "/insurance/home/condo" },
           { name: "Landlord insurance", href: "/insurance/home/landlord" },
+          { name: "All home insurance types", href: "/insurance/home/types" },
+          { name: "Ontario home insurance", href: "/insurance/home/ontario" },
+          { name: "Alberta home insurance", href: "/insurance/home/alberta" },
+          { name: "BC home insurance", href: "/insurance/home/bc" },
+          { name: "Quebec home insurance", href: "/insurance/home/quebec" },
+          { name: "All home insurance regions", href: "/insurance/home/regions" },
         ]
       },
       {
@@ -248,6 +346,41 @@ const navCategories = [
           { name: "Term life insurance", href: "/insurance/life/term" },
           { name: "Permanent life insurance", href: "/insurance/life/permanent" },
           { name: "Disability insurance", href: "/insurance/life/disability" },
+          { name: "Critical illness insurance", href: "/insurance/life/critical-illness" },
+          { name: "Group insurance", href: "/insurance/life/group" },
+          { name: "All life insurance types", href: "/insurance/life/types" },
+          { name: "Life insurance by region", href: "/insurance/life/region" },
+          { name: "Life insurance education", href: "/insurance/life/education" },
+          { name: "Life insurance companies", href: "/insurance/life/companies" },
+        ]
+      },
+      {
+        title: "Travel insurance",
+        href: "/insurance/travel",
+        links: [
+          { name: "Travel insurance quotes", href: "/insurance/travel/quotes" },
+          { name: "Multi-trip insurance", href: "/insurance/travel/multi-trip" },
+          { name: "Travel medical insurance", href: "/insurance/travel/medical" },
+          { name: "Trip cancellation insurance", href: "/insurance/travel/cancellation" },
+          { name: "Senior travel insurance", href: "/insurance/travel/senior" },
+          { name: "Pre-existing condition", href: "/insurance/travel/pre-existing" },
+          { name: "Visitors to Canada", href: "/insurance/travel/visitors" },
+          { name: "Travel insurance programs", href: "/insurance/travel/programs" },
+          { name: "Travel insurance types", href: "/insurance/travel/types" },
+          { name: "Travel insurance reviews", href: "/insurance/travel/reviews" },
+        ]
+      },
+      {
+        title: "Business insurance",
+        href: "/insurance/business",
+        links: [
+          { name: "Business insurance quotes", href: "/insurance/business/quotes" },
+          { name: "General liability insurance", href: "/insurance/business/general" },
+          { name: "Professional liability insurance", href: "/insurance/business/professional" },
+          { name: "Directors & Officers insurance", href: "/insurance/business/do" },
+          { name: "Commercial property insurance", href: "/insurance/business/property" },
+          { name: "Cyber liability insurance", href: "/insurance/business/cyber" },
+          { name: "All business insurance types", href: "/insurance/business" },
         ]
       }
     ]
