@@ -5,7 +5,7 @@ import { SavingsRatesCalculator } from "@/components/SavingsRatesCalculator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BarChart3, Calculator, Filter, Users, DollarSign, CheckCircle } from "lucide-react";
+import { BarChart3, Calculator, Users, DollarSign, CheckCircle } from "lucide-react";
 
 const CompareChequing = () => {
   const scrollToCalculator = () => {
@@ -46,10 +46,6 @@ const CompareChequing = () => {
                 <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
                   <Calculator className="h-5 w-5" />
                   Start Comparison
-                </Button>
-                <Button size="lg" variant="outline" className="gap-2" onClick={scrollToCategories}>
-                  <Filter className="h-5 w-5" />
-                  Advanced Filters
                 </Button>
               </div>
             </div>
