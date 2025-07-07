@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SavingsRatesCalculator } from "@/components/SavingsRatesCalculator";
@@ -5,7 +6,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, DollarSign, Calculator, PiggyBank, CheckCircle, Percent } from "lucide-react";
+
 const RRSPSavings = () => {
+  const scrollToCalculator = () => {
+    const calculatorSection = document.getElementById('rrsp-calculator');
+    if (calculatorSection) {
+      calculatorSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return <div className="min-h-screen flex flex-col">
       <Header />
       
@@ -26,7 +35,7 @@ const RRSPSavings = () => {
                 Compare the best RRSP savings account rates.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
                   <Calculator className="h-5 w-5" />
                   Compare RRSP Rates
                 </Button>
@@ -37,7 +46,7 @@ const RRSPSavings = () => {
         </section>
         
         {/* Interactive Calculator */}
-        <section className="py-16">
+        <section className="py-16" id="rrsp-calculator">
           <div className="container">
             <div className="max-w-7xl mx-auto">
               <SavingsRatesCalculator accountType="rrsp" title="Best RRSP Savings Account Rates" description="Compare registered retirement savings account rates and plan your retirement" />
