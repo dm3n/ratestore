@@ -107,7 +107,7 @@ const CompareChequing = () => {
                     <CardTitle className="text-xl">By Transaction Limits</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-muted-foregor mb-4">
+                    <p className="text-muted-foreground mb-4">
                       Find accounts with the transaction limits that match your banking habits.
                     </p>
                     <div className="bg-blue-50 p-4 rounded-lg">
