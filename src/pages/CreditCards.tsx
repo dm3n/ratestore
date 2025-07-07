@@ -270,7 +270,7 @@ const CreditCards = () => {
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link to="/credit-cards/best-canadian">
+                  <Link to="/credit-cards/best-overall">
                     View Best Cards
                   </Link>
                 </Button>
@@ -605,7 +605,7 @@ const CreditCards = () => {
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary" asChild>
-                  <Link to="/credit-cards/best-canadian">
+                  <Link to="/credit-cards/best-overall">
                     Browse All Cards
                   </Link>
                 </Button>
