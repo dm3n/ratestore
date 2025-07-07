@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -43,8 +44,6 @@ import Promotions from "./pages/credit-cards/Promotions";
 import CreditCardAwards from "./pages/credit-cards/Awards";
 import Aeroplan from "./pages/credit-cards/Aeroplan";
 import CashBack from "./pages/credit-cards/CashBack";
-import Dining from "./pages/credit-cards/Dining";
-import Gas from "./pages/credit-cards/Gas";
 import Grocery from "./pages/credit-cards/Grocery";
 import Rewards from "./pages/credit-cards/Rewards";
 import Store from "./pages/credit-cards/Store";
@@ -252,8 +251,6 @@ const App = () => (
             <Route path="/credit-cards/awards" element={<CreditCardAwards />} />
             <Route path="/credit-cards/aeroplan" element={<Aeroplan />} />
             <Route path="/credit-cards/cash-back" element={<CashBack />} />
-            <Route path="/credit-cards/dining" element={<Dining />} />
-            <Route path="/credit-cards/gas" element={<Gas />} />
             <Route path="/credit-cards/grocery" element={<Grocery />} />
             <Route path="/credit-cards/rewards" element={<Rewards />} />
             <Route path="/credit-cards/store" element={<Store />} />
