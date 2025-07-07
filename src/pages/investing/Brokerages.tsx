@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -94,6 +93,13 @@ const tradingFeatures = [
 ];
 
 const Brokerages = () => {
+  const scrollToComparison = () => {
+    const element = document.getElementById('brokerages-comparison');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -112,11 +118,11 @@ const Brokerages = () => {
                 Take control of your investments. Compare Canada's top online brokerages and find the perfect platform for self-directed investing.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50" onClick={scrollToComparison}>
                   Compare All Brokerages
                 </Button>
                 <Button size="lg" variant="outline" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border-white/20">
-                  Learn About Online Trading
+                  <Link to="/guides/education-centre">Learn About Online Trading</Link>
                 </Button>
               </div>
             </div>
@@ -146,7 +152,7 @@ const Brokerages = () => {
         </section>
 
         {/* Brokerages Comparison */}
-        <section className="py-16">
+        <section id="brokerages-comparison" className="py-16">
           <div className="container">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Top Online Brokerages Comparison</h2>
@@ -364,7 +370,7 @@ const Brokerages = () => {
               Compare online brokerages and find the platform that matches your trading style and budget.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50" onClick={scrollToComparison}>
                 Compare Brokerages Now
               </Button>
               <Button size="lg" variant="outline" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border-white/20">

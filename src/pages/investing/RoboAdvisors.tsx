@@ -95,13 +95,6 @@ const RoboAdvisors = () => {
     }
   };
 
-  const scrollToFeatures = () => {
-    const element = document.getElementById('key-features');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -123,8 +116,8 @@ const RoboAdvisors = () => {
                 <Button size="lg" className="bg-white text-purple-700 hover:bg-purple-50" onClick={scrollToComparison}>
                   Compare All Robo-Advisors
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white bg-transparent" onClick={scrollToFeatures}>
-                  Learn About Robo-Advisors
+                <Button size="lg" variant="outline" className="border-white text-white bg-transparent">
+                  <Link to="/guides/education-centre">Learn About Robo-Advisors</Link>
                 </Button>
               </div>
             </div>
