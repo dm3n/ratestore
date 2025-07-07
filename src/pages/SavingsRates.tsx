@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SavingsRatesTable } from "@/components/SavingsRatesTable";
@@ -8,6 +9,13 @@ import { TrendingUp, Shield, CheckCircle, Calculator } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const SavingsRates = () => {
+  const scrollToRatesTable = () => {
+    const element = document.getElementById('rates-table-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -26,17 +34,22 @@ const SavingsRates = () => {
               <p className="text-lg text-muted-foreground mb-6">
                 Compare the highest savings account interest rates from top banks and credit unions.
               </p>
-              <Button size="lg" className="gap-2" asChild>
-                <Link to="/tools/calculators">
-                  Calculate My Earnings <Calculator className="h-5 w-5" />
-                </Link>
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="gap-2" onClick={scrollToRatesTable}>
+                  Compare Best Rates
+                </Button>
+                <Button size="lg" variant="outline" className="gap-2" asChild>
+                  <Link to="/tools/calculators">
+                    Calculate My Earnings <Calculator className="h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
         
         {/* Rates Table */}
-        <section className="py-12">
+        <section id="rates-table-section" className="py-12">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <SavingsRatesTable />
