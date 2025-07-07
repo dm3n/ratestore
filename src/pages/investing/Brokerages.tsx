@@ -121,7 +121,7 @@ const Brokerages = () => {
                 <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50" onClick={scrollToComparison}>
                   Compare All Brokerages
                 </Button>
-                <Button size="lg" variant="outline" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border-white/20">
+                <Button size="lg" variant="outline" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border-white/20" asChild>
                   <Link to="/guides/education-centre">Learn About Online Trading</Link>
                 </Button>
               </div>
