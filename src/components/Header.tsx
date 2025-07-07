@@ -88,6 +88,8 @@ const navCategories = [
           { name: "Aeroplan", href: "/credit-cards/aeroplan" },
           { name: "Cash back", href: "/credit-cards/cash-back" },
           { name: "Grocery", href: "/credit-cards/grocery" },
+          { name: "Gas", href: "/credit-cards/gas" },
+          { name: "Dining", href: "/credit-cards/dining" },
           { name: "Rewards", href: "/credit-cards/rewards" },
           { name: "Store", href: "/credit-cards/store" },
           { name: "Travel", href: "/credit-cards/travel" },
@@ -251,203 +253,117 @@ const navCategories = [
   }
 ];
 
-export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [openSections, setOpenSections] = useState<{[key: string]: boolean}>({});
   const isMobile = useIsMobile();
   const { user } = useAuth();
 
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
+  const toggleSection = (section: string) => {
+    setOpenSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
   };
 
-  // Show mobile menu for tablets and mobile (up to 1024px instead of 768px)
-  const shouldShowMobileMenu = window.innerWidth < 1024;
+  const MobileNavItem = ({ category }: { category: any }) => (
+    <Collapsible 
+      open={openSections[category.title]} 
+      onOpenChange={() => toggleSection(category.title)}
+    >
+      <CollapsibleTrigger className="flex items-center justify-between w-full p-3 text-left hover:bg-muted rounded-lg">
+        <span className="font-medium">{category.title}</span>
+        <ChevronRight className={cn(
+          "h-4 w-4 transition-transform",
+          openSections[category.title] && "rotate-90"
+        )} />
+      </CollapsibleTrigger>
+      <CollapsibleContent className="pl-4">
+        {category.sections?.map((section: any, idx: number) => (
+          <div key={idx} className="py-2">
+            <div className="font-medium text-sm text-muted-foreground mb-2">
+              {section.title}
+            </div>
+            {section.links?.map((link: any, linkIdx: number) => (
+              <Link 
+                key={linkIdx}
+                to={link.href}
+                className="block py-1 text-sm hover:text-primary transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="font-bold text-xl text-primary">ratestore.ca</span>
+      <div className="container flex h-16 items-center">
+        <div className="mr-4 hidden md:flex">
+          <Link className="mr-6 flex items-center space-x-2" to="/">
+            <span className="hidden font-bold sm:inline-block">RateStore</span>
           </Link>
+          <nav className="flex items-center space-x-6 text-sm font-medium">
+            {navCategories.map((category) => (
+              <DesktopNavDropdown key={category.title} category={category} />
+            ))}
+          </nav>
         </div>
-        
-        {/* Desktop navigation - only show on larger screens (1024px+) */}
-        <div className="hidden lg:flex flex-1 justify-center">
-          <DesktopNavDropdown />
-        </div>
-        
-        <div className="flex items-center gap-2">
-          {/* User menu - always visible when user is logged in */}
-          {user && <UserMenu />}
-          
-          {/* Desktop sign in button - only show on larger screens */}
-          {!user && (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="hidden lg:flex border-primary text-primary hover:bg-primary hover:text-white"
+
+        {/* Mobile menu */}
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
             >
-              <Link to="/auth">Sign In</Link>
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle Menu</span>
             </Button>
-          )}
-          
-          {/* Mobile menu button - show on tablets and mobile */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:w-80 md:w-96 p-0">
-              <SheetHeader className="p-4 sm:p-6 pb-4 border-b">
-                <SheetTitle className="text-left text-lg sm:text-xl font-bold text-primary">
-                  ratestore.ca
-                </SheetTitle>
-              </SheetHeader>
-              <div className="flex flex-col h-full">
-                <nav className="flex-1 px-4 sm:px-6 py-4 overflow-y-auto">
-                  <MobileNavLinks onLinkClick={closeMobileMenu} />
-                </nav>
-                {!user && (
-                  <div className="p-4 sm:p-6 border-t bg-gray-50/50">
-                    <Button 
-                      variant="default" 
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3"
-                      asChild
-                      onClick={closeMobileMenu}
-                    >
-                      <Link to="/auth">Sign In</Link>
-                    </Button>
-                  </div>
-                )}
+          </SheetTrigger>
+          <SheetContent side="left" className="pr-0">
+            <SheetHeader>
+              <SheetTitle>
+                <Link 
+                  to="/" 
+                  className="flex items-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  RateStore
+                </Link>
+              </SheetTitle>
+            </SheetHeader>
+            <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
+              <div className="flex flex-col space-y-2">
+                {navCategories.map((category) => (
+                  <MobileNavItem key={category.title} category={category} />
+                ))}
               </div>
-            </SheetContent>
-          </Sheet>
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none">
+            <Link className="mr-6 flex items-center space-x-2 md:hidden" to="/">
+              <span className="font-bold">RateStore</span>
+            </Link>
+          </div>
+          <nav className="flex items-center">
+            {user ? (
+              <UserMenu />
+            ) : (
+              <Button asChild>
+                <Link to="/auth">Sign In</Link>
+              </Button>
+            )}
+          </nav>
         </div>
       </div>
     </header>
   );
-}
-
-interface MobileNavLinksProps {
-  onLinkClick: () => void;
-}
-
-function MobileNavLinks({ onLinkClick }: MobileNavLinksProps) {
-  const [openSections, setOpenSections] = useState<string[]>([]);
-  const [openSubSections, setOpenSubSections] = useState<string[]>([]);
-  const [expandedSubSections, setExpandedSubSections] = useState<string[]>([]);
-
-  const toggleSection = (sectionTitle: string) => {
-    setOpenSections(prev => 
-      prev.includes(sectionTitle) 
-        ? prev.filter(s => s !== sectionTitle)
-        : [...prev, sectionTitle]
-    );
-  };
-
-  const toggleSubSection = (subSectionTitle: string) => {
-    setOpenSubSections(prev => 
-      prev.includes(subSectionTitle) 
-        ? prev.filter(s => s !== subSectionTitle)
-        : [...prev, subSectionTitle]
-    );
-  };
-
-  const toggleSubSectionExpansion = (subSectionTitle: string) => {
-    setExpandedSubSections(prev => 
-      prev.includes(subSectionTitle) 
-        ? prev.filter(s => s !== subSectionTitle)
-        : [...prev, subSectionTitle]
-    );
-  };
-
-  const shouldShowMoreButton = (links: any[]) => links.length > 5;
-  const getVisibleLinks = (links: any[], sectionTitle: string) => {
-    const isExpanded = expandedSubSections.includes(sectionTitle);
-    return isExpanded ? links : links.slice(0, 5);
-  };
-
-  return (
-    <div className="space-y-1 sm:space-y-2">
-      {navCategories.map((category) => (
-        <Collapsible 
-          key={category.title}
-          open={openSections.includes(category.title)}
-          onOpenChange={() => toggleSection(category.title)}
-        >
-          <CollapsibleTrigger className="flex items-center justify-between w-full px-3 py-3 text-sm sm:text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 transition-colors">
-            <span>{category.title}</span>
-            {openSections.includes(category.title) ? (
-              <ChevronDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
-            ) : (
-              <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
-            )}
-          </CollapsibleTrigger>
-          <CollapsibleContent className="ml-2 sm:ml-3 mt-2 space-y-1">
-            {/* Main category link */}
-            <Link
-              to={category.href}
-              onClick={onLinkClick}
-              className="flex items-center px-3 py-2 text-xs sm:text-sm font-medium text-primary rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              View All {category.title}
-            </Link>
-            
-            {/* Subcategory sections with nested expansion */}
-            {category.sections.map((section) => (
-              <Collapsible
-                key={section.title}
-                open={openSubSections.includes(section.title)}
-                onOpenChange={() => toggleSubSection(section.title)}
-              >
-                <CollapsibleTrigger className="flex items-center justify-between w-full px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                  <span className="text-left">{section.title}</span>
-                  {openSubSections.includes(section.title) ? (
-                    <ChevronDown className="h-3 w-3 text-gray-400 flex-shrink-0" />
-                  ) : (
-                    <ChevronRight className="h-3 w-3 text-gray-400 flex-shrink-0" />
-                  )}
-                </CollapsibleTrigger>
-                <CollapsibleContent className="ml-3 sm:ml-4 mt-1 space-y-1">
-                  {getVisibleLinks(section.links, section.title).map((link) => (
-                    <Link
-                      key={link.name}
-                      to={link.href}
-                      onClick={onLinkClick}
-                      className="block px-3 py-2 text-xs text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors leading-relaxed"
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
-                  
-                  {/* More/Less button */}
-                  {shouldShowMoreButton(section.links) && (
-                    <button
-                      onClick={() => toggleSubSectionExpansion(section.title)}
-                      className="block px-3 py-2 text-xs text-primary font-medium rounded-lg hover:bg-gray-50 transition-colors w-full text-left"
-                    >
-                      {expandedSubSections.includes(section.title) ? 'less' : 'more'}
-                    </button>
-                  )}
-                </CollapsibleContent>
-              </Collapsible>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
-      ))}
-      
-      {/* Blog link (non-collapsible) */}
-      <Link
-        to="/blog"
-        onClick={onLinkClick}
-        className="flex items-center justify-between px-3 py-3 text-sm sm:text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
-      >
-        <span>Blog</span>
-        <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
-      </Link>
-    </div>
-  );
-}
+};
