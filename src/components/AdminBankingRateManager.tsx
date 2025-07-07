@@ -12,6 +12,10 @@ import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { Pencil, Trash2, Plus, Save, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import type { Tables } from "@/integrations/supabase/types";
+
+// Use the database type directly but transform it for our needs
+type DatabaseBankingRate = Tables<'banking_rates'>;
 
 interface BankingRate {
   id: string;
@@ -57,6 +61,25 @@ export function AdminBankingRateManager() {
     is_active: true
   });
 
+  // Transform database rate to our local type
+  const transformRate = (dbRate: DatabaseBankingRate): BankingRate => ({
+    id: dbRate.id,
+    institution: dbRate.institution,
+    account_name: dbRate.account_name,
+    account_type: dbRate.account_type,
+    account_category: dbRate.account_category,
+    interest_rate: dbRate.interest_rate || 0,
+    monthly_fee: dbRate.monthly_fee || 0,
+    transaction_limit: dbRate.transaction_limit,
+    minimum_balance: dbRate.minimum_balance || 0,
+    features: Array.isArray(dbRate.features) ? dbRate.features as string[] : [],
+    special_offers: dbRate.special_offers,
+    fee_waiver_conditions: dbRate.fee_waiver_conditions,
+    province: dbRate.province || 'All',
+    is_featured: dbRate.is_featured || false,
+    is_active: dbRate.is_active || true
+  });
+
   const fetchRates = async () => {
     setIsLoading(true);
     try {
@@ -66,7 +89,10 @@ export function AdminBankingRateManager() {
         .order('institution', { ascending: true });
 
       if (error) throw error;
-      setRates(data || []);
+      
+      // Transform the data to match our local interface
+      const transformedRates = (data || []).map(transformRate);
+      setRates(transformedRates);
     } catch (error) {
       console.error('Error fetching rates:', error);
       toast({
