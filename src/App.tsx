@@ -15,6 +15,8 @@ import Admin from "./pages/Admin";
 import AuthPage from "./pages/Auth";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import PreApproval from "./pages/PreApproval";
+import CompareAllRates from "./pages/CompareAllRates";
 
 // Banking pages
 import Banking from "./pages/Banking";
@@ -428,6 +430,8 @@ const App = () => (
             
             {/* Other routes */}
             <Route path="/refinance" element={<Refinance />} />
+            <Route path="/pre-approval" element={<PreApproval />} />
+            <Route path="/compare-all-rates" element={<CompareAllRates />} />
           </Routes>
           <ChatbotTrigger />
         </BrowserRouter>

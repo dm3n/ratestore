@@ -257,10 +257,19 @@ const BestRates = () => {
                 Get pre-approved in minutes and lock in today's best mortgage rates.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100">
+                <Button 
+                  size="lg" 
+                  variant="secondary" 
+                  className="bg-white text-primary hover:bg-gray-100"
+                  onClick={() => window.location.href = '/pre-approval'}
+                >
                   Get Pre-Approved
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button 
+                  size="lg" 
+                  className="bg-primary border-white text-white hover:bg-white hover:text-primary"
+                  onClick={() => window.location.href = '/compare-all-rates'}
+                >
                   Compare All Rates
                 </Button>
               </div>
