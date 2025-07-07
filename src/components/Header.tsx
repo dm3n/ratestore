@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -308,9 +309,7 @@ export const Header = () => {
             <span className="hidden font-bold sm:inline-block">RateStore</span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            {navCategories.map((category) => (
-              <DesktopNavDropdown key={category.title} category={category} />
-            ))}
+            <DesktopNavDropdown />
           </nav>
         </div>
 
