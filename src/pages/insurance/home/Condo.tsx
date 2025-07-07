@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Building, Shield, Users, Calculator, CheckCircle, ArrowRight, Phone, TrendingUp, Clock, Home, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
+
 const CondoInsurance = () => {
   const coverageTypes = [{
     title: "Unit Improvements & Betterments",
@@ -219,9 +220,11 @@ const CondoInsurance = () => {
                     Get Condo Quote <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
-                  <Phone className="mr-2 h-5 w-5" />
-                  Speak with Expert
+                <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-purple-600 font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/contact">
+                    <Phone className="mr-2 h-5 w-5" />
+                    Speak with Expert
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -232,4 +235,5 @@ const CondoInsurance = () => {
       <Footer />
     </div>;
 };
+
 export default CondoInsurance;
