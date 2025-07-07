@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -48,6 +47,8 @@ import Grocery from "./pages/credit-cards/Grocery";
 import Rewards from "./pages/credit-cards/Rewards";
 import Store from "./pages/credit-cards/Store";
 import Travel from "./pages/credit-cards/Travel";
+import Dining from "./pages/credit-cards/Dining";
+import Gas from "./pages/credit-cards/Gas";
 import BalanceTransfer from "./pages/credit-cards/BalanceTransfer";
 import Business from "./pages/credit-cards/Business";
 import InstantApproval from "./pages/credit-cards/InstantApproval";
@@ -255,6 +256,8 @@ const App = () => (
             <Route path="/credit-cards/rewards" element={<Rewards />} />
             <Route path="/credit-cards/store" element={<Store />} />
             <Route path="/credit-cards/travel" element={<Travel />} />
+            <Route path="/credit-cards/dining" element={<Dining />} />
+            <Route path="/credit-cards/gas" element={<Gas />} />
             <Route path="/credit-cards/balance-transfer" element={<BalanceTransfer />} />
             <Route path="/credit-cards/business" element={<Business />} />
             <Route path="/credit-cards/instant-approval" element={<InstantApproval />} />

@@ -91,6 +91,8 @@ const navCategories = [
           { name: "Rewards", href: "/credit-cards/rewards" },
           { name: "Store", href: "/credit-cards/store" },
           { name: "Travel", href: "/credit-cards/travel" },
+          { name: "Dining", href: "/credit-cards/dining" },
+          { name: "Gas", href: "/credit-cards/gas" },
         ]
       },
       {
