@@ -301,7 +301,7 @@ const MortgageCalculator = () => {
                     View All Calculators
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+                <Button asChild size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm">
                   <Link to="/mortgages" className="flex items-center gap-2">
                     <Home className="h-5 w-5" />
                     Learn About Mortgages
