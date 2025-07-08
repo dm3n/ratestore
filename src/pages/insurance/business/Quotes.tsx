@@ -15,8 +15,10 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const BusinessInsuranceQuotes = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     businessType: "",
     industry: "",
@@ -30,6 +32,45 @@ const BusinessInsuranceQuotes = () => {
 
   const handleInputChange = (field: string, value: string | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const scrollToQuoteForm = () => {
+    const quoteForm = document.getElementById('quote-form');
+    if (quoteForm) {
+      quoteForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!formData.businessType || !formData.industry || !formData.employees || !formData.location) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields to get your quote.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Simulate form submission
+    toast({
+      title: "Quote Request Submitted!",
+      description: "We'll send your personalized business insurance quotes within 24 hours.",
+    });
+
+    // Reset form after successful submission
+    setFormData({
+      businessType: "",
+      industry: "",
+      employees: "",
+      revenue: "",
+      location: "",
+      coverage: [],
+      businessAge: "",
+      description: ""
+    });
   };
 
   const coverageTypes = [
@@ -105,11 +146,13 @@ const BusinessInsuranceQuotes = () => {
                 Protect your business, employees, and assets with the right coverage.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto" onClick={scrollToQuoteForm}>
                   Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20">
-                  Compare Policies <Building className="ml-2 h-5 w-5" />
+                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20" asChild>
+                  <Link to="/insurance/business">
+                    Compare Policies <Building className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -117,7 +160,7 @@ const BusinessInsuranceQuotes = () => {
         </section>
 
         {/* Quote Form Section */}
-        <section className="py-20">
+        <section id="quote-form" className="py-20">
           <div className="container">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
@@ -133,6 +176,7 @@ const BusinessInsuranceQuotes = () => {
                   <CardDescription>Get personalized quotes from top Canadian insurers</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8">
+                  <form onSubmit={handleFormSubmit}>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label>Business Type</Label>
@@ -286,9 +330,10 @@ const BusinessInsuranceQuotes = () => {
                     </div>
                   </div>
 
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-lg">
-                    Get My Free Quotes <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
+                    <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-lg">
+                      Get My Free Quotes <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </form>
                 </CardContent>
               </Card>
             </div>
@@ -331,7 +376,7 @@ const BusinessInsuranceQuotes = () => {
                           </li>
                         ))}
                       </ul>
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={scrollToQuoteForm}>
                         Get Quote
                       </Button>
                     </CardContent>
@@ -369,7 +414,7 @@ const BusinessInsuranceQuotes = () => {
                         {industry.risk} Risk
                       </Badge>
                       <div className="text-lg font-semibold text-blue-600 mb-4">{industry.avgPremium}</div>
-                      <Button variant="outline" className="w-full">
+                      <Button variant="outline" className="w-full" onClick={scrollToQuoteForm}>
                         Get Quote
                       </Button>
                     </CardContent>
@@ -417,12 +462,14 @@ const BusinessInsuranceQuotes = () => {
                 Get comprehensive business insurance quotes and safeguard your company's future
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto" onClick={scrollToQuoteForm}>
                   Get Free Quote Now <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20">
-                  <Phone className="mr-2 h-5 w-5" />
-                  Call 1-800-BIZ-INSURE
+                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20" asChild>
+                  <a href="tel:1-800-249-4678">
+                    <Phone className="mr-2 h-5 w-5" />
+                    Call 1-800-BIZ-INSURE
+                  </a>
                 </Button>
               </div>
               <p className="text-blue-200">
