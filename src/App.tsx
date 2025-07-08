@@ -201,7 +201,6 @@ import SavingsAlternatives from "./pages/guides/SavingsAlternatives";
 // Other pages
 import Contact from "./pages/Contact";
 import Refinance from "./pages/Refinance";
-import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -435,11 +434,6 @@ const App = () => (
             <Route path="/refinance" element={<Refinance />} />
             <Route path="/pre-approval" element={<PreApproval />} />
             <Route path="/compare-all-rates" element={<CompareAllRates />} />
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } />
           </Routes>
           <ChatbotTrigger />
         </BrowserRouter>
