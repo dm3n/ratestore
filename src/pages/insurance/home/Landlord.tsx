@@ -110,10 +110,19 @@ const LandlordInsurance = () => {
                 Safeguard your investment with coverage for property damage, liability, and lost rental income.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="bg-white text-orange-600 hover:bg-orange-50 font-semibold px-8 py-4 h-auto">
-                  Get Landlord Quote <Building2 className="ml-2 h-5 w-5" />
+                <Button size="lg" className="bg-white text-orange-600 hover:bg-orange-50 font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/insurance/home/quotes">
+                    Get Landlord Quote <Building2 className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
+                <Button 
+                  size="lg" 
+                  className="bg-orange-600/80 border-2 border-white text-white hover:bg-orange-700/80 backdrop-blur-sm font-semibold px-8 py-4 h-auto"
+                  onClick={() => {
+                    const protectionSection = document.querySelector('.benefits-section');
+                    protectionSection?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
                   Calculate Coverage <Calculator className="ml-2 h-5 w-5" />
                 </Button>
               </div>
@@ -210,7 +219,7 @@ const LandlordInsurance = () => {
         </section>
 
         {/* Benefits Section */}
-        <section className="py-20">
+        <section className="py-20 benefits-section">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
