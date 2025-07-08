@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Clock, CheckCircle, CreditCard, DollarSign, MapPin, User, Target, Star } from "lucide-react";
+import { ArrowLeft, Clock, CheckCircle, CreditCard, DollarSign, MapPin, User, Target, Star, Gift, TrendingDown, TrendingUp, RefreshCw, Plane, ShoppingCart, UtensilsCrossed, Fuel, Hotel, ShoppingBag } from "lucide-react";
 import { useCardFinder, UserPreferences } from '@/hooks/useCardFinder';
 import { CardRecommendations } from './CardRecommendations';
 
@@ -43,11 +43,11 @@ export const EnhancedCardFinderForm = ({ onBack }: EnhancedCardFinderFormProps) 
   const { findRecommendations, recommendations, isLoading } = useCardFinder();
 
   const cardPurposes = [
-    { id: 'Earn rewards', icon: '🎁', title: 'Earn rewards', desc: 'Maximize points, miles, or cashback' },
-    { id: 'Pay low interest', icon: '📉', title: 'Pay low interest', desc: 'Minimize interest charges on balances' },
-    { id: 'Build credit', icon: '📈', title: 'Build credit', desc: 'Establish or improve credit history' },
-    { id: 'Transfer balance', icon: '🔄', title: 'Transfer balance', desc: 'Consolidate debt with 0% APR offers' },
-    { id: 'Travel benefits', icon: '✈️', title: 'Travel benefits', desc: 'Access lounges, insurance, and perks' }
+    { id: 'Earn rewards', icon: Gift, title: 'Earn rewards', desc: 'Maximize points, miles, or cashback' },
+    { id: 'Pay low interest', icon: TrendingDown, title: 'Pay low interest', desc: 'Minimize interest charges on balances' },
+    { id: 'Build credit', icon: TrendingUp, title: 'Build credit', desc: 'Establish or improve credit history' },
+    { id: 'Transfer balance', icon: RefreshCw, title: 'Transfer balance', desc: 'Consolidate debt with 0% APR offers' },
+    { id: 'Travel benefits', icon: Plane, title: 'Travel benefits', desc: 'Access lounges, insurance, and perks' }
   ];
 
   const incomeRanges = ['$0 - $29,999', '$30,000 - $49,999', '$50,000 - $74,999', '$75,000 - $99,999', '$100,000+'];
@@ -65,11 +65,11 @@ export const EnhancedCardFinderForm = ({ onBack }: EnhancedCardFinderFormProps) 
   ];
 
   const spendingCategories = [
-    { key: 'groceries', label: 'Groceries', icon: '🛒' },
-    { key: 'dining', label: 'Dining & Restaurants', icon: '🍽️' },
-    { key: 'gas', label: 'Gas & Transportation', icon: '⛽' },
-    { key: 'travel', label: 'Travel & Hotels', icon: '🏨' },
-    { key: 'general', label: 'General Purchases', icon: '🛍️' }
+    { key: 'groceries', label: 'Groceries', icon: ShoppingCart },
+    { key: 'dining', label: 'Dining & Restaurants', icon: UtensilsCrossed },
+    { key: 'gas', label: 'Gas & Transportation', icon: Fuel },
+    { key: 'travel', label: 'Travel & Hotels', icon: Hotel },
+    { key: 'general', label: 'General Purchases', icon: ShoppingBag }
   ];
 
   const steps = [
@@ -183,7 +183,9 @@ export const EnhancedCardFinderForm = ({ onBack }: EnhancedCardFinderFormProps) 
                         }`}
                       >
                         <div className="flex items-center">
-                          <span className="text-2xl mr-3">{purpose.icon}</span>
+                          <div className="w-8 h-8 flex items-center justify-center mr-3">
+                            <purpose.icon className="h-5 w-5 text-blue-600" />
+                          </div>
                           <div>
                             <h3 className="font-semibold">{purpose.title}</h3>
                             <p className="text-sm text-gray-600">{purpose.desc}</p>
@@ -304,7 +306,7 @@ export const EnhancedCardFinderForm = ({ onBack }: EnhancedCardFinderFormProps) 
                     {spendingCategories.map((category) => (
                       <div key={category.key}>
                         <label className="flex items-center text-sm font-medium mb-2">
-                          <span className="text-lg mr-2">{category.icon}</span>
+                          <category.icon className="h-4 w-4 mr-2 text-blue-600" />
                           {category.label}
                         </label>
                         <div className="flex items-center space-x-4">
