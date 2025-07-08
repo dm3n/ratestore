@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Shield, TrendingUp, Calculator, PiggyBank, CheckCircle, Percent } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const TFSASavings = () => {
   return (
@@ -29,13 +30,15 @@ const TFSASavings = () => {
                 Compare the best TFSA rates and maximize your tax-free growth.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2" onClick={() => document.getElementById('calculator-section')?.scrollIntoView({ behavior: 'smooth' })}>
                   <Calculator className="h-5 w-5" />
                   Compare TFSA Rates
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
-                  <PiggyBank className="h-5 w-5" />
-                  Calculate Tax Savings
+                <Button size="lg" variant="outline" className="gap-2" asChild>
+                  <Link to="/tools/tfsa-calculator">
+                    <PiggyBank className="h-5 w-5" />
+                    Calculate Tax Savings
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -43,7 +46,7 @@ const TFSASavings = () => {
         </section>
         
         {/* Interactive Calculator */}
-        <section className="py-16">
+        <section id="calculator-section" className="py-16">
           <div className="container">
             <div className="max-w-7xl mx-auto">
               <SavingsRatesCalculator 
