@@ -13,28 +13,32 @@ const LifeInsuranceTypes = () => {
       title: "Term Life Insurance",
       description: "Affordable temporary coverage for specific periods",
       icon: Heart,
-      link: "/contact",
+      quoteLink: "/insurance/life/quotes",
+      learnMoreLink: "/insurance/life/term",
       features: ["Fixed premiums", "Specific term lengths", "Death benefit protection"]
     },
     {
       title: "Permanent Life Insurance",
       description: "Lifelong coverage with investment component",
       icon: Shield,
-      link: "/contact",
+      quoteLink: "/insurance/life/quotes",
+      learnMoreLink: "/insurance/life/permanent",
       features: ["Lifetime coverage", "Cash value growth", "Investment options"]
     },
     {
       title: "Group Insurance",
       description: "Employer-sponsored life insurance benefits",
       icon: Users,
-      link: "/contact",
+      quoteLink: "/insurance/life/quotes",
+      learnMoreLink: "/insurance/life/group",
       features: ["Group rates", "Employer benefits", "Basic coverage"]
     },
     {
       title: "Critical Illness Insurance",
       description: "Coverage for serious medical conditions",
       icon: Activity,
-      link: "/contact",
+      quoteLink: "/insurance/life/quotes",
+      learnMoreLink: "/insurance/life/critical-illness",
       features: ["Lump sum benefits", "Serious illness coverage", "Treatment support"]
     }
   ];
@@ -90,10 +94,10 @@ const LifeInsuranceTypes = () => {
                       </ul>
                       <div className="flex gap-3">
                         <Button className="flex-1" asChild>
-                          <Link to={insurance.link}>Get Quote</Link>
+                          <Link to={insurance.quoteLink}>Get Quote</Link>
                         </Button>
                         <Button variant="outline" className="flex-1 border-gray-300 text-gray-700 bg-transparent" asChild>
-                          <Link to="/contact">Learn More</Link>
+                          <Link to={insurance.learnMoreLink}>Learn More</Link>
                         </Button>
                       </div>
                     </CardContent>
