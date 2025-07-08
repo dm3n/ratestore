@@ -125,10 +125,10 @@ const Insurance = () => {
                 for auto, home, life, travel, and business insurance - all in one place.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto" onClick={() => document.getElementById('insurance-types-section')?.scrollIntoView({ behavior: 'smooth' })}>
                   Compare All Insurance <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20">
+                <Button size="lg" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8 py-4 h-auto border border-white/20" onClick={() => document.getElementById('benefits-section')?.scrollIntoView({ behavior: 'smooth' })}>
                   <Phone className="mr-2 h-5 w-5" />
                   Speak with Expert
                 </Button>
@@ -138,7 +138,7 @@ const Insurance = () => {
         </section>
 
         {/* Insurance Types */}
-        <section className="py-20">
+        <section id="insurance-types-section" className="py-20">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
@@ -217,7 +217,7 @@ const Insurance = () => {
         </section>
 
         {/* Benefits Section */}
-        <section className="py-20">
+        <section id="benefits-section" className="py-20">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
