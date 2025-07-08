@@ -98,7 +98,7 @@ const LifeInsuranceQuotes = () => {
                 Compare coverage options and find the perfect policy for your needs.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 font-semibold px-8 py-4 h-auto">
+                <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 font-semibold px-8 py-4 h-auto" onClick={() => document.getElementById('quote-form-section')?.scrollIntoView({ behavior: 'smooth' })}>
                   Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto" asChild>
@@ -112,7 +112,7 @@ const LifeInsuranceQuotes = () => {
         </section>
 
         {/* Quote Form Section */}
-        <section className="py-20">
+        <section id="quote-form-section" className="py-20">
           <div className="container">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
@@ -367,7 +367,7 @@ const LifeInsuranceQuotes = () => {
                 Get personalized life insurance quotes in minutes and secure your family's financial future
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-                <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 font-semibold px-8 py-4 h-auto">
+                <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 font-semibold px-8 py-4 h-auto" onClick={() => document.getElementById('quote-form-section')?.scrollIntoView({ behavior: 'smooth' })}>
                   Get Free Quote Now <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto" asChild>
