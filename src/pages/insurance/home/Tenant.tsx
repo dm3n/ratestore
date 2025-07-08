@@ -85,10 +85,12 @@ const TenantInsurance = () => {
                 tenant insurance coverage for less than the cost of a daily coffee.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
-                  Get Tenant Quote <Building className="ml-2 h-5 w-5" />
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/insurance/home/quotes">
+                    Get Tenant Quote <Building className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
+                <Button size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto" onClick={() => document.getElementById('coverage-section')?.scrollIntoView({ behavior: 'smooth' })}>
                   Calculate Coverage <Calculator className="ml-2 h-5 w-5" />
                 </Button>
               </div>
@@ -97,7 +99,7 @@ const TenantInsurance = () => {
         </section>
 
         {/* Coverage Types */}
-        <section className="py-20">
+        <section id="coverage-section" className="py-20">
           <div className="container">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
