@@ -95,8 +95,8 @@ export default function InstantApproval() {
                 </div>
               )}
               
-              <CardHeader>
-                <CardTitle className="text-lg">{card.name}</CardTitle>
+              <CardHeader className="pr-20">
+                <CardTitle className="text-lg pr-2">{card.name}</CardTitle>
                 <CardDescription className="text-sm text-gray-600">{card.issuer}</CardDescription>
               </CardHeader>
               
