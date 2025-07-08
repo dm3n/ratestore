@@ -72,7 +72,7 @@ const BMO = () => {
                 {bmoCards.map((card, index) => (
                   <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-shadow">
                     {card.featured && (
-                      <Badge className="absolute top-4 right-4 bg-yellow-500 text-yellow-900">
+                      <Badge className="absolute top-2 right-2 bg-yellow-500 text-yellow-900">
                         <Star className="h-3 w-3 mr-1" />
                         Featured
                       </Badge>
