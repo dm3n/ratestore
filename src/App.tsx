@@ -199,6 +199,7 @@ import TieredSavings from "./pages/guides/TieredSavings";
 import SavingsAlternatives from "./pages/guides/SavingsAlternatives";
 
 // Other pages
+import Contact from "./pages/Contact";
 import Refinance from "./pages/Refinance";
 
 const queryClient = new QueryClient();
@@ -429,6 +430,7 @@ const App = () => (
             <Route path="/guides/chequing-fees" element={<SavingsAccount />} />
             
             {/* Other routes */}
+            <Route path="/contact" element={<Contact />} />
             <Route path="/refinance" element={<Refinance />} />
             <Route path="/pre-approval" element={<PreApproval />} />
             <Route path="/compare-all-rates" element={<CompareAllRates />} />
