@@ -232,7 +232,13 @@ export function InteractiveRateCalculator({
   };
 
   // Get available terms - if termFilter is specified, only show that term
-  const availableTerms = termFilter ? [termFilter] : ["2-yr", "3-yr", "5-yr"];
+  // For HELOC, include 1-yr term
+  const getAvailableTerms = () => {
+    if (termFilter) return [termFilter];
+    if (transactionType === "heloc") return ["1-yr", "2-yr", "3-yr", "5-yr"];
+    return ["2-yr", "3-yr", "5-yr"];
+  };
+  const availableTerms = getAvailableTerms();
 
   // Toggle show more rates for a specific term and type
   const toggleShowMore = (term: string, type: "fixed" | "variable") => {
