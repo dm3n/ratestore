@@ -200,6 +200,8 @@ import SavingsAlternatives from "./pages/guides/SavingsAlternatives";
 
 // Other pages
 import Contact from "./pages/Contact";
+import Privacy from "./pages/Privacy";
+import { default as TermsOfUse } from "./pages/Terms";
 import Refinance from "./pages/Refinance";
 import Profile from "./pages/Profile";
 
@@ -432,6 +434,8 @@ const App = () => (
             
             {/* Other routes */}
             <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<TermsOfUse />} />
             <Route path="/refinance" element={<Refinance />} />
             <Route path="/pre-approval" element={<PreApproval />} />
             <Route path="/compare-all-rates" element={<CompareAllRates />} />
