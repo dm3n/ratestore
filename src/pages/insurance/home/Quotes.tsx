@@ -12,6 +12,7 @@ import {
   ArrowRight, Phone, MapPin, DollarSign, Clock, Users
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const HomeInsuranceQuotes = () => {
   const [formData, setFormData] = useState({
@@ -48,6 +49,13 @@ const HomeInsuranceQuotes = () => {
     "Newfoundland and Labrador", "Prince Edward Island",
     "Northwest Territories", "Nunavut", "Yukon"
   ];
+
+  const scrollToQuoteForm = () => {
+    const element = document.getElementById('quote-form');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-blue-50">
@@ -89,7 +97,7 @@ const HomeInsuranceQuotes = () => {
                 </div>
                 
                 {/* Quote Form */}
-                <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
+                <Card id="quote-form" className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
                   <CardHeader className="text-center">
                     <CardTitle className="text-2xl text-gray-900">Get Your Free Quote</CardTitle>
                     <CardDescription className="text-gray-600">
@@ -266,12 +274,18 @@ const HomeInsuranceQuotes = () => {
                 Get personalized quotes from top Canadian insurers in minutes
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
+                <Button 
+                  size="lg" 
+                  className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto"
+                  onClick={scrollToQuoteForm}
+                >
                   Get Free Quotes <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="bg-blue-700 border-white text-white hover:bg-blue-600 font-semibold px-8 py-4 h-auto">
-                  <Phone className="mr-2 h-5 w-5" />
-                  Speak with Expert
+                <Button size="lg" variant="outline" className="bg-blue-700 border-white text-white hover:bg-blue-600 font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/contact">
+                    <Phone className="mr-2 h-5 w-5" />
+                    Speak with Expert
+                  </Link>
                 </Button>
               </div>
             </div>
