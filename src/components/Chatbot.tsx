@@ -186,7 +186,7 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
                     <button
                       key={index}
                       onClick={() => handleSendMessage(question)}
-                      className="w-full text-left p-4 text-blue-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl transition-all duration-300 text-sm font-medium hover:shadow-md transform hover:scale-[1.02] border border-blue-200/50 animate-fade-in"
+                      className="w-full text-left p-4 text-blue-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl transition-all duration-200 ease-out text-sm font-medium hover:shadow-sm border border-blue-200/50 animate-fade-in will-change-transform"
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       {question}
