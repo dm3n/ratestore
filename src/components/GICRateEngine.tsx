@@ -348,9 +348,9 @@ export function GICRateEngine({
 
                       <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
                         <div className="text-center lg:text-right">
-                          <div className="text-3xl font-bold text-green-600 mb-1 transition-all duration-300 hover:scale-110">
-                            {(rate.rate * 100).toFixed(2)}%
-                          </div>
+                           <div className="text-3xl font-bold text-green-600 mb-1 transition-all duration-300 hover:scale-110">
+                             {rate.rate.toFixed(2)}%
+                           </div>
                           <div className="text-sm text-muted-foreground">interest rate</div>
                         </div>
                         
@@ -427,7 +427,7 @@ export function GICRateEngine({
                         </div>
                         <div className="flex items-center gap-4 w-full md:w-auto">
                           <div className="text-right flex-1 md:flex-none">
-                            <div className="text-2xl font-bold text-green-600 transition-all duration-300 hover:scale-110">{(rate.rate * 100).toFixed(2)}%</div>
+                            <div className="text-2xl font-bold text-green-600 transition-all duration-300 hover:scale-110">{rate.rate.toFixed(2)}%</div>
                             <div className="text-xs text-muted-foreground">interest rate</div>
                           </div>
                           <Button variant="outline" size="sm" className="shrink-0 transition-all duration-200 hover:scale-105">
