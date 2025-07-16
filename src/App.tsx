@@ -199,6 +199,7 @@ import TieredSavings from "./pages/guides/TieredSavings";
 import SavingsAlternatives from "./pages/guides/SavingsAlternatives";
 
 // Other pages
+import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import { default as TermsOfUse } from "./pages/Terms";
@@ -433,6 +434,7 @@ const App = () => (
             <Route path="/guides/chequing-fees" element={<SavingsAccount />} />
             
             {/* Other routes */}
+            <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<TermsOfUse />} />
