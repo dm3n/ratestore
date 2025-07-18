@@ -273,29 +273,35 @@ export function InteractiveRateCalculator({
   };
 
   const renderRateItem = (rate: RateData, isAdditional = false) => (
-    <div key={rate.id} className={`text-center ${isAdditional ? 'py-2 border-t border-gray-100' : ''}`}>
-      <div className={`${isAdditional ? 'text-lg' : 'text-2xl sm:text-3xl'} font-bold text-primary`}>
-        {(rate.rate * 100).toFixed(2)}%
-      </div>
-      {rate.prime && (
-        <div className="text-sm text-muted-foreground">{rate.prime}</div>
-      )}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-2">
-        <div className="flex items-center gap-2">
-          {rate.lenderType === "home" || rate.lenderType !== "bank" ? (
-            <Home className="h-4 w-4" />
-          ) : (
-            <Building2 className="h-4 w-4" />
-          )}
-          <span className="text-sm font-medium">{rate.lender}</span>
+    <div key={rate.id} className={`${isAdditional ? 'py-3 border-t border-gray-100' : ''}`}>
+      <div className="text-center space-y-2">
+        <div className={`${isAdditional ? 'text-xl' : 'text-2xl md:text-3xl'} font-bold text-primary`}>
+          {(rate.rate * 100).toFixed(2)}%
         </div>
-        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
-          inquire
-        </Button>
+        {rate.prime && (
+          <div className="text-sm text-muted-foreground">{rate.prime}</div>
+        )}
       </div>
-      <button className="text-sm text-muted-foreground hover:underline mt-1">
-        More details +
-      </button>
+      
+      <div className="mt-3 space-y-2">
+        <div className="flex items-center justify-center gap-2 text-sm">
+          {rate.lenderType === "home" || rate.lenderType !== "bank" ? (
+            <Home className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <Building2 className="h-4 w-4 text-muted-foreground" />
+          )}
+          <span className="font-medium">{rate.lender}</span>
+        </div>
+        
+        <div className="flex flex-col gap-2">
+          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-medium">
+            inquire
+          </Button>
+          <button className="text-xs text-muted-foreground hover:underline">
+            More details +
+          </button>
+        </div>
+      </div>
     </div>
   );
 
@@ -504,16 +510,29 @@ export function InteractiveRateCalculator({
             const showMoreFixed = showMoreRates[`${term}-fixed`];
             const showMoreVariable = showMoreRates[`${term}-variable`];
 
-            return (
-              <div key={term} className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 border rounded-lg bg-white shadow-sm">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="text-lg font-bold">{term}</span>
-                    <button className="block text-primary text-sm hover:underline">
-                      compare all rates
-                    </button>
+             return (
+              <div key={term} className="border rounded-lg bg-white shadow-sm overflow-hidden">
+                {/* Term Header */}
+                <div className="bg-gray-50 px-4 py-3 border-b">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-lg font-bold">{term}</span>
+                      <button className="block text-primary text-sm hover:underline mt-1">
+                        compare all rates
+                      </button>
+                    </div>
+                    <div className="hidden md:flex gap-8 text-sm font-medium text-muted-foreground">
+                      <span>Fixed</span>
+                      <span>Variable</span>
+                    </div>
                   </div>
-                  <div className="flex-1">
+                </div>
+
+                {/* Rate Content */}
+                <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x">
+                  {/* Fixed Rate Section */}
+                  <div className="p-4">
+                    <div className="md:hidden text-sm font-medium text-muted-foreground mb-3">Fixed Rate</div>
                     {isLoading ? (
                       <div className="text-center space-y-2">
                         <Skeleton className="h-8 w-20 mx-auto" />
@@ -521,84 +540,86 @@ export function InteractiveRateCalculator({
                         <Skeleton className="h-8 w-16 mx-auto" />
                       </div>
                     ) : fixedRate ? (
-                      <>
+                      <div className="space-y-3">
                         {renderRateItem(fixedRate)}
                         {showMoreFixed && additionalFixedRates.map(rate => 
                           renderRateItem(rate, true)
                         )}
                         {additionalFixedRates.length > 0 && (
-                          <div className="text-center mt-2">
+                          <div className="text-center pt-2">
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => toggleShowMore(term, "fixed")}
-                              className="text-primary hover:text-primary/80"
+                              className="text-primary hover:text-primary/80 text-xs"
                             >
                               {showMoreFixed ? (
                                 <>
-                                  <ChevronUp className="h-4 w-4 mr-1" />
+                                  <ChevronUp className="h-3 w-3 mr-1" />
                                   Show less
                                 </>
                               ) : (
                                 <>
-                                  <ChevronDown className="h-4 w-4 mr-1" />
+                                  <ChevronDown className="h-3 w-3 mr-1" />
                                   Show {additionalFixedRates.length} more
                                 </>
                               )}
                             </Button>
                           </div>
                         )}
-                      </>
+                      </div>
                     ) : (
-                      <div className="text-center text-muted-foreground">
+                      <div className="text-center text-muted-foreground py-8">
                         No rates available
                       </div>
                     )}
                   </div>
-                </div>
 
-                <div className="lg:border-l lg:pl-4">
-                  {isLoading ? (
-                    <div className="text-center space-y-2">
-                      <Skeleton className="h-8 w-20 mx-auto" />
-                      <Skeleton className="h-4 w-24 mx-auto" />
-                      <Skeleton className="h-6 w-32 mx-auto" />
-                      <Skeleton className="h-8 w-16 mx-auto" />
-                    </div>
-                  ) : variableRate ? (
-                    <>
-                      {renderRateItem(variableRate)}
-                      {showMoreVariable && additionalVariableRates.map(rate => 
-                        renderRateItem(rate, true)
-                      )}
-                      {additionalVariableRates.length > 0 && (
-                        <div className="text-center mt-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleShowMore(term, "variable")}
-                            className="text-primary hover:text-primary/80"
-                          >
-                            {showMoreVariable ? (
-                              <>
-                                <ChevronUp className="h-4 w-4 mr-1" />
-                                Show less
-                              </>
-                            ) : (
-                              <>
-                                <ChevronDown className="h-4 w-4 mr-1" />
-                                Show {additionalVariableRates.length} more
-                              </>
-                            )}
-                          </Button>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <div className="text-center text-muted-foreground">
-                      No rates available
-                    </div>
-                  )}
+                  {/* Variable Rate Section */}
+                  <div className="p-4">
+                    <div className="md:hidden text-sm font-medium text-muted-foreground mb-3">Variable Rate</div>
+                    {isLoading ? (
+                      <div className="text-center space-y-2">
+                        <Skeleton className="h-8 w-20 mx-auto" />
+                        <Skeleton className="h-4 w-24 mx-auto" />
+                        <Skeleton className="h-6 w-32 mx-auto" />
+                        <Skeleton className="h-8 w-16 mx-auto" />
+                      </div>
+                    ) : variableRate ? (
+                      <div className="space-y-3">
+                        {renderRateItem(variableRate)}
+                        {showMoreVariable && additionalVariableRates.map(rate => 
+                          renderRateItem(rate, true)
+                        )}
+                        {additionalVariableRates.length > 0 && (
+                          <div className="text-center pt-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => toggleShowMore(term, "variable")}
+                              className="text-primary hover:text-primary/80 text-xs"
+                            >
+                              {showMoreVariable ? (
+                                <>
+                                  <ChevronUp className="h-3 w-3 mr-1" />
+                                  Show less
+                                </>
+                              ) : (
+                                <>
+                                  <ChevronDown className="h-3 w-3 mr-1" />
+                                  Show {additionalVariableRates.length} more
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-center text-muted-foreground py-8">
+                        No rates available
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             );
