@@ -76,11 +76,20 @@ export function InteractiveRateCalculator({
   // Fetch rates from database based on current inputs
   const updateRates = async () => {
     setIsLoading(true);
-    console.log('Fetching rates for transaction type:', transactionType);
+    console.log('Fetching rates for transaction type:', transactionType, 'down payment %:', downPaymentPercent);
     
     try {
       const loanAmount = purchasePrice - downPayment;
       const loanToValue = loanAmount / purchasePrice;
+      const downPaymentDecimal = downPaymentPercent / 100;
+      
+      console.log('Query parameters:', {
+        transactionType,
+        downPaymentDecimal,
+        loanToValue,
+        purchasePrice,
+        downPayment
+      });
       
       // Build query with province filter if specified
       let query = supabase
@@ -88,7 +97,7 @@ export function InteractiveRateCalculator({
         .select('*')
         .eq('is_active', true)
         .contains('transaction_types', [transactionType])
-        .lte('min_down_payment', downPaymentPercent / 100)
+        .lte('min_down_payment', downPaymentDecimal)
         .gte('max_loan_to_value', loanToValue)
         .order('base_rate', { ascending: true });
 
