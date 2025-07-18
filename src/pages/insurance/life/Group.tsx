@@ -102,8 +102,10 @@ const GroupInsurance = () => {
                     Get Group Quote <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white bg-transparent font-semibold px-8 py-4 h-auto">
-                  Plan Builder <Calculator className="ml-2 h-5 w-5" />
+                <Button size="lg" variant="outline" className="border-white text-white bg-transparent font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/insurance/life/group/plan-builder">
+                    Plan Builder <Calculator className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
               </div>
             </div>
