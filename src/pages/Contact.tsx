@@ -30,7 +30,7 @@ const Contact = () => {
         <section className="py-12">
           <div className="container">
             <div className="max-w-6xl mx-auto">
-              <div className="grid gap-8 md:grid-cols-2">
+              <div className="grid gap-6 lg:gap-8 lg:grid-cols-2">
                 <div>
                   <Card>
                     <CardHeader>

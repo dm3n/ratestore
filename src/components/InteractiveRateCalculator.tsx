@@ -274,20 +274,22 @@ export function InteractiveRateCalculator({
 
   const renderRateItem = (rate: RateData, isAdditional = false) => (
     <div key={rate.id} className={`text-center ${isAdditional ? 'py-2 border-t border-gray-100' : ''}`}>
-      <div className={`${isAdditional ? 'text-lg' : 'text-2xl'} font-bold text-primary`}>
+      <div className={`${isAdditional ? 'text-lg' : 'text-2xl sm:text-3xl'} font-bold text-primary`}>
         {(rate.rate * 100).toFixed(2)}%
       </div>
       {rate.prime && (
         <div className="text-sm text-muted-foreground">{rate.prime}</div>
       )}
-      <div className="flex items-center justify-center gap-2 mt-2">
-        {rate.lenderType === "home" || rate.lenderType !== "bank" ? (
-          <Home className="h-4 w-4" />
-        ) : (
-          <Building2 className="h-4 w-4" />
-        )}
-        <span className="text-sm">{rate.lender}</span>
-        <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-2">
+        <div className="flex items-center gap-2">
+          {rate.lenderType === "home" || rate.lenderType !== "bank" ? (
+            <Home className="h-4 w-4" />
+          ) : (
+            <Building2 className="h-4 w-4" />
+          )}
+          <span className="text-sm font-medium">{rate.lender}</span>
+        </div>
+        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
           inquire
         </Button>
       </div>
@@ -300,9 +302,9 @@ export function InteractiveRateCalculator({
   return (
     <Card className="border-2 border-primary/20 shadow-lg">
       <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
-        <div className="flex justify-between items-center">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div>
-            <CardTitle className="text-2xl font-bold">Find Your Best Rate</CardTitle>
+            <CardTitle className="text-xl lg:text-2xl font-bold">Find Your Best Rate</CardTitle>
             <p className="text-muted-foreground mt-1">
               Live rates updated automatically
               {isLoading && (
@@ -322,22 +324,22 @@ export function InteractiveRateCalculator({
               </span>
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full lg:w-auto">
             <Button 
               variant="outline" 
               size="sm" 
               onClick={updateRates}
               disabled={isLoading}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 w-full sm:w-auto"
             >
               <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
             {!termFilter && (
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
-                <TabsList className="grid w-fit grid-cols-2">
-                  <TabsTrigger value="best-market" className="text-sm">Best market rates</TabsTrigger>
-                  <TabsTrigger value="best-bank" className="text-sm">Best bank rates</TabsTrigger>
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full sm:w-auto">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="best-market" className="text-xs sm:text-sm">Best market</TabsTrigger>
+                  <TabsTrigger value="best-bank" className="text-xs sm:text-sm">Best bank</TabsTrigger>
                 </TabsList>
               </Tabs>
             )}
@@ -347,7 +349,7 @@ export function InteractiveRateCalculator({
       
       <CardContent className="p-6">
         {/* Calculator Inputs */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 p-4 bg-gray-50 rounded-lg">
           <div className="space-y-2">
             <Label htmlFor="transaction-type" className="text-sm font-medium">Transaction type</Label>
             <Select 
@@ -428,7 +430,7 @@ export function InteractiveRateCalculator({
         {termFilter && (
           <div className="mb-8">
             <h3 className="text-lg font-semibold mb-4">Big 5 Banks - Best Rates</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {big5Banks.map((bank) => {
                 const bankData = bankRates.find(br => br.bankName === bank.name);
                 return (
@@ -483,12 +485,12 @@ export function InteractiveRateCalculator({
         )}
 
         {/* Rate Results */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
+          <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <h3 className="text-lg font-semibold">
               {termFilter ? "All Big 5 Bank Rates by Term" : "Term"}
             </h3>
-            <div className="flex gap-8 text-sm font-medium">
+            <div className="flex gap-4 sm:gap-8 text-sm font-medium">
               <span>Fixed</span>
               <span>Variable</span>
             </div>
@@ -503,7 +505,7 @@ export function InteractiveRateCalculator({
             const showMoreVariable = showMoreRates[`${term}-variable`];
 
             return (
-              <div key={term} className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 border rounded-lg">
+              <div key={term} className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 border rounded-lg bg-white shadow-sm">
                 <div className="flex items-start justify-between">
                   <div>
                     <span className="text-lg font-bold">{term}</span>

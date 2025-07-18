@@ -182,7 +182,7 @@ const CalculatorsHub = () => {
             </p>
             
             {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
               <div className="bg-white p-4 rounded-lg shadow-sm">
                 <div className="text-2xl font-bold text-blue-600">{calculators.length}</div>
                 <div className="text-sm text-muted-foreground">Total Tools</div>
@@ -213,7 +213,7 @@ const CalculatorsHub = () => {
               <TrendingUp className="h-5 w-5 text-orange-500" />
               <h2 className="text-2xl font-bold">Most Popular Calculators</h2>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {popularCalculators.map((calc, index) => (
                 <motion.div
                   key={calc.id}
@@ -268,7 +268,7 @@ const CalculatorsHub = () => {
             className="mb-8"
           >
             <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -280,7 +280,7 @@ const CalculatorsHub = () => {
                     />
                   </div>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
@@ -321,7 +321,7 @@ const CalculatorsHub = () => {
                 {filteredCalculators.length} tools
               </Badge>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredCalculators.map((calc, index) => (
                 <motion.div
                   key={calc.id}

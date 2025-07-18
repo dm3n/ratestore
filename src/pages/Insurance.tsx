@@ -148,7 +148,7 @@ const Insurance = () => {
                 </p>
               </div>
               
-              <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
                 {insuranceTypes.map((type, index) => (
                   <Card key={index} className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                     <CardHeader className="text-center">
@@ -199,7 +199,7 @@ const Insurance = () => {
                 </p>
               </div>
               
-              <div className="grid md:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
                 {stats.map((stat, index) => (
                   <Card key={index} className="text-center border-0 shadow-lg hover:shadow-xl transition-shadow">
                     <CardContent className="pt-8">

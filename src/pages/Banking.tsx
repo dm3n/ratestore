@@ -200,7 +200,7 @@ export function Banking() {
                 <p className="text-xl text-slate-600">Updated daily from Canada's top financial institutions</p>
               </div>
               
-              <div className="grid md:grid-cols-3 gap-6 mb-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12">
                 <Card className="relative group hover:shadow-xl transition-all duration-300 border-0 shadow-md ring-2 ring-green-500/20 bg-gradient-to-br from-green-50/50 to-white">
                   <div className="absolute -top-3 left-6">
                     <Badge className="bg-green-600 text-white px-3 py-1 text-xs font-semibold">

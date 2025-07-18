@@ -382,7 +382,7 @@ export function Header() {
   };
 
   // Show mobile menu for tablets and mobile (up to 1024px instead of 768px)
-  const shouldShowMobileMenu = window.innerWidth < 1024;
+  const shouldShowMobileMenu = isMobile;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -414,38 +414,40 @@ export function Header() {
           )}
           
           {/* Mobile menu button - show on tablets and mobile */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:w-80 md:w-96 p-0">
-              <SheetHeader className="p-4 sm:p-6 pb-4 border-b">
-                <SheetTitle className="text-left text-lg sm:text-xl font-bold text-primary">
-                  ratestore.ca
-                </SheetTitle>
-              </SheetHeader>
-              <div className="flex flex-col h-full">
-                <nav className="flex-1 px-4 sm:px-6 py-4 overflow-y-auto">
-                  <MobileNavLinks onLinkClick={closeMobileMenu} />
-                </nav>
-                {!user && (
-                  <div className="p-4 sm:p-6 border-t bg-gray-50/50">
-                    <Button 
-                      variant="default" 
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3"
-                      asChild
-                      onClick={closeMobileMenu}
-                    >
-                      <Link to="/auth">Sign In</Link>
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </SheetContent>
-          </Sheet>
+          {isMobile && (
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="lg:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-full sm:w-80 md:w-96 p-0">
+                <SheetHeader className="p-4 sm:p-6 pb-4 border-b">
+                  <SheetTitle className="text-left text-lg sm:text-xl font-bold text-primary">
+                    ratestore.ca
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col h-full">
+                  <nav className="flex-1 px-4 sm:px-6 py-4 overflow-y-auto">
+                    <MobileNavLinks onLinkClick={closeMobileMenu} />
+                  </nav>
+                  {!user && (
+                    <div className="p-4 sm:p-6 border-t bg-gray-50/50">
+                      <Button 
+                        variant="default" 
+                        className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3"
+                        asChild
+                        onClick={closeMobileMenu}
+                      >
+                        <Link to="/auth">Sign In</Link>
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
         </div>
       </div>
     </header>

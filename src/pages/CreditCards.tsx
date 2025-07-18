@@ -292,7 +292,7 @@ const CreditCards = () => {
               <p className="text-xl mb-8 text-purple-100">
                 Get personalized credit card recommendations in under 1 minute. No credit check required.
               </p>
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
                 <div className="text-center">
                   <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <span className="text-xl font-bold">1</span>
