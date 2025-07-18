@@ -118,6 +118,18 @@ const calculators: CalculatorTool[] = [
     difficulty: "intermediate",
     popular: false,
     features: ["Contribution room", "Growth projections", "Tax savings", "Withdrawal planning"]
+  },
+  {
+    id: "debt-payoff",
+    name: "Debt Payoff Calculator",
+    description: "Create a strategic debt elimination plan",
+    longDescription: "Optimize your debt repayment strategy with multiple payoff methods and see how to save money on interest.",
+    icon: Shield,
+    href: "/tools/debt-payoff-calculator",
+    category: "planning",
+    difficulty: "intermediate",
+    popular: true,
+    features: ["Multiple strategies", "Interest savings", "Payment timeline", "Progress tracking"]
   }
 ];
 
