@@ -4,23 +4,36 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calculator, Home, TrendingUp, FileText, BookOpen } from "lucide-react";
+import { Calculator, Home, TrendingUp, FileText, BookOpen, Star, Shield, Clock, CheckCircle, ArrowRight, Building, Percent, MapPin, Phone } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Mortgages = () => {
   const navigate = useNavigate();
 
   const bestRates = [
-    { lender: "Canadian Lender", rate: "3.84%", term: "5-yr Fixed", type: "featured" },
-    { lender: "Canadian Lender", rate: "3.95%", term: "5-yr Variable", type: "featured" },
-    { lender: "Scotiabank", rate: "4.64%", term: "3-yr Fixed", type: "featured" },
+    { lender: "Canadian Lender", rate: "3.84%", term: "5-yr Fixed", type: "featured", savings: "Save $12,000" },
+    { lender: "Canadian Lender", rate: "3.95%", term: "5-yr Variable", type: "featured", savings: "Save $8,500" },
+    { lender: "Scotiabank", rate: "4.64%", term: "3-yr Fixed", type: "featured", savings: "Save $5,200" },
     { lender: "TD Bank", rate: "4.12%", term: "3-yr Fixed", type: "regular" },
     { lender: "RBC", rate: "4.25%", term: "5-yr Fixed", type: "regular" },
     { lender: "BMO", rate: "4.18%", term: "5-yr Variable", type: "regular" }
   ];
 
+  const quickTools = [
+    { title: "Mortgage Calculator", description: "Calculate monthly payments", icon: Calculator, color: "blue", link: "/tools/mortgage-calculator" },
+    { title: "Affordability Calculator", description: "How much can you afford?", icon: Home, color: "green", link: "/tools/affordability-calculator" },
+    { title: "Payment Calculator", description: "Compare payment options", icon: Percent, color: "purple", link: "/tools/mortgage-calculator" },
+    { title: "First-Time Buyer", description: "Complete buying guide", icon: BookOpen, color: "orange", link: "/guides/first-time-buyer" }
+  ];
+
+  const features = [
+    { title: "100+ Lenders", description: "Compare rates from banks, credit unions, and alternative lenders", icon: Building },
+    { title: "Real-Time Rates", description: "Live rates updated multiple times daily", icon: Clock },
+    { title: "Expert Support", description: "Get personalized advice from mortgage specialists", icon: Shield },
+    { title: "No Hidden Fees", description: "Transparent pricing with no surprises", icon: CheckCircle }
+  ];
+
   const handleCompareRate = (rate: any) => {
-    // Navigate to best rates page with the selected rate for comparison
     navigate('/mortgages/best-rates', { 
       state: { 
         compareRate: {
@@ -38,172 +51,235 @@ const Mortgages = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-primary/5 py-12 md:py-16 lg:py-20">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 md:mb-6 bg-blue-50 text-blue-600 border-blue-200">
-                Compare mortgage rates from 100+ lenders
-              </Badge>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 md:mb-6">
-                Find the Best Mortgage Rates in Canada
+        <section className="relative bg-gradient-to-br from-primary/10 via-primary/5 to-transparent py-20 md:py-32 overflow-hidden">
+          <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+          <div className="container relative">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-primary mb-6">
+                <Star className="h-4 w-4" />
+                Canada's Most Trusted Mortgage Platform
+              </div>
+              <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Find Your Perfect
+                <br />
+                <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                  Mortgage Rate
+                </span>
               </h1>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
-                Compare rates from Canada's top banks and lenders. Get personalized quotes 
-                and expert advice to find the perfect mortgage for your home purchase or renewal.
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-10">
+                Compare rates from 100+ Canadian lenders in minutes. Get expert guidance and save thousands on your mortgage.
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" variant="outline" className="gap-2 px-6 md:px-8" asChild>
+              <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                <Button size="lg" className="h-14 px-8 text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all" asChild>
                   <Link to="/mortgages/best-rates">
-                    Compare Rates <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />
+                    Compare Rates Now <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" className="gap-2 px-6 md:px-8" asChild>
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-semibold border-2 hover:bg-primary/5" asChild>
                   <Link to="/tools/mortgage-calculator">
-                    Calculate Payments <Calculator className="h-4 w-4 md:h-5 md:w-5" />
+                    Calculate Payments <Calculator className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
+              </div>
+              
+              {/* Quick Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary">100+</div>
+                  <div className="text-sm text-muted-foreground">Lenders</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary">$2B+</div>
+                  <div className="text-sm text-muted-foreground">Mortgages Funded</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary">50K+</div>
+                  <div className="text-sm text-muted-foreground">Happy Customers</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary">4.9★</div>
+                  <div className="text-sm text-muted-foreground">Customer Rating</div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Featured Rates */}
-        <section className="py-12 md:py-16 lg:py-20">
-          <div className="container px-4 sm:px-6 lg:px-8">
+        {/* Featured Rates Section */}
+        <section className="py-20 bg-white">
+          <div className="container">
             <div className="max-w-6xl mx-auto">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 md:mb-12 gap-4">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">Today's Best Mortgage Rates</h2>
-                <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
-                  Updated daily
+              <div className="text-center mb-16">
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">Today's Best Rates</h2>
+                <p className="text-xl text-muted-foreground mb-6">Updated every hour • Rates as low as 3.84%</p>
+                <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 px-4 py-1">
+                  <Clock className="h-4 w-4 mr-1" />
+                  Last updated: 2 minutes ago
                 </Badge>
               </div>
               
-              <div className="grid gap-6 md:gap-8">
-                {/* Featured Rates */}
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
-                  {bestRates.filter(rate => rate.type === "featured").map((rate, index) => (
-                    <Card key={index} className="border-2 border-primary/20 shadow-lg hover:shadow-xl transition-all duration-200">
-                      <CardHeader className="text-center pb-4">
-                        <Badge variant="outline" className="self-center mb-2 bg-primary/10 text-primary">
-                          Featured
-                        </Badge>
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            <Home className="h-4 w-4 text-blue-600" />
-                          </div>
-                          <span className="font-medium text-sm md:text-base">{rate.lender}</span>
+              <div className="grid md:grid-cols-3 gap-8 mb-16">
+                {bestRates.filter(rate => rate.type === "featured").map((rate, index) => (
+                  <Card key={index} className="relative border-0 shadow-xl bg-gradient-to-br from-white to-primary/5 hover:shadow-2xl transition-all duration-300 group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
+                    <CardHeader className="text-center pb-4 relative">
+                      <Badge className="self-center mb-4 bg-gradient-to-r from-primary to-primary/80 text-white">
+                        <Star className="h-3 w-3 mr-1" />
+                        Featured Rate
+                      </Badge>
+                      <div className="flex items-center justify-center gap-3 mb-4">
+                        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                          <Building className="h-6 w-6 text-primary" />
                         </div>
-                        <div className="text-2xl md:text-3xl font-bold text-primary">{rate.rate}</div>
-                        <div className="text-sm text-muted-foreground">{rate.term}</div>
-                      </CardHeader>
-                      <CardContent>
-                        <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                          Get Quote
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                        <span className="font-semibold text-lg">{rate.lender}</span>
+                      </div>
+                      <div className="text-4xl font-bold text-primary mb-2">{rate.rate}</div>
+                      <div className="text-muted-foreground font-medium">{rate.term}</div>
+                      {rate.savings && (
+                        <div className="mt-3 text-green-600 font-semibold text-sm bg-green-50 rounded-full px-3 py-1">
+                          {rate.savings}
+                        </div>
+                      )}
+                    </CardHeader>
+                    <CardContent className="relative">
+                      <Button className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary font-semibold">
+                        Get This Rate
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
 
-                {/* Other Competitive Rates */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-xl md:text-2xl">More Competitive Rates</CardTitle>
-                    <CardDescription>Additional mortgage rates from trusted lenders</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {bestRates.filter(rate => rate.type === "regular").map((rate, index) => (
-                        <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors gap-4">
+              {/* More Rates Table */}
+              <Card className="border-0 shadow-lg">
+                <CardHeader className="bg-gradient-to-r from-muted/50 to-muted/30">
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <TrendingUp className="h-6 w-6 text-primary" />
+                    More Competitive Rates
+                  </CardTitle>
+                  <CardDescription className="text-base">
+                    Additional mortgage options from trusted Canadian lenders
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="divide-y">
+                    {bestRates.filter(rate => rate.type === "regular").map((rate, index) => (
+                      <div key={index} className="p-6 hover:bg-muted/30 transition-colors group">
+                        <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-                              <Home className="h-5 w-5 text-primary" />
+                            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                              <Building className="h-6 w-6 text-primary" />
                             </div>
                             <div>
-                              <div className="font-semibold text-sm md:text-base">{rate.lender}</div>
-                              <div className="text-sm text-muted-foreground">{rate.term}</div>
+                              <div className="font-semibold text-lg">{rate.lender}</div>
+                              <div className="text-muted-foreground">{rate.term}</div>
                             </div>
                           </div>
-                          <div className="flex items-center gap-4 w-full sm:w-auto">
-                            <div className="text-xl md:text-2xl font-bold text-primary">{rate.rate}</div>
+                          <div className="flex items-center gap-6">
+                            <div className="text-right">
+                              <div className="text-3xl font-bold text-primary">{rate.rate}</div>
+                              <div className="text-sm text-muted-foreground">Annual Rate</div>
+                            </div>
                             <Button 
                               variant="outline" 
-                              size="sm" 
-                              className="shrink-0"
+                              className="group-hover:bg-primary group-hover:text-white transition-colors"
                               onClick={() => handleCompareRate(rate)}
                             >
-                              Compare
+                              Compare Rate
                             </Button>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-20 bg-gradient-to-br from-muted/30 to-muted/10">
+          <div className="container">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold mb-4">Why Choose Our Platform?</h2>
+                <p className="text-xl text-muted-foreground">
+                  We make finding the perfect mortgage simple, fast, and transparent
+                </p>
+              </div>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {features.map((feature, index) => (
+                  <Card key={index} className="text-center border-0 bg-white/80 backdrop-blur-sm hover:shadow-lg transition-all group">
+                    <CardContent className="p-8">
+                      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                        <feature.icon className="h-8 w-8 text-primary" />
+                      </div>
+                      <h3 className="font-bold text-lg mb-3">{feature.title}</h3>
+                      <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-        {/* Tools and Resources */}
-        <section className="py-12 md:py-16 lg:py-20 bg-primary/5">
-          <div className="container px-4 sm:px-6 lg:px-8">
+        {/* Quick Tools Section */}
+        <section className="py-20">
+          <div className="container">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12">
-                Mortgage Tools & Resources
-              </h2>
+              <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold mb-4">Mortgage Tools & Calculators</h2>
+                <p className="text-xl text-muted-foreground">
+                  Everything you need to make informed mortgage decisions
+                </p>
+              </div>
               
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-200">
-                  <CardHeader>
-                    <div className="mb-3 bg-blue-100 w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
-                      <Calculator className="h-6 w-6 md:h-7 md:w-7 text-blue-600" />
-                    </div>
-                    <CardTitle className="text-lg md:text-xl">Mortgage Calculator</CardTitle>
-                    <CardDescription className="text-sm md:text-base">
-                      Calculate your monthly payments and see how much you can afford.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link to="/tools/mortgage-calculator">Use Calculator</Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-                
-                <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-200">
-                  <CardHeader>
-                    <div className="mb-3 bg-green-100 w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
-                      <FileText className="h-6 w-6 md:h-7 md:w-7 text-green-600" />
-                    </div>
-                    <CardTitle className="text-lg md:text-xl">Affordability Calculator</CardTitle>
-                    <CardDescription className="text-sm md:text-base">
-                      Find out how much house you can afford based on your income.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link to="/tools/affordability">Check Affordability</Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-                
-                <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-200 sm:col-span-2 lg:col-span-1">
-                  <CardHeader>
-                    <div className="mb-3 bg-purple-100 w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
-                      <BookOpen className="h-6 w-6 md:h-7 md:w-7 text-purple-600" />
-                    </div>
-                    <CardTitle className="text-lg md:text-xl">First-Time Buyer Guide</CardTitle>
-                    <CardDescription className="text-sm md:text-base">
-                      Complete guide to buying your first home in Canada.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link to="/guides/first-time-buyer">Read Guide</Link>
-                    </Button>
-                  </CardContent>
-                </Card>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {quickTools.map((tool, index) => (
+                  <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-muted/20">
+                    <CardContent className="p-6">
+                      <div className={`w-14 h-14 bg-${tool.color}-100 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                        <tool.icon className={`h-7 w-7 text-${tool.color}-600`} />
+                      </div>
+                      <h3 className="font-bold text-lg mb-2">{tool.title}</h3>
+                      <p className="text-muted-foreground mb-4 text-sm leading-relaxed">{tool.description}</p>
+                      <Button variant="ghost" className="w-full justify-between group-hover:bg-primary group-hover:text-white transition-colors" asChild>
+                        <Link to={tool.link}>
+                          Try Now <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-r from-primary to-primary/90 text-white">
+          <div className="container">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Get Started?</h2>
+              <p className="text-xl text-primary-foreground/90 mb-10 leading-relaxed">
+                Join thousands of Canadians who have found their perfect mortgage rate through our platform. 
+                Start comparing rates in under 60 seconds.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Button size="lg" variant="secondary" className="h-14 px-8 text-lg font-semibold" asChild>
+                  <Link to="/mortgages/best-rates">
+                    Compare Rates Now <TrendingUp className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-semibold border-white/20 text-white hover:bg-white/10" asChild>
+                  <Link to="/contact">
+                    <Phone className="mr-2 h-5 w-5" />
+                    Speak with Expert
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
