@@ -79,11 +79,11 @@ const BestRates = () => {
               <div className="text-center mb-16">
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-8">
                   <span className="bg-gradient-to-br from-foreground via-primary to-foreground/80 bg-clip-text text-transparent">
-                    Compare All
+                    Best Mortgage
                   </span>
                   <br />
                   <span className="bg-gradient-to-br from-primary via-secondary to-primary/80 bg-clip-text text-transparent">
-                    Mortgage Rates
+                    Rates in Canada
                   </span>
                 </h1>
                 <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light">
