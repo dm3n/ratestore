@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Scale, Shield, TrendingUp, Star } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const ThreeYearFixed = () => {
   const threeYearRates = [
@@ -40,29 +41,47 @@ const ThreeYearFixed = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-purple-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-purple-100 text-purple-700 border-purple-200">
-                <Scale className="h-3 w-3 mr-1" />
-                Balanced Choice
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                3-Year Fixed Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                The middle ground between flexibility and security. Compare 3-year fixed 
-                mortgage rates from top Canadian lenders.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">4.04%</div>
-                  <div className="text-sm text-muted-foreground">Best 3-Year Fixed Rate Today</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "Balanced Choice",
+            icon: Scale,
+            color: "purple"
+          }}
+          title="3-Year Fixed"
+          subtitle="Mortgage Rates"
+          description="The middle ground between flexibility and security. Get the perfect balance with 3-year fixed rates that offer protection without long-term commitment."
+          rate={{
+            value: "4.04%",
+            label: "Best 3-Year Fixed Rate",
+            sublabel: "Balanced term option"
+          }}
+          stats={[
+            {
+              value: "3 Years",
+              label: "Rate Protection",
+              sublabel: "Medium-term security"
+            },
+            {
+              value: "Balanced",
+              label: "Risk Profile",
+              sublabel: "Security meets flexibility"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "Compare Fixed Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Calculate Payments",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "purple-50",
+            to: "violet-50"
+          }}
+        />
 
         {/* Interactive Rate Calculator */}
         <section className="py-16 bg-gray-50">

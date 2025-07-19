@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TrendingDown, AlertTriangle, DollarSign, Star } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const ThreeYearVariable = () => {
   const variableRates = [
@@ -40,30 +41,47 @@ const ThreeYearVariable = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-yellow-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-yellow-100 text-yellow-700 border-yellow-200">
-                <TrendingDown className="h-3 w-3 mr-1" />
-                Rate Flexibility
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                3-Year Variable Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Take advantage of rate flexibility with variable rates. Your rate changes 
-                with the Bank of Canada's prime rate.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">4.75%</div>
-                  <div className="text-sm text-muted-foreground">Best 3-Year Variable Rate Today</div>
-                  <div className="text-xs text-muted-foreground mt-1">(Prime - 0.25%)</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "Rate Flexibility",
+            icon: TrendingDown,
+            color: "yellow"
+          }}
+          title="3-Year Variable"
+          subtitle="Mortgage Rates"
+          description="Take advantage of rate flexibility with 3-year variable mortgages. Benefit when rates drop while maintaining medium-term commitment for better discounts."
+          rate={{
+            value: "4.75%",
+            label: "Best 3-Year Variable Rate",
+            sublabel: "(Prime - 0.25%)"
+          }}
+          stats={[
+            {
+              value: "Prime - 0.25%",
+              label: "Best Discount",
+              sublabel: "Below prime rate"
+            },
+            {
+              value: "3 Years",
+              label: "Term Length",
+              sublabel: "With rate flexibility"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "Compare Variable Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Calculate Payments",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "yellow-50",
+            to: "amber-50"
+          }}
+        />
 
         {/* Interactive Rate Calculator */}
         <section className="py-16 bg-gray-50">

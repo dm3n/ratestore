@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MapPin, Star } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const BC = () => {
   const bcRates = [
@@ -21,29 +22,47 @@ const BC = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-green-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-green-100 text-green-700 border-green-200">
-                <MapPin className="h-3 w-3 mr-1" />
-                British Columbia
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                BC Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Find the best mortgage rates in British Columbia from local credit unions 
-                and lenders in Vancouver, Victoria, and across the province.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">3.89%</div>
-                  <div className="text-sm text-muted-foreground">Best BC Rate Today</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "British Columbia",
+            icon: MapPin,
+            color: "green"
+          }}
+          title="BC Mortgage"
+          subtitle="Rates"
+          description="Find the best mortgage rates in Beautiful British Columbia. Compare rates from local credit unions, banks, and lenders across Vancouver, Victoria, and the entire province."
+          rate={{
+            value: "3.89%",
+            label: "Best BC Rate Today",
+            sublabel: "From local credit unions"
+          }}
+          stats={[
+            {
+              value: "25+",
+              label: "Local Lenders",
+              sublabel: "Credit unions & banks"
+            },
+            {
+              value: "Province-wide",
+              label: "Coverage",
+              sublabel: "Vancouver to Victoria"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "Compare BC Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Calculate Payments",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "green-50",
+            to: "emerald-50"
+          }}
+        />
 
         {/* Interactive Rate Calculator */}
         <section className="py-16 bg-gray-50">

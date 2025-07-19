@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MapPin, Star } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const Ontario = () => {
   const ontarioRates = [
@@ -21,29 +22,47 @@ const Ontario = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-blue-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-blue-100 text-blue-700 border-blue-200">
-                <MapPin className="h-3 w-3 mr-1" />
-                Ontario Province
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                Ontario Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Find competitive mortgage rates in Ontario from Toronto credit unions 
-                and regional lenders across the province.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">3.86%</div>
-                  <div className="text-sm text-muted-foreground">Best Ontario Rate Today</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "Ontario Province",
+            icon: MapPin,
+            color: "blue"
+          }}
+          title="Ontario Mortgage"
+          subtitle="Rates"
+          description="Find competitive mortgage rates in Ontario from Toronto credit unions and regional lenders. Access the best rates from the GTA to Ottawa and everywhere in between."
+          rate={{
+            value: "3.86%",
+            label: "Best Ontario Rate Today",
+            sublabel: "From credit unions"
+          }}
+          stats={[
+            {
+              value: "30+",
+              label: "Local Lenders",
+              sublabel: "Credit unions & banks"
+            },
+            {
+              value: "Province-wide",
+              label: "Coverage",
+              sublabel: "Toronto to Ottawa"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "Compare Ontario Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Calculate Payments",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "blue-50",
+            to: "indigo-50"
+          }}
+        />
 
         {/* Interactive Rate Calculator */}
         <section className="py-16 bg-gray-50">

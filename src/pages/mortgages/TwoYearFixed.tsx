@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TrendingDown, Clock, AlertTriangle, Star } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const TwoYearFixed = () => {
   const twoYearRates = [
@@ -39,29 +40,47 @@ const TwoYearFixed = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-orange-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-orange-100 text-orange-700 border-orange-200">
-                <Clock className="h-3 w-3 mr-1" />
-                Short Term Option
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                2-Year Fixed Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Lower initial rates but more frequent renewals. Compare 2-year fixed 
-                mortgage rates from Canada's top lenders.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">4.24%</div>
-                  <div className="text-sm text-muted-foreground">Best 2-Year Fixed Rate Today</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "Short Term Option",
+            icon: Clock,
+            color: "orange"
+          }}
+          title="2-Year Fixed"
+          subtitle="Mortgage Rates"
+          description="Get lower initial rates with 2-year fixed mortgages. Perfect for those expecting rate changes or wanting to reassess options sooner."
+          rate={{
+            value: "4.24%",
+            label: "Best 2-Year Fixed Rate",
+            sublabel: "Short-term security"
+          }}
+          stats={[
+            {
+              value: "2 Years",
+              label: "Rate Protection",
+              sublabel: "Short-term commitment"
+            },
+            {
+              value: "Lower",
+              label: "Initial Rates",
+              sublabel: "Typically better than longer terms"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "Compare Fixed Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Calculate Payments",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "orange-50",
+            to: "amber-50"
+          }}
+        />
 
         {/* Interactive Rate Calculator */}
         <section className="py-16 bg-gray-50">

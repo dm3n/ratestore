@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MapPin, Star } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const Quebec = () => {
   const quebecRates = [
@@ -21,29 +22,47 @@ const Quebec = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-purple-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-purple-100 text-purple-700 border-purple-200">
-                <MapPin className="h-3 w-3 mr-1" />
-                Quebec Province
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                Quebec Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Compare mortgage rates in Quebec from Desjardins, local credit unions, 
-                and regional lenders in Montreal and across the province.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">3.94%</div>
-                  <div className="text-sm text-muted-foreground">Best Quebec Rate Today</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "Province de Québec",
+            icon: MapPin,
+            color: "purple"
+          }}
+          title="Quebec Mortgage"
+          subtitle="Rates"
+          description="Compare mortgage rates in Quebec from Desjardins, local credit unions, and regional lenders. Find the best rates in Montreal, Quebec City, and across la belle province."
+          rate={{
+            value: "3.94%",
+            label: "Best Quebec Rate Today",
+            sublabel: "From local lenders"
+          }}
+          stats={[
+            {
+              value: "15+",
+              label: "Local Lenders",
+              sublabel: "Caisses & banks"
+            },
+            {
+              value: "Province-wide",
+              label: "Coverage",
+              sublabel: "Montreal to Quebec City"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "Compare Quebec Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Calculate Payments",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "purple-50",
+            to: "violet-50"
+          }}
+        />
 
         {/* Interactive Rate Calculator */}
         <section className="py-16 bg-gray-50">
