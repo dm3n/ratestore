@@ -274,7 +274,11 @@ const Mortgages = () => {
                     Compare Rates Now <TrendingUp className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-semibold border-white/20 text-white hover:bg-white/10" asChild>
+                <Button 
+                  size="lg" 
+                  className="h-14 px-8 text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 border border-white text-white hover:bg-white/10" 
+                  asChild
+                >
                   <Link to="/contact">
                     <Phone className="mr-2 h-5 w-5" />
                     Speak with Expert
