@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TrendingDown, Shield, Calculator, Star } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const FiveYearVariable = () => {
   const variableRates = [
@@ -39,30 +40,47 @@ const FiveYearVariable = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-teal-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-teal-100 text-teal-700 border-teal-200">
-                <TrendingDown className="h-3 w-3 mr-1" />
-                Best Variable Discounts
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                5-Year Variable Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Get the best variable rate discounts with a 5-year term. 
-                Flexibility meets competitive pricing.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">4.70%</div>
-                  <div className="text-sm text-muted-foreground">Best 5-Year Variable Rate Today</div>
-                  <div className="text-xs text-muted-foreground mt-1">(Prime - 0.30%)</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "5-Year Variable Term",
+            icon: TrendingDown,
+            color: "teal"
+          }}
+          title="5-Year Variable"
+          subtitle="Mortgage Rates"
+          description="Get the best variable rate discounts with a 5-year term. Enjoy rate flexibility while securing competitive pricing and potentially lower payments if rates decrease."
+          rate={{
+            value: "4.70%",
+            label: "Best 5-Year Variable Rate",
+            sublabel: "(Prime - 0.30%)"
+          }}
+          stats={[
+            {
+              value: "Prime - 0.30%",
+              label: "Best Discount",
+              sublabel: "Below prime rate"
+            },
+            {
+              value: "5 Years",
+              label: "Term Length",
+              sublabel: "With rate flexibility"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "Compare Variable Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Calculate Payments",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "teal-50",
+            to: "cyan-50"
+          }}
+        />
 
         {/* Interactive Rate Calculator */}
         <section className="py-16 bg-gray-50">

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Home, CreditCard, Zap, Star } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const HELOCRates = () => {
   const helocRates = [
@@ -39,30 +40,47 @@ const HELOCRates = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-indigo-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-indigo-100 text-indigo-700 border-indigo-200">
-                <Home className="h-3 w-3 mr-1" />
-                Home Equity Line of Credit
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                HELOC Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Unlock your home's equity with a Home Equity Line of Credit. 
-                Compare HELOC rates and access flexible funding.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">5.45%</div>
-                  <div className="text-sm text-muted-foreground">Best HELOC Rate Today</div>
-                  <div className="text-xs text-muted-foreground mt-1">Variable rate based on Prime</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "Home Equity Line of Credit",
+            icon: Home,
+            color: "indigo"
+          }}
+          title="HELOC Rates"
+          subtitle="Unlock Your Home's Equity"
+          description="Access up to 65% of your home's value with a flexible Home Equity Line of Credit. Compare HELOC rates and unlock the equity in your home for renovations, investments, or debt consolidation."
+          rate={{
+            value: "5.45%",
+            label: "Best HELOC Rate Today",
+            sublabel: "Variable rate based on Prime"
+          }}
+          stats={[
+            {
+              value: "65%",
+              label: "Maximum LTV",
+              sublabel: "Of your home's value"
+            },
+            {
+              value: "$500K",
+              label: "Credit Limit",
+              sublabel: "Available to qualified borrowers"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "Compare HELOC Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Calculate Payments",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "indigo-50",
+            to: "purple-50"
+          }}
+        />
 
         {/* Interactive HELOC Calculator */}
         <section className="py-16 bg-gray-50">

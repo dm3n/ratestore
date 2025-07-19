@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Building2, Star } from "lucide-react";
 import { useMortgageRates } from "@/hooks/useMortgageRates";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const BankRates = () => {
   const { rates, isLoading, error } = useMortgageRates({
@@ -57,29 +58,47 @@ const BankRates = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-blue-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-blue-100 text-blue-700 border-blue-200">
-                <Building2 className="h-3 w-3 mr-1" />
-                Big 5 Banks
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                Best Bank Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Compare mortgage rates from Canada's Big 5 banks. Find the best rates 
-                from RBC, TD, Scotiabank, BMO, and CIBC.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">{bestRate}</div>
-                  <div className="text-sm text-muted-foreground">Best Big 5 Bank Rate Today</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "Big 5 Canadian Banks",
+            icon: Building2,
+            color: "blue"
+          }}
+          title="Best Bank"
+          subtitle="Mortgage Rates"
+          description="Compare mortgage rates from Canada's Big 5 banks. Find competitive rates from RBC, TD, Scotiabank, BMO, and CIBC with the stability and service you expect from major banks."
+          rate={{
+            value: bestRate,
+            label: "Best Big 5 Bank Rate",
+            sublabel: "5-Year Fixed Term"
+          }}
+          stats={[
+            {
+              value: "5",
+              label: "Major Banks",
+              sublabel: "RBC, TD, Scotia, BMO, CIBC"
+            },
+            {
+              value: "100+",
+              label: "Rate Options",
+              sublabel: "Various terms available"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "Compare Bank Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Calculate Payments",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "blue-50",
+            to: "indigo-50"
+          }}
+        />
 
         <section className="py-16">
           <div className="container px-4 sm:px-6 lg:px-8">
