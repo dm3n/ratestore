@@ -279,10 +279,18 @@ const AutoInsuranceQuotes = () => {
                 Get personalized quotes from top Canadian insurers in minutes
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto">
+                <Button 
+                  size="lg" 
+                  className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 h-auto"
+                  onClick={() => window.location.href = '/insurance/auto/quotes'}
+                >
                   Get Free Quotes <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-blue-600 to-indigo-800 border border-white text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto"
+                  onClick={() => window.location.href = '/contact'}
+                >
                   <Phone className="mr-2 h-5 w-5" />
                   Speak with Expert
                 </Button>
