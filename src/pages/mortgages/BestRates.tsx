@@ -65,49 +65,70 @@ const BestRates = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-primary/10 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-yellow-50 text-yellow-700 border-yellow-200">
-                <Award className="h-3 w-3 mr-1" />
-                Live Rates - Updated Automatically
-              </Badge>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-                Best Mortgage Rates in Canada
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Live mortgage rates updated automatically from our database. 
-                See the absolute best rates available right now.
-              </p>
-              
-              {/* Refresh Section - Same as GIC calculators */}
-              <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-6">
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
-                  <span>
-                    {isLoading ? 'Updating rates...' : 'Rates updated'}
-                  </span>
+        <section className="relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-background">
+          {/* Background decoration */}
+          <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-radial from-primary/10 to-transparent"></div>
+          
+          <div className="relative container px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+            <div className="max-w-5xl mx-auto">
+              {/* Status badge */}
+              <div className="flex justify-center mb-8">
+                <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary px-4 py-2 text-sm font-medium">
+                  <div className={`w-2 h-2 rounded-full mr-2 ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
+                  {isLoading ? 'Updating rates...' : 'Live rates updated automatically'}
+                </Badge>
+              </div>
+
+              {/* Main heading */}
+              <div className="text-center mb-12">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight bg-gradient-to-br from-foreground to-foreground/80 bg-clip-text text-transparent mb-6">
+                  Best Mortgage Rates
+                  <span className="block text-primary">in Canada</span>
+                </h1>
+                <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Compare today's lowest mortgage rates from Canada's top lenders. 
+                  Updated in real-time with verified, available rates.
+                </p>
+              </div>
+
+              {/* Stats bar */}
+              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 sm:p-8 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+                  <div className="space-y-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-primary">100+</div>
+                    <div className="text-sm text-muted-foreground">Lenders Tracked</div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-primary">Real-Time</div>
+                    <div className="text-sm text-muted-foreground">Rate Updates</div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-primary">
+                      {lastUpdated ? (
+                        lastUpdated.toLocaleString('en-CA', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })
+                      ) : 'Now'}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Last Updated</div>
+                  </div>
                 </div>
-                {lastUpdated && (
-                  <span>
-                    {lastUpdated.toLocaleString('en-CA', {
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
-                )}
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={refetch}
-                  disabled={isLoading}
-                  className="flex items-center gap-1 h-6 px-2 text-xs hover:bg-primary/5"
-                >
-                  <RefreshCw className={`h-3 w-3 ${isLoading ? 'animate-spin' : ''}`} />
-                  Refresh
-                </Button>
+                
+                {/* Refresh button */}
+                <div className="flex justify-center mt-6">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={refetch}
+                    disabled={isLoading}
+                    className="flex items-center gap-2 hover:bg-primary/5 border-primary/20"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                    Refresh Rates
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
