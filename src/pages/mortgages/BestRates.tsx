@@ -91,7 +91,16 @@ const BestRates = () => {
                 
                 {/* Quick action buttons */}
                 <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
-                  <Button size="lg" className="h-14 px-8 text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-xl hover:shadow-2xl transition-all">
+                  <Button 
+                    size="lg" 
+                    className="h-14 px-8 text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-xl hover:shadow-2xl transition-all"
+                    onClick={() => {
+                      document.getElementById('rate-calculator')?.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                      });
+                    }}
+                  >
                     Find My Rate <TrendingDown className="ml-2 h-5 w-5" />
                   </Button>
                   <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-semibold border-2 border-primary/20 hover:bg-primary/5 backdrop-blur-sm">
@@ -188,7 +197,7 @@ const BestRates = () => {
           </section>}
 
         {/* Interactive Rate Calculator */}
-        <section className="bg-gray-50 py-[72px]">
+        <section id="rate-calculator" className="bg-gray-50 py-[72px]">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <InteractiveRateCalculator />
