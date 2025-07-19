@@ -283,7 +283,7 @@ const CompareAllRates = () => {
                           
                           <div className="text-right">
                             <div className="text-3xl font-bold text-primary mb-1">
-                              {(Number(rate.base_rate) * 100).toFixed(2)}%
+                              {Number(rate.base_rate).toFixed(2)}%
                             </div>
                             <Button size="sm" className="bg-primary hover:bg-primary/90">
                               Get Quote
