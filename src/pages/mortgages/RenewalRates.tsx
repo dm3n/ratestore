@@ -40,25 +40,70 @@ const RenewalRates = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-orange-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-orange-100 text-orange-700 border-orange-200">
-                <RefreshCw className="h-3 w-3 mr-1" />
-                Mortgage Renewal
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                Mortgage Renewal Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Your mortgage is up for renewal? Compare the best renewal rates 
-                and negotiate better terms with your current lender or switch to a new one.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">3.79%</div>
-                  <div className="text-sm text-muted-foreground">Best Renewal Rate Today</div>
-                  <div className="text-xs text-muted-foreground mt-1">Special rates for existing customers</div>
+        <section className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-20 overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM4YjVjZjYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
+          
+          <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-5xl mx-auto">
+              {/* Hero Badge */}
+              <div className="flex items-center justify-center gap-3 mb-8">
+                <Badge variant="outline" className="bg-orange-100 text-orange-700 border-orange-200 px-4 py-2 text-sm">
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Mortgage Renewal Time
+                </Badge>
+                <Badge variant="outline" className="bg-green-100 text-green-700 border-green-200 px-4 py-2 text-sm">
+                  <Star className="h-4 w-4 mr-2" />
+                  Special Rates Available
+                </Badge>
+              </div>
+
+              {/* Main Heading */}
+              <div className="text-center mb-12">
+                <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+                  Mortgage Renewal
+                  <span className="block">Made Simple</span>
+                </h1>
+                <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+                  Your renewal is the perfect opportunity to save thousands. Compare exclusive renewal rates 
+                  and unlock better terms than your current lender is offering.
+                </p>
+              </div>
+
+              {/* Key Stats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-sm border border-white/20 text-center">
+                  <div className="text-4xl font-bold text-green-600 mb-2">3.79%</div>
+                  <div className="text-sm font-medium text-muted-foreground mb-1">Best Renewal Rate</div>
+                  <div className="text-xs text-muted-foreground">5-Year Fixed Term</div>
+                </div>
+                <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-sm border border-white/20 text-center">
+                  <div className="text-4xl font-bold text-blue-600 mb-2">$12K</div>
+                  <div className="text-sm font-medium text-muted-foreground mb-1">Average Savings</div>
+                  <div className="text-xs text-muted-foreground">By switching lenders</div>
+                </div>
+                <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-sm border border-white/20 text-center">
+                  <div className="text-4xl font-bold text-purple-600 mb-2">90%</div>
+                  <div className="text-sm font-medium text-muted-foreground mb-1">Auto-Renewal Rate</div>
+                  <div className="text-xs text-muted-foreground">Don't accept the first offer</div>
+                </div>
+              </div>
+
+              {/* CTA Section */}
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-center text-white">
+                <h3 className="text-2xl font-bold mb-4">Don't Accept Your Lender's First Offer</h3>
+                <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+                  90% of borrowers simply accept their lender's renewal offer. Be in the 10% who negotiate and save thousands.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 px-8">
+                    <TrendingUp className="h-5 w-5 mr-2" />
+                    Compare Renewal Rates
+                  </Button>
+                  <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10 px-8">
+                    <RefreshCw className="h-5 w-5 mr-2" />
+                    Calculate Savings
+                  </Button>
                 </div>
               </div>
             </div>
