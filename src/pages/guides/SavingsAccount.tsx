@@ -84,13 +84,17 @@ const SavingsAccountGuide = () => {
                 and how to choose the right one for your financial goals.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
-                  <Calculator className="mr-2 h-4 w-4" />
-                  Compare Savings Rates
+                <Button asChild size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+                  <Link to="/savings-rates">
+                    <Calculator className="mr-2 h-4 w-4" />
+                    Compare Savings Rates
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  Find Best Accounts
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Button asChild size="lg" variant="outline" className="bg-blue-700 border-white text-white hover:bg-white/10">
+                  <Link to="/banking/savings/high-interest">
+                    Find Best Accounts
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </Button>
               </div>
             </div>
