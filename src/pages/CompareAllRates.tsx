@@ -89,11 +89,9 @@ const CompareAllRates = () => {
           <div className="relative container px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-32">
             <div className="max-w-6xl mx-auto text-center">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-8">
-                <span className="bg-gradient-to-br from-foreground via-primary to-foreground/80 bg-clip-text text-transparent">
-                  Compare All
-                </span>
+                <span className="bg-gradient-to-br from-foreground via-primary to-foreground/80 bg-clip-text text-transparent">Mortgage Rate Database</span>
                 <br />
-                <span className="bg-gradient-to-br from-primary via-secondary to-primary/80 bg-clip-text text-[#2300c0]/55">Mortgage Rates</span>
+                
               </h1>
               <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light mb-12">
                 Browse and compare mortgage rates from <span className="text-primary font-medium">all lenders</span> in our database
