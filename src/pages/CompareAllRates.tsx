@@ -83,16 +83,51 @@ const CompareAllRates = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-primary/10 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-                Compare All Mortgage Rates
+        <section className="relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-secondary/10">
+          {/* Background decoration with modern effects */}
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-radial from-primary/15 via-primary/5 to-transparent"></div>
+            <div className="absolute bottom-0 right-0 w-[800px] h-[400px] bg-gradient-radial from-secondary/10 to-transparent"></div>
+            <div className="absolute top-1/2 left-0 w-[600px] h-[300px] bg-gradient-radial from-accent/5 to-transparent"></div>
+          </div>
+          
+          <div className="relative container px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-32">
+            <div className="max-w-6xl mx-auto text-center">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-8">
+                <span className="bg-gradient-to-br from-foreground via-primary to-foreground/80 bg-clip-text text-transparent">
+                  Compare All
+                </span>
+                <br />
+                <span className="bg-gradient-to-br from-primary via-secondary to-primary/80 bg-clip-text text-transparent">
+                  Mortgage Rates
+                </span>
               </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Browse and compare mortgage rates from all lenders in our database. 
-                Filter by lender type, rate type, term, and province to find your perfect match.
+              <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light mb-12">
+                Browse and compare mortgage rates from <span className="text-primary font-medium">all lenders</span> in our database
+                <br className="hidden sm:block" />
+                Filter by type, term, and province to find your perfect match.
               </p>
+              
+              {/* Enhanced stats */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div className="bg-card/60 backdrop-blur-md border border-border/50 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">100+</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground font-medium">Lenders</div>
+                </div>
+                <div className="bg-card/60 backdrop-blur-md border border-border/50 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">Live</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground font-medium">Updates</div>
+                </div>
+                <div className="bg-card/60 backdrop-blur-md border border-border/50 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">All</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground font-medium">Provinces</div>
+                </div>
+                <div className="bg-card/60 backdrop-blur-md border border-border/50 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">Free</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground font-medium">Service</div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
