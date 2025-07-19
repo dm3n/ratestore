@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RefreshCw, Star, TrendingUp } from "lucide-react";
+import { Link } from "react-router-dom";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 
 const RenewalRates = () => {
@@ -96,13 +97,17 @@ const RenewalRates = () => {
                   90% of borrowers simply accept their lender's renewal offer. Be in the 10% who negotiate and save thousands.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 px-8">
-                    <TrendingUp className="h-5 w-5 mr-2" />
-                    Compare Renewal Rates
+                  <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-blue-50 px-8">
+                    <Link to="/compare-all-rates">
+                      <TrendingUp className="h-5 w-5 mr-2" />
+                      Compare Renewal Rates
+                    </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10 px-8">
-                    <RefreshCw className="h-5 w-5 mr-2" />
-                    Calculate Savings
+                  <Button asChild size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10 px-8">
+                    <Link to="/tools/renewal-calculator">
+                      <RefreshCw className="h-5 w-5 mr-2" />
+                      Calculate Savings
+                    </Link>
                   </Button>
                 </div>
               </div>
