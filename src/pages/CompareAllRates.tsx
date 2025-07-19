@@ -283,7 +283,13 @@ const CompareAllRates = () => {
                           
                           <div className="text-right">
                             <div className="text-3xl font-bold text-primary mb-1">
-                              {Number(rate.base_rate).toFixed(2)}%
+                              {(() => {
+                                const rateValue = Number(rate.base_rate);
+                                // If rate is less than 1, it's stored as decimal (0.0544), multiply by 100
+                                // If rate is greater than 1, it's already a percentage (5.44)
+                                const displayRate = rateValue < 1 ? rateValue * 100 : rateValue;
+                                return displayRate.toFixed(2);
+                              })()}%
                             </div>
                             <Button size="sm" className="bg-primary hover:bg-primary/90">
                               Get Quote
