@@ -58,10 +58,10 @@ const BestRates = () => {
       <main className="flex-1">
         <section className="relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-background">
           {/* Background decoration */}
-          <div className="absolute inset-0 bg-grid-pattern opacity-5 py-0"></div>
+          <div className="absolute inset-0 bg-grid-pattern opacity-5 py-[21px]"></div>
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-radial from-primary/10 to-transparent"></div>
           
-          <div className="relative container px-4 sm:px-6 lg:px-8 lg:py-28 py-[6px]">
+          <div className="relative container px-4 sm:px-6 lg:px-8 lg:py-28 py-[88px]">
             <div className="max-w-5xl mx-auto">
               {/* Status badge */}
               <div className="flex justify-center mb-8">
