@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { TrendingUp, TrendingDown, Calendar } from "lucide-react";
+import { MortgageHero } from "@/components/MortgageHero";
 
 const Historical = () => {
   const historicalData = [
@@ -28,23 +29,47 @@ const Historical = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-gray-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-gray-100 text-gray-700 border-gray-200">
-                <Calendar className="h-3 w-3 mr-1" />
-                Historical Data
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                Historical Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Track mortgage rate trends over time and understand how economic events 
-                have shaped Canada's mortgage market.
-              </p>
-            </div>
-          </div>
-        </section>
+        <MortgageHero
+          badge={{
+            text: "Historical Data & Trends",
+            icon: Calendar,
+            color: "orange"
+          }}
+          title="Historical Mortgage"
+          subtitle="Rate Trends"
+          description="Track mortgage rate trends over time and understand how economic events have shaped Canada's mortgage market. Learn from past rate cycles to make informed decisions."
+          rate={{
+            value: "3.84%",
+            label: "Current Average Rate",
+            sublabel: "vs 4.85% peak in 2023"
+          }}
+          stats={[
+            {
+              value: "1.75%",
+              label: "Historic Low",
+              sublabel: "Reached in 2021"
+            },
+            {
+              value: "4.85%",
+              label: "Recent Peak", 
+              sublabel: "Hit in 2023"
+            }
+          ]}
+          cta={{
+            primary: {
+              text: "View Current Rates",
+              href: "/compare-all-rates"
+            },
+            secondary: {
+              text: "Rate Calculator",
+              href: "/tools/mortgage-calculator"
+            }
+          }}
+          gradientColors={{
+            from: "orange-50",
+            to: "amber-50"
+          }}
+        />
 
         <section className="py-16">
           <div className="container px-4 sm:px-6 lg:px-8">
