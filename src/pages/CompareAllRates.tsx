@@ -11,7 +11,6 @@ import { Building2, Home, Filter, Search, ArrowUpDown } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 import { useMortgageRates } from "@/hooks/useMortgageRates";
 import { useState } from "react";
-
 const CompareAllRates = () => {
   const [filters, setFilters] = useState({
     lenderType: 'all',
@@ -19,55 +18,52 @@ const CompareAllRates = () => {
     term: 'all',
     province: 'all'
   });
-  
   const [sortBy, setSortBy] = useState('rate');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-
-  const { rates, isLoading } = useMortgageRates({
+  const {
+    rates,
+    isLoading
+  } = useMortgageRates({
     autoRefresh: true
   });
 
   // Filter and sort rates
-  const filteredRates = rates
-    .filter(rate => {
-      if (filters.lenderType !== 'all' && rate.lender_type !== filters.lenderType) return false;
-      if (filters.rateType !== 'all' && rate.rate_type !== filters.rateType) return false;
-      if (filters.term !== 'all' && rate.term !== filters.term) return false;
-      if (filters.province !== 'all' && rate.province !== filters.province) return false;
-      return true;
-    })
-    .sort((a, b) => {
-      let aValue, bValue;
-      
-      switch (sortBy) {
-        case 'rate':
-          aValue = a.base_rate;
-          bValue = b.base_rate;
-          break;
-        case 'lender':
-          aValue = a.lender_name;
-          bValue = b.lender_name;
-          break;
-        case 'term':
-          aValue = a.term;
-          bValue = b.term;
-          break;
-        default:
-          aValue = a.base_rate;
-          bValue = b.base_rate;
-      }
-      
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-      }
-      
-      return sortOrder === 'asc' ? Number(aValue) - Number(bValue) : Number(bValue) - Number(aValue);
-    });
-
+  const filteredRates = rates.filter(rate => {
+    if (filters.lenderType !== 'all' && rate.lender_type !== filters.lenderType) return false;
+    if (filters.rateType !== 'all' && rate.rate_type !== filters.rateType) return false;
+    if (filters.term !== 'all' && rate.term !== filters.term) return false;
+    if (filters.province !== 'all' && rate.province !== filters.province) return false;
+    return true;
+  }).sort((a, b) => {
+    let aValue, bValue;
+    switch (sortBy) {
+      case 'rate':
+        aValue = a.base_rate;
+        bValue = b.base_rate;
+        break;
+      case 'lender':
+        aValue = a.lender_name;
+        bValue = b.lender_name;
+        break;
+      case 'term':
+        aValue = a.term;
+        bValue = b.term;
+        break;
+      default:
+        aValue = a.base_rate;
+        bValue = b.base_rate;
+    }
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    }
+    return sortOrder === 'asc' ? Number(aValue) - Number(bValue) : Number(bValue) - Number(aValue);
+  });
   const handleFilterChange = (key: string, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters(prev => ({
+      ...prev,
+      [key]: value
+    }));
   };
-
   const toggleSort = (field: string) => {
     if (sortBy === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -76,9 +72,7 @@ const CompareAllRates = () => {
       setSortOrder('asc');
     }
   };
-
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-1">
@@ -99,9 +93,7 @@ const CompareAllRates = () => {
                   Compare All
                 </span>
                 <br />
-                <span className="bg-gradient-to-br from-primary via-secondary to-primary/80 bg-clip-text text-transparent">
-                  Mortgage Rates
-                </span>
+                <span className="bg-gradient-to-br from-primary via-secondary to-primary/80 bg-clip-text text-[#2300c0]/55">Mortgage Rates</span>
               </h1>
               <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light mb-12">
                 Browse and compare mortgage rates from <span className="text-primary font-medium">all lenders</span> in our database
@@ -167,7 +159,7 @@ const CompareAllRates = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     <div className="space-y-2">
                       <Label>Lender Type</Label>
-                      <Select value={filters.lenderType} onValueChange={(value) => handleFilterChange('lenderType', value)}>
+                      <Select value={filters.lenderType} onValueChange={value => handleFilterChange('lenderType', value)}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -182,7 +174,7 @@ const CompareAllRates = () => {
 
                     <div className="space-y-2">
                       <Label>Rate Type</Label>
-                      <Select value={filters.rateType} onValueChange={(value) => handleFilterChange('rateType', value)}>
+                      <Select value={filters.rateType} onValueChange={value => handleFilterChange('rateType', value)}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -196,7 +188,7 @@ const CompareAllRates = () => {
 
                     <div className="space-y-2">
                       <Label>Term</Label>
-                      <Select value={filters.term} onValueChange={(value) => handleFilterChange('term', value)}>
+                      <Select value={filters.term} onValueChange={value => handleFilterChange('term', value)}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -212,7 +204,7 @@ const CompareAllRates = () => {
 
                     <div className="space-y-2">
                       <Label>Province</Label>
-                      <Select value={filters.province} onValueChange={(value) => handleFilterChange('province', value)}>
+                      <Select value={filters.province} onValueChange={value => handleFilterChange('province', value)}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -228,30 +220,15 @@ const CompareAllRates = () => {
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => toggleSort('rate')}
-                      className="flex items-center gap-1"
-                    >
+                    <Button variant="outline" size="sm" onClick={() => toggleSort('rate')} className="flex items-center gap-1">
                       <ArrowUpDown className="h-3 w-3" />
                       Sort by Rate {sortBy === 'rate' && (sortOrder === 'asc' ? '↑' : '↓')}
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => toggleSort('lender')}
-                      className="flex items-center gap-1"
-                    >
+                    <Button variant="outline" size="sm" onClick={() => toggleSort('lender')} className="flex items-center gap-1">
                       <ArrowUpDown className="h-3 w-3" />
                       Sort by Lender {sortBy === 'lender' && (sortOrder === 'asc' ? '↑' : '↓')}
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => toggleSort('term')}
-                      className="flex items-center gap-1"
-                    >
+                    <Button variant="outline" size="sm" onClick={() => toggleSort('term')} className="flex items-center gap-1">
                       <ArrowUpDown className="h-3 w-3" />
                       Sort by Term {sortBy === 'term' && (sortOrder === 'asc' ? '↑' : '↓')}
                     </Button>
@@ -268,10 +245,11 @@ const CompareAllRates = () => {
 
               {/* Rate Cards */}
               <div className="grid gap-4">
-                {isLoading ? (
-                  // Loading skeleton
-                  Array.from({ length: 5 }).map((_, i) => (
-                    <Card key={i} className="animate-pulse">
+                {isLoading ?
+              // Loading skeleton
+              Array.from({
+                length: 5
+              }).map((_, i) => <Card key={i} className="animate-pulse">
                       <CardContent className="p-6">
                         <div className="flex justify-between items-center">
                           <div className="space-y-2">
@@ -284,20 +262,12 @@ const CompareAllRates = () => {
                           </div>
                         </div>
                       </CardContent>
-                    </Card>
-                  ))
-                ) : (
-                  filteredRates.map((rate) => (
-                    <Card key={rate.id} className="hover:shadow-md transition-shadow">
+                    </Card>) : filteredRates.map(rate => <Card key={rate.id} className="hover:shadow-md transition-shadow">
                       <CardContent className="p-6">
                         <div className="flex justify-between items-center">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              {rate.lender_type === 'bank' ? (
-                                <Building2 className="h-5 w-5 text-blue-600" />
-                              ) : (
-                                <Home className="h-5 w-5 text-green-600" />
-                              )}
+                              {rate.lender_type === 'bank' ? <Building2 className="h-5 w-5 text-blue-600" /> : <Home className="h-5 w-5 text-green-600" />}
                               <h3 className="text-lg font-semibold">{rate.lender_name}</h3>
                               <Badge variant={rate.rate_type === 'fixed' ? 'default' : 'secondary'}>
                                 {rate.rate_type}
@@ -323,13 +293,10 @@ const CompareAllRates = () => {
                           </div>
                         </div>
                       </CardContent>
-                    </Card>
-                  ))
-                )}
+                    </Card>)}
               </div>
 
-              {filteredRates.length === 0 && !isLoading && (
-                <Card className="text-center py-12">
+              {filteredRates.length === 0 && !isLoading && <Card className="text-center py-12">
                   <CardContent>
                     <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <h3 className="text-lg font-semibold mb-2">No rates found</h3>
@@ -337,16 +304,13 @@ const CompareAllRates = () => {
                       Try adjusting your filters to see more results.
                     </p>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
             </div>
           </div>
         </section>
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default CompareAllRates;
