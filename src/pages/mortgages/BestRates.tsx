@@ -56,123 +56,50 @@ const BestRates = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-br from-background via-primary/10 to-background min-h-[80vh] flex items-center">
+        <section className="relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-background">
           {/* Background decoration */}
-          <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-radial from-primary/20 via-primary/10 to-transparent blur-3xl"></div>
-          <div className="absolute -top-10 -right-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-10 -left-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
+          <div className="absolute inset-0 bg-grid-pattern opacity-5 py-[21px]"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-radial from-primary/10 to-transparent"></div>
           
-          <div className="relative container px-4 sm:px-6 lg:px-8 py-20">
-            <div className="max-w-6xl mx-auto">
+          <div className="relative container px-4 sm:px-6 lg:px-8 lg:py-28 py-[88px]">
+            <div className="max-w-5xl mx-auto">
               {/* Status badge */}
               <div className="flex justify-center mb-8">
-                <Badge variant="outline" className="border-primary/30 bg-primary/10 backdrop-blur-sm text-primary px-6 py-3 text-sm font-medium shadow-lg">
-                  <div className={`w-2 h-2 rounded-full mr-3 ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
-                  {isLoading ? 'Updating rates...' : 'Live rates • Updated automatically'}
+                <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary px-4 py-2 text-sm font-medium">
+                  <div className={`w-2 h-2 rounded-full mr-2 ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
+                  {isLoading ? 'Updating rates...' : 'Live rates updated automatically'}
                 </Badge>
               </div>
 
               {/* Main heading */}
-              <div className="text-center mb-16">
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-8">
-                  <span className="bg-gradient-to-br from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent">
-                    Best Mortgage Rates
-                  </span>
-                  <br />
-                  <span className="bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent">
-                    in Canada
-                  </span>
+              <div className="text-center mb-12">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight bg-gradient-to-br from-foreground to-foreground/80 bg-clip-text text-transparent mb-6">
+                  Best Mortgage Rates
+                  <span className="block text-primary">in Canada</span>
                 </h1>
-                <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed mb-12">
+                <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   Compare today's lowest mortgage rates from Canada's top lenders. 
                   Updated in real-time with verified, available rates.
                 </p>
-                
-                {/* Quick action buttons */}
-                <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
-                  <Button 
-                    size="lg" 
-                    className="h-14 px-8 text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-xl hover:shadow-2xl transition-all"
-                    onClick={() => {
-                      document.getElementById('rate-calculator')?.scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                      });
-                    }}
-                  >
-                    Find My Rate <TrendingDown className="ml-2 h-5 w-5" />
-                  </Button>
-                  <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-semibold border-2 border-primary/20 hover:bg-primary/5 backdrop-blur-sm">
-                    <RefreshCw className={`mr-2 h-5 w-5 ${isLoading ? 'animate-spin' : ''}`} onClick={refetch} />
-                    Refresh Rates
-                  </Button>
-                </div>
               </div>
 
-              {/* Enhanced stats display */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all group">
-                  <CardContent className="p-8 text-center">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                      <TrendingDown className="h-8 w-8 text-primary" />
-                    </div>
-                    <div className="text-3xl font-bold text-primary mb-2">100+</div>
-                    <div className="text-muted-foreground font-medium">Lenders Tracked Daily</div>
-                  </CardContent>
-                </Card>
+              {/* Stats bar */}
+              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 sm:p-8 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+                  <div className="space-y-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-primary">100+</div>
+                    <div className="text-sm text-muted-foreground">Lenders Tracked</div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-primary">Real-Time</div>
+                    <div className="text-sm text-muted-foreground">Rate Updates</div>
+                  </div>
+                  
+                </div>
                 
-                <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all group">
-                  <CardContent className="p-8 text-center">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                      <Clock className="h-8 w-8 text-green-600" />
-                    </div>
-                    <div className="text-3xl font-bold text-green-600 mb-2">Real-Time</div>
-                    <div className="text-muted-foreground font-medium">Automatic Updates</div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all group">
-                  <CardContent className="p-8 text-center">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                      <CheckCircle className="h-8 w-8 text-blue-600" />
-                    </div>
-                    <div className="text-3xl font-bold text-blue-600 mb-2">
-                      {lastUpdated ? lastUpdated.toLocaleString('en-CA', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      }) : 'Now'}
-                    </div>
-                    <div className="text-muted-foreground font-medium">Last Updated</div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Key benefits */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <CheckCircle className="h-6 w-6 text-primary" />
-                  </div>
-                  <div className="font-semibold text-sm">No Hidden Fees</div>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Award className="h-6 w-6 text-primary" />
-                  </div>
-                  <div className="font-semibold text-sm">Verified Rates</div>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <TrendingDown className="h-6 w-6 text-primary" />
-                  </div>
-                  <div className="font-semibold text-sm">Lowest Available</div>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Clock className="h-6 w-6 text-primary" />
-                  </div>
-                  <div className="font-semibold text-sm">Instant Quotes</div>
+                {/* Refresh button */}
+                <div className="flex justify-center mt-6">
+                  
                 </div>
               </div>
             </div>
@@ -197,7 +124,7 @@ const BestRates = () => {
           </section>}
 
         {/* Interactive Rate Calculator */}
-        <section id="rate-calculator" className="bg-gray-50 py-[72px]">
+        <section className="bg-gray-50 py-[72px]">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <InteractiveRateCalculator />
