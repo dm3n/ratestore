@@ -56,51 +56,79 @@ const BestRates = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-background">
-          {/* Background decoration */}
-          <div className="absolute inset-0 bg-grid-pattern opacity-5 py-[21px]"></div>
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-radial from-primary/10 to-transparent"></div>
+        <section className="relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-secondary/10">
+          {/* Background decoration with improved modern effects */}
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-radial from-primary/15 via-primary/5 to-transparent"></div>
+            <div className="absolute bottom-0 right-0 w-[800px] h-[400px] bg-gradient-radial from-secondary/10 to-transparent"></div>
+            <div className="absolute top-1/2 left-0 w-[600px] h-[300px] bg-gradient-radial from-accent/5 to-transparent"></div>
+          </div>
           
-          <div className="relative container px-4 sm:px-6 lg:px-8 lg:py-28 py-[88px]">
-            <div className="max-w-5xl mx-auto">
-              {/* Status badge */}
-              <div className="flex justify-center mb-8">
-                <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary px-4 py-2 text-sm font-medium">
-                  <div className={`w-2 h-2 rounded-full mr-2 ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
-                  {isLoading ? 'Updating rates...' : 'Live rates updated automatically'}
+          <div className="relative container px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-32">
+            <div className="max-w-6xl mx-auto">
+              {/* Status badge with improved design */}
+              <div className="flex justify-center mb-12">
+                <Badge variant="outline" className="border-primary/30 bg-primary/10 backdrop-blur-sm text-primary px-6 py-3 text-sm font-medium rounded-full shadow-lg">
+                  <div className={`w-2.5 h-2.5 rounded-full mr-3 ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500 animate-pulse'}`} />
+                  {isLoading ? 'Updating rates...' : 'Live rates • Updated automatically'}
                 </Badge>
               </div>
 
-              {/* Main heading */}
-              <div className="text-center mb-12">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight bg-gradient-to-br from-foreground to-foreground/80 bg-clip-text text-transparent mb-6">
-                  Best Mortgage Rates
-                  <span className="block text-primary">in Canada</span>
+              {/* Main heading with enhanced typography */}
+              <div className="text-center mb-16">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-8">
+                  <span className="bg-gradient-to-br from-foreground via-primary to-foreground/80 bg-clip-text text-transparent">
+                    Compare All
+                  </span>
+                  <br />
+                  <span className="bg-gradient-to-br from-primary via-secondary to-primary/80 bg-clip-text text-transparent">
+                    Mortgage Rates
+                  </span>
                 </h1>
-                <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Compare today's lowest mortgage rates from Canada's top lenders. 
+                <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-light">
+                  Find Canada's lowest mortgage rates from <span className="text-primary font-medium">100+ trusted lenders</span>
+                  <br className="hidden sm:block" />
                   Updated in real-time with verified, available rates.
                 </p>
               </div>
 
-              {/* Stats bar */}
-              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 sm:p-8 mb-8">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-                  <div className="space-y-1">
-                    <div className="text-2xl sm:text-3xl font-bold text-primary">100+</div>
-                    <div className="text-sm text-muted-foreground">Lenders Tracked</div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-2xl sm:text-3xl font-bold text-primary">Real-Time</div>
-                    <div className="text-sm text-muted-foreground">Rate Updates</div>
-                  </div>
-                  
+              {/* Enhanced stats cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+                <div className="bg-card/60 backdrop-blur-md border border-border/50 rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">100+</div>
+                  <div className="text-sm text-muted-foreground font-medium">Lenders Tracked</div>
                 </div>
-                
-                {/* Refresh button */}
-                <div className="flex justify-center mt-6">
-                  
+                <div className="bg-card/60 backdrop-blur-md border border-border/50 rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">Real-Time</div>
+                  <div className="text-sm text-muted-foreground font-medium">Rate Updates</div>
                 </div>
+                <div className="bg-card/60 backdrop-blur-md border border-border/50 rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">$50K+</div>
+                  <div className="text-sm text-muted-foreground font-medium">Average Savings</div>
+                </div>
+              </div>
+
+              {/* CTA buttons with modern design */}
+              <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  onClick={() => {
+                    const calculator = document.querySelector('[data-calculator]');
+                    calculator?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  Find My Rate
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="border-2 border-primary/30 bg-background/80 backdrop-blur-sm text-primary hover:bg-primary/10 px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  onClick={() => window.location.href = '/pre-approval'}
+                >
+                  Get Pre-Approved
+                </Button>
               </div>
             </div>
           </div>
