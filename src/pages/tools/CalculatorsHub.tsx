@@ -432,7 +432,7 @@ const ToolsHub = () => {
                   <Button asChild variant="outline" size="lg" className="bg-transparent border-white text-white hover:bg-white/10 flex-1">
                     <Link to="/mortgages/best-rates" className="flex items-center gap-2">
                       <Home className="h-5 w-5" />
-                      Mortgage Rates
+                      Best Mortgage Rates
                       <ExternalLink className="h-4 w-4" />
                     </Link>
                   </Button>
