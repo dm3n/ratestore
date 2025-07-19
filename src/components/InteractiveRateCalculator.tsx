@@ -276,7 +276,7 @@ export function InteractiveRateCalculator({
     <div key={rate.id} className={`${isAdditional ? 'py-3 border-t border-gray-100' : ''}`}>
       <div className="text-center space-y-2">
         <div className={`${isAdditional ? 'text-xl' : 'text-2xl md:text-3xl'} font-bold text-primary`}>
-          {(rate.rate > 1 ? rate.rate : rate.rate * 100).toFixed(2)}%
+          {(rate.rate > 0.5 ? rate.rate : rate.rate * 100).toFixed(2)}%
         </div>
         {rate.prime && (
           <div className="text-sm text-muted-foreground">{rate.prime}</div>
@@ -454,7 +454,7 @@ export function InteractiveRateCalculator({
                           <Skeleton className="h-8 w-20" />
                         ) : bankData?.bestFixedRate ? (
                           <div className="text-2xl font-bold text-primary">
-                            {(bankData.bestFixedRate.rate > 1 ? bankData.bestFixedRate.rate : bankData.bestFixedRate.rate * 100).toFixed(2)}%
+                            {(bankData.bestFixedRate.rate > 0.5 ? bankData.bestFixedRate.rate : bankData.bestFixedRate.rate * 100).toFixed(2)}%
                           </div>
                         ) : (
                           <div className="text-sm text-muted-foreground">No rates available</div>
@@ -467,7 +467,7 @@ export function InteractiveRateCalculator({
                         ) : bankData?.bestVariableRate ? (
                           <div>
                             <div className="text-2xl font-bold text-primary">
-                              {(bankData.bestVariableRate.rate > 1 ? bankData.bestVariableRate.rate : bankData.bestVariableRate.rate * 100).toFixed(2)}%
+                              {(bankData.bestVariableRate.rate > 0.5 ? bankData.bestVariableRate.rate : bankData.bestVariableRate.rate * 100).toFixed(2)}%
                             </div>
                             {bankData.bestVariableRate.prime && (
                               <div className="text-xs text-muted-foreground">
