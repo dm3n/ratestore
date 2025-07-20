@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Award, TrendingDown, Clock, CheckCircle, RefreshCw } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
 import { useMortgageRates } from "@/hooks/useMortgageRates";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 const BestRates = () => {
@@ -248,11 +248,11 @@ const BestRates = () => {
                 Get pre-approved in minutes and lock in today's best mortgage rates.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100" onClick={() => window.location.href = '/pre-approval'}>
-                  Get Pre-Approved
+                <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100" asChild>
+                  <Link to="/pre-approval">Get Pre-Approved</Link>
                 </Button>
-                <Button size="lg" className="bg-primary border-white text-white hover:bg-white hover:text-primary" onClick={() => window.location.href = '/compare-all-rates'}>
-                  Compare All Rates
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary" asChild>
+                  <Link to="/compare-all-rates">Compare All Rates</Link>
                 </Button>
               </div>
             </div>
