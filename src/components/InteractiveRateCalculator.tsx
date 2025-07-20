@@ -96,10 +96,16 @@ export function InteractiveRateCalculator({
         .from('mortgage_rates')
         .select('*')
         .eq('is_active', true)
-        .contains('transaction_types', [transactionType])
-        .lte('min_down_payment', downPaymentDecimal)
-        .gte('max_loan_to_value', loanToValue)
-        .order('base_rate', { ascending: true });
+        .contains('transaction_types', [transactionType]);
+
+      // HELOC rates have different requirements than regular mortgages
+      if (transactionType !== 'heloc') {
+        query = query
+          .lte('min_down_payment', downPaymentDecimal)
+          .gte('max_loan_to_value', loanToValue);
+      }
+      
+      query = query.order('base_rate', { ascending: true });
 
       // Add province filter if specified
       if (provinceFilter && provinceFilter !== 'all') {
