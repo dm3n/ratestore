@@ -5,17 +5,22 @@ interface GoogleSheetMortgageRate {
   lender: string;
   rate: number;
   term: string;
-  maxLtv: number;
-  mortgageType: 'insured' | 'uninsured';
-  minCreditScore: number;
+  rateType: 'fixed' | 'variable';
+  transactionType: 'buying' | 'renewing' | 'refinancing';
+  hasInsurance: boolean;
+  ltvMin: number;
+  ltvMax: number;
+  minDownPayment?: number;
+  maxDownPayment?: number;
   province: string;
-  rateType?: 'fixed' | 'variable';
+  minCreditScore?: number;
 }
 
 interface UserMortgageRequirements {
   term: string;
-  mortgageType: 'insured' | 'uninsured';
-  creditScore: number;
+  transactionType: 'buying' | 'renewing' | 'refinancing';
+  hasInsurance: boolean;
+  creditScore?: number;
   propertyValue: number;
   downPayment: number;
   province?: string;
@@ -52,7 +57,7 @@ export function useGoogleSheetsRates() {
   };
 
   const getBestRates = () => {
-    return GoogleSheetsService.getBestRatesByTerm(rates);
+    return GoogleSheetsService.getBestRatesByCategory(rates);
   };
 
   const getLowestRate = () => {

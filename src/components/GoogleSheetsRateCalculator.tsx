@@ -12,22 +12,27 @@ interface GoogleSheetMortgageRate {
   lender: string;
   rate: number;
   term: string;
-  maxLtv: number;
-  mortgageType: 'insured' | 'uninsured';
-  minCreditScore: number;
+  rateType: 'fixed' | 'variable';
+  transactionType: 'buying' | 'renewing' | 'refinancing';
+  hasInsurance: boolean;
+  ltvMin: number;
+  ltvMax: number;
+  minDownPayment?: number;
+  maxDownPayment?: number;
   province: string;
-  rateType?: 'fixed' | 'variable';
+  minCreditScore?: number;
 }
 
 export const GoogleSheetsRateCalculator = () => {
   const { rates, isLoading, error, findMatches } = useGoogleSheetsRates();
   const [requirements, setRequirements] = useState({
     term: '',
-    mortgageType: '' as 'insured' | 'uninsured' | '',
+    transactionType: '' as 'buying' | 'renewing' | 'refinancing' | '',
+    hasInsurance: false,
     creditScore: 650,
     propertyValue: 500000,
     downPayment: 100000,
-    province: 'BC'
+    province: 'ON'
   });
   const [matches, setMatches] = useState<GoogleSheetMortgageRate[]>([]);
   const [showResults, setShowResults] = useState(false);
@@ -37,13 +42,14 @@ export const GoogleSheetsRateCalculator = () => {
   };
 
   const handleFindRates = () => {
-    if (!requirements.term || !requirements.mortgageType) {
+    if (!requirements.term || !requirements.transactionType) {
       return;
     }
 
     const matchingRates = findMatches({
       term: requirements.term,
-      mortgageType: requirements.mortgageType,
+      transactionType: requirements.transactionType,
+      hasInsurance: requirements.hasInsurance,
       creditScore: requirements.creditScore,
       propertyValue: requirements.propertyValue,
       downPayment: requirements.downPayment,
@@ -117,16 +123,32 @@ export const GoogleSheetsRateCalculator = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="mortgageType">Mortgage Type</Label>
-              <Select value={requirements.mortgageType} onValueChange={(value: 'insured' | 'uninsured') => 
-                setRequirements(prev => ({ ...prev, mortgageType: value }))
+              <Label htmlFor="transactionType">Transaction Type</Label>
+              <Select value={requirements.transactionType} onValueChange={(value: 'buying' | 'renewing' | 'refinancing') => 
+                setRequirements(prev => ({ ...prev, transactionType: value }))
               }>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder="Select transaction type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="insured">Insured (High-Ratio)</SelectItem>
-                  <SelectItem value="uninsured">Uninsured (Conventional)</SelectItem>
+                  <SelectItem value="buying">Buying a Home</SelectItem>
+                  <SelectItem value="renewing">Renewing Mortgage</SelectItem>
+                  <SelectItem value="refinancing">Refinancing</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="hasInsurance">Mortgage Insurance</Label>
+              <Select value={requirements.hasInsurance.toString()} onValueChange={(value) => 
+                setRequirements(prev => ({ ...prev, hasInsurance: value === 'true' }))
+              }>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select insurance status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="true">Insured (CMHC/High-Ratio)</SelectItem>
+                  <SelectItem value="false">Uninsured (Conventional)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -140,9 +162,9 @@ export const GoogleSheetsRateCalculator = () => {
                   <SelectValue placeholder="Select province" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="ON">Ontario</SelectItem>
                   <SelectItem value="BC">British Columbia</SelectItem>
                   <SelectItem value="AB">Alberta</SelectItem>
-                  <SelectItem value="ON">Ontario</SelectItem>
                   <SelectItem value="QC">Quebec</SelectItem>
                   <SelectItem value="ALL">All Provinces</SelectItem>
                 </SelectContent>
@@ -198,7 +220,7 @@ export const GoogleSheetsRateCalculator = () => {
             </div>
             <Button 
               onClick={handleFindRates} 
-              disabled={isLoading || !requirements.term || !requirements.mortgageType}
+              disabled={isLoading || !requirements.term || !requirements.transactionType}
               className="px-8"
             >
               {isLoading ? 'Loading...' : 'Find Best Rates'}
@@ -236,7 +258,7 @@ export const GoogleSheetsRateCalculator = () => {
                         <div>
                           <h3 className="font-semibold">{rate.lender}</h3>
                           <p className="text-sm text-muted-foreground">
-                            {rate.term} • {rate.mortgageType} • {rate.province}
+                            {rate.term} {rate.rateType} • {rate.transactionType} • {rate.hasInsurance ? 'Insured' : 'Uninsured'} • {rate.province}
                           </p>
                         </div>
                       </div>
@@ -250,8 +272,9 @@ export const GoogleSheetsRateCalculator = () => {
                       </div>
                     </div>
                     <div className="mt-2 flex gap-4 text-xs text-muted-foreground">
-                      <span>Max LTV: {(rate.maxLtv * 100).toFixed(0)}%</span>
-                      <span>Min Credit: {rate.minCreditScore}</span>
+                      <span>LTV Range: {(rate.ltvMin * 100).toFixed(0)}% - {(rate.ltvMax * 100).toFixed(0)}%</span>
+                      {rate.minCreditScore && <span>Min Credit: {rate.minCreditScore}</span>}
+                      {rate.minDownPayment && <span>Down Payment: {(rate.minDownPayment * 100).toFixed(0)}%+</span>}
                     </div>
                   </div>
                 ))}

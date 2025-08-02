@@ -65,6 +65,7 @@ const Index = () => {
   };
 
   const tools = [
+    { name: "Mortgage Rate Finder", description: "Find your perfect rate", icon: Search, link: "/tools/mortgage-rate-finder" },
     { name: "Mortgage Calculator", description: "Calculate monthly payments", icon: Calculator, link: "/tools/mortgage-calculator" },
     { name: "Debt Payoff Calculator", description: "Plan your debt freedom", icon: TrendingUp, link: "/tools/debt-payoff-calculator" },
     { name: "TFSA Calculator", description: "Calculate your contribution", icon: DollarSign, link: "/tools/tfsa-calculator" },

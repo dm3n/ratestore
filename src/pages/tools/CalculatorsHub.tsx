@@ -27,6 +27,19 @@ interface Tool {
 const allTools: Tool[] = [
 // Calculator Tools
 {
+  id: "mortgage-rate-finder",
+  name: "Mortgage Rate Finder",
+  description: "Find the best mortgage rates tailored to your situation",
+  longDescription: "Advanced mortgage rate matching system that finds the best rates based on your credit score, down payment, and loan requirements. Get personalized recommendations from our comprehensive database.",
+  icon: Search,
+  href: "/tools/mortgage-rate-finder",
+  category: "calculators",
+  subcategory: "mortgage",
+  difficulty: "beginner",
+  popular: true,
+  features: ["Personalized matching", "Live rates", "Credit score optimization", "Multiple scenarios"]
+},
+{
   id: "mortgage-calculator",
   name: "Mortgage Payment Calculator",
   description: "Calculate monthly mortgage payments and total costs",
