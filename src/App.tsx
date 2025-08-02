@@ -176,6 +176,7 @@ import DebtPayoffCalculator from "./pages/tools/DebtPayoffCalculator";
 import ROICalculator from "./pages/tools/ROICalculator";
 import LoanComparisonTool from "./pages/tools/LoanComparisonTool";
 import CalculatorsHub from "./pages/tools/CalculatorsHub";
+import MortgageRateFinder from "./pages/tools/MortgageRateFinder";
 
 // Guide pages
 import EducationCentre from "./pages/guides/EducationCentre";
@@ -400,6 +401,7 @@ const App = () => (
             <Route path="/tools/roi-calculator" element={<ROICalculator />} />
             <Route path="/tools/loan-comparison-tool" element={<LoanComparisonTool />} />
             <Route path="/tools/calculators" element={<CalculatorsHub />} />
+            <Route path="/tools/mortgage-rate-finder" element={<MortgageRateFinder />} />
             
             {/* Guide routes */}
             <Route path="/guides/education-centre" element={<EducationCentre />} />
