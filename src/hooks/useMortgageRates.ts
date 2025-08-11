@@ -5,14 +5,14 @@ import { supabase } from '@/integrations/supabase/client';
 export interface MortgageRate {
   id: string;
   lender_name: string;
-  lender_type: string;
-  rate_type: string;
-  term: string;
-  base_rate: number;
-  min_down_payment: number;
-  max_loan_to_value: number;
-  transaction_types: string[];
-  prime_discount: string | null;
+  lender_type: string; // derived: 'bank' or 'lender'
+  rate_type: string | null;
+  term: string; // e.g., '5-yr'
+  base_rate: number; // from rate_sheet_rates.rate
+  min_down_payment: number; // derived from bracket (if down_payment)
+  max_loan_to_value: number; // derived from bracket (if ltv)
+  transaction_types: string[]; // single transaction_type mapped to array
+  prime_discount: string | null; // n/a
   is_active: boolean;
   province: string;
   created_at: string;
@@ -41,18 +41,18 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
     
     try {
       let query = supabase
-        .from('mortgage_rates')
+        .from('rate_sheet_rates')
         .select('*')
-        .eq('is_active', true)
-        .order('base_rate', { ascending: true });
+        .eq('active', true)
+        .order('rate', { ascending: true });
 
       // Apply filters based on options
       if (options.transactionType) {
-        query = query.contains('transaction_types', [options.transactionType]);
+        query = query.eq('transaction_type', options.transactionType);
       }
       
       if (options.lenderType) {
-        query = query.eq('lender_type', options.lenderType);
+        query = query; // lender_type derived later
       }
       
       if (options.rateType) {
@@ -60,11 +60,14 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
       }
       
       if (options.term) {
-        query = query.eq('term', options.term);
+        // map term like '5-yr' => number 5
+        const years = Number((options.term || '').split('-')[0]);
+        if (!isNaN(years)) query = query.eq('term_years', years);
       }
       
       if (options.minDownPayment) {
-        query = query.lte('min_down_payment', options.minDownPayment);
+        // minDownPayment: only applicable for down_payment bracket rows
+        query = query;
       }
 
       if (options.province) {
@@ -77,8 +80,22 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
         throw error;
       }
 
-      console.log('Fetched rates:', data);
-      setRates(data || []);
+      setRates((data || []).map((row: any) => ({
+        id: row.id,
+        lender_name: row.lender || 'Lender',
+        lender_type: ['RBC','TD','Scotiabank','BMO','CIBC'].some((b) => (row.lender || '').toLowerCase().includes(b.toLowerCase())) ? 'bank' : 'lender',
+        rate_type: row.rate_type,
+        term: row.term_years ? `${row.term_years}-yr` : 'Open',
+        base_rate: Number(row.rate),
+        min_down_payment: row.bracket_type === 'down_payment' ? Number(row.bracket_min ?? 0) : 0,
+        max_loan_to_value: row.bracket_type === 'ltv' ? Number(row.bracket_max ?? 1) : 1,
+        transaction_types: row.transaction_type ? [row.transaction_type] : [],
+        prime_discount: null,
+        is_active: !!row.active,
+        province: row.province,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+      })) as any);
       setLastUpdated(new Date());
     } catch (err) {
       console.error('Error fetching mortgage rates:', err);
@@ -105,16 +122,16 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
     if (!options.autoRefresh) return;
 
     const channel = supabase
-      .channel('mortgage-rates-realtime')
+      .channel('rate-sheet-realtime')
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'mortgage_rates'
+          table: 'rate_sheet_rates'
         },
         (payload) => {
-          console.log('Mortgage rates updated:', payload);
+          console.log('Rate sheet updated:', payload);
           fetchRates();
         }
       )

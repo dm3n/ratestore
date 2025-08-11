@@ -91,31 +91,27 @@ export function InteractiveRateCalculator({
         downPayment
       });
       
-      // Build query with province filter if specified
       let query = supabase
-        .from('mortgage_rates')
+        .from('rate_sheet_rates')
         .select('*')
-        .eq('is_active', true)
-        .contains('transaction_types', [transactionType]);
+        .eq('active', true)
+        .eq('transaction_type', transactionType);
 
-      // HELOC rates have different requirements than regular mortgages
-      if (transactionType !== 'heloc') {
-        query = query
-          .lte('min_down_payment', downPaymentDecimal)
-          .gte('max_loan_to_value', loanToValue);
-      }
-      
-      query = query.order('base_rate', { ascending: true });
-
-      // Add province filter if specified
+      // Apply basic filters
       if (provinceFilter && provinceFilter !== 'all') {
         query = query.eq('province', provinceFilter);
       }
-
-      // Add term filter if specified
       if (termFilter) {
-        query = query.eq('term', termFilter);
+        const years = Number(termFilter.split('-')[0]);
+        if (!isNaN(years)) query = query.eq('term_years', years);
       }
+
+      // Bracket matching: match either LTV or Down Payment brackets
+      const orFilter = `and(bracket_type.eq.ltv,bracket_min.lte.${loanToValue},bracket_max.gte.${loanToValue}),and(bracket_type.eq.down_payment,bracket_min.lte.${downPaymentDecimal},bracket_max.gte.${downPaymentDecimal})`;
+      // @ts-ignore - supabase-js or() typing
+      query = query.or(orFilter);
+
+      query = query.order('rate', { ascending: true });
 
       const { data: dbRates, error } = await query;
 
@@ -126,19 +122,18 @@ export function InteractiveRateCalculator({
 
       console.log('Fetched rates from database:', dbRates?.length || 0, 'rates');
 
-      // Transform database rates to component format
-      const transformedRates: RateData[] = dbRates?.map(rate => ({
-        id: rate.id,
-        lender: rate.lender_name,
-        rate: Number(rate.base_rate),
-        lenderType: rate.lender_type === 'bank' ? 'bank' : 'home',
-        term: rate.term,
-        type: rate.rate_type as "fixed" | "variable",
-        prime: rate.prime_discount,
-        minDownPayment: Number(rate.min_down_payment),
-        maxLoanToValue: Number(rate.max_loan_to_value),
-        transactionTypes: rate.transaction_types || []
-      })) || [];
+      const transformedRates: RateData[] = (dbRates || []).map((row: any) => ({
+        id: row.id,
+        lender: row.lender || 'Lender',
+        rate: Number(row.rate),
+        lenderType: ['RBC','TD','Scotiabank','BMO','CIBC'].some((b) => (row.lender || '').toLowerCase().includes(b.toLowerCase())) ? 'bank' : 'home',
+        term: row.term_years ? `${row.term_years}-yr` : 'Open',
+        type: (row.rate_type as any) || 'fixed',
+        prime: null,
+        minDownPayment: row.bracket_type === 'down_payment' ? Number(row.bracket_min ?? 0) : 0,
+        maxLoanToValue: row.bracket_type === 'ltv' ? Number(row.bracket_max ?? 1) : 1,
+        transactionTypes: row.transaction_type ? [row.transaction_type] : [],
+      }));
 
       console.log('Transformed rates:', transformedRates.length);
 
@@ -222,13 +217,13 @@ export function InteractiveRateCalculator({
   // Set up real-time updates for rate changes
   useEffect(() => {
     const channel = supabase
-      .channel('mortgage-rates-changes')
+      .channel('rate-sheet-changes')
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'mortgage_rates'
+          table: 'rate_sheet_rates'
         },
         () => {
           console.log('Mortgage rates updated, refreshing calculator...');

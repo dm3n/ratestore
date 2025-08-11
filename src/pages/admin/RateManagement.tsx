@@ -1,7 +1,7 @@
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { RateManager } from "@/components/RateManager";
+import { AdminRateSheetManager } from "@/components/AdminRateSheetManager";
 
 const RateManagement = () => {
   return (
@@ -12,13 +12,13 @@ const RateManagement = () => {
         <div className="container px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold">Rate Management</h1>
+              <h1 className="text-3xl font-bold">Rate Sheet Management</h1>
               <p className="text-muted-foreground mt-2">
-                Manage mortgage rates that appear in the calculator. Changes are reflected immediately.
+                Manage the canonical mortgage rate sheet used across calculators. Changes are live immediately.
               </p>
             </div>
             
-            <RateManager />
+            <AdminRateSheetManager />
           </div>
         </div>
       </main>

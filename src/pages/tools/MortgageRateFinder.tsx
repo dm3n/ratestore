@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { GoogleSheetsRateCalculator } from "@/components/GoogleSheetsRateCalculator";
+import { RateSheetCalculator } from "@/components/RateSheetCalculator";
 
 const MortgageRateFinder = () => {
   return (
@@ -18,7 +18,7 @@ const MortgageRateFinder = () => {
           </p>
         </div>
 
-        <GoogleSheetsRateCalculator />
+        <RateSheetCalculator />
       </main>
 
       <Footer />

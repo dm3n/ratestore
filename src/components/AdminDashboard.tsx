@@ -3,11 +3,9 @@ import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdminUserManager } from './AdminUserManager';
-import { AdminRatesMenu } from './AdminRatesMenu';
-import { AdminGICRateManager } from './AdminGICRateManager';
 import { AdminBlogManager } from './AdminBlogManager';
-import { AdminBankingRateManager } from './AdminBankingRateManager';
-import { Users, TrendingUp, Database, FileText, Building2 } from 'lucide-react';
+import { Users, TrendingUp, Database, FileText } from 'lucide-react';
+import { AdminRateSheetManager } from './AdminRateSheetManager';
 
 export const AdminDashboard = () => {
   return (
@@ -18,13 +16,12 @@ export const AdminDashboard = () => {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
-          <TabsTrigger value="rates">Mortgage Rates</TabsTrigger>
-          <TabsTrigger value="banking-rates">Banking Rates</TabsTrigger>
-          <TabsTrigger value="gic-rates">GIC Rates</TabsTrigger>
+          <TabsTrigger value="rates">Rate Sheet</TabsTrigger>
           <TabsTrigger value="blog">Blog Posts</TabsTrigger>
+        </TabsList>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -51,12 +48,12 @@ export const AdminDashboard = () => {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Banking Products</CardTitle>
-                <Building2 className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Data Rows</CardTitle>
+                <Database className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">85</div>
-                <p className="text-xs text-muted-foreground">Chequing & Savings</p>
+                <div className="text-2xl font-bold">{/* could fetch count here later */}—</div>
+                <p className="text-xs text-muted-foreground">rate_sheet_rates</p>
               </CardContent>
             </Card>
             <Card>
@@ -93,9 +90,7 @@ export const AdminDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <div className="text-sm cursor-pointer hover:underline">Update mortgage rates</div>
-                  <div className="text-sm cursor-pointer hover:underline">Add banking products</div>
-                  <div className="text-sm cursor-pointer hover:underline">Create new blog post</div>
+                  <div className="text-sm cursor-pointer hover:underline">Manage rate sheet</div>
                   <div className="text-sm cursor-pointer hover:underline">Review user feedback</div>
                 </div>
               </CardContent>
@@ -108,15 +103,7 @@ export const AdminDashboard = () => {
         </TabsContent>
 
         <TabsContent value="rates">
-          <AdminRatesMenu />
-        </TabsContent>
-
-        <TabsContent value="banking-rates">
-          <AdminBankingRateManager />
-        </TabsContent>
-        
-        <TabsContent value="gic-rates">
-          <AdminGICRateManager />
+          <AdminRateSheetManager />
         </TabsContent>
 
         <TabsContent value="blog">
