@@ -545,6 +545,75 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_sheet_rates: {
+        Row: {
+          active: boolean
+          amortization_max_years: number
+          bracket_max: number | null
+          bracket_min: number | null
+          bracket_type: string
+          created_at: string
+          dollar_figure: number | null
+          has_insurance: boolean
+          id: string
+          lender: string | null
+          mortgage_size_bracket: string | null
+          notes: string | null
+          occupancy: string
+          product_type: string
+          province: string
+          rate: number | null
+          rate_type: string | null
+          term_years: number | null
+          transaction_type: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          amortization_max_years?: number
+          bracket_max?: number | null
+          bracket_min?: number | null
+          bracket_type: string
+          created_at?: string
+          dollar_figure?: number | null
+          has_insurance?: boolean
+          id?: string
+          lender?: string | null
+          mortgage_size_bracket?: string | null
+          notes?: string | null
+          occupancy?: string
+          product_type: string
+          province?: string
+          rate?: number | null
+          rate_type?: string | null
+          term_years?: number | null
+          transaction_type?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          amortization_max_years?: number
+          bracket_max?: number | null
+          bracket_min?: number | null
+          bracket_type?: string
+          created_at?: string
+          dollar_figure?: number | null
+          has_insurance?: boolean
+          id?: string
+          lender?: string | null
+          mortgage_size_bracket?: string | null
+          notes?: string | null
+          occupancy?: string
+          product_type?: string
+          province?: string
+          rate?: number | null
+          rate_type?: string | null
+          term_years?: number | null
+          transaction_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_accounts: {
         Row: {
           account_name: string
