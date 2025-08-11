@@ -485,6 +485,66 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_overrides: {
+        Row: {
+          active: boolean
+          created_at: string
+          created_by: string | null
+          has_insurance: boolean
+          id: string
+          lender: string
+          ltv_max: number
+          ltv_min: number
+          max_down_payment: number | null
+          min_credit_score: number | null
+          min_down_payment: number | null
+          province: string
+          rate: number
+          rate_type: string
+          term: string
+          transaction_type: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          has_insurance?: boolean
+          id?: string
+          lender: string
+          ltv_max?: number
+          ltv_min?: number
+          max_down_payment?: number | null
+          min_credit_score?: number | null
+          min_down_payment?: number | null
+          province?: string
+          rate: number
+          rate_type: string
+          term: string
+          transaction_type: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          has_insurance?: boolean
+          id?: string
+          lender?: string
+          ltv_max?: number
+          ltv_min?: number
+          max_down_payment?: number | null
+          min_credit_score?: number | null
+          min_down_payment?: number | null
+          province?: string
+          rate?: number
+          rate_type?: string
+          term?: string
+          transaction_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_accounts: {
         Row: {
           account_name: string
