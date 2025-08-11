@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdminUserManager } from './AdminUserManager';
-import { AdminRateManager } from './AdminRateManager';
+import { AdminRatesMenu } from './AdminRatesMenu';
 import { AdminGICRateManager } from './AdminGICRateManager';
 import { AdminBlogManager } from './AdminBlogManager';
 import { AdminBankingRateManager } from './AdminBankingRateManager';
@@ -108,7 +108,7 @@ export const AdminDashboard = () => {
         </TabsContent>
 
         <TabsContent value="rates">
-          <AdminRateManager />
+          <AdminRatesMenu />
         </TabsContent>
 
         <TabsContent value="banking-rates">
