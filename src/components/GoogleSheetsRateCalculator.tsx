@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { useGoogleSheetsRates } from '@/hooks/useGoogleSheetsRates';
+import { useRateOverrides } from '@/hooks/useRateOverrides';
 import { Calculator, TrendingDown, Award } from 'lucide-react';
 
 interface GoogleSheetMortgageRate {
@@ -24,7 +24,7 @@ interface GoogleSheetMortgageRate {
 }
 
 export const GoogleSheetsRateCalculator = () => {
-  const { rates, isLoading, error, findMatches } = useGoogleSheetsRates();
+  const { overrides: rates, isLoading, error, findMatches } = useRateOverrides();
   const [requirements, setRequirements] = useState({
     term: '',
     transactionType: '' as 'buying' | 'renewing' | 'refinancing' | '',

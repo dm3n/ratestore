@@ -1,13 +1,14 @@
 import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Info } from "lucide-react";
-import { useGoogleSheetsRates } from "@/hooks/useGoogleSheetsRates";
-
+import { Info, Pencil, Trash2, Plus } from "lucide-react";
+import { useRateOverrides } from "@/hooks/useRateOverrides";
+import RateEditDialog from "@/components/admin-rates/RateEditDialog";
 // Local type aligned with GoogleSheetsService
 interface SheetRate {
   lender: string;
@@ -96,13 +97,15 @@ function RatesTable({ data }: { data: SheetRate[] }) {
 }
 
 export function AdminRatesMenu() {
-  const { rates, isLoading, error, lastUpdated } = useGoogleSheetsRates();
+  const { overrides: rates, isLoading, error, lastUpdated, upsertRate, removeRate, refetch } = useRateOverrides();
   const [province, setProvince] = useState<string>("ON");
+  const [editOpen, setEditOpen] = useState(false);
+  const [initialEdit, setInitialEdit] = useState<Partial<SheetRate> | undefined>();
 
   const filtered = useMemo(() => {
-    return rates.filter((r) => !province || province === "ALL" || r.province === province);
+    const arr = rates as unknown as SheetRate[];
+    return arr.filter((r) => !province || province === "ALL" || r.province === province);
   }, [rates, province]);
-
   const buying = filtered.filter((r) => r.transactionType === "buying");
   const renewing = filtered.filter((r) => r.transactionType === "renewing");
   const refinancing = filtered.filter((r) => r.transactionType === "refinancing" && r.term !== "HELOC");
@@ -165,6 +168,9 @@ export function AdminRatesMenu() {
               </SelectContent>
             </Select>
           </div>
+          <Button size="sm" onClick={() => { setInitialEdit(undefined); setEditOpen(true); }}>
+            <Plus className="h-4 w-4 mr-2" /> Add Rate
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
@@ -174,7 +180,69 @@ export function AdminRatesMenu() {
         {isLoading && !rates.length ? (
           <div className="text-sm text-muted-foreground">Loading rates…</div>
         ) : (
-          <Accordion type="multiple" className="space-y-4">
+          <>
+            {/* Overrides list (editable) */}
+            <section className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium">Edited Rates (Overrides)</h3>
+                <Badge variant="outline">{filtered.length}</Badge>
+              </div>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Lender</TableHead>
+                      <TableHead>Term</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Txn</TableHead>
+                      <TableHead>Insured</TableHead>
+                      <TableHead>LTV</TableHead>
+                      <TableHead>Down Pmt</TableHead>
+                      <TableHead>Province</TableHead>
+                      <TableHead>Min Credit</TableHead>
+                      <TableHead>Rate</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filtered
+                      .slice()
+                      .sort((a, b) => a.rate - b.rate)
+                      .map((h: any) => (
+                        <TableRow key={h.id ?? `${h.lender}-${h.term}-${h.rateType}`}>
+                          <TableCell>{h.lender}</TableCell>
+                          <TableCell>{h.term}</TableCell>
+                          <TableCell className="uppercase">{h.rateType}</TableCell>
+                          <TableCell className="capitalize">{h.transactionType}</TableCell>
+                          <TableCell>{h.hasInsurance ? "Yes" : "No"}</TableCell>
+                          <TableCell>
+                            {(h.ltvMin * 100).toFixed(0)}% - {(h.ltvMax * 100).toFixed(0)}%
+                          </TableCell>
+                          <TableCell>
+                            {h.minDownPayment != null ? `${(h.minDownPayment * 100).toFixed(0)}%` : "—"}
+                            {h.maxDownPayment != null ? ` - ${(h.maxDownPayment * 100).toFixed(0)}%` : ""}
+                          </TableCell>
+                          <TableCell>{h.province}</TableCell>
+                          <TableCell>{h.minCreditScore ?? "—"}</TableCell>
+                          <TableCell>{(h.rate * 100).toFixed(2)}%</TableCell>
+                          <TableCell className="flex gap-2">
+                            <Button variant="ghost" size="icon" onClick={() => { setInitialEdit(h); setEditOpen(true); }} aria-label="Edit">
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                            {h.id && (
+                              <Button variant="ghost" size="icon" onClick={() => removeRate(h.id!)} aria-label="Delete">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </section>
+
+            <Accordion type="multiple" className="space-y-4">
             {/* Buying a Home */}
             <AccordionItem value="buying">
               <AccordionTrigger>
@@ -272,8 +340,17 @@ export function AdminRatesMenu() {
               </AccordionItem>
             )}
           </Accordion>
+          </>
         )}
       </CardContent>
+      <RateEditDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        initial={initialEdit}
+        onSave={async (row: any) => {
+          await upsertRate(row);
+        }}
+      />
     </Card>
   );
 }

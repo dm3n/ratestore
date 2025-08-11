@@ -1,0 +1,11 @@
+-- Harden function search_path for set_updated_at (created/overwritten earlier)
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+set search_path to 'public'
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
