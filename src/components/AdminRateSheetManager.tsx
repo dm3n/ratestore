@@ -185,10 +185,10 @@ export const AdminRateSheetManager = () => {
         <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-1">
             <Label>Province</Label>
-            <Select value={filters.province} onValueChange={(v) => setFilters((f) => ({ ...f, province: v }))}>
+            <Select value={filters.province} onValueChange={(v) => setFilters((f) => ({ ...f, province: v === 'all' ? '' : v }))}>
               <SelectTrigger><SelectValue placeholder="All" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="all">All</SelectItem>
                 {provinces.map((p) => (
                   <SelectItem key={p} value={p}>{p}</SelectItem>
                 ))}
@@ -197,10 +197,10 @@ export const AdminRateSheetManager = () => {
           </div>
           <div className="space-y-1">
             <Label>Transaction Type</Label>
-            <Select value={filters.transaction_type} onValueChange={(v) => setFilters((f) => ({ ...f, transaction_type: v }))}>
+            <Select value={filters.transaction_type} onValueChange={(v) => setFilters((f) => ({ ...f, transaction_type: v === 'all' ? '' : v }))}>
               <SelectTrigger><SelectValue placeholder="All" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="all">All</SelectItem>
                 <SelectItem value="buying">Buying</SelectItem>
                 <SelectItem value="renewing">Renewing</SelectItem>
                 <SelectItem value="refinancing">Refinancing</SelectItem>
@@ -210,10 +210,10 @@ export const AdminRateSheetManager = () => {
           </div>
           <div className="space-y-1">
             <Label>Rate Type</Label>
-            <Select value={filters.rate_type} onValueChange={(v) => setFilters((f) => ({ ...f, rate_type: v }))}>
+            <Select value={filters.rate_type} onValueChange={(v) => setFilters((f) => ({ ...f, rate_type: v === 'all' ? '' : v }))}>
               <SelectTrigger><SelectValue placeholder="All" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="all">All</SelectItem>
                 <SelectItem value="fixed">Fixed</SelectItem>
                 <SelectItem value="variable">Variable</SelectItem>
               </SelectContent>
