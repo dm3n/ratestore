@@ -178,16 +178,19 @@ export function InteractiveRateCalculator({
 
       // Transform to internal format
       let transformedRates = externalRates.rates.map(transformExternalRate);
+      console.log('After transformation:', transformedRates);
 
       // Filter by lender if specified
       if (lenderFilter && lenderFilter !== "ALL_LENDERS") {
         transformedRates = transformedRates.filter(rate => 
           rate.lender.toLowerCase().includes(lenderFilter.toLowerCase())
         );
+        console.log('After lender filter:', transformedRates);
       }
 
       // Filter for Big 5 banks if termFilter is provided (indicating this is for bank rates page)
       if (termFilter) {
+        console.log('termFilter is:', termFilter);
         transformedRates = transformedRates.filter(rate => 
           big5Banks.some(bank => 
             bank.searchTerms.some(term => 
@@ -195,8 +198,11 @@ export function InteractiveRateCalculator({
             )
           )
         );
+        console.log('After Big 5 filter:', transformedRates);
       } else if (activeTab === "best-bank") {
+        console.log('activeTab is best-bank, filtering for banks');
         transformedRates = transformedRates.filter(rate => rate.lenderType === 'bank');
+        console.log('After bank type filter:', transformedRates);
       }
 
       // Store all rates for show more functionality
