@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { RefreshCw } from "lucide-react";
 import { useRateSheet } from "@/hooks/useRateSheet";
 
 export const RateSheetCalculator = () => {
@@ -26,6 +27,15 @@ export const RateSheetCalculator = () => {
     setResults(matches.slice(0, 20));
     setShow(true);
   };
+
+  // Auto-update rates when inputs change with debouncing
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onFind();
+    }, 500);
+    
+    return () => clearTimeout(timeoutId);
+  }, [requirements]);
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -100,7 +110,10 @@ export const RateSheetCalculator = () => {
               </SelectContent>
             </Select>
           </div>
-          <Button onClick={onFind} disabled={isLoading}>Find rates</Button>
+          <Button onClick={onFind} disabled={isLoading} className="flex items-center gap-2">
+            {isLoading && <RefreshCw className="h-4 w-4 animate-spin" />}
+            {isLoading ? 'Updating...' : 'Refresh rates'}
+          </Button>
         </CardContent>
       </Card>
 

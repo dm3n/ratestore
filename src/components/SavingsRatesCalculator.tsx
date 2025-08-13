@@ -151,6 +151,15 @@ export function SavingsRatesCalculator({ accountType, title, description }: Savi
     fetchRates();
   }, [accountType]);
 
+  // Auto-refresh rates when filters change with debouncing
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      fetchRates();
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
+  }, [depositAmount, timeHorizon, institutionFilter, minBalanceFilter, categoryFilter, activeTab]);
+
   // Filter rates based on current selections
   const filteredRates = rates.filter(rate => {
     console.log('🔍 Filtering rate:', rate.institution, 'with filters:', {
