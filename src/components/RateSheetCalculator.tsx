@@ -6,24 +6,37 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw } from "lucide-react";
 import { useRateSheet } from "@/hooks/useRateSheet";
+import { useExternalRateApi, type RateLookupCriteria } from "@/hooks/useExternalRateApi";
 
 export const RateSheetCalculator = () => {
   const { findMatches, isLoading } = useRateSheet();
+  const { 
+    rates: externalRates, 
+    isLoading: externalLoading, 
+    lookupRates, 
+    fetchAllRates,
+    getMortgageSizeBracket,
+    getDownPaymentRange,
+    findBestRates 
+  } = useExternalRateApi();
   const [requirements, setRequirements] = useState({
     transactionType: "buying" as const,
     hasInsurance: true,
     province: "ON",
     termYears: 5,
-    rateType: "fixed" as const,
+    rateType: "fixed" as "fixed" | "variable" | "any",
     propertyValue: 500000,
     downPayment: 100000,
     amortizationYears: 25,
     lender: "",
   });
   const [results, setResults] = useState<any[]>([]);
+  const [externalResults, setExternalResults] = useState<any[]>([]);
   const [show, setShow] = useState(false);
+  const [showExternal, setShowExternal] = useState(true);
 
-  const onFind = () => {
+  const onFind = async () => {
+    // Find matches from internal database
     let matches = findMatches(requirements as any);
     
     // Filter by lender if specified
@@ -35,6 +48,37 @@ export const RateSheetCalculator = () => {
     
     setResults(matches.slice(0, 20));
     setShow(true);
+
+    // Find matches from external API
+    const downPaymentPercent = requirements.propertyValue > 0 ? (requirements.downPayment / requirements.propertyValue) * 100 : 20;
+    const loanAmount = requirements.propertyValue - requirements.downPayment;
+    
+    const criteria: RateLookupCriteria = {
+      transaction_type: requirements.transactionType === "buying" ? "purchase" : requirements.transactionType,
+      province: requirements.province === "ALL" ? undefined : requirements.province,
+      term: requirements.termYears,
+      rate_type: requirements.rateType === "any" ? undefined : requirements.rateType,
+      down_payment_percent: downPaymentPercent,
+      property_value: requirements.propertyValue,
+      loan_amount: loanAmount,
+      ltv: requirements.propertyValue > 0 ? loanAmount / requirements.propertyValue : 0,
+      mortgage_size: getMortgageSizeBracket(loanAmount),
+      cmhc_insured: requirements.hasInsurance,
+    };
+
+    // Use external API rates
+    const externalMatches = findBestRates(criteria, 20);
+    
+    // Filter by lender if specified
+    let filteredExternalMatches = externalMatches;
+    if (requirements.lender) {
+      filteredExternalMatches = externalMatches.filter(rate => 
+        rate.lender?.toLowerCase().includes(requirements.lender.toLowerCase())
+      );
+    }
+    
+    setExternalResults(filteredExternalMatches);
+    setShowExternal(true);
   };
 
   // Auto-update rates when inputs change with debouncing
@@ -138,20 +182,68 @@ export const RateSheetCalculator = () => {
               </Select>
             </div>
           </div>
-          <Button onClick={onFind} disabled={isLoading} className="flex items-center gap-2">
-            {isLoading && <RefreshCw className="h-4 w-4 animate-spin" />}
-            {isLoading ? 'Updating...' : 'Refresh rates'}
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={onFind} disabled={isLoading || externalLoading} className="flex items-center gap-2 flex-1">
+              {(isLoading || externalLoading) && <RefreshCw className="h-4 w-4 animate-spin" />}
+              {(isLoading || externalLoading) ? 'Updating...' : 'Find Best Rates'}
+            </Button>
+            <Button onClick={fetchAllRates} disabled={externalLoading} variant="outline" className="flex items-center gap-2">
+              <RefreshCw className={`h-4 w-4 ${externalLoading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
-      {show && (
+      {showExternal && externalResults.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Matching rates</CardTitle>
+            <CardTitle className="flex items-center justify-between">
+              <span>Live Market Rates</span>
+              <Badge variant="outline" className="text-xs">
+                {externalResults.length} rates found
+              </Badge>
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Real-time rates from our comprehensive rate sheet, updated every 30 minutes
+            </p>
           </CardHeader>
           <CardContent className="space-y-3">
-            {!results.length && <div className="text-muted-foreground text-sm">No matches found. Try adjusting inputs.</div>}
+            {externalResults.map((r, index) => (
+              <div key={`external-${index}`} className="flex items-center justify-between border rounded-md p-3 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <div>
+                  <div className="font-medium">{r.lender || 'Lender'}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {r.term} • {r.rate_type} • {r.cmhc_insured ? 'Insured' : 'Conventional'}
+                    {r.down_payment_range && ` • DP: ${r.down_payment_range}`}
+                    {r.mortgage_size && ` • Size: ${r.mortgage_size}`}
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Badge variant="default" className="bg-primary">
+                    {r.rate?.toFixed(2) || 'N/A'}%
+                  </Badge>
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    Get Quote
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {show && results.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>Database Rates</span>
+              <Badge variant="outline" className="text-xs">
+                {results.length} rates found
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
             {results.map((r) => (
               <div key={r.id} className="flex items-center justify-between border rounded-md p-3">
                 <div>
@@ -164,6 +256,25 @@ export const RateSheetCalculator = () => {
                 </div>
               </div>
             ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {(showExternal && externalResults.length === 0 && !externalLoading) && (show && results.length === 0 && !isLoading) && (
+        <Card>
+          <CardHeader>
+            <CardTitle>No Matching Rates Found</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-muted-foreground text-sm">
+              No rates match your current criteria. Try adjusting your inputs:
+              <ul className="list-disc list-inside mt-2 space-y-1">
+                <li>Change the down payment amount</li>
+                <li>Select a different term or rate type</li>
+                <li>Try a different province</li>
+                <li>Remove the lender filter</li>
+              </ul>
+            </div>
           </CardContent>
         </Card>
       )}
