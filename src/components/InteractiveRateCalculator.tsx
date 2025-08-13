@@ -44,6 +44,7 @@ export function InteractiveRateCalculator({
   const [purchasePrice, setPurchasePrice] = useState(400000);
   const [downPayment, setDownPayment] = useState(20000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(5);
+  const [lenderFilter, setLenderFilter] = useState("");
   const [activeTab, setActiveTab] = useState("best-market");
   const [rates, setRates] = useState<RateData[]>([]);
   const [allRates, setAllRates] = useState<RateData[]>([]);
@@ -137,10 +138,17 @@ export function InteractiveRateCalculator({
 
       console.log('Transformed rates:', transformedRates.length);
 
-      // Filter for Big 5 banks if termFilter is provided (indicating this is for bank rates page)
+      // Filter by lender if specified
       let filteredRates = transformedRates;
-      if (termFilter) {
+      if (lenderFilter) {
         filteredRates = transformedRates.filter(rate => 
+          rate.lender.toLowerCase().includes(lenderFilter.toLowerCase())
+        );
+      }
+
+      // Filter for Big 5 banks if termFilter is provided (indicating this is for bank rates page)
+      if (termFilter) {
+        filteredRates = filteredRates.filter(rate => 
           big5Banks.some(bank => 
             bank.searchTerms.some(term => 
               rate.lender.toLowerCase().includes(term)
@@ -148,7 +156,7 @@ export function InteractiveRateCalculator({
           )
         );
       } else if (activeTab === "best-bank") {
-        filteredRates = transformedRates.filter(rate => rate.lenderType === 'bank');
+        filteredRates = filteredRates.filter(rate => rate.lenderType === 'bank');
       }
 
       console.log('Filtered rates:', filteredRates.length);
@@ -212,7 +220,7 @@ export function InteractiveRateCalculator({
   // Update rates when inputs change
   useEffect(() => {
     updateRates();
-  }, [purchasePrice, downPayment, transactionType, activeTab, provinceFilter, termFilter]);
+  }, [purchasePrice, downPayment, transactionType, lenderFilter, activeTab, provinceFilter, termFilter]);
 
   // Set up real-time updates for rate changes
   useEffect(() => {
@@ -235,7 +243,7 @@ export function InteractiveRateCalculator({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [transactionType, purchasePrice, downPayment, activeTab, provinceFilter, termFilter]);
+  }, [transactionType, purchasePrice, downPayment, lenderFilter, activeTab, provinceFilter, termFilter]);
 
   const handleInputChange = (setter: (value: any) => void, value: any) => {
     setter(value);
@@ -356,17 +364,17 @@ export function InteractiveRateCalculator({
       
       <CardContent className="p-6">
         {/* Calculator Inputs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8 p-4 bg-gray-50 rounded-lg">
           <div className="space-y-2">
             <Label htmlFor="transaction-type" className="text-sm font-medium">Transaction type</Label>
             <Select 
               value={transactionType} 
               onValueChange={(value) => handleInputChange(setTransactionType, value)}
             >
-              <SelectTrigger>
+              <SelectTrigger className="bg-background border border-input z-50">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-background border border-input shadow-lg z-50">
                 <SelectItem value="buying">Buying a home</SelectItem>
                 <SelectItem value="refinancing">Refinancing</SelectItem>
                 <SelectItem value="renewal">Renewal</SelectItem>
@@ -430,6 +438,17 @@ export function InteractiveRateCalculator({
                 </svg>
               </div>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="lender-filter" className="text-sm font-medium">Lender</Label>
+            <Input
+              id="lender-filter"
+              type="text"
+              placeholder="Search by lender..."
+              value={lenderFilter}
+              onChange={(e) => handleInputChange(setLenderFilter, e.target.value)}
+            />
           </div>
         </div>
 

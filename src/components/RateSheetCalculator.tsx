@@ -18,12 +18,21 @@ export const RateSheetCalculator = () => {
     propertyValue: 500000,
     downPayment: 100000,
     amortizationYears: 25,
+    lender: "",
   });
   const [results, setResults] = useState<any[]>([]);
   const [show, setShow] = useState(false);
 
   const onFind = () => {
-    const matches = findMatches(requirements as any);
+    let matches = findMatches(requirements as any);
+    
+    // Filter by lender if specified
+    if (requirements.lender) {
+      matches = matches.filter(rate => 
+        rate.lender?.toLowerCase().includes(requirements.lender.toLowerCase())
+      );
+    }
+    
     setResults(matches.slice(0, 20));
     setShow(true);
   };
@@ -47,8 +56,10 @@ export const RateSheetCalculator = () => {
           <div>
             <label className="text-sm">Transaction type</label>
             <Select value={requirements.transactionType} onValueChange={(v) => setRequirements((r) => ({ ...r, transactionType: v as any }))}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
+              <SelectTrigger className="bg-background border border-input z-50">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-background border border-input shadow-lg z-50">
                 <SelectItem value="buying">Buying</SelectItem>
                 <SelectItem value="renewing">Renewing</SelectItem>
                 <SelectItem value="refinancing">Refinancing</SelectItem>
@@ -60,8 +71,10 @@ export const RateSheetCalculator = () => {
             <div>
               <label className="text-sm">Province</label>
               <Select value={requirements.province} onValueChange={(v) => setRequirements((r) => ({ ...r, province: v }))}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
+                <SelectTrigger className="bg-background border border-input z-50">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-input shadow-lg z-50">
                   {["ALL","AB","BC","MB","NB","NL","NS","NT","NU","ON","PE","QC","SK","YT"].map((p) => (
                     <SelectItem key={p} value={p}>{p}</SelectItem>
                   ))}
@@ -81,8 +94,10 @@ export const RateSheetCalculator = () => {
             <div>
               <label className="text-sm">Rate type</label>
               <Select value={requirements.rateType} onValueChange={(v) => setRequirements((r) => ({ ...r, rateType: v as any }))}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
+                <SelectTrigger className="bg-background border border-input z-50">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-input shadow-lg z-50">
                   <SelectItem value="fixed">Fixed</SelectItem>
                   <SelectItem value="variable">Variable</SelectItem>
                   <SelectItem value="any">Any</SelectItem>
@@ -100,15 +115,28 @@ export const RateSheetCalculator = () => {
               <Input type="number" value={requirements.downPayment} onChange={(e) => setRequirements((r) => ({ ...r, downPayment: Number(e.target.value) }))} />
             </div>
           </div>
-          <div>
-            <label className="text-sm">Insurance</label>
-            <Select value={String(requirements.hasInsurance)} onValueChange={(v) => setRequirements((r) => ({ ...r, hasInsurance: v === 'true' }))}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="true">Insured</SelectItem>
-                <SelectItem value="false">Conventional</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm">Lender</label>
+              <Input 
+                type="text" 
+                placeholder="Search by lender name..." 
+                value={requirements.lender} 
+                onChange={(e) => setRequirements((r) => ({ ...r, lender: e.target.value }))} 
+              />
+            </div>
+            <div>
+              <label className="text-sm">Insurance</label>
+              <Select value={String(requirements.hasInsurance)} onValueChange={(v) => setRequirements((r) => ({ ...r, hasInsurance: v === 'true' }))}>
+                <SelectTrigger className="bg-background border border-input z-50">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-input shadow-lg z-50">
+                  <SelectItem value="true">Insured</SelectItem>
+                  <SelectItem value="false">Conventional</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <Button onClick={onFind} disabled={isLoading} className="flex items-center gap-2">
             {isLoading && <RefreshCw className="h-4 w-4 animate-spin" />}
