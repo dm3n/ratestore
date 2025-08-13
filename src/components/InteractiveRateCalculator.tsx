@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Plus, Home, Building2, RefreshCw, ChevronDown, ChevronUp, HelpCircle, AlertTriangle, Info } from "lucide-react";
+import { Plus, Home, Building2, RefreshCw, ChevronDown, ChevronUp, HelpCircle, AlertTriangle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -24,24 +24,26 @@ interface APIRate {
 
 interface APIResponse {
   rates: APIRate[];
+  rates_by_term: {
+    [key: string]: {
+      fixed: APIRate[];
+      variable: APIRate[];
+    };
+  };
   criteria: {
     transaction_type: string;
     property_value: number;
     down_payment: number;
     down_payment_percent: number;
     loan_amount: number;
-    ltv_percent?: number;
+    ltv_percent: number;
     size_category: string;
-    dp_category?: string;
+    dp_category: string;
     ltv_category?: string;
     has_cmhc?: boolean;
   };
   total_rates_found: number;
-  debug_info?: {
-    available_sections: string[];
-    available_dp_categories?: string[];
-    available_ltv_categories?: string[];
-  };
+  last_updated?: string;
 }
 
 interface RateData {
@@ -81,9 +83,6 @@ export function InteractiveRateCalculator({
   const [lenderFilter, setLenderFilter] = useState("ALL_LENDERS");
   const [selectedProvince, setSelectedProvince] = useState("ON");
   const [activeTab, setActiveTab] = useState("best-market");
-  const [propertyType, setPropertyType] = useState("owner-occupied");
-  const [amortizationPeriod, setAmortizationPeriod] = useState("25");
-  const [hasCMHC, setHasCMHC] = useState<boolean | null>(null);
   const [rates, setRates] = useState<RateData[]>([]);
   const [allRates, setAllRates] = useState<RateData[]>([]);
   const [bankRates, setBankRates] = useState<BankRateData[]>([]);
@@ -94,7 +93,6 @@ export function InteractiveRateCalculator({
   const [showLenderDetail, setShowLenderDetail] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [debugInfo, setDebugInfo] = useState<any>(null);
   
   // Big 5 Canadian banks
   const big5Banks = [
@@ -135,35 +133,21 @@ export function InteractiveRateCalculator({
     if (transactionType === "buying" && purchasePrice > 1000000 && dpPercent < 20) {
       errors.push("Properties over $1M require minimum 20% down payment");
     }
-
-    if (propertyType === "rental" && dpPercent < 20) {
-      errors.push("Rental properties require minimum 20% down payment");
-    }
     
     setValidationErrors(errors);
   };
-
-  // Auto-detect CMHC insurance requirement
-  useEffect(() => {
-    const dpPercent = (downPayment / purchasePrice) * 100;
-    if (transactionType === "buying" || transactionType === "renewals") {
-      setHasCMHC(dpPercent < 20);
-    } else {
-      setHasCMHC(null); // Not applicable for refinancing/HELOC
-    }
-  }, [downPayment, purchasePrice, transactionType]);
 
   // Calculate down payment percentage when dollar amount changes
   useEffect(() => {
     const percent = Math.round((downPayment / purchasePrice) * 100);
     setDownPaymentPercent(Math.min(percent, 100));
     validateInputs();
-  }, [downPayment, purchasePrice, propertyType, transactionType]);
+  }, [downPayment, purchasePrice]);
 
   // Calculate down payment dollar amount when percentage changes
   const handlePercentChange = (percent: number) => {
-    const minPercent = propertyType === "rental" ? 20 : 5;
-    const validPercent = Math.max(minPercent, Math.min(percent, 100));
+    // Enforce minimum 5% down payment
+    const validPercent = Math.max(5, Math.min(percent, 100));
     setDownPaymentPercent(validPercent);
     setDownPayment(Math.round((validPercent / 100) * purchasePrice));
   };
@@ -182,45 +166,23 @@ export function InteractiveRateCalculator({
     transactionTypes: [rate.transaction_type],
   });
 
-  // Get transaction type specific labels
-  const getTransactionLabels = () => {
-    switch (transactionType) {
-      case "buying":
-        return { priceLabel: "Purchase price", valueLabel: "Property value" };
-      case "renewals":
-        return { priceLabel: "Current property value", valueLabel: "Property value" };
-      case "refinancing":
-        return { priceLabel: "Current property value", valueLabel: "Property value" };
-      case "heloc":
-        return { priceLabel: "Property value", valueLabel: "Property value" };
-      default:
-        return { priceLabel: "Purchase price", valueLabel: "Property value" };
-    }
-  };
-
   // Fetch rates from API based on current inputs
   const updateRates = async () => {
     setIsLoading(true);
     setApiError(null);
-    setDebugInfo(null);
     
     console.log('Fetching rates for:', {
       transactionType,
       purchasePrice,
       downPayment,
-      downPaymentPercent,
-      propertyType,
-      hasCMHC
+      downPaymentPercent
     });
     
     try {
-      // Map transaction type to API format exactly as your API expects
+      // Map transaction type to API format
       const apiTransactionType = transactionType === 'buying' ? 'purchases' : 
-                                transactionType === 'renewal' ? 'renewals' :
-                                transactionType; // refinancing, heloc remain the same
-
-      const loanAmount = purchasePrice - downPayment;
-      const ltvPercent = (loanAmount / purchasePrice) * 100;
+                                transactionType === 'renewing' ? 'renewals' :
+                                transactionType;
 
       const requestData = {
         transaction_type: apiTransactionType,
@@ -229,17 +191,13 @@ export function InteractiveRateCalculator({
         province: selectedProvince || 'ON',
         terms: ['1', '2', '3', '4', '5', '6', '7', '10'],
         rate_types: ['fixed', 'variable'],
-        property_type: propertyType,
-        amortization_period: parseInt(amortizationPeriod),
-        has_cmhc: hasCMHC,
-        ltv_percent: ltvPercent
+        has_cmhc: downPaymentPercent < 20
       };
 
       console.log('API Request:', requestData);
       
       const apiResponse = await callMortgageRateAPI(requestData);
       console.log('API Response:', apiResponse);
-      setDebugInfo(apiResponse.debug_info);
 
       if (!apiResponse.rates || apiResponse.rates.length === 0) {
         console.log('No rates found from API');
@@ -342,12 +300,12 @@ export function InteractiveRateCalculator({
           transactionTypes: [transactionType]
         },
         {
-          id: 'td-5-variable',
-          lender: 'TD',
-          rate: 3.85,
+          id: 'rbc-5-fixed',
+          lender: 'RBC',
+          rate: 4.29,
           lenderType: 'bank',
           term: '5',
-          type: 'variable',
+          type: 'fixed',
           minDownPayment: 0.05,
           maxLoanToValue: 0.95,
           transactionTypes: [transactionType]
@@ -364,33 +322,17 @@ export function InteractiveRateCalculator({
   // Update rates when inputs change
   useEffect(() => {
     updateRates();
-  }, [purchasePrice, downPayment, transactionType, lenderFilter, selectedProvince, activeTab, propertyType, amortizationPeriod, hasCMHC]);
+  }, [purchasePrice, downPayment, transactionType, lenderFilter, selectedProvince, activeTab]);
 
   const handleInputChange = (setter: (value: any) => void, value: any) => {
     setter(value);
   };
 
-  // Get available terms based on transaction type
+  // Get available terms - if termFilter is specified, only show that term
   const getAvailableTerms = () => {
     if (termFilter) return [termFilter];
-    
-    // Get unique terms from current rates
-    const availableTermsFromRates = Array.from(new Set(rates.map(rate => rate.term))).sort();
-    
-    if (availableTermsFromRates.length > 0) {
-      return availableTermsFromRates;
-    }
-    
-    // Fallback based on transaction type
-    switch (transactionType) {
-      case "heloc":
-        return ["1", "5"]; // HELOC typically has these terms in your CSV
-      case "renewals":
-      case "refinancing":
-        return ["1", "2", "3", "4", "5", "6", "7", "10"];
-      default:
-        return ["2", "3", "5"];
-    }
+    if (transactionType === "heloc") return ["1", "2", "3", "5"];
+    return ["2", "3", "5"];
   };
 
   const availableTerms = getAvailableTerms();
@@ -465,8 +407,6 @@ export function InteractiveRateCalculator({
     </div>
   );
 
-  const transactionLabels = getTransactionLabels();
-
   return (
     <TooltipProvider>
       <Card className="border-2 border-primary/20 shadow-lg" data-calculator>
@@ -475,7 +415,7 @@ export function InteractiveRateCalculator({
             <div>
               <CardTitle className="text-xl lg:text-2xl font-bold">Find Your Best Rate</CardTitle>
               <p className="text-muted-foreground mt-1">
-                Live rates from comprehensive TD mortgage data
+                Live rates updated automatically from TD mortgage data
                 {isLoading && (
                   <span className="inline-flex items-center ml-2 text-primary">
                     <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
@@ -529,19 +469,6 @@ export function InteractiveRateCalculator({
             </Alert>
           )}
 
-          {/* Debug Info */}
-          {debugInfo && (
-            <Alert className="mb-6 border-blue-200 bg-blue-50">
-              <Info className="h-4 w-4 text-blue-600" />
-              <AlertDescription className="text-blue-800">
-                <details className="text-xs">
-                  <summary className="cursor-pointer font-medium">Debug Info (Click to expand)</summary>
-                  <pre className="mt-2 whitespace-pre-wrap">{JSON.stringify(debugInfo, null, 2)}</pre>
-                </details>
-              </AlertDescription>
-            </Alert>
-          )}
-
           {/* Validation Errors */}
           {validationErrors.length > 0 && (
             <Alert className="mb-6 border-orange-200 bg-orange-50">
@@ -552,27 +479,6 @@ export function InteractiveRateCalculator({
                     <li key={index}>{error}</li>
                   ))}
                 </ul>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {/* CMHC Insurance Notice */}
-          {hasCMHC !== null && (transactionType === "buying" || transactionType === "renewals") && (
-            <Alert className="mb-6 border-blue-200 bg-blue-50">
-              <Info className="h-4 w-4 text-blue-600" />
-              <AlertDescription className="text-blue-800">
-                <strong>CMHC Insurance:</strong> {hasCMHC ? 'Required' : 'Not required'} 
-                ({downPaymentPercent < 20 ? 'Down payment less than 20%' : 'Down payment 20% or more'})
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {/* HELOC Notice */}
-          {transactionType === "heloc" && (
-            <Alert className="mb-6 border-yellow-200 bg-yellow-50">
-              <Info className="h-4 w-4 text-yellow-600" />
-              <AlertDescription className="text-yellow-800">
-                <strong>HELOC Rates:</strong> Currently showing available data from TD. HELOC rates may be limited compared to other mortgage products.
               </AlertDescription>
             </Alert>
           )}
@@ -598,7 +504,7 @@ export function InteractiveRateCalculator({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="purchase-price" className="text-sm font-medium">{transactionLabels.priceLabel}</Label>
+              <Label htmlFor="purchase-price" className="text-sm font-medium">Purchase price</Label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                 <Input
@@ -614,98 +520,80 @@ export function InteractiveRateCalculator({
               </div>
             </div>
 
-            {/* Only show down payment for purchases, renewals, and refinancing */}
-            {transactionType !== "heloc" && (
-              <>
-                <div className="space-y-2">
-                  <Label htmlFor="down-payment" className="text-sm font-medium">
-                    {transactionType === "buying" ? "Down payment $" : 
-                     transactionType === "renewals" ? "Equity $" : "Equity $"}
-                  </Label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                    <Input
-                      id="down-payment"
-                      type="text"
-                      value={downPayment.toLocaleString()}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value.replace(/,/g, '')) || 0;
-                        handleInputChange(setDownPayment, value);
-                      }}
-                      className="pl-8"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Label htmlFor="down-payment-percent" className="text-sm font-medium">
-                      {transactionType === "buying" ? "Down Payment %" : "Equity %"}
-                    </Label>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-md z-50 p-4">
-                        <div className="space-y-3">
-                          <div>
-                            <p className="font-semibold text-sm mb-1">What is Loan-to-Value (LTV)?</p>
-                            <p className="text-xs text-muted-foreground">LTV represents the ratio of your mortgage loan to your property's value.</p>
-                          </div>
-                          
-                          <div>
-                            <p className="font-medium text-xs mb-1">How to Calculate LTV:</p>
-                            <p className="text-xs bg-muted p-2 rounded">LTV = (Loan Amount ÷ Property Value) × 100</p>
-                          </div>
-                          
-                          <div>
-                            <p className="font-medium text-xs mb-1">Important Notes:</p>
-                            <ul className="text-xs text-muted-foreground space-y-1">
-                              <li>• Higher LTV = Higher risk for lenders</li>
-                              <li>• LTV over 80% typically requires mortgage insurance</li>
-                              <li>• Lower LTV often means better interest rates</li>
-                              <li>• Minimum 5% down payment (20% for rentals)</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      id="down-payment-percent"
-                      type="number"
-                      min={propertyType === "rental" ? "20" : "5"}
-                      max="100"
-                      value={downPaymentPercent}
-                      onChange={(e) => handlePercentChange(parseInt(e.target.value) || 5)}
-                      className="w-16"
-                    />
-                    <span className="text-xs text-muted-foreground">%</span>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    LTV: {((purchasePrice - downPayment) / purchasePrice * 100).toFixed(1)}%
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* Property Type - show for all transaction types */}
             <div className="space-y-2">
-              <Label htmlFor="property-type" className="text-sm font-medium">Property type</Label>
-              <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="bg-background border border-input z-50">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-input shadow-lg z-50">
-                  <SelectItem value="owner-occupied">Owner Occupied</SelectItem>
-                  <SelectItem value="second-home">Second Home</SelectItem>
-                  <SelectItem value="rental">Rental Property</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="down-payment" className="text-sm font-medium">Down payment $</Label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                <Input
+                  id="down-payment"
+                  type="text"
+                  value={downPayment.toLocaleString()}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value.replace(/,/g, '')) || 0;
+                    handleInputChange(setDownPayment, value);
+                  }}
+                  className="pl-8"
+                />
+              </div>
             </div>
 
-            {/* Province */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="down-payment-percent" className="text-sm font-medium">Down Payment %</Label>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-md z-50 p-4">
+                    <div className="space-y-3">
+                      <div>
+                        <p className="font-semibold text-sm mb-1">What is Loan-to-Value (LTV)?</p>
+                        <p className="text-xs text-muted-foreground">LTV represents the ratio of your mortgage loan to your property's value.</p>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium text-xs mb-1">How to Calculate LTV:</p>
+                        <p className="text-xs bg-muted p-2 rounded">LTV = (Loan Amount ÷ Property Value) × 100</p>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium text-xs mb-1">Example:</p>
+                        <p className="text-xs">Property Value: $500,000<br/>
+                        Down Payment: $100,000 (20%)<br/>
+                        Loan Amount: $400,000<br/>
+                        <span className="font-medium">LTV = 80%</span></p>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium text-xs mb-1">Important Notes:</p>
+                        <ul className="text-xs text-muted-foreground space-y-1">
+                           <li>• Higher LTV = Higher risk for lenders</li>
+                           <li>• LTV over 80% typically requires mortgage insurance</li>
+                          <li>• Lower LTV often means better interest rates</li>
+                          <li>• Minimum 5% down payment (20% for rentals)</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="flex items-center gap-2">
+                <Input
+                  id="down-payment-percent"
+                  type="number"
+                  min="5"
+                  max="100"
+                  value={downPaymentPercent}
+                  onChange={(e) => handlePercentChange(parseInt(e.target.value) || 5)}
+                  className="w-16"
+                />
+                <span className="text-xs text-muted-foreground">%</span>
+              </div>
+              <div className="text-xs text-muted-foreground">
+                LTV: {((purchasePrice - downPayment) / purchasePrice * 100).toFixed(1)}%
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="province" className="text-sm font-medium">Province</Label>
               <Select value={selectedProvince} onValueChange={setSelectedProvince}>
@@ -731,23 +619,6 @@ export function InteractiveRateCalculator({
               </Select>
             </div>
 
-            {/* Amortization Period - hide for HELOC */}
-            {transactionType !== "heloc" && (
-              <div className="space-y-2">
-                <Label htmlFor="amortization" className="text-sm font-medium">Amortization</Label>
-                <Select value={amortizationPeriod} onValueChange={setAmortizationPeriod}>
-                  <SelectTrigger className="bg-background border border-input z-50">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border border-input shadow-lg z-50">
-                    <SelectItem value="25">25 years or less</SelectItem>
-                    <SelectItem value="30">26-30 years</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-
-            {/* Lender Filter */}
             <div className="space-y-2">
               <Label htmlFor="lender-filter" className="text-sm font-medium">Lender</Label>
               <Select value={lenderFilter} onValueChange={setLenderFilter}>
@@ -858,9 +729,7 @@ export function InteractiveRateCalculator({
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <h3 className="text-lg font-semibold">
-                {termFilter ? "All Big 5 Bank Rates by Term" : 
-                 transactionType === "heloc" ? "HELOC Rates" :
-                 "Best Available Rates"}
+                {termFilter ? "All Big 5 Bank Rates by Term" : "Best Available Rates"}
                 {rates.length > 0 && (
                   <span className="text-sm font-normal text-muted-foreground ml-2">
                     ({rates.length} rates found)
@@ -876,12 +745,7 @@ export function InteractiveRateCalculator({
             {rates.length === 0 && !isLoading ? (
               <div className="text-center py-12 text-muted-foreground">
                 <div className="text-lg font-medium mb-2">No rates available</div>
-                <p className="text-sm">
-                  {transactionType === "heloc" 
-                    ? "HELOC rates are limited in our current dataset. Please try different criteria or contact us directly."
-                    : "Try adjusting your criteria or refresh the rates."
-                  }
-                </p>
+                <p className="text-sm">Try adjusting your criteria or refresh the rates.</p>
               </div>
             ) : (
               availableTerms.map((term) => {
@@ -903,9 +767,7 @@ export function InteractiveRateCalculator({
                     <div className="bg-gray-50 px-4 py-3 border-b">
                       <div className="flex items-center justify-between">
                         <div>
-                          <span className="text-lg font-bold">
-                            {transactionType === "heloc" ? `${term} Year HELOC` : `${term} Year`}
-                          </span>
+                          <span className="text-lg font-bold">{term} Year</span>
                           <button className="block text-primary text-sm hover:underline mt-1">
                             compare all rates
                           </button>
