@@ -96,30 +96,29 @@ export const useExternalRateApi = () => {
     setError(null);
     
     try {
-      // Convert to the service API format
-      const apiCriteria = {
-        ...criteria,
-        transaction_type: criteria.transaction_type === 'purchases' ? 'buying' : 
-                         criteria.transaction_type === 'renewals' ? 'renewing' : 
-                         criteria.transaction_type
-      };
-      const response = await mortgageApi.findBestRates(apiCriteria as any);
+      // Use the find-best endpoint directly as specified in the API docs
+      const response = await fetch('https://victorjjma.pythonanywhere.com/api/rates/find-best', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(criteria)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
       
-      if (response.rates && response.rates.length > 0) {
-        setRates(response.rates);
+      if (data.rates && data.rates.length > 0) {
+        setRates(data.rates);
         setLastUpdated(new Date());
-        return response;
+        return data;
       } else {
-        // If no rates returned, get all rates and filter manually
-        const allRatesResponse = await mortgageApi.getAllRates() as any;
-        const filteredRates = filterRatesFromAllData(allRatesResponse.rates, criteria);
-        setRates(filteredRates.slice(0, 10));
-        setLastUpdated(new Date());
-        return {
-          rates: filteredRates.slice(0, 10),
-          total_rates_found: filteredRates.length,
-          last_updated: allRatesResponse.last_updated
-        };
+        console.log('No rates returned from find-best endpoint');
+        setRates([]);
+        return { rates: [], total_rates_found: 0 };
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to find best rates';
@@ -254,10 +253,10 @@ export const useExternalRateApi = () => {
     return '35-99.99%';
   };
 
-  // Auto-fetch rates on mount
-  useEffect(() => {
-    fetchAllRates();
-  }, []);
+  // Remove auto-fetch on mount to prevent constant updates
+  // useEffect(() => {
+  //   fetchAllRates();
+  // }, []);
 
   return {
     rates,

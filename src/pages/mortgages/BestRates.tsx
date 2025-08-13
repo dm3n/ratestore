@@ -27,7 +27,7 @@ const BestRates = () => {
     }
   }, [location.state]);
 
-  // Fetch best rates with default criteria
+  // Fetch best rates with default criteria on mount only
   useEffect(() => {
     const fetchBestRates = async () => {
       await findBestRates({
@@ -41,7 +41,7 @@ const BestRates = () => {
     };
     
     fetchBestRates();
-  }, [findBestRates]);
+  }, []); // Empty dependency array to run only once
 
   // Get the top 3 best rates for display
   const bestRates = rates.slice(0, 3).map((rate, index) => ({
