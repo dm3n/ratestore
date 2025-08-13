@@ -364,7 +364,7 @@ export function InteractiveRateCalculator({
       
       <CardContent className="p-6">
         {/* Calculator Inputs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8 p-4 bg-gray-50 rounded-lg">
           <div className="space-y-2">
             <Label htmlFor="transaction-type" className="text-sm font-medium">Transaction type</Label>
             <Select 
