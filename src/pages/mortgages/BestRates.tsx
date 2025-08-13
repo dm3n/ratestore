@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Award, TrendingDown, Clock, CheckCircle, RefreshCw } from "lucide-react";
-import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
+import { ComprehensiveMortgageCalculator } from "@/components/ComprehensiveMortgageCalculator";
 import { useMortgageRates } from "@/hooks/useMortgageRates";
 import { useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -155,7 +155,7 @@ const BestRates = () => {
         <section className="bg-gray-50 py-[72px]">
           <div className="container px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <InteractiveRateCalculator />
+              <ComprehensiveMortgageCalculator />
             </div>
           </div>
         </section>
