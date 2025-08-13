@@ -27,6 +27,22 @@ const BestRates = () => {
     }
   }, [location.state]);
 
+  // Fetch best rates with default criteria
+  useEffect(() => {
+    const fetchBestRates = async () => {
+      await findBestRates({
+        transaction_type: "buying",
+        property_value: 500000,
+        down_payment: 100000, // 20% down
+        province: "ON",
+        terms: ["2", "3", "5"],
+        rate_types: ["fixed", "variable"]
+      });
+    };
+    
+    fetchBestRates();
+  }, [findBestRates]);
+
   // Get the top 3 best rates for display
   const bestRates = rates.slice(0, 3).map((rate, index) => ({
     lender: rate.lender,

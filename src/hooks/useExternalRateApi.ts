@@ -138,6 +138,9 @@ export const useExternalRateApi = () => {
     const transactionType = criteria.transaction_type === 'buying' ? 'purchases' : criteria.transaction_type;
     const ratesData = allRates[transactionType];
     
+    console.log('Looking for rates in:', transactionType, dpCategory, sizeCategory);
+    console.log('Available data:', ratesData);
+    
     if (ratesData && ratesData[dpCategory] && ratesData[dpCategory][sizeCategory]) {
       const termData = ratesData[dpCategory][sizeCategory];
       
@@ -147,6 +150,7 @@ export const useExternalRateApi = () => {
       
       terms.forEach(term => {
         const termKey = `${term}_year`;
+        console.log(`Checking term: ${termKey}`, termData[termKey]);
         if (termData[termKey]) {
           rateTypes.forEach(rateType => {
             if (termData[termKey][rateType]) {
@@ -162,6 +166,8 @@ export const useExternalRateApi = () => {
           });
         }
       });
+    } else {
+      console.log('No matching rate data found for criteria:', { transactionType, dpCategory, sizeCategory });
     }
     
     return rateArray.sort((a, b) => a.rate - b.rate);
