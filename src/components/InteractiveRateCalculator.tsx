@@ -331,8 +331,24 @@ export function InteractiveRateCalculator({
   // Get available terms - if termFilter is specified, only show that term
   const getAvailableTerms = () => {
     if (termFilter) return [termFilter];
-    if (transactionType === "heloc") return ["1", "2", "3", "5"];
-    return ["2", "3", "5"];
+    
+    // Get unique terms from current rates
+    const availableTermsFromRates = Array.from(new Set(rates.map(rate => rate.term))).sort();
+    
+    if (availableTermsFromRates.length > 0) {
+      return availableTermsFromRates;
+    }
+    
+    // Fallback based on transaction type
+    switch (transactionType) {
+      case "heloc":
+        return ["1", "5"]; // HELOC typically has these terms
+      case "renewals":
+      case "refinancing":
+        return ["1", "2", "3", "4", "5", "6", "7", "10"];
+      default:
+        return ["2", "3", "5"];
+    }
   };
 
   const availableTerms = getAvailableTerms();
