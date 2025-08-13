@@ -31,7 +31,7 @@ const BestRates = () => {
   useEffect(() => {
     const fetchBestRates = async () => {
       await findBestRates({
-        transaction_type: "buying",
+        transaction_type: "purchases",
         property_value: 500000,
         down_payment: 100000, // 20% down
         province: "ON",

@@ -99,7 +99,7 @@ export function ComprehensiveMortgageCalculator() {
       // Find best rates from external API
       try {
         const apiRequest = {
-          transaction_type: "buying" as const,
+          transaction_type: "purchases" as const,
           property_value: purchasePrice,
           down_payment: downPayment,
           province: province,

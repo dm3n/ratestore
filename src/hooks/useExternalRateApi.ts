@@ -1,5 +1,15 @@
 import { useState, useEffect } from 'react';
-import { mortgageApi, FindBestRatesRequest, ExternalRate } from '@/services/mortgageApi';
+import { mortgageApi, ExternalRate } from '@/services/mortgageApi';
+
+// Define the interface locally to match API expectations
+interface FindBestRatesRequest {
+  transaction_type: 'purchases' | 'renewals' | 'refinancing' | 'heloc';
+  property_value: number;
+  down_payment: number;
+  province?: string;
+  terms?: string[];
+  rate_types?: string[];
+}
 
 // Re-export ExternalRate from the API service
 export type { ExternalRate } from '@/services/mortgageApi';
@@ -86,7 +96,14 @@ export const useExternalRateApi = () => {
     setError(null);
     
     try {
-      const response = await mortgageApi.findBestRates(criteria);
+      // Convert to the service API format
+      const apiCriteria = {
+        ...criteria,
+        transaction_type: criteria.transaction_type === 'purchases' ? 'buying' : 
+                         criteria.transaction_type === 'renewals' ? 'renewing' : 
+                         criteria.transaction_type
+      };
+      const response = await mortgageApi.findBestRates(apiCriteria as any);
       
       if (response.rates && response.rates.length > 0) {
         setRates(response.rates);
@@ -135,7 +152,7 @@ export const useExternalRateApi = () => {
     else if (loanAmount >= 750000) sizeCategory = 'over_750k';
     
     // Get transaction type rates
-    const transactionType = criteria.transaction_type === 'buying' ? 'purchases' : criteria.transaction_type;
+    const transactionType = criteria.transaction_type || 'purchases';
     const ratesData = allRates[transactionType];
     
     console.log('Looking for rates in:', transactionType, dpCategory, sizeCategory);

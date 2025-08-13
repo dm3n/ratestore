@@ -143,7 +143,9 @@ export function InteractiveRateCalculator({
 
       // Get best rates from external API
       const apiRequest = {
-        transaction_type: transactionType as "buying" | "renewing" | "refinancing" | "heloc",
+        transaction_type: transactionType === 'buying' ? 'purchases' as const : 
+                         transactionType === 'renewing' ? 'renewals' as const :
+                         transactionType as 'refinancing' | 'heloc',
         property_value: purchasePrice,
         down_payment: downPayment,
         province: selectedProvince || 'ON',

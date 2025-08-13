@@ -68,7 +68,9 @@ export const RateSheetCalculator = () => {
 
     // Use external API rates
     const apiRequest = {
-      transaction_type: criteria.transaction_type as "buying" | "renewing" | "refinancing" | "heloc",
+      transaction_type: requirements.transactionType === 'buying' ? 'purchases' as const : 
+                       requirements.transactionType === 'renewing' ? 'renewals' as const :
+                       requirements.transactionType as 'refinancing' | 'heloc',
       property_value: criteria.property_value || 500000,
       down_payment: criteria.property_value ? criteria.property_value * ((criteria.down_payment_percent || 20) / 100) : 100000,
       province: criteria.province || 'ON',
