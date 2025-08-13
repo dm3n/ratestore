@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Home, Building2, RefreshCw, ChevronDown, ChevronUp, HelpCircle, AlertTriangle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useExternalRateApi, type RateLookupCriteria } from "@/hooks/useExternalRateApi";
+import { supabase } from "@/integrations/supabase/client";
 
 interface RateData {
   id: string;
@@ -57,11 +57,6 @@ export function InteractiveRateCalculator({
   const [selectedLenderRates, setSelectedLenderRates] = useState<RateData[]>([]);
   const [showLenderDetail, setShowLenderDetail] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
-  const [propertyType, setPropertyType] = useState("single-family");
-  const [rateTypeFilter, setRateTypeFilter] = useState("fixed");
-  
-  // External API hook
-  const { lookupRates, getMortgageSizeBracket, isLoading: apiLoading } = useExternalRateApi();
 
   // Big 5 Canadian banks
   const big5Banks = [
@@ -103,44 +98,55 @@ export function InteractiveRateCalculator({
     setDownPayment(Math.round((validPercent / 100) * purchasePrice));
   };
 
-  // Fetch rates from external API based on current inputs
+  // Fetch rates from database based on current inputs
   const updateRates = async () => {
     setIsLoading(true);
     console.log('Fetching rates for transaction type:', transactionType, 'down payment %:', downPaymentPercent);
     
     try {
       const loanAmount = purchasePrice - downPayment;
-      const loanToValue = (loanAmount / purchasePrice) * 100;
+      const loanToValue = loanAmount / purchasePrice;
+      const downPaymentDecimal = downPaymentPercent / 100;
       
-      // Create criteria for external API
-      const criteria: RateLookupCriteria = {
-        transaction_type: transactionType,
-        province: selectedProvince && selectedProvince !== 'all' ? selectedProvince : undefined,
-        term: termFilter ? Number(termFilter.split('-')[0]) : undefined,
-        rate_type: rateTypeFilter || undefined,
-        down_payment_percent: downPaymentPercent,
-        property_value: purchasePrice,
-        loan_amount: loanAmount,
-        ltv: loanToValue,
-        mortgage_size: getMortgageSizeBracket(loanAmount),
-        property_type: propertyType || undefined,
-        cmhc_insured: downPaymentPercent < 20
-      };
+      let query = supabase
+        .from('rate_sheet_rates')
+        .select('*')
+        .eq('active', true)
+        .eq('transaction_type', transactionType);
 
-      // Use external API to lookup rates
-      const apiRates = await lookupRates(criteria);
-      console.log('External API returned rates:', apiRates);
+      // Apply basic filters
+      if (selectedProvince && selectedProvince !== 'all') {
+        query = query.eq('province', selectedProvince);
+      }
+      if (termFilter) {
+        const years = Number(termFilter.split('-')[0]);
+        if (!isNaN(years)) query = query.eq('term_years', years);
+      }
 
-      const transformedRates: RateData[] = (apiRates || []).map((row: any, index: number) => ({
-        id: `ext-${index}`,
+      // Bracket matching: match either LTV or Down Payment brackets
+      const orFilter = `and(bracket_type.eq.ltv,bracket_min.lte.${loanToValue},bracket_max.gte.${loanToValue}),and(bracket_type.eq.down_payment,bracket_min.lte.${downPaymentDecimal},bracket_max.gte.${downPaymentDecimal})`;
+      // @ts-ignore - supabase-js or() typing
+      query = query.or(orFilter);
+
+      query = query.order('rate', { ascending: true });
+
+      const { data: dbRates, error } = await query;
+
+      if (error) {
+        console.error('Error fetching rates:', error);
+        return;
+      }
+
+      const transformedRates: RateData[] = (dbRates || []).map((row: any) => ({
+        id: row.id,
         lender: row.lender || 'Lender',
         rate: Number(row.rate),
         lenderType: ['RBC','TD','Scotiabank','BMO','CIBC'].some((b) => (row.lender || '').toLowerCase().includes(b.toLowerCase())) ? 'bank' : 'home',
-        term: row.term ? `${row.term}-yr` : 'Open',
+        term: row.term_years ? `${row.term_years}-yr` : 'Open',
         type: (row.rate_type as any) || 'fixed',
         prime: null,
-        minDownPayment: row.down_payment_range ? parseFloat(row.down_payment_range.split('-')[0]) / 100 : 0,
-        maxLoanToValue: row.ltv_range ? parseFloat(row.ltv_range.split('-')[1]) / 100 : 1,
+        minDownPayment: row.bracket_type === 'down_payment' ? Number(row.bracket_min ?? 0) : 0,
+        maxLoanToValue: row.bracket_type === 'ltv' ? Number(row.bracket_max ?? 1) : 1,
         transactionTypes: row.transaction_type ? [row.transaction_type] : [],
       }));
 
@@ -226,14 +232,27 @@ export function InteractiveRateCalculator({
     validateInputs();
   }, [purchasePrice, downPayment, transactionType, lenderFilter, selectedProvince, activeTab, provinceFilter, termFilter]);
 
-  // Set up periodic refresh for external API rates
+  // Set up real-time updates for rate changes
   useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('Auto-refreshing external rates...');
-      updateRates();
-    }, 30 * 60 * 1000); // Refresh every 30 minutes
+    const channel = supabase
+      .channel('rate-sheet-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'rate_sheet_rates'
+        },
+        () => {
+          console.log('Mortgage rates updated, refreshing calculator...');
+          updateRates();
+        }
+      )
+      .subscribe();
 
-    return () => clearInterval(interval);
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [transactionType, purchasePrice, downPayment, lenderFilter, selectedProvince, activeTab, provinceFilter, termFilter]);
 
   const handleInputChange = (setter: (value: any) => void, value: any) => {
