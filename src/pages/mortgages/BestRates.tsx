@@ -43,19 +43,33 @@ const BestRates = () => {
     fetchBestRates();
   }, []); // Empty dependency array to run only once
 
-  // Get the top 3 best rates for display
-  const bestRates = rates.slice(0, 3).map((rate, index) => ({
-    lender: rate.lender,
-    rate: `${rate.rate.toFixed(2)}%`,
-    term: `${rate.term} Year ${rate.rate_type === 'fixed' ? 'Fixed' : 'Variable'}`,
-    features: [
-      "Best available rate",
-      "Verified lender",
-      rate.rate_type === 'fixed' ? "Rate guaranteed" : "Variable rate"
-    ],
-    savings: `$${(Math.random() * 20000 + 10000).toFixed(0)} vs. average`,
-    special: index === 0 ? "Best Overall" : index === 1 ? "Best for Speed" : "Best Service"
-  }));
+  // Group rates by term to show both fixed and variable for each term
+  const ratesByTerm = rates.reduce((acc: any, rate) => {
+    const termKey = `${rate.term}yr`;
+    if (!acc[termKey]) {
+      acc[termKey] = { fixed: null, variable: null };
+    }
+    acc[termKey][rate.rate_type] = rate;
+    return acc;
+  }, {});
+
+  // Convert to display format showing both fixed and variable for each term
+  const bestRates = Object.entries(ratesByTerm).map(([term, rateTypes]: [string, any]) => {
+    const termNumber = term.replace('yr', '');
+    const fixedRate = rateTypes.fixed;
+    const variableRate = rateTypes.variable;
+    
+    return {
+      term: `${termNumber} Year`,
+      fixedRate: fixedRate ? `${fixedRate.rate.toFixed(2)}%` : 'N/A',
+      variableRate: variableRate ? `${variableRate.rate.toFixed(2)}%` : 'N/A',
+      lender: fixedRate?.lender || variableRate?.lender || 'TD',
+      bestRate: Math.min(
+        fixedRate?.rate || Infinity, 
+        variableRate?.rate || Infinity
+      ),
+    };
+  }).sort((a, b) => a.bestRate - b.bestRate);
   const whyBest = [{
     icon: TrendingDown,
     title: "Lowest Rates",
@@ -201,34 +215,49 @@ const BestRates = () => {
                       </CardHeader>
                     </Card>)}
                 </div> : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
-                  {bestRates.map((rate, index) => <Card key={index} className={`relative border-2 shadow-lg hover:shadow-xl transition-all duration-300 ${compareRate && compareRate.rate === rate.rate ? 'border-blue-500 bg-blue-50' : 'border-primary/20'}`}>
+                  {bestRates.map((termRates, index) => (
+                    <Card key={index} className="relative border-2 shadow-lg hover:shadow-xl transition-all duration-300 border-primary/20">
                       <Badge className="absolute -top-3 left-6 bg-primary text-white px-3 py-1">
-                        {rate.special}
+                        {index === 0 ? "Best Overall" : index === 1 ? "Popular Choice" : "Flexible Option"}
                       </Badge>
-                      {compareRate && compareRate.rate === rate.rate && <Badge className="absolute -top-3 right-6 bg-blue-600 text-white px-3 py-1">
-                          Comparing
-                        </Badge>}
                       <CardHeader className="text-center pb-4">
                         <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                           <Award className="h-8 w-8 text-primary" />
                         </div>
-                        <CardTitle className="text-xl mb-2">{rate.lender}</CardTitle>
-                        <div className="text-3xl font-bold text-primary mb-2">{rate.rate}</div>
-                        <Badge variant="outline" className="mb-4">{rate.term}</Badge>
-                        <div className="text-green-600 font-semibold">Save {rate.savings}</div>
+                        <CardTitle className="text-xl mb-2">{termRates.lender}</CardTitle>
+                        <Badge variant="outline" className="mb-4">{termRates.term}</Badge>
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-muted-foreground">Fixed:</span>
+                            <span className="text-lg font-bold text-primary">{termRates.fixedRate}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-muted-foreground">Variable:</span>
+                            <span className="text-lg font-bold text-secondary">{termRates.variableRate}</span>
+                          </div>
+                        </div>
                       </CardHeader>
                       <CardContent>
                         <ul className="space-y-3 mb-6">
-                          {rate.features.map((feature, idx) => <li key={idx} className="flex items-center gap-2 text-sm">
-                              <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                              {feature}
-                            </li>)}
+                          <li className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                            Best available rate
+                          </li>
+                          <li className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                            Verified lender
+                          </li>
+                          <li className="flex items-center gap-2 text-sm">
+                            <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                            Both fixed & variable options
+                          </li>
                         </ul>
                         <Button className="w-full bg-primary hover:bg-primary/90">
                           Get This Rate
                         </Button>
                       </CardContent>
-                    </Card>)}
+                    </Card>
+                  ))}
                 </div>}
 
               {/* Why These Are Best */}
