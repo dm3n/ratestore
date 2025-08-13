@@ -87,9 +87,23 @@ export const useExternalRateApi = () => {
     
     try {
       const response = await mortgageApi.findBestRates(criteria);
-      setRates(response.rates);
-      setLastUpdated(new Date());
-      return response;
+      
+      if (response.rates && response.rates.length > 0) {
+        setRates(response.rates);
+        setLastUpdated(new Date());
+        return response;
+      } else {
+        // If no rates returned, get all rates and filter manually
+        const allRatesResponse = await mortgageApi.getAllRates() as any;
+        const filteredRates = filterRatesFromAllData(allRatesResponse.rates, criteria);
+        setRates(filteredRates.slice(0, 10));
+        setLastUpdated(new Date());
+        return {
+          rates: filteredRates.slice(0, 10),
+          total_rates_found: filteredRates.length,
+          last_updated: allRatesResponse.last_updated
+        };
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to find best rates';
       setError(errorMessage);
@@ -98,6 +112,59 @@ export const useExternalRateApi = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Helper function to filter rates from all data based on criteria
+  const filterRatesFromAllData = (allRates: any, criteria: FindBestRatesRequest): ExternalRate[] => {
+    const rateArray: ExternalRate[] = [];
+    
+    // Calculate categories based on criteria
+    const downPaymentPercent = (criteria.down_payment / criteria.property_value) * 100;
+    const loanAmount = criteria.property_value - criteria.down_payment;
+    
+    // Determine categories
+    let dpCategory = 'dp_5_19';
+    if (downPaymentPercent >= 20 && downPaymentPercent < 25) dpCategory = 'dp_20_24';
+    else if (downPaymentPercent >= 25 && downPaymentPercent < 30) dpCategory = 'dp_25_29';
+    else if (downPaymentPercent >= 30 && downPaymentPercent < 35) dpCategory = 'dp_30_34';
+    else if (downPaymentPercent >= 35) dpCategory = 'dp_35_99';
+    
+    let sizeCategory = 'under_299k';
+    if (loanAmount >= 300000 && loanAmount < 500000) sizeCategory = '300k_499k';
+    else if (loanAmount >= 500000 && loanAmount < 750000) sizeCategory = '500k_749k';
+    else if (loanAmount >= 750000) sizeCategory = 'over_750k';
+    
+    // Get transaction type rates
+    const transactionType = criteria.transaction_type === 'buying' ? 'purchases' : criteria.transaction_type;
+    const ratesData = allRates[transactionType];
+    
+    if (ratesData && ratesData[dpCategory] && ratesData[dpCategory][sizeCategory]) {
+      const termData = ratesData[dpCategory][sizeCategory];
+      
+      // Filter by requested terms and rate types
+      const terms = criteria.terms || ['2', '3', '5'];
+      const rateTypes = criteria.rate_types || ['fixed', 'variable'];
+      
+      terms.forEach(term => {
+        const termKey = `${term}_year`;
+        if (termData[termKey]) {
+          rateTypes.forEach(rateType => {
+            if (termData[termKey][rateType]) {
+              rateArray.push({
+                lender: `Best ${term}Y ${rateType.charAt(0).toUpperCase() + rateType.slice(1)}`,
+                rate: termData[termKey][rateType],
+                term: term,
+                rate_type: rateType as 'fixed' | 'variable',
+                transaction_type: transactionType,
+                categories: [dpCategory, sizeCategory]
+              });
+            }
+          });
+        }
+      });
+    }
+    
+    return rateArray.sort((a, b) => a.rate - b.rate);
   };
 
   const lookupSpecificRates = async (criteria: RateLookupCriteria) => {
