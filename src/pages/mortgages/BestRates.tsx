@@ -70,6 +70,11 @@ const BestRates = () => {
       ),
     };
   }).sort((a, b) => a.bestRate - b.bestRate);
+
+  // Debug logging
+  console.log('rates from API:', rates);
+  console.log('ratesByTerm:', ratesByTerm);
+  console.log('bestRates after processing:', bestRates);
   const whyBest = [{
     icon: TrendingDown,
     title: "Lowest Rates",
@@ -214,7 +219,27 @@ const BestRates = () => {
                         <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
                       </CardHeader>
                     </Card>)}
-                </div> : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+                </div> : bestRates.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <RefreshCw className="h-8 w-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">No rates available</h3>
+                    <p className="text-muted-foreground mb-4">
+                      We're currently updating our rates. Please try again in a moment.
+                    </p>
+                    <Button onClick={() => findBestRates({
+                      transaction_type: "purchases",
+                      property_value: 500000,
+                      down_payment: 100000,
+                      province: "ON",
+                      terms: ["2", "3", "5"],
+                      rate_types: ["fixed", "variable"]
+                    })}>
+                      Refresh Rates
+                    </Button>
+                  </div>
+                ) : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
                   {bestRates.map((termRates, index) => (
                     <Card key={index} className="relative border-2 shadow-lg hover:shadow-xl transition-all duration-300 border-primary/20">
                       <Badge className="absolute -top-3 left-6 bg-primary text-white px-3 py-1">
