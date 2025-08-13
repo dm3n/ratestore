@@ -463,14 +463,35 @@ export function InteractiveRateCalculator({
                   <TooltipTrigger>
                     <HelpCircle className="h-4 w-4 text-muted-foreground" />
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-sm z-50">
-                    <div className="space-y-2">
-                      <p className="font-medium">Loan-to-Value (LTV) Calculator</p>
-                      <p>LTV = (Loan Amount ÷ Property Value) × 100</p>
-                      <p>Example: $400,000 loan ÷ $500,000 property = 80% LTV</p>
-                      <p className="text-sm text-muted-foreground">
-                        Lower LTV = Higher down payment = Better rates
-                      </p>
+                  <TooltipContent className="max-w-md z-50 p-4">
+                    <div className="space-y-3">
+                      <div>
+                        <p className="font-semibold text-sm mb-1">What is Loan-to-Value (LTV)?</p>
+                        <p className="text-xs text-muted-foreground">LTV represents the ratio of your mortgage loan to your property's value.</p>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium text-xs mb-1">How to Calculate LTV:</p>
+                        <p className="text-xs bg-muted p-2 rounded">LTV = (Loan Amount ÷ Property Value) × 100</p>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium text-xs mb-1">Example:</p>
+                        <p className="text-xs">Property Value: $500,000<br/>
+                        Down Payment: $100,000 (20%)<br/>
+                        Loan Amount: $400,000<br/>
+                        <span className="font-medium">LTV = 80%</span></p>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium text-xs mb-1">Important Notes:</p>
+                        <ul className="text-xs text-muted-foreground space-y-1">
+                           <li>• Higher LTV = Higher risk for lenders</li>
+                           <li>• LTV over 80% typically requires mortgage insurance</li>
+                          <li>• Lower LTV often means better interest rates</li>
+                          <li>• Minimum 5% down payment (20% for rentals)</li>
+                        </ul>
+                      </div>
                     </div>
                   </TooltipContent>
                 </Tooltip>
