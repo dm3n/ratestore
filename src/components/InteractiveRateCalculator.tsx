@@ -45,7 +45,7 @@ export function InteractiveRateCalculator({
   const [purchasePrice, setPurchasePrice] = useState(400000);
   const [downPayment, setDownPayment] = useState(20000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(5);
-  const [lenderFilter, setLenderFilter] = useState("");
+  const [lenderFilter, setLenderFilter] = useState("ALL_LENDERS");
   const [selectedProvince, setSelectedProvince] = useState("ON");
   const [activeTab, setActiveTab] = useState("best-market");
   const [rates, setRates] = useState<RateData[]>([]);
@@ -152,7 +152,7 @@ export function InteractiveRateCalculator({
 
       // Filter by lender if specified
       let filteredRates = transformedRates;
-      if (lenderFilter) {
+      if (lenderFilter && lenderFilter !== "ALL_LENDERS") {
         filteredRates = transformedRates.filter(rate => 
           rate.lender.toLowerCase().includes(lenderFilter.toLowerCase())
         );
@@ -524,7 +524,7 @@ export function InteractiveRateCalculator({
                   <SelectValue placeholder="All lenders" />
                 </SelectTrigger>
                 <SelectContent className="bg-background border border-input shadow-lg z-50">
-                  <SelectItem value="">All lenders</SelectItem>
+                  <SelectItem value="ALL_LENDERS">All lenders</SelectItem>
                   {Array.from(new Set(allRates.map(rate => rate.lender))).sort().map((lender) => (
                     <SelectItem key={lender} value={lender}>{lender}</SelectItem>
                   ))}
