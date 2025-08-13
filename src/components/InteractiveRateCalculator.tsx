@@ -153,7 +153,9 @@ export function InteractiveRateCalculator({
         rate_types: ['fixed', 'variable']
       };
       
+      console.log('Sending API request:', apiRequest);
       const externalRates = await findBestRates(apiRequest);
+      console.log('Received API response:', externalRates);
       console.log('External API returned rates:', externalRates);
       
       if (!externalRates || !externalRates.rates || externalRates.rates.length === 0) {
