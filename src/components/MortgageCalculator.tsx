@@ -4,18 +4,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { calculateMonthlyPayment, calculateTotalPayment, calculateTotalInterest } from "@/lib/calculator";
 import { DollarSign, Percent, Calendar, RefreshCw } from "lucide-react";
 import { CalculationResults } from "@/components/CalculationResults";
+import { useMortgageCalculatorApi } from "@/hooks/useMortgageCalculatorApi";
 
 export function MortgageCalculator() {
   const [loanAmount, setLoanAmount] = useState<number>(300000);
   const [interestRate, setInterestRate] = useState<number>(4.5);
   const [loanTerm, setLoanTerm] = useState<number>(30);
-  const [monthlyPayment, setMonthlyPayment] = useState<number>(0);
-  const [totalPayment, setTotalPayment] = useState<number>(0);
-  const [totalInterest, setTotalInterest] = useState<number>(0);
-  const [isCalculating, setIsCalculating] = useState(false);
+  
+  const { calculatePayment, isLoading, results, error } = useMortgageCalculatorApi();
 
   // Handle loan amount input
   const handleLoanAmountInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,39 +60,38 @@ export function MortgageCalculator() {
     setLoanTerm(value[0]);
   };
 
-  // Calculate mortgage details automatically with smooth loading animation
-  useEffect(() => {
-    const calculateWithAnimation = async () => {
-      setIsCalculating(true);
-      
-      // Add a small delay to show the animation
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      const monthly = calculateMonthlyPayment(loanAmount, interestRate, loanTerm);
-      setMonthlyPayment(monthly);
-      
-      const total = calculateTotalPayment(monthly, loanTerm);
-      setTotalPayment(total);
-      
-      const interest = calculateTotalInterest(total, loanAmount);
-      setTotalInterest(interest);
-      
-      setIsCalculating(false);
-    };
+  // Calculate mortgage details using API
+  const handleCalculation = async () => {
+    try {
+      await calculatePayment({
+        loan_amount: loanAmount,
+        interest_rate: interestRate,
+        loan_term: loanTerm
+      });
+    } catch (error) {
+      console.error('Calculation failed:', error);
+    }
+  };
 
-    calculateWithAnimation();
+  // Auto-calculate when inputs change with debouncing
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      handleCalculation();
+    }, 500);
+    
+    return () => clearTimeout(timeoutId);
   }, [loanAmount, interestRate, loanTerm]);
 
   return (
-    <div className={`grid gap-6 lg:grid-cols-2 transition-opacity duration-300 ${isCalculating ? 'opacity-50' : 'opacity-100'}`}>
+    <div className={`grid gap-6 lg:grid-cols-2 transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
       <Card className="border-0 shadow-lg animate-fade-in">
         <CardHeader className="bg-primary/5 rounded-t-lg">
           <div className="flex justify-between items-center">
             <div>
               <CardTitle className="text-2xl font-bold">Mortgage Calculator</CardTitle>
-              <CardDescription>Adjust values to see updated payment estimates</CardDescription>
+              <CardDescription>Adjust values to see updated payment estimates with live rates</CardDescription>
             </div>
-            {isCalculating && (
+            {isLoading && (
               <div className="flex items-center gap-2 text-primary animate-fade-in">
                 <RefreshCw className="h-4 w-4 animate-spin" />
                 <span className="text-sm">Calculating...</span>
@@ -204,14 +201,14 @@ export function MortgageCalculator() {
         </CardContent>
       </Card>
 
-      <div className={`transition-opacity duration-300 ${isCalculating ? 'opacity-50' : 'opacity-100'}`}>
+      <div className={`transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
         <CalculationResults
-          monthlyPayment={monthlyPayment}
+          monthlyPayment={results?.monthly_payment || 0}
           loanAmount={loanAmount}
           interestRate={interestRate}
           loanTerm={loanTerm}
-          totalPayment={totalPayment}
-          totalInterest={totalInterest}
+          totalPayment={results?.total_payment || 0}
+          totalInterest={results?.total_interest || 0}
         />
       </div>
     </div>

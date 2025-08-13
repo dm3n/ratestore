@@ -10,46 +10,36 @@ import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Home, Calculator, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAffordabilityCalculatorApi } from "@/hooks/useAffordabilityCalculatorApi";
 
 const AffordabilityCalculator = () => {
   const [annualIncome, setAnnualIncome] = useState(80000);
   const [monthlyDebts, setMonthlyDebts] = useState(500);
   const [downPayment, setDownPayment] = useState(20000);
   const [interestRate, setInterestRate] = useState(5.5);
-  const [isCalculating, setIsCalculating] = useState(false);
-  const [results, setResults] = useState<any>(null);
+  
+  const { calculateAffordability, isLoading, results, error } = useAffordabilityCalculatorApi();
 
-  const calculateAffordability = () => {
-    setIsCalculating(true);
-    
-    // Simulate calculation delay for animation
-    setTimeout(() => {
-      const monthlyIncome = annualIncome / 12;
-      const maxMonthlyPayment = monthlyIncome * 0.28 - monthlyDebts; // 28% rule
-      const totalDebtRatio = (maxMonthlyPayment + monthlyDebts) / monthlyIncome;
-      
-      // Calculate maximum loan amount
-      const monthlyRate = interestRate / 100 / 12;
-      const numPayments = 30 * 12; // 30 years
-      const maxLoanAmount = maxMonthlyPayment * (1 - Math.pow(1 + monthlyRate, -numPayments)) / monthlyRate;
-      
-      const maxHomePrice = maxLoanAmount + downPayment;
-      
-      setResults({
-        maxHomePrice,
-        maxLoanAmount,
-        maxMonthlyPayment,
-        totalDebtRatio,
-        monthlyIncome,
-        affordabilityScore: Math.min(100, (maxHomePrice / 1000000) * 100)
+  // Calculate affordability using API
+  const handleCalculation = async () => {
+    try {
+      await calculateAffordability({
+        annual_income: annualIncome,
+        monthly_debt: monthlyDebts,
+        down_payment: downPayment,
+        interest_rate: interestRate
       });
-      
-      setIsCalculating(false);
-    }, 1000);
+    } catch (error) {
+      console.error('Calculation failed:', error);
+    }
   };
 
   useEffect(() => {
-    calculateAffordability();
+    const timeoutId = setTimeout(() => {
+      handleCalculation();
+    }, 500);
+    
+    return () => clearTimeout(timeoutId);
   }, [annualIncome, monthlyDebts, downPayment, interestRate]);
 
   const formatCurrency = (amount: number) => {
@@ -216,7 +206,7 @@ const AffordabilityCalculator = () => {
                 </CardHeader>
                 <CardContent className="p-6">
                   <AnimatePresence mode="wait">
-                    {isCalculating ? (
+                    {isLoading ? (
                       <motion.div
                         key="loading"
                         initial={{ opacity: 0 }}
@@ -237,7 +227,7 @@ const AffordabilityCalculator = () => {
                       >
                         <div className="text-center">
                           <div className="text-4xl font-bold text-green-600 mb-2">
-                            {formatCurrency(results.maxHomePrice)}
+                            {formatCurrency(results.max_home_price)}
                           </div>
                           <div className="text-lg text-muted-foreground">Maximum Home Price</div>
                         </div>
@@ -245,13 +235,13 @@ const AffordabilityCalculator = () => {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
                             <div className="text-2xl font-bold text-blue-600">
-                              {formatCurrency(results.maxMonthlyPayment)}
+                              {formatCurrency(results.max_monthly_payment)}
                             </div>
                             <div className="text-sm text-muted-foreground">Max Monthly Payment</div>
                           </div>
                           <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg">
                             <div className="text-2xl font-bold text-purple-600">
-                              {formatCurrency(results.maxLoanAmount)}
+                              {formatCurrency(results.max_loan_amount)}
                             </div>
                             <div className="text-sm text-muted-foreground">Max Loan Amount</div>
                           </div>
@@ -259,20 +249,26 @@ const AffordabilityCalculator = () => {
 
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
-                            <span className="text-sm font-medium">Debt-to-Income Ratio</span>
-                            <span className={`text-sm font-bold ${results.totalDebtRatio <= 0.36 ? 'text-green-600' : 'text-red-600'}`}>
-                              {(results.totalDebtRatio * 100).toFixed(1)}%
+                            <span className="text-sm font-medium">Total Debt Service (TDS) Ratio</span>
+                            <span className={`text-sm font-bold ${results.tds_ratio <= 0.44 ? 'text-green-600' : 'text-red-600'}`}>
+                              {(results.tds_ratio * 100).toFixed(1)}%
                             </span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <motion.div
-                              className={`h-2 rounded-full ${results.totalDebtRatio <= 0.36 ? 'bg-green-500' : 'bg-red-500'}`}
+                              className={`h-2 rounded-full ${results.tds_ratio <= 0.44 ? 'bg-green-500' : 'bg-red-500'}`}
                               initial={{ width: 0 }}
-                              animate={{ width: `${Math.min(results.totalDebtRatio * 100, 100)}%` }}
+                              animate={{ width: `${Math.min(results.tds_ratio * 100, 100)}%` }}
                               transition={{ duration: 1, delay: 0.5 }}
                             />
                           </div>
-                          {results.totalDebtRatio > 0.36 && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Gross Debt Service (GDS) Ratio</span>
+                            <span className={`text-sm font-bold ${results.gds_ratio <= 0.39 ? 'text-green-600' : 'text-red-600'}`}>
+                              {(results.gds_ratio * 100).toFixed(1)}%
+                            </span>
+                          </div>
+                          {(results.tds_ratio > 0.44 || results.gds_ratio > 0.39) && (
                             <div className="flex items-center text-amber-600 text-sm">
                               <AlertCircle className="h-4 w-4 mr-1" />
                               Consider reducing debt or increasing income
