@@ -181,7 +181,7 @@ export function InteractiveRateCalculator({
     try {
       // Map transaction type to API format
       const apiTransactionType = transactionType === 'buying' ? 'purchases' : 
-                                transactionType === 'renewing' ? 'renewals' :
+                                transactionType === 'renewals' ? 'renewals' :
                                 transactionType;
 
       const requestData = {
