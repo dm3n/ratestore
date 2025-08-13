@@ -1,5 +1,5 @@
 
-import { ComprehensiveMortgageCalculator } from "@/components/ComprehensiveMortgageCalculator";
+import { MortgageCalculator } from "@/components/MortgageCalculator";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,7 +35,7 @@ const Mortgage = () => {
             <div className="max-w-7xl mx-auto">
               <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
                 <div>
-                  <ComprehensiveMortgageCalculator />
+                  <MortgageCalculator />
                 </div>
                 
                 <div className="space-y-6">
