@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Award, TrendingDown, Clock, CheckCircle, RefreshCw } from "lucide-react";
 import { InteractiveRateCalculator } from "@/components/InteractiveRateCalculator";
-import { useMortgageRates } from "@/hooks/useMortgageRates";
+import { useExternalRateApi } from "@/hooks/useExternalRateApi";
 import { useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -16,12 +16,9 @@ const BestRates = () => {
     rates,
     isLoading,
     lastUpdated,
-    refetch
-  } = useMortgageRates({
-    rateType: 'fixed',
-    term: '5-yr',
-    autoRefresh: true
-  });
+    fetchAllRates,
+    findBestRates
+  } = useExternalRateApi();
 
   // Check if we have a rate to compare from navigation state
   useEffect(() => {
@@ -32,10 +29,14 @@ const BestRates = () => {
 
   // Get the top 3 best rates for display
   const bestRates = rates.slice(0, 3).map((rate, index) => ({
-    lender: rate.lender_name,
-    rate: `${(rate.base_rate * 100).toFixed(2)}%`,
-    term: rate.term.replace('-', ' ').replace('yr', 'Year Fixed'),
-    features: [rate.lender_type === 'bank' ? "Bank rate" : "Alternative lender", rate.prime_discount ? rate.prime_discount : "Competitive rate", rate.transaction_types.includes('buying') ? "Purchase qualified" : "Refinance qualified"],
+    lender: rate.lender,
+    rate: `${rate.rate.toFixed(2)}%`,
+    term: `${rate.term} Year ${rate.rate_type === 'fixed' ? 'Fixed' : 'Variable'}`,
+    features: [
+      "Best available rate",
+      "Verified lender",
+      rate.rate_type === 'fixed' ? "Rate guaranteed" : "Variable rate"
+    ],
     savings: `$${(Math.random() * 20000 + 10000).toFixed(0)} vs. average`,
     special: index === 0 ? "Best Overall" : index === 1 ? "Best for Speed" : "Best Service"
   }));
