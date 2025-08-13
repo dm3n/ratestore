@@ -519,13 +519,17 @@ export function InteractiveRateCalculator({
 
             <div className="space-y-2">
               <Label htmlFor="lender-filter" className="text-sm font-medium">Lender</Label>
-              <Input
-                id="lender-filter"
-                type="text"
-                placeholder="Search by lender..."
-                value={lenderFilter}
-                onChange={(e) => handleInputChange(setLenderFilter, e.target.value)}
-              />
+              <Select value={lenderFilter} onValueChange={setLenderFilter}>
+                <SelectTrigger className="bg-background border border-input z-50">
+                  <SelectValue placeholder="All lenders" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-input shadow-lg z-50">
+                  <SelectItem value="">All lenders</SelectItem>
+                  {Array.from(new Set(allRates.map(rate => rate.lender))).sort().map((lender) => (
+                    <SelectItem key={lender} value={lender}>{lender}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
