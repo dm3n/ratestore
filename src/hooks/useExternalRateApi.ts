@@ -41,7 +41,93 @@ export const useExternalRateApi = () => {
     
     try {
       const response = await mortgageApi.getAllRates() as any;
-      setRates(response.rates || response || []);
+      
+      // Transform the nested API response into flat ExternalRate array
+      const transformedRates: ExternalRate[] = [];
+      
+      if (response.rates) {
+        // Process HELOC rates
+        if (response.rates.heloc) {
+          Object.entries(response.rates.heloc).forEach(([lender, rateData]: [string, any]) => {
+            transformedRates.push({
+              lender,
+              term: "1",
+              rate_type: "variable",
+              rate: rateData.rate,
+              transaction_type: "heloc"
+            });
+          });
+        }
+        
+        // Process purchase rates
+        if (response.rates.purchases) {
+          Object.entries(response.rates.purchases).forEach(([dpRange, sizeData]: [string, any]) => {
+            Object.entries(sizeData).forEach(([sizeRange, termData]: [string, any]) => {
+              Object.entries(termData).forEach(([termKey, rateData]: [string, any]) => {
+                if (rateData && Object.keys(rateData).length > 0) {
+                  Object.entries(rateData).forEach(([lender, rate]: [string, any]) => {
+                    transformedRates.push({
+                      lender,
+                      term: termKey.replace('yr', ''),
+                      rate_type: "fixed",
+                      rate: typeof rate === 'number' ? rate : rate.rate,
+                      transaction_type: "buying",
+                      down_payment_range: dpRange,
+                      mortgage_size: sizeRange
+                    });
+                  });
+                }
+              });
+            });
+          });
+        }
+        
+        // Process refinancing rates
+        if (response.rates.refinancing) {
+          Object.entries(response.rates.refinancing).forEach(([ltvRange, termData]: [string, any]) => {
+            Object.entries(termData).forEach(([termKey, rateData]: [string, any]) => {
+              if (rateData && Object.keys(rateData).length > 0) {
+                Object.entries(rateData).forEach(([lender, rate]: [string, any]) => {
+                  transformedRates.push({
+                    lender,
+                    term: termKey.replace('yr', ''),
+                    rate_type: "fixed",
+                    rate: typeof rate === 'number' ? rate : rate.rate,
+                    transaction_type: "refinancing",
+                    ltv_range: ltvRange
+                  });
+                });
+              }
+            });
+          });
+        }
+        
+        // Process renewal rates
+        if (response.rates.renewals) {
+          Object.entries(response.rates.renewals).forEach(([cmhcStatus, ltvData]: [string, any]) => {
+            Object.entries(ltvData).forEach(([ltvRange, termData]: [string, any]) => {
+              Object.entries(termData).forEach(([termKey, rateData]: [string, any]) => {
+                if (rateData && Object.keys(rateData).length > 0) {
+                  Object.entries(rateData).forEach(([lender, rate]: [string, any]) => {
+                    transformedRates.push({
+                      lender,
+                      term: termKey.replace('yr', ''),
+                      rate_type: "fixed",
+                      rate: typeof rate === 'number' ? rate : rate.rate,
+                      transaction_type: "renewal",
+                      ltv_range: ltvRange,
+                      cmhc_insured: cmhcStatus === 'cmhc_yes'
+                    });
+                  });
+                }
+              });
+            });
+          });
+        }
+      }
+      
+      console.log('Transformed rates:', transformedRates);
+      setRates(transformedRates);
       setLastUpdated(new Date());
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch rates';
