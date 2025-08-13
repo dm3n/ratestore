@@ -13,7 +13,7 @@ export const RateSheetCalculator = () => {
   const { 
     rates: externalRates, 
     isLoading: externalLoading, 
-    lookupRates, 
+    lookupSpecificRates, 
     fetchAllRates,
     getMortgageSizeBracket,
     getDownPaymentRange,
@@ -67,7 +67,18 @@ export const RateSheetCalculator = () => {
     };
 
     // Use external API rates
-    const externalMatches = findBestRates(criteria, 20);
+    const apiRequest = {
+      transaction_type: criteria.transaction_type as "buying" | "renewing" | "refinancing" | "heloc",
+      property_value: criteria.property_value || 500000,
+      down_payment: criteria.property_value ? criteria.property_value * ((criteria.down_payment_percent || 20) / 100) : 100000,
+      province: criteria.province || 'ON',
+      terms: criteria.term ? [String(criteria.term)] : ['2', '3', '5'],
+      rate_types: criteria.rate_type ? [criteria.rate_type] : ['fixed', 'variable'],
+      has_cmhc: criteria.cmhc_insured
+    };
+    
+    const externalResponse = await findBestRates(apiRequest);
+    const externalMatches = externalResponse?.rates || [];
     
     // Filter by lender if specified
     let filteredExternalMatches = externalMatches;

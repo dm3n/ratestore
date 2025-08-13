@@ -53,7 +53,7 @@ export function ComprehensiveMortgageCalculator() {
 
   // Auto-calculate when inputs change
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    const timeoutId = setTimeout(async () => {
       const rate = selectedRate || interestRate;
       
       // Mortgage payment calculation
@@ -97,25 +97,26 @@ export function ComprehensiveMortgageCalculator() {
       });
 
       // Find best rates from external API
-      const criteria: RateLookupCriteria = {
-        transaction_type: "purchase",
-        province: province,
-        term: 5, // Default to 5-year
-        rate_type: "fixed",
-        down_payment_percent: downPaymentPercent,
-        property_value: purchasePrice,
-        loan_amount: loanAmount,
-        ltv: ltv,
-        mortgage_size: getMortgageSizeBracket(loanAmount),
-        cmhc_insured: downPaymentPercent < 20,
-      };
+      try {
+        const apiRequest = {
+          transaction_type: "buying" as const,
+          property_value: purchasePrice,
+          down_payment: downPayment,
+          province: province,
+          terms: ['2', '3', '5'],
+          rate_types: ['fixed', 'variable']
+        };
+        
+        const bestRatesResponse = await findBestRates(apiRequest);
+        const bestRates = bestRatesResponse?.rates || [];
+        setCurrentBestRates(bestRates);
 
-      const bestRates = findBestRates(criteria, 5);
-      setCurrentBestRates(bestRates);
-
-      // Auto-select best rate if available
-      if (bestRates.length > 0 && bestRates[0].rate && !selectedRate) {
-        setSelectedRate(bestRates[0].rate);
+        // Auto-select best rate if available
+        if (bestRates.length > 0 && bestRates[0].rate && !selectedRate) {
+          setSelectedRate(bestRates[0].rate);
+        }
+      } catch (error) {
+        console.error('Error fetching best rates:', error);
       }
     }, 500);
 

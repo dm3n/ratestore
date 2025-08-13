@@ -1,19 +1,8 @@
 import { useState, useEffect } from 'react';
-import { mortgageApi } from '@/services/mortgageApi';
+import { mortgageApi, FindBestRatesRequest, ExternalRate } from '@/services/mortgageApi';
 
-export interface ExternalRate {
-  lender: string;
-  term: string;
-  rate_type: string;
-  rate: number;
-  down_payment_range?: string;
-  ltv_range?: string;
-  mortgage_size?: string;
-  property_type?: string;
-  transaction_type?: string;
-  cmhc_insured?: boolean;
-  province?: string;
-}
+// Re-export ExternalRate from the API service
+export type { ExternalRate } from '@/services/mortgageApi';
 
 export interface RateLookupCriteria {
   transaction_type?: string;
@@ -46,84 +35,38 @@ export const useExternalRateApi = () => {
       const transformedRates: ExternalRate[] = [];
       
       if (response.rates) {
-        // Process HELOC rates
-        if (response.rates.heloc) {
-          Object.entries(response.rates.heloc).forEach(([lender, rateData]: [string, any]) => {
-            transformedRates.push({
-              lender,
-              term: "1",
-              rate_type: "variable",
-              rate: rateData.rate,
-              transaction_type: "heloc"
-            });
-          });
-        }
-        
-        // Process purchase rates
-        if (response.rates.purchases) {
-          Object.entries(response.rates.purchases).forEach(([dpRange, sizeData]: [string, any]) => {
-            Object.entries(sizeData).forEach(([sizeRange, termData]: [string, any]) => {
-              Object.entries(termData).forEach(([termKey, rateData]: [string, any]) => {
-                if (rateData && Object.keys(rateData).length > 0) {
-                  Object.entries(rateData).forEach(([lender, rate]: [string, any]) => {
-                    transformedRates.push({
-                      lender,
-                      term: termKey.replace('yr', ''),
-                      rate_type: "fixed",
-                      rate: typeof rate === 'number' ? rate : rate.rate,
-                      transaction_type: "buying",
-                      down_payment_range: dpRange,
-                      mortgage_size: sizeRange
-                    });
-                  });
-                }
-              });
-            });
-          });
-        }
-        
-        // Process refinancing rates
-        if (response.rates.refinancing) {
-          Object.entries(response.rates.refinancing).forEach(([ltvRange, termData]: [string, any]) => {
-            Object.entries(termData).forEach(([termKey, rateData]: [string, any]) => {
-              if (rateData && Object.keys(rateData).length > 0) {
-                Object.entries(rateData).forEach(([lender, rate]: [string, any]) => {
-                  transformedRates.push({
-                    lender,
-                    term: termKey.replace('yr', ''),
-                    rate_type: "fixed",
-                    rate: typeof rate === 'number' ? rate : rate.rate,
-                    transaction_type: "refinancing",
-                    ltv_range: ltvRange
+        // Process all rate categories from the new API format
+        ['purchases', 'renewals', 'refinancing', 'heloc'].forEach(category => {
+          if (response.rates[category]) {
+            Object.entries(response.rates[category]).forEach(([key, data]: [string, any]) => {
+              if (category === 'heloc') {
+                // HELOC rates have lender directly
+                transformedRates.push({
+                  lender: key,
+                  term: "1",
+                  rate_type: "variable",
+                  rate: data.rate || data,
+                });
+              } else {
+                // Other categories have nested structure
+                Object.entries(data).forEach(([subKey, subData]: [string, any]) => {
+                  Object.entries(subData).forEach(([termKey, rateData]: [string, any]) => {
+                    if (rateData && typeof rateData === 'object') {
+                      Object.entries(rateData).forEach(([lender, rate]: [string, any]) => {
+                        transformedRates.push({
+                          lender,
+                          term: termKey.replace('yr', ''),
+                          rate_type: "fixed",
+                          rate: typeof rate === 'number' ? rate : rate.rate || rate,
+                        });
+                      });
+                    }
                   });
                 });
               }
             });
-          });
-        }
-        
-        // Process renewal rates
-        if (response.rates.renewals) {
-          Object.entries(response.rates.renewals).forEach(([cmhcStatus, ltvData]: [string, any]) => {
-            Object.entries(ltvData).forEach(([ltvRange, termData]: [string, any]) => {
-              Object.entries(termData).forEach(([termKey, rateData]: [string, any]) => {
-                if (rateData && Object.keys(rateData).length > 0) {
-                  Object.entries(rateData).forEach(([lender, rate]: [string, any]) => {
-                    transformedRates.push({
-                      lender,
-                      term: termKey.replace('yr', ''),
-                      rate_type: "fixed",
-                      rate: typeof rate === 'number' ? rate : rate.rate,
-                      transaction_type: "renewal",
-                      ltv_range: ltvRange,
-                      cmhc_insured: cmhcStatus === 'cmhc_yes'
-                    });
-                  });
-                }
-              });
-            });
-          });
-        }
+          }
+        });
       }
       
       console.log('Transformed rates:', transformedRates);
@@ -138,13 +81,41 @@ export const useExternalRateApi = () => {
     }
   };
 
-  const lookupRates = async (criteria: RateLookupCriteria) => {
+  const findBestRates = async (criteria: FindBestRatesRequest) => {
     setIsLoading(true);
     setError(null);
     
     try {
-      const response = await mortgageApi.lookupRates(criteria) as any;
-      return response.rates || response || [];
+      const response = await mortgageApi.findBestRates(criteria);
+      setRates(response.rates);
+      setLastUpdated(new Date());
+      return response;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to find best rates';
+      setError(errorMessage);
+      console.error('Error finding best rates:', err);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const lookupSpecificRates = async (criteria: RateLookupCriteria) => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const lookupData = {
+        transaction_type: criteria.transaction_type || 'buying',
+        property_value: criteria.property_value || 500000,
+        down_payment: criteria.property_value ? criteria.property_value * ((criteria.down_payment_percent || 20) / 100) : 100000,
+        term: String(criteria.term || '5'),
+        rate_type: criteria.rate_type || 'fixed',
+        has_cmhc: criteria.cmhc_insured
+      };
+      
+      const response = await mortgageApi.lookupRates(lookupData);
+      return response.matching_rates || [];
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to lookup rates';
       setError(errorMessage);
@@ -155,20 +126,10 @@ export const useExternalRateApi = () => {
     }
   };
 
-  const findBestRates = (criteria: RateLookupCriteria, limit: number = 10): ExternalRate[] => {
+  const filterLocalRates = (criteria: RateLookupCriteria, limit: number = 10): ExternalRate[] => {
     if (!rates.length) return [];
 
     const filtered = rates.filter(rate => {
-      // Filter by transaction type
-      if (criteria.transaction_type && rate.transaction_type !== criteria.transaction_type) {
-        return false;
-      }
-
-      // Filter by province
-      if (criteria.province && rate.province && rate.province !== 'ALL' && rate.province !== criteria.province) {
-        return false;
-      }
-
       // Filter by term
       if (criteria.term && rate.term !== String(criteria.term)) {
         return false;
@@ -176,11 +137,6 @@ export const useExternalRateApi = () => {
 
       // Filter by rate type
       if (criteria.rate_type && rate.rate_type !== criteria.rate_type) {
-        return false;
-      }
-
-      // Filter by CMHC insurance
-      if (criteria.cmhc_insured !== undefined && rate.cmhc_insured !== criteria.cmhc_insured) {
         return false;
       }
 
@@ -219,8 +175,9 @@ export const useExternalRateApi = () => {
     error,
     lastUpdated,
     fetchAllRates,
-    lookupRates,
     findBestRates,
+    lookupSpecificRates,
+    filterLocalRates,
     getMortgageSizeBracket,
     getDownPaymentRange,
   };

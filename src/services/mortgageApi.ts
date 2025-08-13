@@ -62,7 +62,7 @@ export interface RenewalRequest {
   outstanding_balance: number;
   current_property_value: number;
   current_rate: number;
-  term_years: number;
+  term_years: string;
   rate_type: string;
   has_cmhc: boolean;
 }
@@ -72,6 +72,62 @@ export interface RenewalResponse {
   available_rates: any[];
   monthly_savings: number;
   annual_savings: number;
+}
+
+// New types for the updated API
+export interface FindBestRatesRequest {
+  transaction_type: "buying" | "renewing" | "refinancing" | "heloc";
+  property_value: number;
+  down_payment: number;
+  province: string;
+  terms?: string[];
+  rate_types?: string[];
+  has_cmhc?: boolean;
+}
+
+export interface FindBestRatesResponse {
+  rates: ExternalRate[];
+  rates_by_term: Record<string, Record<string, ExternalRate[]>>;
+  criteria: {
+    ltv: number;
+    down_payment_category: string;
+    mortgage_size: string;
+  };
+  total_rates_found: number;
+  last_updated: string;
+}
+
+export interface RateLookupRequest {
+  transaction_type: string;
+  property_value: number;
+  down_payment: number;
+  term: string;
+  rate_type: string;
+  has_cmhc?: boolean;
+}
+
+export interface RateLookupResponse {
+  matching_rates: ExternalRate[];
+  criteria: {
+    ltv: number;
+    down_payment_category: string;
+    mortgage_size: string;
+  };
+}
+
+export interface ExternalRate {
+  lender: string;
+  term: string;
+  rate_type: string;
+  rate: number;
+  categories?: string[];
+  transaction_type?: string;
+  down_payment_range?: string;
+  ltv_range?: string;
+  mortgage_size?: string;
+  property_type?: string;
+  cmhc_insured?: boolean;
+  province?: string;
 }
 
 export interface CompoundInterestRequest {
@@ -184,8 +240,12 @@ class MortgageApiService {
     return this.makeRequest('/api/rates/all');
   }
 
-  async lookupRates(criteria: any) {
-    return this.makeRequest('/api/rates/lookup', criteria);
+  async findBestRates(data: FindBestRatesRequest): Promise<FindBestRatesResponse> {
+    return this.makeRequest<FindBestRatesResponse>('/api/rates/find-best', data);
+  }
+
+  async lookupRates(data: RateLookupRequest): Promise<RateLookupResponse> {
+    return this.makeRequest<RateLookupResponse>('/api/rates/lookup', data);
   }
 
   async checkHealth() {

@@ -142,10 +142,19 @@ export function InteractiveRateCalculator({
       }
 
       // Get best rates from external API
-      const externalRates = findBestRates(criteria, 50); // Get more rates for filtering
+      const apiRequest = {
+        transaction_type: transactionType as "buying" | "renewing" | "refinancing" | "heloc",
+        property_value: purchasePrice,
+        down_payment: downPayment,
+        province: selectedProvince || 'ON',
+        terms: ['2', '3', '5'],
+        rate_types: ['fixed', 'variable']
+      };
+      
+      const externalRates = await findBestRates(apiRequest);
       console.log('External API returned rates:', externalRates);
       
-      if (!externalRates || externalRates.length === 0) {
+      if (!externalRates || !externalRates.rates || externalRates.rates.length === 0) {
         console.log('No rates found from external API - using sample rates');
         // Add some sample rates when API returns empty
         const sampleRates: ExternalRate[] = [
@@ -164,7 +173,7 @@ export function InteractiveRateCalculator({
       }
 
       // Transform to internal format
-      let transformedRates = externalRates.map(transformExternalRate);
+      let transformedRates = externalRates.rates.map(transformExternalRate);
 
       // Filter by lender if specified
       if (lenderFilter && lenderFilter !== "ALL_LENDERS") {
