@@ -70,11 +70,6 @@ const BestRates = () => {
       ),
     };
   }).sort((a, b) => a.bestRate - b.bestRate);
-
-  // Debug logging
-  console.log('rates from API:', rates);
-  console.log('ratesByTerm:', ratesByTerm);
-  console.log('bestRates after processing:', bestRates);
   const whyBest = [{
     icon: TrendingDown,
     title: "Lowest Rates",
