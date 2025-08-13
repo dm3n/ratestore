@@ -189,7 +189,7 @@ export function InteractiveRateCalculator({
         property_value: purchasePrice,
         down_payment: downPayment,
         province: selectedProvince || 'ON',
-        terms: ['1', '2', '3', '4', '5', '6', '7', '10'],
+        // Don't specify terms - let the API return what's available
         rate_types: ['fixed', 'variable'],
         has_cmhc: downPaymentPercent < 20
       };
@@ -198,6 +198,8 @@ export function InteractiveRateCalculator({
       
       const apiResponse = await callMortgageRateAPI(requestData);
       console.log('API Response:', apiResponse);
+      console.log('API Response rates count:', apiResponse.rates?.length);
+      console.log('API Response sample rates:', apiResponse.rates?.slice(0, 3));
 
       if (!apiResponse.rates || apiResponse.rates.length === 0) {
         console.log('No rates found from API');
@@ -210,6 +212,9 @@ export function InteractiveRateCalculator({
 
       // Transform API rates to internal format
       let transformedRates = apiResponse.rates.map(transformAPIRate);
+      console.log('Transformed rates count:', transformedRates.length);
+      console.log('Transformed rates sample:', transformedRates.slice(0, 3));
+      console.log('Unique terms in transformed rates:', Array.from(new Set(transformedRates.map(rate => rate.term))));
       console.log('Transformed rates:', transformedRates);
 
       // Filter by lender if specified
@@ -271,6 +276,9 @@ export function InteractiveRateCalculator({
         rateGroups[key].push(rate);
       });
 
+      console.log('Rate groups:', Object.keys(rateGroups));
+      console.log('Rate groups detail:', rateGroups);
+
       // Select the best rate for each group (lowest rate)
       const bestRates: RateData[] = [];
       Object.values(rateGroups).forEach(group => {
@@ -278,6 +286,8 @@ export function InteractiveRateCalculator({
         bestRates.push(sortedGroup[0]);
       });
 
+      console.log('Final bestRates count:', bestRates.length);
+      console.log('Final bestRates terms:', bestRates.map(rate => `${rate.term}-${rate.type}`));
       console.log('Final bestRates:', bestRates);
       setRates(bestRates);
       setLastUpdated(new Date());
@@ -333,7 +343,7 @@ export function InteractiveRateCalculator({
     if (termFilter) return [termFilter];
     
     // Get unique terms from current rates - only show if we have actual data
-    const availableTermsFromRates = Array.from(new Set(rates.map(rate => rate.term as string))).sort();
+    const availableTermsFromRates = Array.from(new Set(rates.map(rate => rate.term))).sort() as string[];
     
     // Only return terms if we have actual rates, otherwise return empty array
     return availableTermsFromRates;
