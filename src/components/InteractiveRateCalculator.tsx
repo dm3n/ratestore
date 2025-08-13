@@ -251,6 +251,7 @@ export function InteractiveRateCalculator({
         bestRates.push(sortedGroup[0]); // Add the best rate
       });
 
+      console.log('Final bestRates before setRates:', bestRates);
       setRates(bestRates);
       setLastUpdated(new Date());
     } catch (error) {
