@@ -4,20 +4,15 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calculator, Home, TrendingUp, FileText, BookOpen, Star, Shield, Clock, CheckCircle, ArrowRight, Building, Percent, MapPin, Phone } from "lucide-react";
+import { Calculator, Home, TrendingUp, FileText, BookOpen, Star, Shield, Clock, CheckCircle, ArrowRight, Building, Percent, MapPin, Phone, RefreshCw } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useMortgageRatesApi } from "@/hooks/useMortgageRatesApi";
 
 const Mortgages = () => {
   const navigate = useNavigate();
-
-  const bestRates = [
-    { lender: "Canadian Lender", rate: "3.84%", term: "5-yr Fixed", type: "featured", savings: "Save $12,000" },
-    { lender: "Canadian Lender", rate: "3.95%", term: "5-yr Variable", type: "featured", savings: "Save $8,500" },
-    { lender: "Scotiabank", rate: "4.64%", term: "3-yr Fixed", type: "featured", savings: "Save $5,200" },
-    { lender: "TD Bank", rate: "4.12%", term: "3-yr Fixed", type: "regular" },
-    { lender: "RBC", rate: "4.25%", term: "5-yr Fixed", type: "regular" },
-    { lender: "BMO", rate: "4.18%", term: "5-yr Variable", type: "regular" }
-  ];
+  const { rates, isLoading, error, lastUpdated, fetchRates, getBestRatesByCategory } = useMortgageRatesApi();
+  
+  const { featured, regular } = getBestRatesByCategory();
 
   const quickTools = [
     { title: "Mortgage Calculator", description: "Calculate monthly payments", icon: Calculator, color: "blue", link: "/tools/mortgage-calculator" },
@@ -111,44 +106,89 @@ const Mortgages = () => {
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">Today's Best Rates</h2>
-                <p className="text-xl text-muted-foreground mb-6">Updated every hour • Rates as low as 3.84%</p>
-                <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 px-4 py-1">
-                  <Clock className="h-4 w-4 mr-1" />
-                  Last updated: 2 minutes ago
-                </Badge>
+                <p className="text-xl text-muted-foreground mb-6">
+                  Live rates from Canada's top lenders • {featured.length > 0 && `Rates as low as ${featured[0]?.rate}`}
+                </p>
+                <div className="flex items-center justify-center gap-4">
+                  <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 px-4 py-1">
+                    <Clock className="h-4 w-4 mr-1" />
+                    {lastUpdated ? `Updated ${lastUpdated.toLocaleTimeString()}` : 'Loading...'}
+                  </Badge>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={fetchRates}
+                    disabled={isLoading}
+                  >
+                    <RefreshCw className={`h-4 w-4 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
+                    Refresh
+                  </Button>
+                </div>
               </div>
               
-              <div className="grid md:grid-cols-3 gap-8 mb-16">
-                {bestRates.filter(rate => rate.type === "featured").map((rate, index) => (
-                  <Card key={index} className="relative border-0 shadow-xl bg-gradient-to-br from-white to-primary/5 hover:shadow-2xl transition-all duration-300 group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
-                    <CardHeader className="text-center pb-4 relative">
-                      <Badge className="self-center mb-4 bg-gradient-to-r from-primary to-primary/80 text-white">
-                        <Star className="h-3 w-3 mr-1" />
-                        Featured Rate
-                      </Badge>
-                      <div className="flex items-center justify-center gap-3 mb-4">
-                        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                          <Building className="h-6 w-6 text-primary" />
+              {error && (
+                <div className="text-center mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-600">Error loading rates: {error}</p>
+                  <Button 
+                    variant="outline" 
+                    onClick={fetchRates}
+                    className="mt-4"
+                  >
+                    Try Again
+                  </Button>
+                </div>
+              )}
+              
+              {isLoading && (
+                <div className="grid md:grid-cols-3 gap-8 mb-16">
+                  {[1, 2, 3].map((i) => (
+                    <Card key={i} className="animate-pulse">
+                      <CardHeader className="text-center pb-4">
+                        <div className="w-20 h-6 bg-muted rounded mx-auto mb-4"></div>
+                        <div className="w-32 h-8 bg-muted rounded mx-auto mb-2"></div>
+                        <div className="w-24 h-4 bg-muted rounded mx-auto"></div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="w-full h-12 bg-muted rounded"></div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {!isLoading && !error && (
+                <div className="grid md:grid-cols-3 gap-8 mb-16">
+                  {featured.map((rate, index) => (
+                    <Card key={rate.id} className="relative border-0 shadow-xl bg-gradient-to-br from-white to-primary/5 hover:shadow-2xl transition-all duration-300 group">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
+                      <CardHeader className="text-center pb-4 relative">
+                        <Badge className="self-center mb-4 bg-gradient-to-r from-primary to-primary/80 text-white">
+                          <Star className="h-3 w-3 mr-1" />
+                          Featured Rate
+                        </Badge>
+                        <div className="flex items-center justify-center gap-3 mb-4">
+                          <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                            <Building className="h-6 w-6 text-primary" />
+                          </div>
+                          <span className="font-semibold text-lg">{rate.lender}</span>
                         </div>
-                        <span className="font-semibold text-lg">{rate.lender}</span>
-                      </div>
-                      <div className="text-4xl font-bold text-primary mb-2">{rate.rate}</div>
-                      <div className="text-muted-foreground font-medium">{rate.term}</div>
-                      {rate.savings && (
-                        <div className="mt-3 text-green-600 font-semibold text-sm bg-green-50 rounded-full px-3 py-1">
-                          {rate.savings}
-                        </div>
-                      )}
-                    </CardHeader>
-                    <CardContent className="relative">
-                      <Button className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary font-semibold">
-                        Get This Rate
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                        <div className="text-4xl font-bold text-primary mb-2">{rate.rate}</div>
+                        <div className="text-muted-foreground font-medium">{rate.term}</div>
+                        {rate.savings && (
+                          <div className="mt-3 text-green-600 font-semibold text-sm bg-green-50 rounded-full px-3 py-1">
+                            {rate.savings}
+                          </div>
+                        )}
+                      </CardHeader>
+                      <CardContent className="relative">
+                        <Button className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary font-semibold">
+                          Get This Rate
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
 
               {/* More Rates Table */}
               <Card className="border-0 shadow-lg">
@@ -162,36 +202,61 @@ const Mortgages = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="divide-y">
-                    {bestRates.filter(rate => rate.type === "regular").map((rate, index) => (
-                      <div key={index} className="p-6 hover:bg-muted/30 transition-colors group">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                              <Building className="h-6 w-6 text-primary" />
+                  {isLoading ? (
+                    <div className="divide-y">
+                      {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div key={i} className="p-6 animate-pulse">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 bg-muted rounded-full"></div>
+                              <div>
+                                <div className="w-32 h-6 bg-muted rounded mb-2"></div>
+                                <div className="w-24 h-4 bg-muted rounded"></div>
+                              </div>
                             </div>
-                            <div>
-                              <div className="font-semibold text-lg">{rate.lender}</div>
-                              <div className="text-muted-foreground">{rate.term}</div>
+                            <div className="flex items-center gap-6">
+                              <div className="text-right">
+                                <div className="w-16 h-8 bg-muted rounded mb-2"></div>
+                                <div className="w-20 h-4 bg-muted rounded"></div>
+                              </div>
+                              <div className="w-24 h-10 bg-muted rounded"></div>
                             </div>
-                          </div>
-                          <div className="flex items-center gap-6">
-                            <div className="text-right">
-                              <div className="text-3xl font-bold text-primary">{rate.rate}</div>
-                              <div className="text-sm text-muted-foreground">Annual Rate</div>
-                            </div>
-                            <Button 
-                              variant="outline" 
-                              className="group-hover:bg-primary group-hover:text-white transition-colors"
-                              onClick={() => handleCompareRate(rate)}
-                            >
-                              Compare Rate
-                            </Button>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="divide-y">
+                      {regular.map((rate, index) => (
+                        <div key={rate.id} className="p-6 hover:bg-muted/30 transition-colors group">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                <Building className="h-6 w-6 text-primary" />
+                              </div>
+                              <div>
+                                <div className="font-semibold text-lg">{rate.lender}</div>
+                                <div className="text-muted-foreground">{rate.term}</div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-6">
+                              <div className="text-right">
+                                <div className="text-3xl font-bold text-primary">{rate.rate}</div>
+                                <div className="text-sm text-muted-foreground">Annual Rate</div>
+                              </div>
+                              <Button 
+                                variant="outline" 
+                                className="group-hover:bg-primary group-hover:text-white transition-colors"
+                                onClick={() => handleCompareRate(rate)}
+                              >
+                                Compare Rate
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
