@@ -68,7 +68,7 @@ export const useMortgageRatesApi = () => {
     // Filter for owner-occupied properties and common provinces
     const filtered = rawData.filter(rate => 
       rate.Property_Type === 'Owner Occupied' &&
-      ['ON', 'BC', 'AB', 'QC'].includes(rate.Province) &&
+      ['ONTARIO', 'BRITISH COLUMBIA', 'ALBERTA', 'QUEBEC', 'ON', 'BC', 'AB', 'QC'].includes(rate.Province) &&
       rate.Transaction_Type === 'PURCHASES'
     );
 
@@ -85,7 +85,7 @@ export const useMortgageRatesApi = () => {
       term: formatTerm(rate.Term_Years, rate.Rate_Type),
       type: index < 6 ? 'featured' : 'regular', // First 6 as featured
       savings: index < 3 ? calculateSavings(rate.Interest_Rate_Decimal) : undefined,
-      province: rate.Province,
+      province: rate.Province.length > 2 ? rate.Province.substring(0, 2).toUpperCase() : rate.Province,
       transactionType: rate.Transaction_Type,
       mortgageSize: rate.Mortgage_Size_Range,
       downPaymentRange: rate.Down_Payment_Range
