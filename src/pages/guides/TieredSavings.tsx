@@ -413,7 +413,7 @@ const TieredSavingsGuide = () => {
                       Compare Tiered Accounts
                     </Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  <Button asChild size="lg" variant="ghost" className="border border-white bg-transparent text-white hover:bg-white/10 hover:text-white">
                     <Link to="/tools/tfsa-calculator">
                       Calculate Earnings
                       <ArrowRight className="ml-2 h-4 w-4" />
