@@ -14,16 +14,280 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blog_posts: {
+        Row: {
+          author: string
+          category: string | null
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          featured_image_url: string | null
+          id: string
+          is_featured: boolean | null
+          is_published: boolean | null
+          read_time: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author: string
+          category?: string | null
+          content: string
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          read_time?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string
+          category?: string | null
+          content?: string
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          read_time?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      rate_sheet_rates: {
+        Row: {
+          conditions: string | null
+          created_at: string | null
+          id: string
+          lender: string
+          max_ltv: number | null
+          min_down_payment: number | null
+          product_type: string
+          province: string | null
+          rate: number
+          term: string | null
+          transaction_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          conditions?: string | null
+          created_at?: string | null
+          id?: string
+          lender: string
+          max_ltv?: number | null
+          min_down_payment?: number | null
+          product_type: string
+          province?: string | null
+          rate: number
+          term?: string | null
+          transaction_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          conditions?: string | null
+          created_at?: string | null
+          id?: string
+          lender?: string
+          max_ltv?: number | null
+          min_down_payment?: number | null
+          product_type?: string
+          province?: string | null
+          rate?: number
+          term?: string | null
+          transaction_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      user_accounts: {
+        Row: {
+          account_name: string
+          account_type: string
+          balance: number
+          created_at: string | null
+          id: string
+          institution: string | null
+          interest_rate: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          account_name: string
+          account_type: string
+          balance?: number
+          created_at?: string | null
+          id?: string
+          institution?: string | null
+          interest_rate?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          account_name?: string
+          account_type?: string
+          balance?: number
+          created_at?: string | null
+          id?: string
+          institution?: string | null
+          interest_rate?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_dashboard_stats: {
+        Row: {
+          created_at: string | null
+          emergency_fund: number | null
+          id: string
+          monthly_budget: number | null
+          savings_goal: number | null
+          total_savings: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          emergency_fund?: number | null
+          id?: string
+          monthly_budget?: number | null
+          savings_goal?: number | null
+          total_savings?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          emergency_fund?: number | null
+          id?: string
+          monthly_budget?: number | null
+          savings_goal?: number | null
+          total_savings?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_transactions: {
+        Row: {
+          account_id: string | null
+          amount: number
+          category: string | null
+          created_at: string | null
+          description: string
+          id: string
+          transaction_date: string
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          amount: number
+          category?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          transaction_date: string
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          amount?: number
+          category?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          transaction_date?: string
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_transactions_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      make_user_admin: {
+        Args: { target_user_id: string; user_email: string }
+        Returns: undefined
+      }
+      remove_admin_role: {
+        Args: { target_user_id: string; user_email: string }
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +414,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
