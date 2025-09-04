@@ -124,13 +124,17 @@ const TieredSavingsGuide = () => {
                 Learn strategies to optimize your returns across different balance levels.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
-                  <Calculator className="mr-2 h-4 w-4" />
-                  Calculate My Earnings
+                <Button asChild size="lg" className="bg-white text-blue-700 hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl">
+                  <Link to="/tools/compound-interest-calculator">
+                    <Calculator className="mr-2 h-4 w-4" />
+                    Calculate My Earnings
+                  </Link>
                 </Button>
-                <Button size="lg" variant="ghost" className="border border-white bg-transparent text-white hover:bg-white/10 hover:text-white">
-                  Find Tiered Accounts
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Button asChild size="lg" variant="ghost" className="border border-white bg-transparent text-white hover:bg-white/10 hover:text-white transition-all duration-300">
+                  <Link to="/banking/savings/high-interest">
+                    Find Tiered Accounts
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -407,14 +411,14 @@ const TieredSavingsGuide = () => {
                   Find the best tiered savings accounts and start earning more on your money today.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button asChild size="lg" className="bg-white text-purple-700 hover:bg-purple-50">
+                  <Button asChild size="lg" className="bg-white text-purple-700 hover:bg-purple-50 transition-all duration-300 shadow-lg hover:shadow-xl">
                     <Link to="/banking/savings/compare">
                       <Star className="mr-2 h-4 w-4" />
                       Compare Tiered Accounts
                     </Link>
                   </Button>
-                  <Button asChild size="lg" variant="ghost" className="border border-white bg-transparent text-white hover:bg-white/10 hover:text-white">
-                    <Link to="/tools/tfsa-calculator">
+                  <Button asChild size="lg" variant="ghost" className="border border-white bg-transparent text-white hover:bg-white/10 hover:text-white transition-all duration-300">
+                    <Link to="/tools/compound-interest-calculator">
                       Calculate Earnings
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
