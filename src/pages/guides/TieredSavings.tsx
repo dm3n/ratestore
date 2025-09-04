@@ -128,7 +128,7 @@ const TieredSavingsGuide = () => {
                   <Calculator className="mr-2 h-4 w-4" />
                   Calculate My Earnings
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button size="lg" variant="ghost" className="border border-white bg-transparent text-white hover:bg-white/10 hover:text-white">
                   Find Tiered Accounts
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
