@@ -62,12 +62,13 @@ export function AddTransactionDialog({ open, onOpenChange, onRefresh }: AddTrans
   }, [open, user]);
 
   const fetchAccounts = async () => {
+    if (!user?.id) return;
+    
     try {
       const { data, error } = await supabase
         .from('user_accounts')
         .select('id, account_name, account_type')
-        .eq('user_id', user.id)
-        .eq('is_active', true);
+        .eq('user_id', user.id);
 
       if (error) throw error;
       setAccounts(data || []);

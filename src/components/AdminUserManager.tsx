@@ -85,6 +85,7 @@ export function AdminUserManager() {
   const makeUserAdmin = async (email: string, userId: string) => {
     try {
       const { error } = await supabase.rpc('make_user_admin', {
+        target_user_id: userId,
         user_email: email
       });
 

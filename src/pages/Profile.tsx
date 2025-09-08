@@ -19,7 +19,6 @@ const Profile = () => {
   const [profile, setProfile] = useState({
     email: '',
     full_name: '',
-    avatar_url: '',
   });
 
   useEffect(() => {
@@ -44,14 +43,12 @@ const Profile = () => {
         setProfile({
           email: data.email || user.email || '',
           full_name: data.full_name || user.user_metadata?.full_name || '',
-          avatar_url: data.avatar_url || '',
         });
       } else {
         // Create profile if it doesn't exist
         setProfile({
           email: user.email || '',
           full_name: user.user_metadata?.full_name || '',
-          avatar_url: '',
         });
       }
     } catch (error) {
@@ -73,9 +70,9 @@ const Profile = () => {
         .from('profiles')
         .upsert({
           id: user.id,
+          user_id: user.id,
           email: profile.email,
           full_name: profile.full_name,
-          avatar_url: profile.avatar_url,
           updated_at: new Date().toISOString(),
         });
 

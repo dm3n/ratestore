@@ -160,13 +160,51 @@ export const useCardFinder = () => {
   const findRecommendations = async (preferences: UserPreferences) => {
     setIsLoading(true);
     try {
-      // Fetch all active credit cards
-      const { data: cards, error: cardsError } = await supabase
-        .from('credit_cards')
-        .select('*')
-        .eq('is_active', true);
+      // Mock credit card data since credit_cards table doesn't exist
+      const mockCards = [
+        {
+          id: '1',
+          name: 'Tangerine Money-Back Credit Card',
+          issuer: 'Tangerine Bank',
+          card_type: 'cashback',
+          annual_fee: 0,
+          welcome_bonus_value: 100,
+          welcome_bonus_requirement: 500,
+          cashback_rate_general: 0.5,
+          cashback_rate_grocery: 2.0,
+          cashback_rate_gas: 2.0,
+          cashback_rate_dining: 2.0,
+          cashback_rate_travel: 2.0,
+          features: ['No annual fee', 'Cashback on purchases', 'Online account management'],
+          pros: ['No annual fee', 'Good cashback rates', 'Easy approval'],
+          cons: ['Limited travel benefits'],
+          apply_url: 'https://tangerine.ca/creditcard',
+          credit_score_required: 'good',
+          is_active: true
+        },
+        {
+          id: '2',  
+          name: 'CIBC Dividend Visa Infinite',
+          issuer: 'CIBC',
+          card_type: 'cashback',
+          annual_fee: 99,
+          welcome_bonus_value: 150,
+          welcome_bonus_requirement: 1000,
+          cashback_rate_general: 1.0,
+          cashback_rate_grocery: 4.0,
+          cashback_rate_gas: 2.0,
+          cashback_rate_dining: 2.0,
+          cashback_rate_travel: 2.0,
+          features: ['Mobile device insurance', 'Purchase protection', 'Extended warranty'],
+          pros: ['High grocery cashback', 'Good insurance coverage'],
+          cons: ['Annual fee', 'High income requirement'],
+          apply_url: 'https://cibc.com/creditcard',
+          credit_score_required: 'excellent',
+          is_active: true
+        }
+      ];
 
-      if (cardsError) throw cardsError;
+      const cards = mockCards;
 
       // Calculate match scores for each card and transform to proper types
       const scoredCards = cards.map(card => {
@@ -205,45 +243,9 @@ export const useCardFinder = () => {
         }))
         .slice(0, 5); // Top 5 recommendations
 
-      // Save submission to database
+      // Save submission to database (mock for now)
       const sessionId = user?.id || generateSessionId();
-      const { data: submission, error: submissionError } = await supabase
-        .from('card_finder_submissions')
-        .insert({
-          user_id: user?.id || null,
-          session_id: sessionId,
-          card_purpose: preferences.cardPurpose,
-          date_of_birth: preferences.dateOfBirth.year ? 
-            `${preferences.dateOfBirth.year}-${preferences.dateOfBirth.month.padStart(2, '0')}-${preferences.dateOfBirth.day.padStart(2, '0')}` : null,
-          annual_income_range: preferences.annualIncomeRange,
-          credit_score_range: preferences.creditScoreRange,
-          monthly_spending: preferences.monthlySpending,
-          primary_spending_categories: preferences.primarySpendingCategories,
-          travel_frequency: preferences.travelFrequency,
-          balance_transfer_amount: preferences.balanceTransferAmount,
-          preferred_features: preferences.preferredFeatures,
-          max_annual_fee: preferences.maxAnnualFee,
-          current_cards: preferences.currentCards
-        })
-        .select()
-        .single();
-
-      if (submissionError) throw submissionError;
-
-      // Save recommendations
-      const recommendationsToInsert = rankedCards.map(card => ({
-        submission_id: submission.id,
-        card_id: card.id,
-        match_score: card.match_score,
-        match_reasons: card.match_reasons,
-        rank: card.rank
-      }));
-
-      const { error: recsError } = await supabase
-        .from('card_recommendations')
-        .insert(recommendationsToInsert);
-
-      if (recsError) throw recsError;
+      console.log('Card finder recommendations generated for session:', sessionId);
 
       setRecommendations(rankedCards);
     } catch (error) {
