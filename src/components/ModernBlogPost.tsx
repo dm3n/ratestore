@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Clock, ArrowLeft, Share2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import DOMPurify from 'dompurify';
+import { useState } from "react";
 
 interface BlogPost {
   id: string;
@@ -22,6 +24,37 @@ interface ModernBlogPostProps {
 }
 
 export const ModernBlogPost = ({ post }: ModernBlogPostProps) => {
+  const [email, setEmail] = useState('');
+  const [isValidEmail, setIsValidEmail] = useState(true);
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    setIsValidEmail(newEmail === '' || validateEmail(newEmail));
+  };
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateEmail(email)) {
+      setIsValidEmail(false);
+      return;
+    }
+    // Handle newsletter subscription logic here
+    console.log('Newsletter subscription for:', email);
+  };
+
+  // Sanitize HTML content to prevent XSS attacks
+  const sanitizedContent = DOMPurify.sanitize(post.content, {
+    ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'u', 'ol', 'ul', 'li', 'blockquote', 'a', 'img'],
+    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'target', 'rel'],
+    ALLOW_DATA_ATTR: false
+  });
+
   return (
     <article className="max-w-4xl mx-auto">
       {/* Back to Blog */}
@@ -170,7 +203,7 @@ export const ModernBlogPost = ({ post }: ModernBlogPostProps) => {
           }
         `}</style>
         <div 
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
       </div>
 
@@ -183,16 +216,32 @@ export const ModernBlogPost = ({ post }: ModernBlogPostProps) => {
           <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
             Get the latest financial insights and market analysis delivered to your inbox weekly.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input 
-              type="email" 
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <Button className="bg-slate-900 hover:bg-slate-800 px-6">
+          <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            <div className="flex-1">
+              <input 
+                type="email" 
+                placeholder="Enter your email"
+                value={email}
+                onChange={handleEmailChange}
+                className={`w-full px-4 py-3 rounded-lg border text-slate-900 focus:outline-none focus:ring-2 ${
+                  isValidEmail 
+                    ? 'border-slate-300 focus:ring-blue-500' 
+                    : 'border-red-500 focus:ring-red-500'
+                }`}
+                required
+              />
+              {!isValidEmail && (
+                <p className="text-red-500 text-sm mt-1">Please enter a valid email address</p>
+              )}
+            </div>
+            <Button 
+              type="submit" 
+              className="bg-slate-900 hover:bg-slate-800 px-6"
+              disabled={!email || !isValidEmail}
+            >
               Subscribe
             </Button>
-          </div>
+          </form>
         </div>
       </div>
     </article>

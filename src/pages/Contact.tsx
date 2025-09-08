@@ -7,8 +7,60 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Phone, MapPin, MessageCircle, Clock, Shield, Users } from "lucide-react";
+import { useState } from "react";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newErrors: {[key: string]: string} = {};
+
+    // Validate required fields
+    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!validateEmail(formData.email)) newErrors.email = 'Please enter a valid email address';
+    if (!formData.subject.trim()) newErrors.subject = 'Subject is required';
+    if (!formData.message.trim()) newErrors.message = 'Message is required';
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      // Handle form submission
+      console.log('Contact form submitted:', formData);
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -98,60 +150,105 @@ const Contact = () => {
 
                   <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
                     <CardContent className="p-8 space-y-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
-                          <Input 
-                            id="firstName" 
-                            placeholder="John" 
-                            className="h-12 border-2 focus:border-primary/50 transition-colors"
-                          />
+                      <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
+                            <Input 
+                              id="firstName" 
+                              placeholder="John" 
+                              value={formData.firstName}
+                              onChange={(e) => handleInputChange('firstName', e.target.value)}
+                              className={`h-12 border-2 focus:border-primary/50 transition-colors ${
+                                errors.firstName ? 'border-red-500 focus:border-red-500' : ''
+                              }`}
+                              required
+                            />
+                            {errors.firstName && (
+                              <p className="text-red-500 text-sm">{errors.firstName}</p>
+                            )}
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
+                            <Input 
+                              id="lastName" 
+                              placeholder="Doe" 
+                              value={formData.lastName}
+                              onChange={(e) => handleInputChange('lastName', e.target.value)}
+                              className={`h-12 border-2 focus:border-primary/50 transition-colors ${
+                                errors.lastName ? 'border-red-500 focus:border-red-500' : ''
+                              }`}
+                              required
+                            />
+                            {errors.lastName && (
+                              <p className="text-red-500 text-sm">{errors.lastName}</p>
+                            )}
+                          </div>
                         </div>
+                        
                         <div className="space-y-2">
-                          <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
+                          <Label htmlFor="email" className="text-sm font-medium">Email Address</Label>
                           <Input 
-                            id="lastName" 
-                            placeholder="Doe" 
-                            className="h-12 border-2 focus:border-primary/50 transition-colors"
+                            id="email" 
+                            type="email" 
+                            placeholder="john@example.com" 
+                            value={formData.email}
+                            onChange={(e) => handleInputChange('email', e.target.value)}
+                            className={`h-12 border-2 focus:border-primary/50 transition-colors ${
+                              errors.email ? 'border-red-500 focus:border-red-500' : ''
+                            }`}
+                            required
                           />
+                          {errors.email && (
+                            <p className="text-red-500 text-sm">{errors.email}</p>
+                          )}
                         </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="email" className="text-sm font-medium">Email Address</Label>
-                        <Input 
-                          id="email" 
-                          type="email" 
-                          placeholder="john@example.com" 
-                          className="h-12 border-2 focus:border-primary/50 transition-colors"
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="subject" className="text-sm font-medium">Subject</Label>
-                        <Input 
-                          id="subject" 
-                          placeholder="How can we help you?" 
-                          className="h-12 border-2 focus:border-primary/50 transition-colors"
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="message" className="text-sm font-medium">Message</Label>
-                        <Textarea 
-                          id="message" 
-                          placeholder="Tell us about your financial goals or questions..." 
-                          className="min-h-32 border-2 focus:border-primary/50 transition-colors resize-none"
-                        />
-                      </div>
-                      
-                      <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all">
-                        Send Message
-                      </Button>
-                      
-                      <p className="text-sm text-muted-foreground text-center">
-                        We'll respond within 24 hours during business days
-                      </p>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="subject" className="text-sm font-medium">Subject</Label>
+                          <Input 
+                            id="subject" 
+                            placeholder="How can we help you?" 
+                            value={formData.subject}
+                            onChange={(e) => handleInputChange('subject', e.target.value)}
+                            className={`h-12 border-2 focus:border-primary/50 transition-colors ${
+                              errors.subject ? 'border-red-500 focus:border-red-500' : ''
+                            }`}
+                            required
+                          />
+                          {errors.subject && (
+                            <p className="text-red-500 text-sm">{errors.subject}</p>
+                          )}
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="message" className="text-sm font-medium">Message</Label>
+                          <Textarea 
+                            id="message" 
+                            placeholder="Tell us about your financial goals or questions..." 
+                            value={formData.message}
+                            onChange={(e) => handleInputChange('message', e.target.value)}
+                            className={`min-h-32 border-2 focus:border-primary/50 transition-colors resize-none ${
+                              errors.message ? 'border-red-500 focus:border-red-500' : ''
+                            }`}
+                            required
+                          />
+                          {errors.message && (
+                            <p className="text-red-500 text-sm">{errors.message}</p>
+                          )}
+                        </div>
+                        
+                        <Button 
+                          type="submit"
+                          className="w-full h-12 text-base font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all"
+                        >
+                          Send Message
+                        </Button>
+                        
+                        <p className="text-sm text-muted-foreground text-center">
+                          We'll respond within 24 hours during business days
+                        </p>
+                      </form>
                     </CardContent>
                   </Card>
                 </div>

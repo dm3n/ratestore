@@ -14,6 +14,30 @@ const categories = ["All", "Mortgage News", "Savings", "Credit Cards", "Home Buy
 const Blog = () => {
   const { posts, loading, error, refetch } = useBlogPosts();
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [isNewsletterEmailValid, setIsNewsletterEmailValid] = useState(true);
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleNewsletterEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value;
+    setNewsletterEmail(email);
+    setIsNewsletterEmailValid(email === '' || validateEmail(email));
+  };
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateEmail(newsletterEmail)) {
+      setIsNewsletterEmailValid(false);
+      return;
+    }
+    // Handle newsletter subscription
+    console.log('Newsletter subscription for:', newsletterEmail);
+    setNewsletterEmail('');
+  };
 
   const featuredPost = posts.find(post => post.is_featured) || posts[0];
   const regularPosts = posts.filter(post => post.id !== featuredPost?.id);
@@ -259,16 +283,32 @@ const Blog = () => {
               <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
                 Get weekly insights on rates, market trends, and financial strategies delivered to your inbox.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                <input 
-                  type="email" 
-                  placeholder="Enter your email address"
-                  className="flex-1 px-4 py-3 rounded-lg text-slate-900 font-medium"
-                />
-                <Button className="bg-blue-600 hover:bg-blue-700 px-8 py-3 font-semibold">
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+                <div className="flex-1">
+                  <input 
+                    type="email" 
+                    placeholder="Enter your email address"
+                    value={newsletterEmail}
+                    onChange={handleNewsletterEmailChange}
+                    className={`w-full px-4 py-3 rounded-lg font-medium ${
+                      isNewsletterEmailValid 
+                        ? 'text-slate-900' 
+                        : 'text-slate-900 border-2 border-red-500'
+                    }`}
+                    required
+                  />
+                  {!isNewsletterEmailValid && (
+                    <p className="text-red-300 text-sm mt-1 text-left">Please enter a valid email address</p>
+                  )}
+                </div>
+                <Button 
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-700 px-8 py-3 font-semibold"
+                  disabled={!newsletterEmail || !isNewsletterEmailValid}
+                >
                   Subscribe
                 </Button>
-              </div>
+              </form>
               <p className="text-sm text-slate-400 mt-4">
                 Join 50,000+ Canadians who trust our financial insights
               </p>
