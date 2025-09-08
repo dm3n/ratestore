@@ -29,14 +29,14 @@ interface CreditCard {
   annual_fee: number;
   welcome_bonus_value: number;
   welcome_bonus_requirement: number | null;
-  welcome_bonus_timeframe: number | null;
+  welcome_bonus_timeframe: string | null;
   promotional_offer: string | null;
   cashback_rate_general: number;
   cashback_rate_grocery: number;
   cashback_rate_gas: number;
   cashback_rate_dining: number;
   cashback_rate_travel: number;
-  points_per_dollar: number;
+  points_per_dollar: number | null;
   rewards_program: string | null;
   features: string[];
   pros: string[];

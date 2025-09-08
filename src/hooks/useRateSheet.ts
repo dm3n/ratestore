@@ -3,23 +3,16 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type RateSheetRate = {
   id?: string;
-  active: boolean;
-  product_type: string; // e.g., 'mortgage', 'heloc'
-  transaction_type: "buying" | "renewing" | "refinancing" | "heloc" | string;
-  has_insurance: boolean;
-  amortization_max_years: number; // default 25
-  term_years: number | null; // null for HELOC
-  rate_type: "fixed" | "variable" | null;
-  rate: number; // decimal e.g., 0.049
-  province: string; // e.g., 'ON'
-  bracket_type: "ltv" | "down_payment" | string;
-  bracket_min: number | null; // decimal 0-1
-  bracket_max: number | null; // decimal 0-1
-  occupancy: "owner_occupied" | "rental" | string;
-  mortgage_size_bracket?: string | null;
-  lender?: string | null;
-  notes?: string | null;
+  conditions?: string | null;
   created_at?: string;
+  lender: string;
+  max_ltv?: number | null;
+  min_down_payment?: number | null;
+  product_type: string;
+  province?: string | null;
+  rate: number;
+  term?: string | null;
+  transaction_type: string;
   updated_at?: string;
 };
 
@@ -45,9 +38,6 @@ export function useRateSheet() {
   const fetchRates = async (filters?: Partial<{
     province: string;
     transaction_type: string;
-    active: boolean;
-    rate_type: string;
-    has_insurance: boolean;
   }>) => {
     setIsLoading(true);
     setError(null);
@@ -57,12 +47,8 @@ export function useRateSheet() {
         .select("*")
         .order("rate", { ascending: true });
 
-      if (filters?.active !== undefined) query = query.eq("active", filters.active);
-      else query = query.eq("active", true);
       if (filters?.province) query = query.eq("province", filters.province);
       if (filters?.transaction_type) query = query.eq("transaction_type", filters.transaction_type);
-      if (filters?.rate_type) query = query.eq("rate_type", filters.rate_type);
-      if (filters?.has_insurance !== undefined) query = query.eq("has_insurance", filters.has_insurance);
 
       const { data, error } = await query;
       if (error) throw error;
@@ -83,12 +69,23 @@ export function useRateSheet() {
   const upsertRate = async (row: RateSheetRate) => {
     const { data, error } = await supabase
       .from("rate_sheet_rates")
-      .upsert(row)
+      .upsert({
+        id: row.id,
+        conditions: row.conditions,
+        lender: row.lender,
+        max_ltv: row.max_ltv,
+        min_down_payment: row.min_down_payment,
+        product_type: row.product_type,
+        province: row.province,
+        rate: row.rate,
+        term: row.term,
+        transaction_type: row.transaction_type,
+      })
       .select("*")
       .single();
     if (error) throw error;
     await fetchRates();
-    return data as RateSheetRate;
+    return data;
   };
 
   const removeRate = async (id: string) => {
@@ -100,26 +97,12 @@ export function useRateSheet() {
   const findMatches = (req: RateMatchRequirements) => {
     const loanAmount = Math.max(0, req.propertyValue - req.downPayment);
     const ltv = req.propertyValue > 0 ? loanAmount / req.propertyValue : 0;
-    const dpct = req.propertyValue > 0 ? req.downPayment / req.propertyValue : 0;
 
     const filtered = rates.filter((r) => {
-      if (!r.active) return false;
       if (req.province && r.province !== req.province && r.province !== "ALL" && r.province !== "All") return false;
       if (r.transaction_type !== req.transactionType) return false;
-      if (req.termYears != null && r.term_years != null && r.term_years !== req.termYears) return false;
-      if (req.rateType && req.rateType !== "any" && r.rate_type && r.rate_type !== req.rateType) return false;
-      if (req.hasInsurance !== undefined && r.has_insurance !== req.hasInsurance) return false;
-      if (req.amortizationYears && r.amortization_max_years && r.amortization_max_years < req.amortizationYears) return false;
-      if (req.occupancy && r.occupancy && r.occupancy !== req.occupancy) return false;
-
-      // Bracket matching
-      if (r.bracket_type === "ltv") {
-        if (r.bracket_min != null && ltv < Number(r.bracket_min)) return false;
-        if (r.bracket_max != null && ltv > Number(r.bracket_max)) return false;
-      } else if (r.bracket_type === "down_payment") {
-        if (r.bracket_min != null && dpct < Number(r.bracket_min)) return false;
-        if (r.bracket_max != null && dpct > Number(r.bracket_max)) return false;
-      }
+      if (r.max_ltv != null && ltv > Number(r.max_ltv)) return false;
+      if (r.min_down_payment != null && req.downPayment < Number(r.min_down_payment)) return false;
 
       return true;
     });

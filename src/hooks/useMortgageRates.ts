@@ -61,8 +61,8 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
       
       if (options.term) {
         // map term like '5-yr' => number 5
-        const years = Number((options.term || '').split('-')[0]);
-        if (!isNaN(years)) query = query.eq('term_years', years);
+        // Use string matching for term
+        if (options.term) query = query.eq('term', options.term);
       }
       
       if (options.minDownPayment) {
@@ -84,11 +84,11 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
         id: row.id,
         lender_name: row.lender || 'Lender',
         lender_type: ['RBC','TD','Scotiabank','BMO','CIBC'].some((b) => (row.lender || '').toLowerCase().includes(b.toLowerCase())) ? 'bank' : 'lender',
-        rate_type: row.rate_type,
-        term: row.term_years ? `${row.term_years}-yr` : 'Open',
+        rate_type: null,
+        term: row.term || 'Open',
         base_rate: Number(row.rate),
-        min_down_payment: row.bracket_type === 'down_payment' ? Number(row.bracket_min ?? 0) : 0,
-        max_loan_to_value: row.bracket_type === 'ltv' ? Number(row.bracket_max ?? 1) : 1,
+        min_down_payment: Number(row.min_down_payment ?? 0),
+        max_loan_to_value: Number(row.max_ltv ?? 1),
         transaction_types: row.transaction_type ? [row.transaction_type] : [],
         prime_discount: null,
         is_active: !!row.active,
