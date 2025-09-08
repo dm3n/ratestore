@@ -43,7 +43,6 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
       let query = supabase
         .from('rate_sheet_rates')
         .select('*')
-        .eq('active', true)
         .order('rate', { ascending: true });
 
       // Apply filters based on options
@@ -56,7 +55,8 @@ export function useMortgageRates(options: UseMortgageRatesOptions = {}) {
       }
       
       if (options.rateType) {
-        query = query.eq('rate_type', options.rateType);
+        // Skip rate_type filtering since it's not in the current schema
+        console.log('Rate type filtering requested but not implemented:', options.rateType);
       }
       
       if (options.term) {
