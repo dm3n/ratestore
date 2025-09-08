@@ -1,4 +1,4 @@
-project_id = "rwbssjijeghdrtumlwoq"
+project_id = "dffrzsoashvqicxsvdqx"
 
 [functions.chat-groq]
 verify_jwt = false
