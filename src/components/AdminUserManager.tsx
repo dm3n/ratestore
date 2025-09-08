@@ -109,11 +109,10 @@ export function AdminUserManager() {
 
   const removeAdminRole = async (userId: string, email: string) => {
     try {
-      const { error } = await supabase
-        .from('user_roles')
-        .delete()
-        .eq('user_id', userId)
-        .eq('role', 'admin');
+      const { error } = await supabase.rpc('remove_admin_role', {
+        target_user_id: userId,
+        user_email: email
+      });
 
       if (error) throw error;
 

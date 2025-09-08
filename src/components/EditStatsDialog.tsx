@@ -45,8 +45,6 @@ export function EditStatsDialog({ open, onOpenChange, stats, onRefresh }: EditSt
 
     setLoading(true);
     try {
-      console.log('Updating dashboard stats for user:', user.id);
-      console.log('Form data:', formData);
 
       // Use upsert to either update existing record or create new one
       const { data, error } = await supabase
