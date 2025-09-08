@@ -99,12 +99,20 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
     setIsLoading(true);
 
     try {
+      console.log('Attempting to invoke chat-groq function...');
       const { data, error } = await supabase.functions.invoke('chat-groq', {
         body: { message: textToSend }
       });
 
+      console.log('Function response:', { data, error });
+
       if (error) {
+        console.error('Supabase function error:', error);
         throw error;
+      }
+
+      if (!data || !data.response) {
+        throw new Error('Invalid response format from server');
       }
 
       const aiMessage: Message = {
@@ -117,9 +125,24 @@ export function Chatbot({ isOpen, onClose }: ChatbotProps) {
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
+      
+      let errorText = "I apologize, but I'm having trouble connecting right now.";
+      
+      // Provide more specific error messages based on the error type
+      if (error && typeof error === 'object' && 'message' in error) {
+        const errorMessage = error.message as string;
+        if (errorMessage.includes('GROQ API key')) {
+          errorText = "It looks like the AI service needs to be configured. Please contact support.";
+        } else if (errorMessage.includes('Failed to fetch')) {
+          errorText = "Unable to connect to the AI service. Please check your internet connection and try again.";
+        } else if (errorMessage.includes('timeout') || errorMessage.includes('network')) {
+          errorText = "The request timed out. Please try again in a moment.";
+        }
+      }
+      
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
+        text: errorText + " If the problem persists, please try refreshing the page.",
         isUser: false,
         timestamp: new Date()
       };
