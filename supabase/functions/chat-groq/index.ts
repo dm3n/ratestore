@@ -2,7 +2,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const groqApiKey = Deno.env.get('GROQ');
+const groqApiKey = Deno.env.get('GROQ_API_KEY') || Deno.env.get('GROQ');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -16,6 +16,12 @@ serve(async (req) => {
   }
 
   try {
+    console.log('GROQ API Key available:', !!groqApiKey);
+    
+    if (!groqApiKey) {
+      throw new Error('GROQ API key not found in environment variables');
+    }
+    
     const { message } = await req.json();
 
     const systemPrompt = `You are a professional financial assistant for RateStore.ca, a Canadian financial comparison platform. You provide helpful, accurate, and professional advice about:
