@@ -164,7 +164,6 @@ export function InteractiveRateCalculator({
             <div>
               <CardTitle className="text-xl lg:text-2xl font-bold">Find Your Best Rate</CardTitle>
               <p className="text-muted-foreground mt-1">
-                Live rates updated from our external rate database
                 {isLoading && (
                   <span className="inline-flex items-center ml-2 text-primary">
                     <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
