@@ -22,17 +22,57 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        
+        // Create profile for new users (including Google OAuth)
+        if (event === 'SIGNED_IN' && session?.user) {
+          const { data: existingProfile } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('user_id', session.user.id)
+            .single();
+            
+          if (!existingProfile) {
+            await supabase
+              .from('profiles')
+              .insert({
+                user_id: session.user.id,
+                full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email,
+                email: session.user.email,
+              });
+          }
+        }
+        
         setLoading(false);
       }
     );
 
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      // Create profile for existing sessions (on app load)
+      if (session?.user) {
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('user_id', session.user.id)
+          .single();
+          
+        if (!existingProfile) {
+          await supabase
+            .from('profiles')
+            .insert({
+              user_id: session.user.id,
+              full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email,
+              email: session.user.email,
+            });
+        }
+      }
+      
       setLoading(false);
     });
 
