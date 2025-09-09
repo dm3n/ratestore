@@ -5,7 +5,7 @@ const EXTERNAL_RATES_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOi
 
 export const externalRatesClient = createClient(EXTERNAL_RATES_URL, EXTERNAL_RATES_ANON_KEY);
 
-// City to Province mapping
+// City to Province mapping - EXACT mapping as specified by business logic
 export const cityProvinceMap = {
   'Victoria': 'BC',
   'Edmonton': 'AB',
@@ -45,11 +45,19 @@ export interface ExternalRateData {
 export type TransactionType = 'purchase' | 'refinance' | 'renewal' | 'heloc';
 
 export const getTableName = (transactionType: TransactionType): string => {
-  const tableName = `rate_store_${transactionType}`;
+  // Business logic: Fixed mapping of transaction types to tables
+  const mapping = {
+    purchase: 'rate_store_purchase',
+    refinance: 'rate_store_refinance', 
+    renewal: 'rate_store_renewal',
+    heloc: 'rate_store_heloc'
+  };
+  
+  const tableName = mapping[transactionType];
   console.log('🗃️ [getTableName] Mapping transaction type to table:', {
     transactionType,
     tableName,
-    availableTables: ['rate_store_purchase', 'rate_store_refinance', 'rate_store_renewal', 'rate_store_heloc']
+    availableTables: Object.values(mapping)
   });
   return tableName;
 };

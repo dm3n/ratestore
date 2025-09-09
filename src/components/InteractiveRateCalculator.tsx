@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Home, Building2, RefreshCw, ChevronDown, ChevronUp, HelpCircle, AlertTriangle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useExternalRates, type RateFilters } from "@/hooks/useExternalRates";
+import { useExternalRatesOptimized } from "@/hooks/useExternalRatesOptimized";
 
 interface InteractiveRateCalculatorProps {
   defaultTransactionType?: 'purchase' | 'refinance' | 'renewal' | 'heloc';
@@ -41,23 +41,29 @@ export function InteractiveRateCalculator({
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   // Build filters for external rates hook
-  const rateFilters: RateFilters = {
+  const rateFilters = {
     transactionType,
-    province: selectedProvince as any,
-    term: selectedTerm,
-    amortization
+    province: selectedProvince,
+    city: 'All', // Default to all cities
+    term: transactionType === 'heloc' ? undefined : selectedTerm,
+    amortization: transactionType === 'heloc' ? undefined : amortization
   };
 
   console.log('🔧 [InteractiveRateCalculator] Current rate filters:', rateFilters);
 
-  const { rates, isLoading, error, lastUpdated, bestRate, bigBankRates, alternativeLenderRates, refetch } = useExternalRates(rateFilters);
+  const { rates, isLoading, error, refetch } = useExternalRatesOptimized(rateFilters);
+
+  // Calculate derived values from rates
+  const bestRate = rates.length > 0 ? rates[0] : null;
+  const bigBankRates = rates.filter(rate => rate.lender.includes('RBC') || rate.lender.includes('TD') || rate.lender.includes('BMO') || rate.lender.includes('Scotiabank') || rate.lender.includes('CIBC'));
+  const alternativeLenderRates = rates.filter(rate => !bigBankRates.some(bank => bank.id === rate.id));
+  const lastUpdated = new Date();
 
   console.log('📊 [InteractiveRateCalculator] Hook results:', {
     ratesCount: rates.length,
     isLoading,
     error,
-    lastUpdated,
-    bestRate: bestRate ? `${bestRate.lender} - ${bestRate.rate}%` : 'None',
+    bestRate: bestRate ? `${bestRate.lender} - ${bestRate.rate}` : 'None',
     bigBankCount: bigBankRates.length,
     altLenderCount: alternativeLenderRates.length
   });
@@ -98,12 +104,13 @@ export function InteractiveRateCalculator({
     setDownPayment(Math.round((validPercent / 100) * purchasePrice));
   };
 
-  // Get available terms from current rates (convert months to years for display)
+  // Get available terms - need to extract from formatted rates
   const getAvailableTerms = (): Array<{ value: number; label: string }> => {
     if (termFilter) return [{ value: parseInt(termFilter) * 12, label: `${termFilter} Year` }];
     
-    const uniqueTermsMonths = Array.from(new Set(rates.map(rate => rate.term))).sort((a, b) => a - b);
-    return uniqueTermsMonths.map(months => ({
+    // For now, return standard terms since rates are formatted strings
+    const standardTerms = [12, 24, 36, 48, 60, 84, 120]; // months
+    return standardTerms.map(months => ({
       value: months,
       label: months >= 12 ? `${Math.floor(months / 12)} Year` : `${months} Months`
     }));
@@ -126,7 +133,7 @@ export function InteractiveRateCalculator({
     >
       <div className="text-center space-y-2">
         <div className={`${isAdditional ? 'text-xl' : 'text-2xl md:text-3xl'} font-bold text-primary`}>
-          {rate.rate.toFixed(2)}%
+          {rate.rate}
         </div>
       </div>
       
@@ -141,7 +148,7 @@ export function InteractiveRateCalculator({
         </div>
         
         <div className="text-center text-xs text-muted-foreground mb-2">
-          {rate.termDisplay} • {rate.type}
+          {rate.term} • {rate.type}
         </div>
         
         <div className="flex flex-col gap-2">
@@ -389,9 +396,9 @@ export function InteractiveRateCalculator({
                     <h3 className="text-lg font-semibold text-green-800 mb-2">Best Rate Found</h3>
                     <div className="flex justify-between items-center">
                       <div>
-                        <span className="text-2xl font-bold text-green-700">{bestRate.rate.toFixed(2)}%</span>
+                        <span className="text-2xl font-bold text-green-700">{bestRate.rate}</span>
                         <span className="ml-2 text-green-600">from {bestRate.lender}</span>
-                        <div className="text-sm text-green-600">{bestRate.termDisplay} • {bestRate.type}</div>
+                        <div className="text-sm text-green-600">{bestRate.term} • {bestRate.type}</div>
                       </div>
                       <Button className="bg-green-600 hover:bg-green-700 text-white">
                         Apply Now
@@ -406,9 +413,9 @@ export function InteractiveRateCalculator({
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {bigBankRates.slice(0, 3).map((rate) => (
                         <div key={rate.id} className="bg-white p-3 rounded border">
-                          <div className="text-lg font-bold text-blue-700">{rate.rate.toFixed(2)}%</div>
+                          <div className="text-lg font-bold text-blue-700">{rate.rate}</div>
                           <div className="text-sm text-blue-600">{rate.lender}</div>
-                          <div className="text-xs text-blue-500">{rate.termDisplay}</div>
+                          <div className="text-xs text-blue-500">{rate.term}</div>
                         </div>
                       ))}
                     </div>
@@ -421,9 +428,9 @@ export function InteractiveRateCalculator({
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {alternativeLenderRates.slice(0, 3).map((rate) => (
                         <div key={rate.id} className="bg-white p-3 rounded border">
-                          <div className="text-lg font-bold text-purple-700">{rate.rate.toFixed(2)}%</div>
+                          <div className="text-lg font-bold text-purple-700">{rate.rate}</div>
                           <div className="text-sm text-purple-600">{rate.lender}</div>
-                          <div className="text-xs text-purple-500">{rate.termDisplay}</div>
+                          <div className="text-xs text-purple-500">{rate.term}</div>
                         </div>
                       ))}
                     </div>
