@@ -5,12 +5,8 @@ export interface RateFilters {
   transactionType: TransactionType;
   province?: Province;
   city?: string;
-  term?: number; // in months
-  amortization?: number; // in years
-  isOwnerOccupied?: boolean;
-  isInsured?: boolean;
-  isBigBank?: boolean;
-  rateType?: 'fixed' | 'variable' | 'all';
+  term?: number; // in months - ignored for HELOC
+  amortization?: number; // in years - ignored for HELOC
 }
 
 export interface FormattedExternalRate {
@@ -66,34 +62,19 @@ export function useExternalRates(filters: RateFilters) {
         console.log('🏙️ [useExternalRates] Added city filter:', filters.city);
       }
       
-      if (filters.term) {
-        query = query.eq('Term', filters.term);
-        console.log('📅 [useExternalRates] Added term filter:', filters.term, 'months');
-      }
-      
-      if (filters.amortization) {
-        query = query.eq('Amortization', filters.amortization);
-        console.log('⏰ [useExternalRates] Added amortization filter:', filters.amortization, 'years');
-      }
-      
-      if (filters.isOwnerOccupied !== undefined) {
-        query = query.eq('IsOwnerOccupied', filters.isOwnerOccupied ? 1 : 0);
-        console.log('🏠 [useExternalRates] Added owner occupied filter:', filters.isOwnerOccupied);
-      }
-      
-      if (filters.isInsured !== undefined) {
-        query = query.eq('IsInsured', filters.isInsured ? 1 : 0);
-        console.log('🛡️ [useExternalRates] Added insurance filter:', filters.isInsured);
-      }
-      
-      if (filters.isBigBank !== undefined) {
-        query = query.eq('IsBigBank', filters.isBigBank ? 1 : 0);
-        console.log('🏦 [useExternalRates] Added big bank filter:', filters.isBigBank);
-      }
-      
-      if (filters.rateType && filters.rateType !== 'all') {
-        query = query.ilike('Type', `%${filters.rateType}%`);
-        console.log('📈 [useExternalRates] Added rate type filter:', filters.rateType);
+      // For HELOC, don't filter by term or amortization
+      if (filters.transactionType !== 'heloc') {
+        if (filters.term) {
+          query = query.eq('Term', filters.term);
+          console.log('📅 [useExternalRates] Added term filter:', filters.term, 'months');
+        }
+        
+        if (filters.amortization) {
+          query = query.eq('Amortization', filters.amortization);
+          console.log('⏰ [useExternalRates] Added amortization filter:', filters.amortization, 'years');
+        }
+      } else {
+        console.log('💰 [useExternalRates] HELOC transaction - skipping term and amortization filters');
       }
 
       console.log('📡 [useExternalRates] Executing Supabase query...');
@@ -104,12 +85,8 @@ export function useExternalRates(filters: RateFilters) {
         filters: {
           province: filters.province,
           city: filters.city,
-          term: filters.term,
-          amortization: filters.amortization,
-          isOwnerOccupied: filters.isOwnerOccupied,
-          isInsured: filters.isInsured,
-          isBigBank: filters.isBigBank,
-          rateType: filters.rateType
+          term: filters.transactionType !== 'heloc' ? filters.term : 'N/A (HELOC)',
+          amortization: filters.transactionType !== 'heloc' ? filters.amortization : 'N/A (HELOC)'
         }
       });
       
@@ -119,12 +96,12 @@ export function useExternalRates(filters: RateFilters) {
       
       if (filters.province) whereConditions.push(`Province = '${filters.province}'`);
       if (filters.city) whereConditions.push(`City = '${filters.city}'`);
-      if (filters.term) whereConditions.push(`Term = ${filters.term}`);
-      if (filters.amortization) whereConditions.push(`Amortization = ${filters.amortization}`);
-      if (filters.isOwnerOccupied !== undefined) whereConditions.push(`IsOwnerOccupied = ${filters.isOwnerOccupied ? 1 : 0}`);
-      if (filters.isInsured !== undefined) whereConditions.push(`IsInsured = ${filters.isInsured ? 1 : 0}`);
-      if (filters.isBigBank !== undefined) whereConditions.push(`IsBigBank = ${filters.isBigBank ? 1 : 0}`);
-      if (filters.rateType && filters.rateType !== 'all') whereConditions.push(`Type ILIKE '%${filters.rateType}%'`);
+      
+      // Only add term and amortization filters for non-HELOC transactions
+      if (filters.transactionType !== 'heloc') {
+        if (filters.term) whereConditions.push(`Term = ${filters.term}`);
+        if (filters.amortization) whereConditions.push(`Amortization = ${filters.amortization}`);
+      }
       
       if (whereConditions.length > 0) {
         sqlQuery += ` WHERE ${whereConditions.join(' AND ')}`;
@@ -206,10 +183,6 @@ export function useExternalRates(filters: RateFilters) {
     filters.city,
     filters.term,
     filters.amortization,
-    filters.isOwnerOccupied,
-    filters.isInsured,
-    filters.isBigBank,
-    filters.rateType,
   ]);
 
   const bestRate = useMemo(() => {

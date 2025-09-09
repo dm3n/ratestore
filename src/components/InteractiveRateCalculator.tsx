@@ -48,11 +48,7 @@ export function InteractiveRateCalculator({
     province: selectedProvince,
     city: selectedCity || undefined,
     term: selectedTerm,
-    amortization,
-    isOwnerOccupied: true,
-    isInsured: downPaymentPercent < 20,
-    isBigBank: activeTab === "best-bank" ? true : undefined,
-    rateType: "all"
+    amortization
   };
 
   console.log('🔧 [InteractiveRateCalculator] Current rate filters:', rateFilters);
@@ -323,6 +319,16 @@ export function InteractiveRateCalculator({
 
           {/* Additional filters */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {transactionType === 'heloc' && (
+              <div className="md:col-span-3 mb-4">
+                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                  <p className="text-sm text-blue-800">
+                    <strong>Note:</strong> HELOC rates are not filtered by Term or Amortization as these don't apply to credit lines.
+                  </p>
+                </div>
+              </div>
+            )}
+            
             <div className="space-y-2">
               <Label htmlFor="city">City (Optional)</Label>
               <Select value={selectedCity || "all"} onValueChange={(value) => setSelectedCity(value === "all" ? "" : value)}>
@@ -340,9 +346,13 @@ export function InteractiveRateCalculator({
 
             <div className="space-y-2">
               <Label htmlFor="term">Term (Optional)</Label>
-              <Select value={selectedTerm?.toString() || "all"} onValueChange={(value) => setSelectedTerm(value === "all" ? undefined : parseInt(value))}>
+              <Select 
+                value={selectedTerm?.toString() || "all"} 
+                onValueChange={(value) => setSelectedTerm(value === "all" ? undefined : parseInt(value))}
+                disabled={transactionType === 'heloc'}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select term" />
+                  <SelectValue placeholder={transactionType === 'heloc' ? "N/A for HELOC" : "Select term"} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All terms</SelectItem>
@@ -357,9 +367,13 @@ export function InteractiveRateCalculator({
 
             <div className="space-y-2">
               <Label htmlFor="amortization">Amortization (Years)</Label>
-              <Select value={amortization.toString()} onValueChange={(value) => setAmortization(parseInt(value))}>
+              <Select 
+                value={amortization.toString()} 
+                onValueChange={(value) => setAmortization(parseInt(value))}
+                disabled={transactionType === 'heloc'}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select amortization" />
+                  <SelectValue placeholder={transactionType === 'heloc' ? "N/A for HELOC" : "Select amortization"} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="20">20 Years</SelectItem>

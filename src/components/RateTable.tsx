@@ -21,8 +21,7 @@ export function RateTable({
   const { rates, isLoading, error, lastUpdated } = useExternalRates({
     transactionType,
     province: province as any,
-    term: termFilter,
-    rateType: "all"
+    term: termFilter
   });
 
   if (error) {
