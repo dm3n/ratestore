@@ -93,7 +93,7 @@ const FiveYearVariable = () => {
                 </p>
               </div>
               <InteractiveRateCalculator 
-                defaultTransactionType="buying" 
+                defaultTransactionType="purchase"
                 termFilter="5-yr"
               />
             </div>

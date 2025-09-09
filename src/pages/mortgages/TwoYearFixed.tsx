@@ -93,7 +93,7 @@ const TwoYearFixed = () => {
                 </p>
               </div>
               <InteractiveRateCalculator 
-                defaultTransactionType="buying" 
+                defaultTransactionType="purchase"
                 termFilter="2-yr"
               />
             </div>

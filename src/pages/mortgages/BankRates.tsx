@@ -111,7 +111,7 @@ const BankRates = () => {
               </div>
               
               <InteractiveRateCalculator 
-                defaultTransactionType="buying"
+                defaultTransactionType="purchase"
                 termFilter="5-yr"
               />
 
