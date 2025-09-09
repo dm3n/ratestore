@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, Mail } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 const Auth = () => {
@@ -18,7 +18,9 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const [showEmailVerificationMessage, setShowEmailVerificationMessage] = useState(false);
+  const [signupEmail, setSignupEmail] = useState('');
+  const { signIn, signUp, resendConfirmation } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -39,7 +41,8 @@ const Auth = () => {
               description: 'Please check your email and verify your account before signing in.',
               variant: 'destructive',
             });
-            navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+            setSignupEmail(email);
+            setShowEmailVerificationMessage(true);
           } else if (result.error.message.includes('Invalid login credentials')) {
             toast({
               title: 'Invalid Credentials', 
@@ -69,10 +72,11 @@ const Auth = () => {
           if (result.error.message.includes('User already registered')) {
             toast({
               title: 'Account Already Exists',
-              description: 'An account with this email already exists. Please sign in or verify your email.',
+              description: 'An account with this email already exists. Please check your inbox for the verification email.',
               variant: 'destructive',
             });
-            navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+            setSignupEmail(email);
+            setShowEmailVerificationMessage(true);
           } else {
             toast({
               title: 'Sign Up Error',
@@ -83,10 +87,11 @@ const Auth = () => {
         } else if (result.needsVerification) {
           // Account created but needs verification
           toast({
-            title: 'Verify Your Email',
-            description: 'Account created! Please check your email and click the verification link.',
+            title: 'Check Your Email',
+            description: 'We sent you a verification link. Please check your inbox and click the link to verify your account.',
           });
-          navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+          setSignupEmail(email);
+          setShowEmailVerificationMessage(true);
         } else {
           // Successful signup with immediate session (shouldn't happen with email confirmation enabled)
           toast({
@@ -135,6 +140,73 @@ const Auth = () => {
       setGoogleLoading(false);
     }
   };
+
+  if (showEmailVerificationMessage) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="mb-6">
+            <Link 
+              to="/" 
+              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to RateStore
+            </Link>
+          </div>
+          
+          <Card>
+            <CardHeader className="text-center">
+              <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+                <Mail className="h-8 w-8 text-blue-600" />
+              </div>
+              <CardTitle className="text-2xl font-bold">Check Your Email</CardTitle>
+              <CardDescription>
+                We've sent a verification link to <strong>{signupEmail}</strong>. 
+                Please check your inbox and click the link to verify your account.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground text-center">
+                Didn't receive the email? Check your spam folder or click below to resend.
+              </p>
+              <Button 
+                onClick={async () => {
+                  const { error } = await resendConfirmation(signupEmail);
+                  if (error) {
+                    toast({
+                      title: 'Error',
+                      description: error.message,
+                      variant: 'destructive',
+                    });
+                  } else {
+                    toast({
+                      title: 'Email sent',
+                      description: 'Verification email has been resent.',
+                    });
+                  }
+                }}
+                variant="outline"
+                className="w-full"
+              >
+                Resend Verification Email
+              </Button>
+              <Button 
+                onClick={() => {
+                  setShowEmailVerificationMessage(false);
+                  setSignupEmail('');
+                }}
+                variant="ghost"
+                className="w-full"
+              >
+                Back to Sign In
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
