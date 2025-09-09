@@ -35,11 +35,27 @@ const Auth = () => {
       }
 
       if (result.error) {
-        toast({
-          title: 'Error',
-          description: result.error.message,
-          variant: 'destructive',
-        });
+        // Handle specific error cases
+        if (result.error.message.includes('Email not confirmed')) {
+          toast({
+            title: 'Email Not Verified',
+            description: 'Please check your email and verify your account before signing in.',
+            variant: 'destructive',
+          });
+          navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+        } else if (result.error.message.includes('Invalid login credentials')) {
+          toast({
+            title: 'Invalid Credentials',
+            description: 'Please check your email and password.',
+            variant: 'destructive',
+          });
+        } else {
+          toast({
+            title: 'Error',
+            description: result.error.message,
+            variant: 'destructive',
+          });
+        }
       } else {
         if (isLogin) {
           toast({
@@ -48,11 +64,13 @@ const Auth = () => {
           });
           navigate('/');
         } else {
+          // For signup, show success message and redirect to sign-in
           toast({
             title: 'Success',
-            description: 'Account created successfully! Please check your email to verify your account.',
+            description: 'Account created successfully! Please check your email to verify your account before signing in.',
           });
-          setIsLogin(true);
+          // Add email to URL for resend functionality
+          navigate(`/verify-email?email=${encodeURIComponent(email)}`);
         }
       }
     } catch (error) {

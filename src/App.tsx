@@ -207,6 +207,7 @@ import Privacy from "./pages/Privacy";
 import { default as TermsOfUse } from "./pages/Terms";
 import Refinance from "./pages/Refinance";
 import Profile from "./pages/Profile";
+import EmailVerification from "./pages/EmailVerification";
 
 const queryClient = new QueryClient();
 
@@ -450,6 +451,7 @@ const App = () => (
                 <Profile />
               </ProtectedRoute>
             } />
+            <Route path="/verify-email" element={<EmailVerification />} />
           </Routes>
           <ChatbotTrigger />
         </BrowserRouter>
