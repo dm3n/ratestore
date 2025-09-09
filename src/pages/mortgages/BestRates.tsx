@@ -9,7 +9,10 @@ import { useExternalRateApi } from "@/hooks/useExternalRateApi";
 import { useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+
 const BestRates = () => {
+  console.log('🎯 [BestRates] Component initialized');
+  
   const location = useLocation();
   const [compareRate, setCompareRate] = useState(null);
   const {
@@ -20,24 +23,43 @@ const BestRates = () => {
     findBestRates
   } = useExternalRateApi();
 
+  console.log('📊 [BestRates] Current state:', {
+    ratesCount: rates?.length || 0,
+    isLoading,
+    lastUpdated,
+    locationState: location.state
+  });
+
   // Check if we have a rate to compare from navigation state
   useEffect(() => {
+    console.log('🔄 [BestRates] useEffect - checking location state:', location.state);
     if (location.state?.compareRate) {
+      console.log('💱 [BestRates] Setting compare rate:', location.state.compareRate);
       setCompareRate(location.state.compareRate);
     }
   }, [location.state]);
 
   // Fetch best rates with default criteria on mount only
   useEffect(() => {
+    console.log('🚀 [BestRates] useEffect - initializing rate fetch');
     const fetchBestRates = async () => {
-      await findBestRates({
-        transaction_type: "purchases",
+      const criteria = {
+        transaction_type: "purchases" as const,
         property_value: 500000,
         down_payment: 100000, // 20% down
         province: "ON",
         terms: ["2", "3", "5"],
         rate_types: ["fixed", "variable"]
-      });
+      };
+      
+      console.log('📋 [BestRates] Fetching best rates with criteria:', criteria);
+      
+      try {
+        await findBestRates(criteria);
+        console.log('✅ [BestRates] Successfully completed findBestRates');
+      } catch (error) {
+        console.error('❌ [BestRates] Error in findBestRates:', error);
+      }
     };
     
     fetchBestRates();
@@ -53,13 +75,15 @@ const BestRates = () => {
     return acc;
   }, {});
 
+  console.log('📈 [BestRates] Rates grouped by term:', ratesByTerm);
+
   // Convert to display format showing both fixed and variable for each term
   const bestRates = Object.entries(ratesByTerm).map(([term, rateTypes]: [string, any]) => {
     const termNumber = term.replace('yr', '');
     const fixedRate = rateTypes.fixed;
     const variableRate = rateTypes.variable;
     
-    return {
+    const result = {
       term: `${termNumber} Year`,
       fixedRate: fixedRate ? `${fixedRate.rate.toFixed(2)}%` : 'N/A',
       variableRate: variableRate ? `${variableRate.rate.toFixed(2)}%` : 'N/A',
@@ -69,7 +93,12 @@ const BestRates = () => {
         variableRate?.rate || Infinity
       ),
     };
+    
+    console.log(`🏆 [BestRates] Processed ${term}:`, result);
+    return result;
   }).sort((a, b) => a.bestRate - b.bestRate);
+
+  console.log('🎖️ [BestRates] Final best rates array:', bestRates);
   const whyBest = [{
     icon: TrendingDown,
     title: "Lowest Rates",

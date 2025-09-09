@@ -23,6 +23,12 @@ export function InteractiveRateCalculator({
   provinceFilter,
   termFilter 
 }: InteractiveRateCalculatorProps) {
+  console.log('🧮 [InteractiveRateCalculator] Component initialized with props:', {
+    defaultTransactionType,
+    provinceFilter,
+    termFilter
+  });
+
   const [transactionType, setTransactionType] = useState<'purchase' | 'refinance' | 'renewal' | 'heloc'>(
     defaultTransactionType as 'purchase' | 'refinance' | 'renewal' | 'heloc'
   );
@@ -49,7 +55,19 @@ export function InteractiveRateCalculator({
     rateType: "all"
   };
 
+  console.log('🔧 [InteractiveRateCalculator] Current rate filters:', rateFilters);
+
   const { rates, isLoading, error, lastUpdated, bestRate, bigBankRates, alternativeLenderRates, refetch } = useExternalRates(rateFilters);
+
+  console.log('📊 [InteractiveRateCalculator] Hook results:', {
+    ratesCount: rates.length,
+    isLoading,
+    error,
+    lastUpdated,
+    bestRate: bestRate ? `${bestRate.lender} - ${bestRate.rate}%` : 'None',
+    bigBankCount: bigBankRates.length,
+    altLenderCount: alternativeLenderRates.length
+  });
 
   // Validate inputs and set error messages
   const validateInputs = () => {
@@ -97,7 +115,13 @@ export function InteractiveRateCalculator({
   };
 
   const handleInputChange = (setter: (value: any) => void, value: any) => {
+    console.log('📝 [InteractiveRateCalculator] Input change:', { setter: setter.name, value });
     setter(value);
+  };
+
+  const handleRefetch = () => {
+    console.log('🔄 [InteractiveRateCalculator] Manual refetch triggered');
+    refetch();
   };
 
   const renderRateItem = (rate: any, isAdditional = false, isClickable = false) => (
@@ -160,7 +184,7 @@ export function InteractiveRateCalculator({
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={refetch}
+                onClick={handleRefetch}
                 disabled={isLoading}
                 className="flex items-center gap-2 w-full sm:w-auto"
               >

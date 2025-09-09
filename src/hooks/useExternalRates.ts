@@ -40,84 +40,129 @@ export function useExternalRates(filters: RateFilters) {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const fetchRates = async () => {
+    console.log('🔍 [useExternalRates] Starting fetchRates with filters:', filters);
     setIsLoading(true);
     setError(null);
     
     try {
       const tableName = getTableName(filters.transactionType);
+      console.log('📊 [useExternalRates] Table name:', tableName);
+      
       let query = externalRatesClient
         .from(tableName)
         .select('*')
         .order('Rate', { ascending: true });
 
+      console.log('🏗️ [useExternalRates] Building query with filters...');
+
       // Apply filters
       if (filters.province) {
         query = query.eq('Province', filters.province);
+        console.log('🌍 [useExternalRates] Added province filter:', filters.province);
       }
       
       if (filters.city) {
         query = query.eq('City', filters.city);
+        console.log('🏙️ [useExternalRates] Added city filter:', filters.city);
       }
       
       if (filters.term) {
         query = query.eq('Term', filters.term);
+        console.log('📅 [useExternalRates] Added term filter:', filters.term, 'months');
       }
       
       if (filters.amortization) {
         query = query.eq('Amortization', filters.amortization);
+        console.log('⏰ [useExternalRates] Added amortization filter:', filters.amortization, 'years');
       }
       
       if (filters.isOwnerOccupied !== undefined) {
         query = query.eq('IsOwnerOccupied', filters.isOwnerOccupied ? 1 : 0);
+        console.log('🏠 [useExternalRates] Added owner occupied filter:', filters.isOwnerOccupied);
       }
       
       if (filters.isInsured !== undefined) {
         query = query.eq('IsInsured', filters.isInsured ? 1 : 0);
+        console.log('🛡️ [useExternalRates] Added insurance filter:', filters.isInsured);
       }
       
       if (filters.isBigBank !== undefined) {
         query = query.eq('IsBigBank', filters.isBigBank ? 1 : 0);
+        console.log('🏦 [useExternalRates] Added big bank filter:', filters.isBigBank);
       }
       
       if (filters.rateType && filters.rateType !== 'all') {
         query = query.ilike('Type', `%${filters.rateType}%`);
+        console.log('📈 [useExternalRates] Added rate type filter:', filters.rateType);
       }
 
+      console.log('📡 [useExternalRates] Executing Supabase query...');
       const { data, error } = await query;
       
-      if (error) throw error;
+      if (error) {
+        console.error('❌ [useExternalRates] Supabase query error:', error);
+        throw error;
+      }
       
-      const formattedRates: FormattedExternalRate[] = (data || []).map((rate: ExternalRateData) => ({
-        id: rate.RateId,
-        lender: rate.Lender || 'Unknown Lender',
-        rate: rate.Rate || 0,
-        term: rate.Term || 0,
-        termDisplay: formatTerm(rate.Term || 0),
-        type: rate.Type || 'Fixed',
-        amortization: rate.Amortization || 25,
-        province: rate.Province || '',
-        city: rate.City || '',
-        isOwnerOccupied: rate.IsOwnerOccupied === 1,
-        isInsured: rate.IsInsured === 1,
-        isBigBank: rate.IsBigBank === 1,
-        description: rate.Description || '',
-        monthlyPrepayment: rate.MonthlyPrepayment || 0,
-        lumpSumPrepayment: rate.LumpSumPrepayment || 0,
-        rateHold: rate.RateHold || 0,
-        preApproval: rate.PreApproval || false,
-      }));
+      console.log('✅ [useExternalRates] Raw data received:', {
+        totalRecords: data?.length || 0,
+        sampleRecord: data?.[0] || null,
+        allRecords: data
+      });
+      
+      const formattedRates: FormattedExternalRate[] = (data || []).map((rate: ExternalRateData, index) => {
+        const formatted = {
+          id: rate.RateId,
+          lender: rate.Lender || 'Unknown Lender',
+          rate: rate.Rate || 0,
+          term: rate.Term || 0,
+          termDisplay: formatTerm(rate.Term || 0),
+          type: rate.Type || 'Fixed',
+          amortization: rate.Amortization || 25,
+          province: rate.Province || '',
+          city: rate.City || '',
+          isOwnerOccupied: rate.IsOwnerOccupied === 1,
+          isInsured: rate.IsInsured === 1,
+          isBigBank: rate.IsBigBank === 1,
+          description: rate.Description || '',
+          monthlyPrepayment: rate.MonthlyPrepayment || 0,
+          lumpSumPrepayment: rate.LumpSumPrepayment || 0,
+          rateHold: rate.RateHold || 0,
+          preApproval: rate.PreApproval || false,
+        };
+        
+        if (index < 3) {
+          console.log(`🔄 [useExternalRates] Formatted rate ${index + 1}:`, formatted);
+        }
+        
+        return formatted;
+      });
+      
+      console.log('🎯 [useExternalRates] Final formatted rates:', {
+        totalFormatted: formattedRates.length,
+        rateRange: formattedRates.length > 0 ? {
+          lowest: Math.min(...formattedRates.map(r => r.rate)),
+          highest: Math.max(...formattedRates.map(r => r.rate))
+        } : null,
+        uniqueLenders: Array.from(new Set(formattedRates.map(r => r.lender))),
+        uniqueTerms: Array.from(new Set(formattedRates.map(r => r.term))),
+        bigBankCount: formattedRates.filter(r => r.isBigBank).length,
+        alternativeLenderCount: formattedRates.filter(r => !r.isBigBank).length
+      });
       
       setRates(formattedRates);
       setLastUpdated(new Date());
     } catch (err) {
-      console.error('Error fetching external rates:', err);
+      console.error('💥 [useExternalRates] Error fetching external rates:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch rates');
     } finally {
       setIsLoading(false);
+      console.log('🏁 [useExternalRates] fetchRates completed');
     }
   };
 
   useEffect(() => {
+    console.log('🔄 [useExternalRates] useEffect triggered with filters change:', filters);
     fetchRates();
   }, [
     filters.transactionType,
@@ -132,15 +177,21 @@ export function useExternalRates(filters: RateFilters) {
   ]);
 
   const bestRate = useMemo(() => {
-    return rates.length > 0 ? rates[0] : null;
+    const result = rates.length > 0 ? rates[0] : null;
+    console.log('🏆 [useExternalRates] Best rate calculated:', result);
+    return result;
   }, [rates]);
 
   const bigBankRates = useMemo(() => {
-    return rates.filter(rate => rate.isBigBank);
+    const result = rates.filter(rate => rate.isBigBank);
+    console.log('🏦 [useExternalRates] Big bank rates calculated:', result.length, 'rates');
+    return result;
   }, [rates]);
 
   const alternativeLenderRates = useMemo(() => {
-    return rates.filter(rate => !rate.isBigBank);
+    const result = rates.filter(rate => !rate.isBigBank);
+    console.log('🏢 [useExternalRates] Alternative lender rates calculated:', result.length, 'rates');
+    return result;
   }, [rates]);
 
   return {

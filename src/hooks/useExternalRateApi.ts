@@ -92,11 +92,13 @@ export const useExternalRateApi = () => {
   };
 
   const findBestRates = async (criteria: FindBestRatesRequest) => {
+    console.log('🎯 [useExternalRateApi] findBestRates called with criteria:', criteria);
     setIsLoading(true);
     setError(null);
     
     try {
       // Use the find-best endpoint directly as specified in the API docs
+      console.log('📡 [useExternalRateApi] Making POST request to find-best endpoint');
       const response = await fetch('https://victorjjma.pythonanywhere.com/api/rates/find-best', {
         method: 'POST',
         headers: {
@@ -105,28 +107,54 @@ export const useExternalRateApi = () => {
         body: JSON.stringify(criteria)
       });
 
+      console.log('📨 [useExternalRateApi] Response status:', response.status, response.statusText);
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('❌ [useExternalRateApi] HTTP error response:', errorText);
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('📊 [useExternalRateApi] Raw API response:', data);
+      console.log('📈 [useExternalRateApi] Response structure:', {
+        hasRates: !!data.rates,
+        ratesCount: data.rates?.length || 0,
+        totalFound: data.total_rates_found,
+        criteria: data.criteria,
+        firstRate: data.rates?.[0]
+      });
       
       if (data.rates && data.rates.length > 0) {
+        console.log('✅ [useExternalRateApi] Setting rates:', data.rates);
         setRates(data.rates);
         setLastUpdated(new Date());
+        
+        // Log rate details
+        data.rates.slice(0, 5).forEach((rate: any, index: number) => {
+          console.log(`🏦 [useExternalRateApi] Rate ${index + 1}:`, {
+            lender: rate.lender,
+            rate: rate.rate,
+            term: rate.term,
+            type: rate.rate_type,
+            transactionType: rate.transaction_type
+          });
+        });
+        
         return data;
       } else {
-        console.log('No rates returned from find-best endpoint');
+        console.warn('⚠️ [useExternalRateApi] No rates returned from find-best endpoint');
         setRates([]);
         return { rates: [], total_rates_found: 0 };
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to find best rates';
+      console.error('💥 [useExternalRateApi] Error finding best rates:', err);
       setError(errorMessage);
-      console.error('Error finding best rates:', err);
       return null;
     } finally {
       setIsLoading(false);
+      console.log('🏁 [useExternalRateApi] findBestRates completed');
     }
   };
 
