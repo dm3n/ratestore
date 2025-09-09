@@ -22,12 +22,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         
-        // Create profile for new users (including Google OAuth)
+        // Create profile for new users (including Google OAuth) - deferred to avoid deadlocks
         if (event === 'SIGNED_IN' && session?.user) {
+          setTimeout(async () => {
+            const { data: existingProfile } = await supabase
+              .from('profiles')
+              .select('id')
+              .eq('user_id', session.user.id)
+              .single();
+              
+            if (!existingProfile) {
+              await supabase
+                .from('profiles')
+                .insert({
+                  user_id: session.user.id,
+                  full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email,
+                  email: session.user.email,
+                });
+            }
+          }, 0);
+        }
+        
+        setLoading(false);
+      }
+    );
+
+    // Get initial session
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      // Create profile for existing sessions (on app load) - deferred to avoid issues
+      if (session?.user) {
+        setTimeout(async () => {
           const { data: existingProfile } = await supabase
             .from('profiles')
             .select('id')
@@ -43,34 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 email: session.user.email,
               });
           }
-        }
-        
-        setLoading(false);
-      }
-    );
-
-    // Get initial session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      // Create profile for existing sessions (on app load)
-      if (session?.user) {
-        const { data: existingProfile } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('user_id', session.user.id)
-          .single();
-          
-        if (!existingProfile) {
-          await supabase
-            .from('profiles')
-            .insert({
-              user_id: session.user.id,
-              full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email,
-              email: session.user.email,
-            });
-        }
+        }, 0);
       }
       
       setLoading(false);
