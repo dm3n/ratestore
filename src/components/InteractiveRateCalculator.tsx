@@ -292,12 +292,12 @@ export function InteractiveRateCalculator({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="space-y-2">
               <Label htmlFor="city">City (Optional)</Label>
-              <Select value={selectedCity} onValueChange={setSelectedCity}>
+              <Select value={selectedCity || "all"} onValueChange={(value) => setSelectedCity(value === "all" ? "" : value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select city" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All cities</SelectItem>
+                  <SelectItem value="all">All cities</SelectItem>
                   {getAvailableCities().map(city => (
                     <SelectItem key={city} value={city}>{city}</SelectItem>
                   ))}
@@ -307,12 +307,12 @@ export function InteractiveRateCalculator({
 
             <div className="space-y-2">
               <Label htmlFor="term">Term (Optional)</Label>
-              <Select value={selectedTerm?.toString() || ""} onValueChange={(value) => setSelectedTerm(value ? parseInt(value) : undefined)}>
+              <Select value={selectedTerm?.toString() || "all"} onValueChange={(value) => setSelectedTerm(value === "all" ? undefined : parseInt(value))}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select term" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All terms</SelectItem>
+                  <SelectItem value="all">All terms</SelectItem>
                   <SelectItem value="12">1 Year</SelectItem>
                   <SelectItem value="24">2 Years</SelectItem>
                   <SelectItem value="36">3 Years</SelectItem>
