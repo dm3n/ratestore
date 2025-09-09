@@ -41,12 +41,49 @@ export const useMortgageRatesApi = () => {
       setIsLoading(true);
       setError(null);
 
+      console.log('🔄 [useMortgageRatesApi] Fetching from:', API_ENDPOINT);
+      
       const response = await fetch(API_ENDPOINT);
+      console.log('📡 [useMortgageRatesApi] Response status:', response.status);
+      console.log('📋 [useMortgageRatesApi] Response headers:', Object.fromEntries(response.headers.entries()));
+      
       if (!response.ok) {
-        throw new Error(`Failed to fetch rates: ${response.status}`);
+        throw new Error(`Failed to fetch rates: ${response.status} ${response.statusText}`);
       }
 
-      const rawData: MortgageRateData[] = await response.json();
+      // Check if response has content
+      const contentLength = response.headers.get('content-length');
+      const contentType = response.headers.get('content-type');
+      
+      console.log('📊 [useMortgageRatesApi] Content-Length:', contentLength);
+      console.log('📄 [useMortgageRatesApi] Content-Type:', contentType);
+      
+      if (contentLength === '0' || !contentType?.includes('application/json')) {
+        console.warn('⚠️ [useMortgageRatesApi] Response appears to be empty or not JSON');
+        // Return empty data instead of trying to parse
+        setRates([]);
+        setLastUpdated(new Date());
+        return;
+      }
+
+      // Get response text first to debug what we're actually receiving
+      const responseText = await response.text();
+      console.log('📝 [useMortgageRatesApi] Raw response text (first 200 chars):', responseText.substring(0, 200));
+      
+      if (!responseText.trim()) {
+        console.warn('⚠️ [useMortgageRatesApi] Response text is empty');
+        setRates([]);
+        setLastUpdated(new Date());
+        return;
+      }
+
+      let rawData: MortgageRateData[];
+      try {
+        rawData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('❌ [useMortgageRatesApi] JSON parse error:', parseError);
+        throw new Error(`Invalid JSON response: ${parseError.message}`);
+      }
       
       if (!Array.isArray(rawData)) {
         throw new Error('Invalid data format received from API');
