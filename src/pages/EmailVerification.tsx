@@ -16,31 +16,48 @@ const EmailVerification = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const token = searchParams.get('token');
+    // Supabase uses different parameter names for email verification
+    const token = searchParams.get('token_hash') || searchParams.get('token');
     const type = searchParams.get('type');
     
+    console.log('EmailVerification params:', { token, type, allParams: Object.fromEntries(searchParams.entries()) });
+    
     if (token && type === 'signup') {
+      verifyEmailToken(token);
+    } else if (token) {
+      // Try verification even if type doesn't match exactly
       verifyEmailToken(token);
     } else {
       // No token found, show manual verification option
       setLoading(false);
       setVerificationStatus('error');
-      setErrorMessage('Invalid verification link');
+      setErrorMessage('Invalid verification link - no token found');
     }
   }, [searchParams]);
 
   const verifyEmailToken = async (token: string) => {
     try {
-      const { data, error } = await supabase.auth.verifyOtp({
+      // First try with the token as is for email confirmation
+      let result = await supabase.auth.verifyOtp({
         token_hash: token,
-        type: 'signup'
+        type: 'email'
       });
 
-      if (error) {
-        throw error;
+      // If that fails, try with signup type
+      if (result.error) {
+        result = await supabase.auth.verifyOtp({
+          token_hash: token,
+          type: 'signup'
+        });
       }
 
-      if (data?.user) {
+      console.log('Verification result:', result);
+
+      if (result.error) {
+        throw result.error;
+      }
+
+      if (result.data?.user) {
         setVerificationStatus('success');
         toast({
           title: 'Email Verified!',
