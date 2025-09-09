@@ -27,56 +27,80 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      let result;
       if (isLogin) {
-        result = await signIn(email, password);
-      } else {
-        result = await signUp(email, password, fullName);
-      }
-
-      if (result.error) {
-        // Handle specific error cases
-        if (result.error.message.includes('Email not confirmed')) {
-          toast({
-            title: 'Email Not Verified',
-            description: 'Please check your email and verify your account before signing in.',
-            variant: 'destructive',
-          });
-          navigate(`/verify-email?email=${encodeURIComponent(email)}`);
-        } else if (result.error.message.includes('Invalid login credentials')) {
-          toast({
-            title: 'Invalid Credentials',
-            description: 'Please check your email and password.',
-            variant: 'destructive',
-          });
+        const result = await signIn(email, password);
+        
+        if (result.error) {
+          // Handle specific sign-in error cases
+          if (result.error.message.includes('Email not confirmed') || 
+              result.error.message.includes('email_not_confirmed')) {
+            toast({
+              title: 'Email Not Verified',
+              description: 'Please check your email and verify your account before signing in.',
+              variant: 'destructive',
+            });
+            navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+          } else if (result.error.message.includes('Invalid login credentials')) {
+            toast({
+              title: 'Invalid Credentials', 
+              description: 'Please check your email and password, or verify your account if you just signed up.',
+              variant: 'destructive',
+            });
+          } else {
+            toast({
+              title: 'Sign In Error',
+              description: result.error.message,
+              variant: 'destructive',
+            });
+          }
         } else {
           toast({
-            title: 'Error',
-            description: result.error.message,
-            variant: 'destructive',
-          });
-        }
-      } else {
-        if (isLogin) {
-          toast({
-            title: 'Success',
-            description: 'Logged in successfully!',
+            title: 'Welcome back!',
+            description: 'Signed in successfully.',
           });
           navigate('/');
-        } else {
-          // For signup, show success message and redirect to sign-in
+        }
+      } else {
+        // Sign up flow
+        const result = await signUp(email, password, fullName);
+        
+        if (result.error) {
+          // Check for user already exists error
+          if (result.error.message.includes('User already registered')) {
+            toast({
+              title: 'Account Already Exists',
+              description: 'An account with this email already exists. Please sign in or verify your email.',
+              variant: 'destructive',
+            });
+            navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+          } else {
+            toast({
+              title: 'Sign Up Error',
+              description: result.error.message,
+              variant: 'destructive',
+            });
+          }
+        } else if (result.needsVerification) {
+          // Account created but needs verification
           toast({
-            title: 'Success',
-            description: 'Account created successfully! Please check your email to verify your account before signing in.',
+            title: 'Verify Your Email',
+            description: 'Account created! Please check your email and click the verification link.',
           });
-          // Add email to URL for resend functionality
           navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+        } else {
+          // Successful signup with immediate session (shouldn't happen with email confirmation enabled)
+          toast({
+            title: 'Account Created!',
+            description: 'Welcome to RateStore!',
+          });
+          navigate('/');
         }
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Auth error:', error);
       toast({
         title: 'Error',
-        description: 'An unexpected error occurred',
+        description: 'An unexpected error occurred. Please try again.',
         variant: 'destructive',
       });
     } finally {

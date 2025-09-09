@@ -7,7 +7,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName?: string) => Promise<{ data?: any; error?: AuthError | null }>;
+  signUp: (email: string, password: string, fullName?: string) => Promise<{ data?: any; error?: AuthError | null; needsVerification?: boolean }>;
   signIn: (email: string, password: string) => Promise<{ data?: any; error?: AuthError | null }>;
   signOut: () => Promise<void>;
   resendConfirmation: (email: string) => Promise<{ error?: AuthError | null }>;
@@ -85,18 +85,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/verify-email`,
-        data: {
-          full_name: fullName || email,
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/verify-email`,
+          data: {
+            full_name: fullName || email,
+          },
         },
-      },
-    });
-    
-    return { data, error };
+      });
+      
+      // Handle the case where user already exists but is unverified
+      if (data?.user && !data.session) {
+        // User exists but needs email verification
+        return { 
+          data, 
+          error: null,
+          needsVerification: true 
+        };
+      }
+      
+      return { data, error };
+    } catch (err: any) {
+      return { data: null, error: err };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
