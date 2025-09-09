@@ -92,6 +92,12 @@ export function InteractiveRateCalculator({
     validateInputs();
   }, [downPayment, purchasePrice]);
 
+  // Log when transaction type changes to trigger new rate fetch
+  useEffect(() => {
+    console.log('🔄 [InteractiveRateCalculator] Transaction type changed to:', transactionType);
+    console.log('🎯 [InteractiveRateCalculator] This should trigger new rate fetch from table:', `rate_store_${transactionType}`);
+  }, [transactionType]);
+
   // Calculate down payment dollar amount when percentage changes
   const handlePercentChange = (percent: number) => {
     const validPercent = Math.max(5, Math.min(percent, 100));
@@ -232,15 +238,18 @@ export function InteractiveRateCalculator({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <div className="space-y-2">
               <Label htmlFor="transaction-type">Transaction Type</Label>
-              <Select value={transactionType} onValueChange={(value) => setTransactionType(value as any)}>
+              <Select value={transactionType} onValueChange={(value) => {
+                console.log('🔄 [InteractiveRateCalculator] Transaction type changing from', transactionType, 'to', value);
+                setTransactionType(value as any);
+              }}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="purchase">Purchase</SelectItem>
-                  <SelectItem value="refinance">Refinance</SelectItem>
-                  <SelectItem value="renewal">Renewal</SelectItem>
-                  <SelectItem value="heloc">HELOC</SelectItem>
+                  <SelectItem value="purchase">Purchase (rate_store_purchase)</SelectItem>
+                  <SelectItem value="refinance">Refinance (rate_store_refinance)</SelectItem>
+                  <SelectItem value="renewal">Renewal (rate_store_renewal)</SelectItem>
+                  <SelectItem value="heloc">HELOC (rate_store_heloc)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -373,8 +382,35 @@ export function InteractiveRateCalculator({
                   </Card>
                 ))}
               </div>
+            ) : error ? (
+              <div className="text-center py-8">
+                <p className="text-red-600 mb-4">Error loading rates: {error}</p>
+                <Button onClick={handleRefetch} variant="outline">
+                  Try Again
+                </Button>
+              </div>
             ) : rates.length > 0 ? (
               <>
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
+                  <h3 className="text-lg font-semibold text-blue-800 mb-2">
+                    Rates from {`rate_store_${transactionType}`} table
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-blue-700">
+                    <div>
+                      <span className="font-medium">Province:</span> {selectedProvince}
+                    </div>
+                    <div>
+                      <span className="font-medium">City:</span> {selectedCity || 'All'}
+                    </div>
+                    <div>
+                      <span className="font-medium">Term:</span> {selectedTerm ? `${selectedTerm} months` : 'All'}
+                    </div>
+                    <div>
+                      <span className="font-medium">Found:</span> {rates.length} rates
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {rates.slice(0, 6).map((rate) => (
                     <Card key={rate.id} className="p-6 hover:shadow-lg transition-shadow">
@@ -397,10 +433,48 @@ export function InteractiveRateCalculator({
                     </div>
                   </div>
                 )}
+
+                {activeTab === "best-bank" && bigBankRates.length > 0 && (
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <h3 className="text-lg font-semibold text-blue-800 mb-4">Big Bank Rates ({bigBankRates.length})</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {bigBankRates.slice(0, 3).map((rate) => (
+                        <div key={rate.id} className="bg-white p-3 rounded border">
+                          <div className="text-lg font-bold text-blue-700">{rate.rate.toFixed(2)}%</div>
+                          <div className="text-sm text-blue-600">{rate.lender}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {alternativeLenderRates.length > 0 && (
+                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <h3 className="text-lg font-semibold text-purple-800 mb-4">Alternative Lenders ({alternativeLenderRates.length})</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {alternativeLenderRates.slice(0, 3).map((rate) => (
+                        <div key={rate.id} className="bg-white p-3 rounded border">
+                          <div className="text-lg font-bold text-purple-700">{rate.rate.toFixed(2)}%</div>
+                          <div className="text-sm text-purple-600">{rate.lender}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </>
             ) : (
               <div className="text-center py-8">
-                <p className="text-muted-foreground">No rates found for your criteria. Try adjusting your filters.</p>
+                <p className="text-muted-foreground mb-4">
+                  No rates found for {transactionType} in {selectedProvince}
+                  {selectedCity && ` (${selectedCity})`}
+                  {selectedTerm && ` for ${selectedTerm} month term`}
+                </p>
+                <div className="text-sm text-muted-foreground mb-4">
+                  Searching in table: <code className="bg-gray-100 px-2 py-1 rounded">rate_store_{transactionType}</code>
+                </div>
+                <Button onClick={handleRefetch} variant="outline">
+                  Refresh Rates
+                </Button>
               </div>
             )}
           </div>

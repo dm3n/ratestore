@@ -45,5 +45,11 @@ export interface ExternalRateData {
 export type TransactionType = 'purchase' | 'refinance' | 'renewal' | 'heloc';
 
 export const getTableName = (transactionType: TransactionType): string => {
-  return `rate_store_${transactionType}`;
+  const tableName = `rate_store_${transactionType}`;
+  console.log('🗃️ [getTableName] Mapping transaction type to table:', {
+    transactionType,
+    tableName,
+    availableTables: ['rate_store_purchase', 'rate_store_refinance', 'rate_store_renewal', 'rate_store_heloc']
+  });
+  return tableName;
 };
