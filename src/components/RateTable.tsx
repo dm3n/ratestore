@@ -3,63 +3,49 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useExternalRates } from "@/hooks/useExternalRates";
 
-interface LenderRate {
-  id: string;
-  lender: string;
-  rate: number;
-  apr: number;
-  monthlyCost: number;
-  loanType: string;
-  featured: boolean;
+interface RateTableProps {
+  transactionType?: 'purchase' | 'refinance' | 'renewal' | 'heloc';
+  province?: string;
+  termFilter?: number;
+  maxResults?: number;
 }
 
-const lenderRates: LenderRate[] = [
-  {
-    id: "1",
-    lender: "LoanStart",
-    rate: 5.625,
-    apr: 5.843,
-    monthlyCost: 1725,
-    loanType: "30-year fixed",
-    featured: true,
-  },
-  {
-    id: "2",
-    lender: "WealthBank",
-    rate: 5.75,
-    apr: 5.93,
-    monthlyCost: 1751,
-    loanType: "30-year fixed",
-    featured: false,
-  },
-  {
-    id: "3",
-    lender: "HomeFirst",
-    rate: 5.5,
-    apr: 5.685,
-    monthlyCost: 1703,
-    loanType: "30-year fixed",
-    featured: false,
-  },
-  {
-    id: "4",
-    lender: "CitiMortgage",
-    rate: 4.875,
-    apr: 5.125,
-    monthlyCost: 1587,
-    loanType: "15-year fixed",
-    featured: true,
-  },
-];
+export function RateTable({ 
+  transactionType = 'purchase', 
+  province = 'ON', 
+  termFilter, 
+  maxResults = 10 
+}: RateTableProps) {
+  const { rates, isLoading, error, lastUpdated } = useExternalRates({
+    transactionType,
+    province: province as any,
+    term: termFilter,
+    rateType: "all"
+  });
 
-export function RateTable() {
+  if (error) {
+    return (
+      <div className="rounded-lg border bg-card shadow-sm p-6">
+        <div className="text-center text-muted-foreground">
+          <p>Unable to load rates at this time.</p>
+          <p className="text-sm mt-2">Error: {error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const displayRates = rates.slice(0, maxResults);
+
   return (
     <div className="rounded-lg border bg-card shadow-sm">
       <div className="p-6">
         <h3 className="text-xl font-semibold">Today's Mortgage Rates</h3>
         <p className="text-sm text-muted-foreground mt-1">
-          Compare rates from top lenders - Updated April 16, 2025
+          Compare rates from top lenders 
+          {lastUpdated && ` - Updated ${lastUpdated.toLocaleDateString()}`}
+          {isLoading && " - Loading..."}
         </p>
       </div>
       <Table>
@@ -67,33 +53,52 @@ export function RateTable() {
           <TableRow>
             <TableHead className="w-[180px]">Lender</TableHead>
             <TableHead>Rate</TableHead>
-            <TableHead>APR</TableHead>
-            <TableHead className="hidden md:table-cell">Monthly Cost</TableHead>
-            <TableHead className="hidden lg:table-cell">Loan Type</TableHead>
+            <TableHead>Term</TableHead>
+            <TableHead className="hidden md:table-cell">Type</TableHead>
+            <TableHead className="hidden lg:table-cell">Amortization</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {lenderRates.map((rate) => (
-            <TableRow key={rate.id}>
-              <TableCell className="font-medium">
-                <div className="flex items-center gap-2">
-                  {rate.featured && <Badge variant="outline" className="bg-primary/10 text-primary">Featured</Badge>}
-                  {rate.lender}
-                </div>
-              </TableCell>
-              <TableCell className="font-semibold">{rate.rate}%</TableCell>
-              <TableCell>{rate.apr}%</TableCell>
-              <TableCell className="hidden md:table-cell">${rate.monthlyCost}/mo</TableCell>
-              <TableCell className="hidden lg:table-cell">{rate.loanType}</TableCell>
-              <TableCell className="text-right">
-                <Button size="sm" className="whitespace-nowrap">
-                  <span className="hidden sm:inline mr-1">Get Quote</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
+          {isLoading ? (
+            Array.from({ length: 5 }).map((_, index) => (
+              <TableRow key={index}>
+                <TableCell><div className="h-4 bg-muted animate-pulse rounded"></div></TableCell>
+                <TableCell><div className="h-4 bg-muted animate-pulse rounded w-16"></div></TableCell>
+                <TableCell><div className="h-4 bg-muted animate-pulse rounded w-12"></div></TableCell>
+                <TableCell className="hidden md:table-cell"><div className="h-4 bg-muted animate-pulse rounded w-16"></div></TableCell>
+                <TableCell className="hidden lg:table-cell"><div className="h-4 bg-muted animate-pulse rounded w-12"></div></TableCell>
+                <TableCell className="text-right"><div className="h-8 bg-muted animate-pulse rounded w-20 ml-auto"></div></TableCell>
+              </TableRow>
+            ))
+          ) : displayRates.length > 0 ? (
+            displayRates.map((rate) => (
+              <TableRow key={rate.id}>
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-2">
+                    {rate.isBigBank && <Badge variant="outline" className="bg-primary/10 text-primary">Big Bank</Badge>}
+                    {rate.lender}
+                  </div>
+                </TableCell>
+                <TableCell className="font-semibold">{rate.rate.toFixed(2)}%</TableCell>
+                <TableCell>{rate.termDisplay}</TableCell>
+                <TableCell className="hidden md:table-cell capitalize">{rate.type}</TableCell>
+                <TableCell className="hidden lg:table-cell">{rate.amortization} years</TableCell>
+                <TableCell className="text-right">
+                  <Button size="sm" className="whitespace-nowrap">
+                    <span className="hidden sm:inline mr-1">Get Quote</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                No rates available for the selected criteria
               </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </div>
