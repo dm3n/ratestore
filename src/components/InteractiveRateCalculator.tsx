@@ -242,10 +242,10 @@ export function InteractiveRateCalculator({
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="purchase">Purchase (rate_store_purchase)</SelectItem>
-                  <SelectItem value="refinance">Refinance (rate_store_refinance)</SelectItem>
-                  <SelectItem value="renewal">Renewal (rate_store_renewal)</SelectItem>
-                  <SelectItem value="heloc">HELOC (rate_store_heloc)</SelectItem>
+                  <SelectItem value="purchase">Purchase</SelectItem>
+                  <SelectItem value="refinance">Refinance</SelectItem>
+                  <SelectItem value="renewal">Renewal</SelectItem>
+                  <SelectItem value="heloc">HELOC</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -319,16 +319,6 @@ export function InteractiveRateCalculator({
 
           {/* Additional filters */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {transactionType === 'heloc' && (
-              <div className="md:col-span-3 mb-4">
-                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                  <p className="text-sm text-blue-800">
-                    <strong>Note:</strong> HELOC rates are not filtered by Term or Amortization as these don't apply to credit lines.
-                  </p>
-                </div>
-              </div>
-            )}
-            
             <div className="space-y-2">
               <Label htmlFor="city">City (Optional)</Label>
               <Select value={selectedCity || "all"} onValueChange={(value) => setSelectedCity(value === "all" ? "" : value)}>
@@ -405,26 +395,6 @@ export function InteractiveRateCalculator({
               </div>
             ) : rates.length > 0 ? (
               <>
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
-                  <h3 className="text-lg font-semibold text-blue-800 mb-2">
-                    Rates from {`rate_store_${transactionType}`} table
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-blue-700">
-                    <div>
-                      <span className="font-medium">Province:</span> {selectedProvince}
-                    </div>
-                    <div>
-                      <span className="font-medium">City:</span> {selectedCity || 'All'}
-                    </div>
-                    <div>
-                      <span className="font-medium">Term:</span> {selectedTerm ? `${selectedTerm} months` : 'All'}
-                    </div>
-                    <div>
-                      <span className="font-medium">Found:</span> {rates.length} rates
-                    </div>
-                  </div>
-                </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {rates.slice(0, 6).map((rate) => (
                     <Card key={rate.id} className="p-6 hover:shadow-lg transition-shadow">
@@ -483,9 +453,6 @@ export function InteractiveRateCalculator({
                   {selectedCity && ` (${selectedCity})`}
                   {selectedTerm && ` for ${selectedTerm} month term`}
                 </p>
-                <div className="text-sm text-muted-foreground mb-4">
-                  Searching in table: <code className="bg-gray-100 px-2 py-1 rounded">rate_store_{transactionType}</code>
-                </div>
                 <Button onClick={handleRefetch} variant="outline">
                   Refresh Rates
                 </Button>
