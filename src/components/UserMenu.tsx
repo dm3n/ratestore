@@ -22,6 +22,7 @@ export function UserMenu() {
     setLoading(true);
     try {
       await signOut();
+      navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
     } finally {

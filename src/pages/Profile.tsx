@@ -10,10 +10,12 @@ import { useToast } from '@/hooks/use-toast';
 import { User, Mail, Calendar, Shield, Edit, Save, X } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState({
@@ -103,6 +105,7 @@ const Profile = () => {
         title: 'Success',
         description: 'Signed out successfully',
       });
+      navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
       toast({
