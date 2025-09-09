@@ -97,6 +97,42 @@ export function useExternalRates(filters: RateFilters) {
       }
 
       console.log('📡 [useExternalRates] Executing Supabase query...');
+      console.log('🔍 [useExternalRates] Final query details:', {
+        table: tableName,
+        selectColumns: '*',
+        orderBy: 'Rate ASC',
+        filters: {
+          province: filters.province,
+          city: filters.city,
+          term: filters.term,
+          amortization: filters.amortization,
+          isOwnerOccupied: filters.isOwnerOccupied,
+          isInsured: filters.isInsured,
+          isBigBank: filters.isBigBank,
+          rateType: filters.rateType
+        }
+      });
+      
+      // Generate equivalent SQL for reference
+      let sqlQuery = `SELECT * FROM ${tableName}`;
+      const whereConditions = [];
+      
+      if (filters.province) whereConditions.push(`Province = '${filters.province}'`);
+      if (filters.city) whereConditions.push(`City = '${filters.city}'`);
+      if (filters.term) whereConditions.push(`Term = ${filters.term}`);
+      if (filters.amortization) whereConditions.push(`Amortization = ${filters.amortization}`);
+      if (filters.isOwnerOccupied !== undefined) whereConditions.push(`IsOwnerOccupied = ${filters.isOwnerOccupied ? 1 : 0}`);
+      if (filters.isInsured !== undefined) whereConditions.push(`IsInsured = ${filters.isInsured ? 1 : 0}`);
+      if (filters.isBigBank !== undefined) whereConditions.push(`IsBigBank = ${filters.isBigBank ? 1 : 0}`);
+      if (filters.rateType && filters.rateType !== 'all') whereConditions.push(`Type ILIKE '%${filters.rateType}%'`);
+      
+      if (whereConditions.length > 0) {
+        sqlQuery += ` WHERE ${whereConditions.join(' AND ')}`;
+      }
+      sqlQuery += ' ORDER BY Rate ASC';
+      
+      console.log('📋 [useExternalRates] Equivalent SQL query:', sqlQuery);
+      
       const { data, error } = await query;
       
       if (error) {
