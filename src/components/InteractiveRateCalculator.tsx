@@ -9,14 +9,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Home, Building2, RefreshCw, ChevronDown, ChevronUp, HelpCircle, AlertTriangle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useExternalRates, type RateFilters } from "@/hooks/useExternalRates";
-import { cityProvinceMap, type Province } from "@/integrations/external-rates/client";
+import { useSupabaseRates, type RateFilters } from "@/hooks/useSupabaseRates";
 
 interface InteractiveRateCalculatorProps {
   defaultTransactionType?: string;
   provinceFilter?: string;
   termFilter?: string;
 }
+
+type Province = "ON" | "BC" | "AB" | "QC" | "SK" | "MB" | "NB" | "NS" | "PE" | "NL";
 
 export function InteractiveRateCalculator({ 
   defaultTransactionType = "purchase",
@@ -29,31 +30,26 @@ export function InteractiveRateCalculator({
     termFilter
   });
 
-  const [transactionType, setTransactionType] = useState<'purchase' | 'refinance' | 'renewal' | 'heloc'>(
-    defaultTransactionType as 'purchase' | 'refinance' | 'renewal' | 'heloc'
-  );
+  const [transactionType, setTransactionType] = useState<string>(defaultTransactionType || "purchase");
   const [purchasePrice, setPurchasePrice] = useState(400000);
   const [downPayment, setDownPayment] = useState(20000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(5);
   const [selectedProvince, setSelectedProvince] = useState<Province>(provinceFilter as Province || "ON");
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedTerm, setSelectedTerm] = useState<number | undefined>(termFilter ? parseInt(termFilter) * 12 : undefined);
+  const [selectedTerm, setSelectedTerm] = useState<string | undefined>(termFilter || undefined);
   const [amortization, setAmortization] = useState<number>(25);
   const [activeTab, setActiveTab] = useState("best-market");
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
-  // Build filters for external rates hook
+  // Build filters for Supabase rates hook
   const rateFilters: RateFilters = {
     transactionType,
     province: selectedProvince,
-    city: selectedCity || undefined,
     term: selectedTerm,
-    amortization
   };
 
   console.log('🔧 [InteractiveRateCalculator] Current rate filters:', rateFilters);
 
-  const { rates, isLoading, error, lastUpdated, bestRate, bigBankRates, alternativeLenderRates, refetch } = useExternalRates(rateFilters);
+  const { rates, isLoading, error, lastUpdated, bestRate, bigBankRates, alternativeLenderRates, refetch } = useSupabaseRates(rateFilters);
 
   console.log('📊 [InteractiveRateCalculator] Hook results:', {
     ratesCount: rates.length,
@@ -91,7 +87,7 @@ export function InteractiveRateCalculator({
   // Log when transaction type changes to trigger new rate fetch
   useEffect(() => {
     console.log('🔄 [InteractiveRateCalculator] Transaction type changed to:', transactionType);
-    console.log('🎯 [InteractiveRateCalculator] This should trigger new rate fetch from table:', `rate_store_${transactionType}`);
+    console.log('🎯 [InteractiveRateCalculator] This should trigger new rate fetch from Supabase rate_sheet_rates table');
   }, [transactionType]);
 
   // Calculate down payment dollar amount when percentage changes
@@ -101,18 +97,11 @@ export function InteractiveRateCalculator({
     setDownPayment(Math.round((validPercent / 100) * purchasePrice));
   };
 
-  // Get available cities for selected province
-  const getAvailableCities = (): string[] => {
-    return Object.keys(cityProvinceMap).filter(city => 
-      cityProvinceMap[city as keyof typeof cityProvinceMap] === selectedProvince
-    );
-  };
-
   // Get available terms from current rates
-  const getAvailableTerms = (): number[] => {
-    if (termFilter) return [parseInt(termFilter) * 12];
+  const getAvailableTerms = (): string[] => {
+    if (termFilter) return [termFilter];
     
-    const uniqueTerms = Array.from(new Set(rates.map(rate => rate.term))).sort((a, b) => a - b);
+    const uniqueTerms = Array.from(new Set(rates.map(rate => rate.term))).sort();
     return uniqueTerms;
   };
 
@@ -319,25 +308,10 @@ export function InteractiveRateCalculator({
           {/* Additional filters */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="space-y-2">
-              <Label htmlFor="city">City (Optional)</Label>
-              <Select value={selectedCity || "all"} onValueChange={(value) => setSelectedCity(value === "all" ? "" : value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select city" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All cities</SelectItem>
-                  {getAvailableCities().map(city => (
-                    <SelectItem key={city} value={city}>{city}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="term">Term (Optional)</Label>
               <Select 
-                value={selectedTerm?.toString() || "all"} 
-                onValueChange={(value) => setSelectedTerm(value === "all" ? undefined : parseInt(value))}
+                value={selectedTerm || "all"} 
+                onValueChange={(value) => setSelectedTerm(value === "all" ? undefined : value)}
                 disabled={transactionType === 'heloc'}
               >
                 <SelectTrigger>
@@ -345,32 +319,14 @@ export function InteractiveRateCalculator({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All terms</SelectItem>
-                  <SelectItem value="12">1 Year</SelectItem>
-                  <SelectItem value="24">2 Years</SelectItem>
-                  <SelectItem value="36">3 Years</SelectItem>
-                  <SelectItem value="48">4 Years</SelectItem>
-                  <SelectItem value="60">5 Years</SelectItem>
+                  {getAvailableTerms().map(term => (
+                    <SelectItem key={term} value={term}>{term}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="amortization">Amortization (Years)</Label>
-              <Select 
-                value={amortization.toString()} 
-                onValueChange={(value) => setAmortization(parseInt(value))}
-                disabled={transactionType === 'heloc'}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={transactionType === 'heloc' ? "N/A for HELOC" : "Select amortization"} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="20">20 Years</SelectItem>
-                  <SelectItem value="25">25 Years</SelectItem>
-                  <SelectItem value="30">30 Years</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <div className="col-span-2"></div>
           </div>
           
           {/* Results */}
@@ -449,8 +405,7 @@ export function InteractiveRateCalculator({
               <div className="text-center py-8">
                 <p className="text-muted-foreground mb-4">
                   No rates found for {transactionType} in {selectedProvince}
-                  {selectedCity && ` (${selectedCity})`}
-                  {selectedTerm && ` for ${selectedTerm} month term`}
+                  {selectedTerm && ` for ${selectedTerm} term`}
                 </p>
                 <Button onClick={handleRefetch} variant="outline">
                   Refresh Rates
