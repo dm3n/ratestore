@@ -124,43 +124,109 @@ export default function CashBack() {
       <Header />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <DollarSign className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold text-gray-900">Cash Back Credit Cards</h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Earn real cash back on every purchase. Compare the best cash back credit cards 
-            in Canada and start earning money on your everyday spending.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Calculator className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Real Cash Rewards</h3>
-              <p className="text-gray-600">Earn actual cash back that you can use however you want</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <TrendingUp className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Simple & Straightforward</h3>
-              <p className="text-gray-600">No complicated point systems or redemption restrictions</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Target className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Everyday Value</h3>
-              <p className="text-gray-600">Earn on all your regular purchases and monthly bills</p>
+        <div className="text-center mb-16">
+          {/* Hero Header */}
+          <div className="relative py-16 px-6 bg-gradient-to-br from-primary/5 via-background to-secondary/5 rounded-3xl mb-12 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-secondary/10 rounded-3xl" />
+            <div className="relative max-w-4xl mx-auto">
+              <Badge variant="outline" className="mb-6 px-4 py-2 bg-primary/10">
+                <DollarSign className="h-4 w-4 mr-2" />
+                Cash Back Cards
+              </Badge>
+              
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Earn <span className="text-primary">Real Cash</span><br />
+                On Every Purchase
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
+                Compare Canada's best cash back credit cards and start earning money back on your everyday spending. 
+                No complicated points—just cold, hard cash.
+              </p>
+
+              {/* Key Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-8">
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">4%</div>
+                  <div className="text-sm text-muted-foreground">Max Cash Back Rate</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">$0</div>
+                  <div className="text-sm text-muted-foreground">Annual Fee Options</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">$300+</div>
+                  <div className="text-sm text-muted-foreground">Annual Cash Back</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">10+</div>
+                  <div className="text-sm text-muted-foreground">Top Cards Available</div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300" onClick={() => setActiveTab("calculator")}>
+                  <Calculator className="h-5 w-5 mr-2" />
+                  Calculate Your Earnings
+                </Button>
+                <Button size="lg" variant="outline" className="px-8 py-3 text-lg" onClick={() => setActiveTab("compare")}>
+                  <Target className="h-5 w-5 mr-2" />
+                  Compare Top Cards
+                </Button>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button size="lg" className="gap-2" onClick={() => setActiveTab("calculator")}>
-              <Calculator className="h-5 w-5" />
-              Calculate Cash Back
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2" onClick={() => setActiveTab("compare")}>
-              <Target className="h-5 w-5" />
-              Compare Rates
-            </Button>
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-500 group bg-gradient-to-br from-background to-muted/20">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                  <DollarSign className="h-8 w-8 text-primary" />
+                </div>
+                <CardTitle className="text-xl font-bold mb-2">Instant Cash Rewards</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Earn actual cash back that deposits directly to your account—no points, no hassle, just money you can use immediately.
+                </p>
+                <div className="text-2xl font-bold text-primary">Up to 4%</div>
+                <div className="text-sm text-muted-foreground">Cash Back Rate</div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-500 group bg-gradient-to-br from-background to-muted/20">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                  <TrendingUp className="h-8 w-8 text-primary" />
+                </div>
+                <CardTitle className="text-xl font-bold mb-2">Simple & Transparent</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  No complicated redemption rules or expiring points. Your cash back is yours to keep and spend as you please.
+                </p>
+                <div className="text-2xl font-bold text-primary">100%</div>
+                <div className="text-sm text-muted-foreground">Straightforward</div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-500 group bg-gradient-to-br from-background to-muted/20">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                  <Target className="h-8 w-8 text-primary" />
+                </div>
+                <CardTitle className="text-xl font-bold mb-2">Everyday Categories</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Earn higher rates on groceries, gas, dining, and more—the purchases you make most often throughout the year.
+                </p>
+                <div className="text-2xl font-bold text-primary">5+</div>
+                <div className="text-sm text-muted-foreground">Bonus Categories</div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
