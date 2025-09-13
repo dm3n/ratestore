@@ -71,25 +71,60 @@ const CompoundInterestCalculator = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-primary/5 py-12 md:py-16">
-          <div className="container">
-            <div className="max-w-3xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
-                Investment Planning Tool
-              </Badge>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-                Compound Interest Calculator
+        <section className="relative overflow-hidden bg-gradient-to-br from-emerald-50/50 via-background to-blue-50/30 py-16 md:py-24">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]" />
+          <div className="absolute -top-32 -right-32 w-64 h-64 bg-emerald-200/30 rounded-full blur-3xl" />
+          <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-blue-200/30 rounded-full blur-3xl" />
+          
+          <div className="container relative">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/20 mb-6">
+                <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                  Investment Planning Tool
+                </span>
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6">
+                <span className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-blue-600 bg-clip-text text-transparent">
+                  Compound Interest
+                </span>
+                <br />
+                <span className="text-foreground">Calculator</span>
               </h1>
-              <p className="text-lg text-muted-foreground mb-6">
+              
+              <p className="text-xl md:text-2xl text-muted-foreground/80 mb-6 max-w-3xl mx-auto leading-relaxed">
                 Discover the incredible power of compound interest and see how your investments 
                 can grow exponentially over time with consistent contributions.
               </p>
+              
+              {/* Key Benefits */}
+              <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+                  <span>Exponential Growth</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                  <span>Time is Your Asset</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full" />
+                  <span>Einstein's 8th Wonder</span>
+                </div>
+              </div>
+              
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button variant="outline" asChild>
-                  <Link to="/investing/gic/best">Find GIC Rates</Link>
+                <Button className="gap-2 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shadow-lg hover:shadow-xl transition-all duration-300" asChild>
+                  <Link to="/investing/gic/best">
+                    Find GIC Rates <DollarSign className="h-4 w-4" />
+                  </Link>
                 </Button>
-                <Button variant="outline" asChild>
-                  <Link to="/banking/savings/high-interest">High-Interest Savings</Link>
+                <Button variant="outline" className="gap-2 border-2 hover:bg-emerald-50 transition-all duration-300" asChild>
+                  <Link to="/banking/savings/high-interest">
+                    High-Interest Savings <TrendingUp className="h-4 w-4" />
+                  </Link>
                 </Button>
               </div>
             </div>
