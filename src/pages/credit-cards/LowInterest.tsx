@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -90,6 +91,7 @@ const lowInterestCards = [
 export default function LowInterest() {
   const [sortBy, setSortBy] = useState("interest-rate");
   const [filterBy, setFilterBy] = useState("all");
+  const navigate = useNavigate();
 
   const filteredCards = lowInterestCards.filter(card => {
     switch (filterBy) {
@@ -172,11 +174,21 @@ export default function LowInterest() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg">
+              <Button 
+                size="lg" 
+                variant="secondary" 
+                className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg"
+                onClick={() => navigate('/credit-cards')}
+              >
                 Compare All Cards
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 hover:border-white font-semibold transition-all duration-200">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-2 border-white bg-transparent text-white hover:bg-white/10 hover:border-white font-semibold transition-all duration-200"
+                onClick={() => navigate('/guides/credit-cards-education')}
+              >
                 Learn More About Low Rates
               </Button>
             </div>
