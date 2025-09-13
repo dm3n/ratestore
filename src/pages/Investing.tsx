@@ -46,26 +46,57 @@ const Investing = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-primary/5 py-16">
-          <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-green-50 text-green-600 border-green-200">
-                Compare investment options across Canada
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                Grow Your Wealth with Smart Investing
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/5 py-20 lg:py-28">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]" />
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/20 rounded-full blur-3xl" />
+          
+          <div className="container relative">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/20 mb-6">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                  Compare investment options across Canada
+                </span>
+              </div>
+              
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6">
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
+                  Grow Your Wealth
+                </span>
+                <br />
+                <span className="text-foreground">with Smart Investing</span>
               </h1>
-              <p className="text-lg text-muted-foreground mb-8">
+              
+              <p className="text-xl md:text-2xl text-muted-foreground/80 mb-4 max-w-4xl mx-auto leading-relaxed">
                 Find the best GIC rates, compare investment accounts, and discover 
                 top-rated robo-advisors and online brokerages to maximize your returns.
               </p>
+              
+              {/* Stats */}
+              <div className="flex flex-wrap justify-center gap-8 mb-10 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full" />
+                  <span>500+ Financial Products</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-secondary rounded-full" />
+                  <span>Real-time Rate Updates</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-accent rounded-full" />
+                  <span>Expert Analysis</span>
+                </div>
+              </div>
+              
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="gap-2" asChild>
+                <Button size="lg" className="gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300" asChild>
                   <Link to="/investing/gic/compare">
                     Compare GIC Rates <TrendingUp className="h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2" asChild>
+                <Button size="lg" variant="outline" className="gap-2 border-2 hover:bg-primary/5 transition-all duration-300" asChild>
                   <Link to="/tools/compound-interest">
                     Investment Calculator <Calculator className="h-5 w-5" />
                   </Link>
