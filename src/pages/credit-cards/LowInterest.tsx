@@ -186,7 +186,7 @@ export default function LowInterest() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-2 border-white bg-transparent text-white hover:bg-white/10 hover:border-white font-semibold transition-all duration-200"
+                className="border-2 border-white bg-transparent text-white font-semibold"
                 onClick={() => navigate('/guides/credit-cards-education')}
               >
                 Learn More About Low Rates
