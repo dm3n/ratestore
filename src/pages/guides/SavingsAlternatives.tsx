@@ -155,13 +155,17 @@ const SavingsAlternativesGuide = () => {
                 Learn about the risks, benefits, and ideal use cases for each alternative.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-white text-emerald-700 hover:bg-emerald-50">
-                  <Calculator className="mr-2 h-4 w-4" />
-                  Compare Options
+                <Button asChild size="lg" className="bg-white text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover-scale">
+                  <Link to="/compare-all-rates">
+                    <Calculator className="mr-2 h-4 w-4" />
+                    Compare Options
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  Investment Calculator
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Button asChild size="lg" variant="outline" className="border-white/80 text-white hover:bg-white/20 hover:border-white font-semibold shadow-md backdrop-blur-sm transition-all duration-200 hover-scale">
+                  <Link to="/tools/calculators-hub">
+                    Investment Calculator
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </Button>
               </div>
             </div>
