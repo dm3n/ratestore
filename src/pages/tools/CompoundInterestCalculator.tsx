@@ -5,7 +5,7 @@ import { CompoundInterestCalculator as Calculator } from "@/components/CompoundI
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, CheckCircle, Lightbulb, Target, Clock, DollarSign } from "lucide-react";
+import { TrendingUp, CheckCircle, Lightbulb, Target, Clock, DollarSign, Calculator as CalculatorIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CompoundInterestCalculator = () => {
@@ -208,20 +208,41 @@ const CompoundInterestCalculator = () => {
         </section>
 
         {/* Investment Strategies */}
-        <section className="py-16 bg-primary/5">
+        <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
           <div className="container">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold text-center mb-12">Smart Investment Strategies</h2>
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 mb-6">
+                  <Lightbulb className="w-4 h-4 text-purple-600" />
+                  <span className="text-sm font-medium text-purple-700 dark:text-purple-300">
+                    Expert Investment Advice
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                  <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    Smart Investment
+                  </span>{" "}
+                  <span className="text-foreground">Strategies</span>
+                </h2>
+                <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                  Master these proven strategies to maximize your compound interest potential
+                </p>
+              </div>
               
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {tips.map((tip, index) => (
-                  <Card key={index} className="border-0 shadow-sm">
-                    <CardHeader className="text-center">
-                      <div className={`mb-4 bg-${tip.color}-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto`}>
-                        <tip.icon className={`h-8 w-8 text-${tip.color}-600`} />
+                  <Card key={index} className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-background to-primary/5">
+                    <CardHeader className="text-center pb-4">
+                      <div className="relative mb-6">
+                        <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br from-${tip.color}-100 to-${tip.color}-200 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300`}>
+                          <tip.icon className={`h-10 w-10 text-${tip.color}-600`} />
+                        </div>
+                        <div className="absolute -inset-4 bg-gradient-to-r from-transparent via-primary/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>
-                      <CardTitle className="text-lg">{tip.title}</CardTitle>
-                      <CardDescription className="text-sm">
+                      <CardTitle className="text-xl mb-3 group-hover:text-primary transition-colors duration-300">
+                        {tip.title}
+                      </CardTitle>
+                      <CardDescription className="text-base leading-relaxed">
                         {tip.description}
                       </CardDescription>
                     </CardHeader>
@@ -233,49 +254,68 @@ const CompoundInterestCalculator = () => {
         </section>
 
         {/* Example Scenarios */}
-        <section className="py-16">
+        <section className="py-20">
           <div className="container">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold text-center mb-12">Real-World Examples</h2>
-              <p className="text-center text-muted-foreground mb-8">
-                See how different investment approaches can impact your wealth over time
-              </p>
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 mb-6">
+                  <Target className="w-4 h-4 text-green-600" />
+                  <span className="text-sm font-medium text-green-700 dark:text-green-300">
+                    Success Stories
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                  <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                    Real-World
+                  </span>{" "}
+                  <span className="text-foreground">Examples</span>
+                </h2>
+                <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                  See how different investment approaches can impact your wealth over time
+                </p>
+              </div>
               
               <div className="grid lg:grid-cols-3 gap-8">
                 {examples.map((example, index) => (
-                  <Card key={index} className="hover:shadow-md transition-shadow">
-                    <CardHeader>
-                      <CardTitle className="text-xl text-center">{example.scenario}</CardTitle>
-                      <CardDescription className="text-center text-sm">
+                  <Card key={index} className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-background to-green-50/50">
+                    <CardHeader className="text-center pb-4">
+                      <div className="relative mb-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-200 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                          <DollarSign className="h-8 w-8 text-green-600" />
+                        </div>
+                        <div className="absolute -inset-4 bg-gradient-to-r from-transparent via-green-500/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </div>
+                      <CardTitle className="text-2xl mb-2 group-hover:text-green-600 transition-colors duration-300">
+                        {example.scenario}
+                      </CardTitle>
+                      <CardDescription className="text-base text-muted-foreground">
                         {example.description}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">Initial:</span>
-                            <div className="font-semibold">{example.initial}</div>
+                    <CardContent className="pt-0">
+                      <div className="space-y-6">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl">
+                            <span className="text-sm text-muted-foreground">Initial Investment</span>
+                            <div className="text-lg font-bold text-green-700">{example.initial}</div>
                           </div>
-                          <div>
-                            <span className="text-muted-foreground">Monthly:</span>
-                            <div className="font-semibold">{example.monthly}</div>
+                          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-xl">
+                            <span className="text-sm text-muted-foreground">Monthly Contribution</span>
+                            <div className="text-lg font-bold text-blue-700">{example.monthly}</div>
                           </div>
-                          <div>
-                            <span className="text-muted-foreground">Rate:</span>
-                            <div className="font-semibold">{example.rate}</div>
+                          <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-4 rounded-xl">
+                            <span className="text-sm text-muted-foreground">Annual Return</span>
+                            <div className="text-lg font-bold text-purple-700">{example.rate}</div>
                           </div>
-                          <div>
-                            <span className="text-muted-foreground">Years:</span>
-                            <div className="font-semibold">{example.years}</div>
+                          <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-4 rounded-xl">
+                            <span className="text-sm text-muted-foreground">Time Period</span>
+                            <div className="text-lg font-bold text-orange-700">{example.years} years</div>
                           </div>
                         </div>
                         
-                        <div className="pt-4 border-t">
-                          <div className="text-center">
-                            <div className="text-sm text-muted-foreground">Final Amount</div>
-                            <div className="text-2xl font-bold text-green-600">{example.result}</div>
-                          </div>
+                        <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-6 rounded-2xl text-white text-center">
+                          <div className="text-sm opacity-90 mb-2">Final Portfolio Value</div>
+                          <div className="text-3xl font-bold">{example.result}</div>
                         </div>
                       </div>
                     </CardContent>
@@ -287,75 +327,111 @@ const CompoundInterestCalculator = () => {
         </section>
 
         {/* Related Tools */}
-        <section className="py-16 bg-primary/5">
+        <section className="py-20 bg-gradient-to-br from-secondary/5 via-background to-primary/5">
           <div className="container">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold text-center mb-12">Related Tools & Resources</h2>
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border border-blue-500/20 mb-6">
+                  <CalculatorIcon className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                    Financial Tools
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                  <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                    Related Tools
+                  </span>{" "}
+                  <span className="text-foreground">& Resources</span>
+                </h2>
+                <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                  Explore our suite of financial calculators and investment guides
+                </p>
+              </div>
               
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="text-center">
-                    <div className="mb-2 bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center mx-auto">
-                      <Target className="h-6 w-6 text-green-600" />
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-background to-green-50/50">
+                  <CardHeader className="text-center pb-4">
+                    <div className="relative mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-200 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <Target className="h-8 w-8 text-green-600" />
+                      </div>
+                      <div className="absolute -inset-4 bg-gradient-to-r from-transparent via-green-500/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
-                    <CardTitle className="text-lg">Retirement Calculator</CardTitle>
-                    <CardDescription className="text-sm">
-                      Plan your retirement savings strategy
+                    <CardTitle className="text-xl mb-3 group-hover:text-green-600 transition-colors duration-300">
+                      Retirement Calculator
+                    </CardTitle>
+                    <CardDescription className="text-base">
+                      Plan your retirement savings strategy with precision
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link to="/tools/retirement">Calculate</Link>
+                    <Button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700" asChild>
+                      <Link to="/tools/retirement">Calculate Now</Link>
                     </Button>
                   </CardContent>
                 </Card>
                 
-                <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="text-center">
-                    <div className="mb-2 bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mx-auto">
-                      <TrendingUp className="h-6 w-6 text-blue-600" />
+                <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-background to-blue-50/50">
+                  <CardHeader className="text-center pb-4">
+                    <div className="relative mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-cyan-200 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <TrendingUp className="h-8 w-8 text-blue-600" />
+                      </div>
+                      <div className="absolute -inset-4 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
-                    <CardTitle className="text-lg">TFSA Calculator</CardTitle>
-                    <CardDescription className="text-sm">
-                      Maximize your tax-free savings
+                    <CardTitle className="text-xl mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                      TFSA Calculator
+                    </CardTitle>
+                    <CardDescription className="text-base">
+                      Maximize your tax-free savings potential
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link to="/tools/tfsa-calculator">Calculate</Link>
+                    <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700" asChild>
+                      <Link to="/tools/tfsa-calculator">Calculate Now</Link>
                     </Button>
                   </CardContent>
                 </Card>
                 
-                <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="text-center">
-                    <div className="mb-2 bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mx-auto">
-                      <DollarSign className="h-6 w-6 text-purple-600" />
+                <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-background to-purple-50/50">
+                  <CardHeader className="text-center pb-4">
+                    <div className="relative mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-violet-200 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <DollarSign className="h-8 w-8 text-purple-600" />
+                      </div>
+                      <div className="absolute -inset-4 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
-                    <CardTitle className="text-lg">GIC Rates</CardTitle>
-                    <CardDescription className="text-sm">
-                      Find guaranteed investment returns
+                    <CardTitle className="text-xl mb-3 group-hover:text-purple-600 transition-colors duration-300">
+                      GIC Rates
+                    </CardTitle>
+                    <CardDescription className="text-base">
+                      Find guaranteed investment returns today
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button variant="outline" className="w-full" asChild>
+                    <Button className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700" asChild>
                       <Link to="/investing/gic/best">Compare Rates</Link>
                     </Button>
                   </CardContent>
                 </Card>
                 
-                <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="text-center">
-                    <div className="mb-2 bg-orange-100 w-12 h-12 rounded-lg flex items-center justify-center mx-auto">
-                      <Lightbulb className="h-6 w-6 text-orange-600" />
+                <Card className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-background to-orange-50/50">
+                  <CardHeader className="text-center pb-4">
+                    <div className="relative mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-200 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <Lightbulb className="h-8 w-8 text-orange-600" />
+                      </div>
+                      <div className="absolute -inset-4 bg-gradient-to-r from-transparent via-orange-500/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
-                    <CardTitle className="text-lg">Investment Guide</CardTitle>
-                    <CardDescription className="text-sm">
-                      Learn investment fundamentals
+                    <CardTitle className="text-xl mb-3 group-hover:text-orange-600 transition-colors duration-300">
+                      Investment Guide
+                    </CardTitle>
+                    <CardDescription className="text-base">
+                      Learn investment fundamentals and strategies
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button variant="outline" className="w-full" asChild>
+                    <Button className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700" asChild>
                       <Link to="/investing">Learn More</Link>
                     </Button>
                   </CardContent>
