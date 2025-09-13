@@ -92,3 +92,49 @@ export function generateAmortizationSchedule(
 
   return schedule;
 }
+
+/**
+ * Calculate compound interest with regular contributions
+ * @param principal - Initial investment amount
+ * @param annualRate - Annual interest rate (as a percentage)
+ * @param contributionAmount - Regular contribution amount
+ * @param contributionFrequency - Frequency of contributions ('monthly', 'annually')
+ * @param timeYears - Time period in years
+ * @returns Compound interest calculation results
+ */
+export function calculateCompoundInterest(
+  principal: number,
+  annualRate: number,
+  contributionAmount: number,
+  contributionFrequency: string,
+  timeYears: number
+) {
+  // Convert annual rate to decimal
+  const rate = annualRate / 100;
+  
+  // Determine compounding frequency and contribution frequency
+  const compoundingFrequency = contributionFrequency === 'monthly' ? 12 : 1;
+  const contributionsPerYear = contributionFrequency === 'monthly' ? 12 : 1;
+  
+  // Calculate future value with compound interest
+  const futureValuePrincipal = principal * Math.pow(1 + rate / compoundingFrequency, compoundingFrequency * timeYears);
+  
+  // Calculate future value of contributions (ordinary annuity)
+  let futureValueContributions = 0;
+  if (contributionAmount > 0) {
+    const periodicRate = rate / contributionsPerYear;
+    const totalPeriods = contributionsPerYear * timeYears;
+    futureValueContributions = contributionAmount * ((Math.pow(1 + periodicRate, totalPeriods) - 1) / periodicRate);
+  }
+  
+  const finalAmount = futureValuePrincipal + futureValueContributions;
+  const totalContributions = contributionAmount * contributionsPerYear * timeYears;
+  const totalInterestEarned = finalAmount - principal - totalContributions;
+  
+  return {
+    final_amount: finalAmount,
+    total_contributions: totalContributions,
+    total_interest_earned: totalInterestEarned,
+    principal_amount: principal
+  };
+}

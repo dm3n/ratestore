@@ -192,7 +192,7 @@ export function CompoundInterestCalculator() {
             <div className="p-6 bg-primary/5 rounded-lg">
               <div className="text-sm text-muted-foreground mb-1">Final Amount</div>
               <div className="text-3xl font-bold text-primary">
-                ${(results?.future_value || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                ${(results?.final_amount || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
               </div>
             </div>
             
@@ -207,7 +207,7 @@ export function CompoundInterestCalculator() {
               <div className="flex justify-between items-center p-4 bg-green-50 rounded-lg">
                 <span className="font-medium">Interest Earned</span>
                 <span className="text-lg font-semibold text-green-600">
-                  ${(results?.total_interest || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                  ${(results?.total_interest_earned || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </span>
               </div>
               
@@ -216,11 +216,11 @@ export function CompoundInterestCalculator() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Contributions:</span>
-                    <span>{results ? (((results.total_contributions / results.future_value) * 100).toFixed(1)) : '0'}%</span>
+                    <span>{results ? (((results.total_contributions / results.final_amount) * 100).toFixed(1)) : '0'}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Interest:</span>
-                    <span>{results ? (((results.total_interest / results.future_value) * 100).toFixed(1)) : '0'}%</span>
+                    <span>{results ? (((results.total_interest_earned / results.final_amount) * 100).toFixed(1)) : '0'}%</span>
                   </div>
                 </div>
               </div>
