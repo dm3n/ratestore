@@ -83,34 +83,91 @@ const USDGIC = () => {
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-16">
-          <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="secondary" className="mb-4">
+        <section className="relative overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-20 md:py-28">
+          {/* Animated Background Elements */}
+          <div className="absolute inset-0">
+            <div className="absolute top-0 left-0 w-72 h-72 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+            <div className="absolute top-0 right-0 w-72 h-72 bg-indigo-400/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-72 h-72 bg-purple-400/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+          </div>
+          
+          {/* Grid Pattern Overlay */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+            }}></div>
+          </div>
+          
+          <div className="container relative z-10">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white text-sm font-medium mb-8 animate-fade-in">
+                <DollarSign className="w-4 h-4 mr-2" />
                 USD Investment Opportunity
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                USD GIC Rates in Canada
+              </div>
+              
+              <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight animate-fade-in">
+                USD GIC Rates
+                <span className="block text-4xl md:text-6xl bg-gradient-to-r from-blue-200 to-indigo-200 bg-clip-text text-transparent mt-2">
+                  in Canada
+                </span>
               </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              
+              <p className="text-xl md:text-2xl text-blue-100 mb-12 leading-relaxed max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: '0.2s' }}>
                 Diversify your investment portfolio with US Dollar Guaranteed Investment Certificates. 
-                Compare the best USD GIC rates from top Canadian financial institutions.
+                Compare the best USD GIC rates from top Canadian financial institutions and benefit from currency diversification.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-blue-600">4.85%</div>
-                  <div className="text-sm text-gray-600">Best 1-Year Rate</div>
+              
+              {/* Enhanced Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                <div className="group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover-scale">
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 to-emerald-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-center w-12 h-12 bg-green-500/20 rounded-xl mb-4 mx-auto">
+                      <TrendingUp className="w-6 h-6 text-green-300" />
+                    </div>
+                    <div className="text-3xl md:text-4xl font-bold text-white mb-2">4.85%</div>
+                    <div className="text-blue-200 text-sm font-medium">Best 1-Year Rate</div>
+                  </div>
                 </div>
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-green-600">$1,000</div>
-                  <div className="text-sm text-gray-600">Min. Investment</div>
+                
+                <div className="group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover-scale">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-center w-12 h-12 bg-blue-500/20 rounded-xl mb-4 mx-auto">
+                      <DollarSign className="w-6 h-6 text-blue-300" />
+                    </div>
+                    <div className="text-3xl md:text-4xl font-bold text-white mb-2">$1,000</div>
+                    <div className="text-blue-200 text-sm font-medium">Min. Investment</div>
+                  </div>
                 </div>
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-purple-600">CDIC</div>
-                  <div className="text-sm text-gray-600">Insured</div>
+                
+                <div className="group relative bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover-scale">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-xl mb-4 mx-auto">
+                      <Shield className="w-6 h-6 text-purple-300" />
+                    </div>
+                    <div className="text-3xl md:text-4xl font-bold text-white mb-2">CDIC</div>
+                    <div className="text-blue-200 text-sm font-medium">Insured Protection</div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Call-to-Action */}
+              <div className="mt-12 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                <div className="inline-flex items-center gap-2 text-blue-200 text-sm">
+                  <Clock className="w-4 h-4" />
+                  <span>Rates updated daily • CDIC protected up to $100,000 USD</span>
                 </div>
               </div>
             </div>
+          </div>
+          
+          {/* Bottom Wave */}
+          <div className="absolute bottom-0 left-0 right-0">
+            <svg viewBox="0 0 1200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 120L50 110C100 100 200 80 300 70C400 60 500 60 600 65C700 70 800 80 900 85C1000 90 1100 90 1150 90L1200 90V120H1150C1100 120 1000 120 900 120C800 120 700 120 600 120C500 120 400 120 300 120C200 120 100 120 50 120H0Z" fill="white"/>
+            </svg>
           </div>
         </section>
 
