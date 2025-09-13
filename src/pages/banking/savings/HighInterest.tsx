@@ -54,7 +54,7 @@ const HighInterestSavings = () => {
                     </Link>
                   </Button>
                   <Button asChild size="lg" variant="outline" className="bg-emerald-700 border-white text-white hover:bg-white/10">
-                    <Link to="/tools/compound-interest-calculator">
+                    <Link to="/tools/compound-interest">
                       Calculate Earnings
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
