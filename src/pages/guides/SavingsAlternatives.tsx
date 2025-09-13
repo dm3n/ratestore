@@ -161,7 +161,7 @@ const SavingsAlternativesGuide = () => {
                     Compare Options
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="border-white/80 text-white hover:bg-white/20 hover:border-white font-semibold shadow-md backdrop-blur-sm transition-all duration-200 hover-scale">
+                <Button asChild size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white/10 hover:border-white font-semibold transition-all duration-200 hover-scale">
                   <Link to="/tools/calculators-hub">
                     Investment Calculator
                     <ArrowRight className="ml-2 h-4 w-4" />
