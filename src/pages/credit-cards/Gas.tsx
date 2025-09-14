@@ -114,43 +114,58 @@ export default function Gas() {
       <Header />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Car className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold text-gray-900">Gas Credit Cards</h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Save money at the pump with credit cards offering enhanced rewards, discounts, 
-            and benefits on gas purchases across Canada.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Gift className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Gas Discounts</h3>
-              <p className="text-gray-600">Save cents per litre at participating gas stations</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <TrendingUp className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Bonus Rewards</h3>
-              <p className="text-gray-600">Earn extra points or cash back on fuel purchases</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Target className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Car Benefits</h3>
-              <p className="text-gray-600">Roadside assistance and automotive services</p>
-            </div>
-          </div>
+        <div className="text-center mb-16">
+          {/* Hero Header */}
+          <div className="relative py-16 px-6 bg-gradient-to-br from-orange-50 via-background to-yellow-50 rounded-3xl mb-12 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 via-transparent to-yellow-500/10 rounded-3xl" />
+            <div className="relative max-w-4xl mx-auto">
+              <Badge variant="outline" className="mb-6 px-4 py-2 bg-primary/10">
+                <Car className="h-4 w-4 mr-2" />
+                Gas Cards
+              </Badge>
+              
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Save More At<br />
+                <span className="text-primary">The Pump</span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
+                Maximize your fuel savings with credit cards offering enhanced gas rewards, 
+                discounts, and automotive benefits across Canada.
+              </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button size="lg" className="gap-2" onClick={() => setActiveTab("calculator")}>
-              <Calculator className="h-5 w-5" />
-              Calculate Savings
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2" onClick={() => setActiveTab("compare")}>
-              <Target className="h-5 w-5" />
-              Compare Cards
-            </Button>
+              {/* Key Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-8">
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">4¢/L</div>
+                  <div className="text-sm font-medium text-muted-foreground">Gas Discount</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">$280</div>
+                  <div className="text-sm font-medium text-muted-foreground">Annual Savings</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">24/7</div>
+                  <div className="text-sm font-medium text-muted-foreground">Roadside Help</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">No Fee</div>
+                  <div className="text-sm font-medium text-muted-foreground">Options</div>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="gap-2 px-8 py-4 h-auto font-semibold" onClick={() => setActiveTab("calculator")}>
+                  <Calculator className="h-5 w-5" />
+                  Calculate Savings
+                </Button>
+                <Button size="lg" variant="outline" className="gap-2 px-8 py-4 h-auto font-semibold border-primary/20 text-primary hover:bg-primary/5" onClick={() => setActiveTab("compare")}>
+                  <Target className="h-5 w-5" />
+                  Compare Cards
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 

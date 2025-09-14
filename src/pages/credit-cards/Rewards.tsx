@@ -93,43 +93,58 @@ export default function Rewards() {
       <Header />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Award className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold text-gray-900">Rewards Credit Cards</h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Earn flexible rewards points that can be redeemed for travel, cash back, 
-            gift cards, and more with top rewards credit cards.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Gift className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Flexible Points</h3>
-              <p className="text-gray-600">Earn points that transfer to multiple partners</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <TrendingUp className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">High Earning Rates</h3>
-              <p className="text-gray-600">Up to 2x points on all purchases or bonus categories</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Target className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Multiple Redemptions</h3>
-              <p className="text-gray-600">Travel, cash back, gift cards, and statement credits</p>
-            </div>
-          </div>
+        <div className="text-center mb-16">
+          {/* Hero Header */}
+          <div className="relative py-16 px-6 bg-gradient-to-br from-primary/5 via-background to-secondary/5 rounded-3xl mb-12 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-secondary/10 rounded-3xl" />
+            <div className="relative max-w-4xl mx-auto">
+              <Badge variant="outline" className="mb-6 px-4 py-2 bg-primary/10">
+                <Award className="h-4 w-4 mr-2" />
+                Rewards Cards
+              </Badge>
+              
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                <span className="text-primary">Flexible</span> Rewards<br />
+                Endless Possibilities
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
+                Earn valuable points that adapt to your lifestyle. 
+                Redeem for travel, cash back, gift cards, and more.
+              </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button size="lg" className="gap-2" onClick={() => setActiveTab("calculator")}>
-              <Calculator className="h-5 w-5" />
-              Calculate Rewards
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2" onClick={() => setActiveTab("compare")}>
-              <Target className="h-5 w-5" />
-              Compare Cards
-            </Button>
+              {/* Key Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-8">
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">2x</div>
+                  <div className="text-sm font-medium text-muted-foreground">Points Rate</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">60k+</div>
+                  <div className="text-sm font-medium text-muted-foreground">Welcome Points</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">25+</div>
+                  <div className="text-sm font-medium text-muted-foreground">Transfer Partners</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">25%</div>
+                  <div className="text-sm font-medium text-muted-foreground">Travel Bonus</div>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="gap-2 px-8 py-4 h-auto font-semibold" onClick={() => setActiveTab("calculator")}>
+                  <Calculator className="h-5 w-5" />
+                  Calculate Rewards
+                </Button>
+                <Button size="lg" variant="outline" className="gap-2 px-8 py-4 h-auto font-semibold border-primary/20 text-primary hover:bg-primary/5" onClick={() => setActiveTab("compare")}>
+                  <Target className="h-5 w-5" />
+                  Compare Cards
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 

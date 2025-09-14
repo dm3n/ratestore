@@ -118,43 +118,58 @@ export default function Travel() {
       <Header />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Plane className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold text-gray-900">Travel Credit Cards</h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Earn points and miles on travel purchases, enjoy premium travel benefits, 
-            and get access to airport lounges with the best travel credit cards.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Gift className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Travel Rewards</h3>
-              <p className="text-gray-600">Earn bonus points and miles on flights, hotels, and travel</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <TrendingUp className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Premium Benefits</h3>
-              <p className="text-gray-600">Access to airport lounges, travel insurance, and elite status</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Target className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Transfer Partners</h3>
-              <p className="text-gray-600">Transfer points to airline and hotel loyalty programs</p>
-            </div>
-          </div>
+        <div className="text-center mb-16">
+          {/* Hero Header */}
+          <div className="relative py-16 px-6 bg-gradient-to-br from-purple-50 via-background to-indigo-50 rounded-3xl mb-12 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-indigo-500/10 rounded-3xl" />
+            <div className="relative max-w-4xl mx-auto">
+              <Badge variant="outline" className="mb-6 px-4 py-2 bg-primary/10">
+                <Plane className="h-4 w-4 mr-2" />
+                Travel Cards
+              </Badge>
+              
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                <span className="text-primary">Explore</span> The World<br />
+                In Premium Style
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
+                Unlock premium travel benefits, earn valuable points and miles, 
+                and access exclusive airport lounges worldwide.
+              </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button size="lg" className="gap-2" onClick={() => setActiveTab("calculator")}>
-              <Calculator className="h-5 w-5" />
-              Calculate Value
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2" onClick={() => setActiveTab("compare")}>
-              <Target className="h-5 w-5" />
-              Compare Cards
-            </Button>
+              {/* Key Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-8">
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">3x</div>
+                  <div className="text-sm font-medium text-muted-foreground">Travel Points</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">75k+</div>
+                  <div className="text-sm font-medium text-muted-foreground">Welcome Miles</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">Lounge</div>
+                  <div className="text-sm font-medium text-muted-foreground">Access</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">No FX</div>
+                  <div className="text-sm font-medium text-muted-foreground">Fees</div>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="gap-2 px-8 py-4 h-auto font-semibold" onClick={() => setActiveTab("calculator")}>
+                  <Calculator className="h-5 w-5" />
+                  Calculate Value
+                </Button>
+                <Button size="lg" variant="outline" className="gap-2 px-8 py-4 h-auto font-semibold border-primary/20 text-primary hover:bg-primary/5" onClick={() => setActiveTab("compare")}>
+                  <Target className="h-5 w-5" />
+                  Compare Cards
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 

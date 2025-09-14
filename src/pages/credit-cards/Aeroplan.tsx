@@ -93,43 +93,58 @@ export default function Aeroplan() {
       <Header />
       
       <main className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Plane className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold text-gray-900">Aeroplan Credit Cards</h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Earn Aeroplan points faster and enjoy exclusive Air Canada benefits 
-            with the best Aeroplan credit cards in Canada.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Gift className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Earn Aeroplan Points</h3>
-              <p className="text-gray-600">Up to 1.5x Aeroplan points on all purchases</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <TrendingUp className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Air Canada Benefits</h3>
-              <p className="text-gray-600">Priority boarding, free bags, and lounge access</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Target className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Travel Rewards</h3>
-              <p className="text-gray-600">Redeem for flights, upgrades, and travel packages</p>
-            </div>
-          </div>
+        <div className="text-center mb-16">
+          {/* Hero Header */}
+          <div className="relative py-16 px-6 bg-gradient-to-br from-blue-50 via-background to-red-50 rounded-3xl mb-12 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-red-500/10 rounded-3xl" />
+            <div className="relative max-w-4xl mx-auto">
+              <Badge variant="outline" className="mb-6 px-4 py-2 bg-primary/10">
+                <Plane className="h-4 w-4 mr-2" />
+                Aeroplan Cards
+              </Badge>
+              
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Fly <span className="text-primary">Higher</span><br />
+                With Aeroplan Points
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
+                Earn Aeroplan points faster and unlock exclusive Air Canada benefits. 
+                From priority boarding to lounge access—elevate every journey.
+              </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button size="lg" className="gap-2" onClick={() => setActiveTab("calculator")}>
-              <Calculator className="h-5 w-5" />
-              Calculate Points
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2" onClick={() => setActiveTab("compare")}>
-              <Target className="h-5 w-5" />
-              Compare Cards
-            </Button>
+              {/* Key Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-8">
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">1.5x</div>
+                  <div className="text-sm font-medium text-muted-foreground">Points Rate</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">50k+</div>
+                  <div className="text-sm font-medium text-muted-foreground">Welcome Bonus</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">Free</div>
+                  <div className="text-sm font-medium text-muted-foreground">Checked Bags</div>
+                </div>
+                <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">Priority</div>
+                  <div className="text-sm font-medium text-muted-foreground">Boarding</div>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="gap-2 px-8 py-4 h-auto font-semibold" onClick={() => setActiveTab("calculator")}>
+                  <Calculator className="h-5 w-5" />
+                  Calculate Points
+                </Button>
+                <Button size="lg" variant="outline" className="gap-2 px-8 py-4 h-auto font-semibold border-primary/20 text-primary hover:bg-primary/5" onClick={() => setActiveTab("compare")}>
+                  <Target className="h-5 w-5" />
+                  Compare Cards
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
