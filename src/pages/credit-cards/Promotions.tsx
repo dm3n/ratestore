@@ -404,44 +404,73 @@ const Promotions = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-blue-50 to-white py-16">
-          <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
-                <Sparkles className="h-3 w-3 mr-1" />
-                Limited Time Offers
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                Credit Card Promotions
+        <section className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-background to-red-50 py-20 md:py-28">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:40px_40px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+          
+          <div className="container relative">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-pulse">
+                <Sparkles className="h-4 w-4" />
+                Limited Time Offers - Act Fast!
+              </div>
+              
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-fade-in">
+                Exclusive Credit Card
+                <span className="block bg-gradient-to-r from-orange-600 to-red-500 bg-clip-text text-transparent">
+                  Promotions
+                </span>
               </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Don't miss out on these exclusive welcome bonuses and limited-time offers from Canada's top credit card issuers.
+              
+              <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto animate-fade-in">
+                Don't miss these
+                <span className="text-orange-600 font-semibold"> time-sensitive welcome bonuses</span> and 
+                <span className="text-red-600 font-semibold"> exclusive offers</span> from Canada's leading credit card issuers
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
-                <div className="text-center">
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <Gift className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                    <div className="font-bold text-2xl text-blue-600">{welcomeBonusCards.length}</div>
-                    <div className="text-sm text-muted-foreground">Welcome Bonuses</div>
-                  </div>
+
+              {/* Promotional Stats */}
+              <div className="grid grid-cols-3 gap-8 mb-12 max-w-2xl mx-auto animate-fade-in">
+                <div className="text-center p-4 bg-white/50 backdrop-blur-sm rounded-xl border border-white/20 hover:shadow-lg transition-all hover:scale-105">
+                  <Gift className="h-8 w-8 text-orange-600 mx-auto mb-3" />
+                  <div className="font-bold text-3xl text-orange-600 mb-1">{welcomeBonusCards.length}</div>
+                  <div className="text-sm text-muted-foreground font-medium">Welcome Bonuses</div>
                 </div>
-                <div className="text-center">
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <CreditCard className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                    <div className="font-bold text-2xl text-green-600">{noFeeCards.length}</div>
-                    <div className="text-sm text-muted-foreground">No Fee Cards</div>
-                  </div>
+                <div className="text-center p-4 bg-white/50 backdrop-blur-sm rounded-xl border border-white/20 hover:shadow-lg transition-all hover:scale-105">
+                  <CreditCard className="h-8 w-8 text-green-600 mx-auto mb-3" />
+                  <div className="font-bold text-3xl text-green-600 mb-1">{noFeeCards.length}</div>
+                  <div className="text-sm text-muted-foreground font-medium">No Fee Cards</div>
                 </div>
-                <div className="text-center">
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <Star className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-                    <div className="font-bold text-2xl text-yellow-600">{highValueCards.length}</div>
-                    <div className="text-sm text-muted-foreground">High Value Offers</div>
-                  </div>
+                <div className="text-center p-4 bg-white/50 backdrop-blur-sm rounded-xl border border-white/20 hover:shadow-lg transition-all hover:scale-105">
+                  <Star className="h-8 w-8 text-yellow-600 mx-auto mb-3" />
+                  <div className="font-bold text-3xl text-yellow-600 mb-1">{highValueCards.length}</div>
+                  <div className="text-sm text-muted-foreground font-medium">High Value Offers</div>
                 </div>
+              </div>
+
+              {/* Countdown Timer Effect */}
+              <div className="mb-8 animate-fade-in">
+                <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium">
+                  <Calendar className="h-4 w-4" />
+                  Offers updated daily - New promotions added regularly
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
+                <Button size="lg" className="gap-2 px-8 py-6 text-lg bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                  View All Promotions <Zap className="h-5 w-5" />
+                </Button>
+                <Button size="lg" variant="outline" className="gap-2 px-8 py-6 text-lg hover:bg-orange-50 border-orange-200 text-orange-700 transition-all">
+                  Compare Welcome Bonuses <Gift className="h-5 w-5" />
+                </Button>
               </div>
             </div>
           </div>
+
+          {/* Animated Background Elements */}
+          <div className="absolute top-10 left-10 w-20 h-20 bg-orange-200 rounded-full blur-xl animate-pulse opacity-60" />
+          <div className="absolute top-1/3 right-20 w-16 h-16 bg-red-200 rounded-full blur-lg animate-pulse opacity-40" />
+          <div className="absolute bottom-20 left-1/3 w-24 h-24 bg-yellow-200 rounded-full blur-2xl animate-pulse opacity-30" />
         </section>
 
         {/* Main Content */}

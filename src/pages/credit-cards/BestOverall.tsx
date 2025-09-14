@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Star, CreditCard, Gift, Shield, Plane, ShoppingCart, Car, Utensils, ArrowRight, Store, Award } from "lucide-react";
+import { Star, CreditCard, Gift, Shield, Plane, ShoppingCart, Car, Utensils, ArrowRight, Store, Award, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const BestOverallCreditCards = () => {
@@ -271,31 +271,68 @@ const BestOverallCreditCards = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-primary/5 to-white py-12 md:py-16">
-          <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-primary/10 text-primary border-primary/20">
-                RateStore 2025 Awards
-              </Badge>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                Best Canadian Credit Cards 2025
-              </h1>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Our award-winning credit cards for 2025, carefully selected based on rewards, 
-                fees, benefits, and overall value. Winner of RateStore's annual credit card awards.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2" asChild>
-                  <Link to="/card-finder">
-                    Find My Perfect Card <ArrowRight className="h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" className="gap-2" onClick={scrollToCategories}>
-                  Compare All Cards <CreditCard className="h-5 w-5" />
-                </Button>
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/5 py-20 md:py-28">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
+          
+          <div className="container relative">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
+                  <Trophy className="h-4 w-4" />
+                  RateStore 2025 Award Winners
+                </div>
+                
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-fade-in">
+                  Best Canadian
+                  <span className="block bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                    Credit Cards 2025
+                  </span>
+                </h1>
+                
+                <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto animate-fade-in">
+                  Our expertly curated selection of award-winning credit cards, 
+                  <span className="text-foreground font-medium"> thoroughly analyzed for maximum value and benefits</span>
+                </p>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 max-w-2xl mx-auto animate-fade-in">
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-primary mb-2">50+</div>
+                    <div className="text-sm text-muted-foreground">Cards Analyzed</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-primary mb-2">4.8</div>
+                    <div className="text-sm text-muted-foreground">Avg Rating</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-primary mb-2">2025</div>
+                    <div className="text-sm text-muted-foreground">Award Year</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-primary mb-2">15K+</div>
+                    <div className="text-sm text-muted-foreground">Reviews</div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
+                  <Button size="lg" className="gap-2 px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105" asChild>
+                    <Link to="/card-finder">
+                      Find My Perfect Card <ArrowRight className="h-5 w-5" />
+                    </Link>
+                  </Button>
+                  <Button size="lg" variant="outline" className="gap-2 px-8 py-6 text-lg hover:bg-primary/5 transition-all" onClick={scrollToCategories}>
+                    Browse Categories <CreditCard className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Decorative Elements */}
+          <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl animate-pulse" />
+          <div className="absolute bottom-20 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-2xl animate-pulse" />
         </section>
 
         {/* Categories Section */}
