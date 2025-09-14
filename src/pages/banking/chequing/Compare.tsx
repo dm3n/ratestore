@@ -421,12 +421,12 @@ const CompareChequing = () => {
 
               {/* CTA Section */}
               <div className="text-center mt-16">
-                <div className="inline-flex items-center gap-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 mb-8">
+                <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 p-4 md:p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 mb-8 max-w-4xl mx-auto">
                   <div className="flex items-center gap-2 text-white/90">
                     <CheckCircle className="h-5 w-5" />
                     <span className="font-medium">Always up-to-date</span>
                   </div>
-                  <div className="h-6 w-px bg-white/20" />
+                  <div className="hidden md:block h-6 w-px bg-white/20" />
                   <div className="flex items-center gap-2 text-white/90">
                     <Users className="h-5 w-5" />
                     <span className="font-medium">Trusted by thousands</span>
@@ -436,7 +436,7 @@ const CompareChequing = () => {
                 <Button 
                   size="lg" 
                   variant="secondary" 
-                  className="px-10 py-4 text-lg font-bold bg-white text-primary hover:bg-white/90 shadow-xl transition-all duration-300 relative z-10"
+                  className="mt-4 px-10 py-4 text-lg font-bold bg-white text-primary hover:bg-white/90 shadow-xl transition-all duration-300 relative z-10"
                   onClick={scrollToCalculator}
                 >
                   <Calculator className="h-6 w-6 mr-2" />
