@@ -205,6 +205,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import { default as TermsOfUse } from "./pages/Terms";
+import Disclosure from "./pages/Disclosure";
 import Refinance from "./pages/Refinance";
 import Profile from "./pages/Profile";
 import EmailVerification from "./pages/EmailVerification";
@@ -443,6 +444,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<TermsOfUse />} />
+            <Route path="/disclosure" element={<Disclosure />} />
             <Route path="/refinance" element={<Refinance />} />
             <Route path="/pre-approval" element={<PreApproval />} />
             <Route path="/compare-all-rates" element={<CompareAllRates />} />
