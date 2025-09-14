@@ -355,7 +355,7 @@ const Index = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="pt-16 lg:pt-20 bg-slate-900 text-white relative overflow-hidden">
+        <section className="py-16 lg:py-20 bg-slate-900 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900" />
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
           <div className="container relative px-4 sm:px-6 lg:px-8">
