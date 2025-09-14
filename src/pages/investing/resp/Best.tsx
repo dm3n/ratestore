@@ -189,10 +189,10 @@ const BestRESP = () => {
               
               <div className="grid lg:grid-cols-2 gap-8">
                 {respProviders.map((provider, index) => (
-                  <Card key={index} className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                <Card key={index} className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                     {provider.popular && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <Badge className="bg-gradient-to-r from-orange-500 to-red-500 text-white border-0">
+                      <div className="absolute top-4 left-4 z-10">
+                        <Badge className="bg-gradient-to-r from-orange-500 to-red-500 text-white border-0 text-xs px-2 py-1">
                           Most Popular
                         </Badge>
                       </div>
@@ -200,9 +200,9 @@ const BestRESP = () => {
                     
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-indigo-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
-                    <CardHeader className="relative z-10">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
+                    <CardHeader className="relative z-10 pt-8">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
                           <CardTitle className="text-2xl group-hover:text-purple-600 transition-colors mb-2">
                             {provider.name}
                           </CardTitle>
@@ -210,9 +210,9 @@ const BestRESP = () => {
                             {provider.description}
                           </CardDescription>
                         </div>
-                        <div className="flex items-center gap-1 ml-4">
+                        <div className="flex items-center gap-1 shrink-0 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 border">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="font-semibold">{provider.rating}</span>
+                          <span className="font-semibold text-gray-900">{provider.rating}</span>
                         </div>
                       </div>
                     </CardHeader>
