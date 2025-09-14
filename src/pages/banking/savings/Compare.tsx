@@ -24,29 +24,100 @@ const CompareSavings = () => {
         {/* Hero Section */}
         <section className="bg-primary/5 py-12 md:py-16">
           <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
-                <BarChart3 className="h-3 w-3 mr-1" />
-                All Account Types
-              </Badge>
-              <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">
-                Compare All Savings Accounts in Canada
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Compare savings accounts from all major Canadian banks and credit unions. 
-                Find the perfect account type and rate for your financial goals.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
-                  <Filter className="h-5 w-5" />
-                  Compare All Accounts
-                </Button>
-                <Button size="lg" variant="outline" className="gap-2" asChild>
-                  <Link to="/tools/calculators">
-                    <Calculator className="h-5 w-5" />
-                    Calculate Earnings
-                  </Link>
-                </Button>
+            <div className="max-w-6xl mx-auto">
+              {/* Enhanced Hero Header */}
+              <div className="relative py-16 px-6 bg-gradient-to-br from-emerald-50 via-background to-blue-50 rounded-3xl mb-8 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-transparent to-blue-500/10 rounded-3xl" />
+                <div className="relative max-w-4xl mx-auto text-center">
+                  <Badge variant="outline" className="mb-6 px-4 py-2 bg-primary/10 animate-fade-in">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Savings Account Comparison
+                  </Badge>
+                  
+                  <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight animate-fade-in">
+                    Find Your <span className="text-primary">Perfect</span><br />
+                    Savings Account
+                  </h1>
+                  
+                  <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed animate-fade-in">
+                    Compare savings accounts from all major Canadian banks and credit unions. 
+                    Discover the best rates and features for your financial goals.
+                  </p>
+
+                  {/* Key Stats */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-8 animate-scale-in">
+                    <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm hover-scale">
+                      <div className="text-2xl md:text-3xl font-bold text-primary">5.75%</div>
+                      <div className="text-sm font-medium text-muted-foreground">Best Rate</div>
+                    </div>
+                    <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm hover-scale">
+                      <div className="text-2xl md:text-3xl font-bold text-primary">50+</div>
+                      <div className="text-sm font-medium text-muted-foreground">Institutions</div>
+                    </div>
+                    <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm hover-scale">
+                      <div className="text-2xl md:text-3xl font-bold text-primary">Real-time</div>
+                      <div className="text-sm font-medium text-muted-foreground">Rates</div>
+                    </div>
+                    <div className="bg-background/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm hover-scale">
+                      <div className="text-2xl md:text-3xl font-bold text-primary">Free</div>
+                      <div className="text-sm font-medium text-muted-foreground">Comparison</div>
+                    </div>
+                  </div>
+
+                  {/* Enhanced CTA Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
+                    <Button 
+                      size="lg" 
+                      className="gap-2 px-8 py-4 h-auto font-semibold hover-scale transition-all duration-300 shadow-lg hover:shadow-xl" 
+                      onClick={scrollToCalculator}
+                    >
+                      <Filter className="h-5 w-5" />
+                      Start Comparison
+                    </Button>
+                    <Button 
+                      size="lg" 
+                      variant="outline" 
+                      className="gap-2 px-8 py-4 h-auto font-semibold border-primary/20 text-primary hover:bg-primary/5 hover-scale transition-all duration-300" 
+                      asChild
+                    >
+                      <Link to="/tools/calculators">
+                        <Calculator className="h-5 w-5" />
+                        Calculate Earnings
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Benefits Bar */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div className="flex items-center gap-3 p-4 bg-background/60 backdrop-blur-sm rounded-xl border border-primary/10 hover-scale">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <BarChart3 className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-sm">Live Rate Updates</div>
+                    <div className="text-xs text-muted-foreground">Always current rates</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-background/60 backdrop-blur-sm rounded-xl border border-primary/10 hover-scale">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Filter className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-sm">Smart Filtering</div>
+                    <div className="text-xs text-muted-foreground">Find your perfect match</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-background/60 backdrop-blur-sm rounded-xl border border-primary/10 hover-scale">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Calculator className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-sm">Earnings Calculator</div>
+                    <div className="text-xs text-muted-foreground">See your potential gains</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
