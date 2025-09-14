@@ -436,7 +436,7 @@ const CompareChequing = () => {
                 <Button 
                   size="lg" 
                   variant="secondary" 
-                  className="px-10 py-4 text-lg font-bold bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                  className="px-10 py-4 text-lg font-bold bg-white text-primary hover:bg-white/90 shadow-xl transition-all duration-300 relative z-10"
                   onClick={scrollToCalculator}
                 >
                   <Calculator className="h-6 w-6 mr-2" />
