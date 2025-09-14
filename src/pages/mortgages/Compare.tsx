@@ -89,7 +89,7 @@ const Compare = () => {
                   <TrendingUp className="h-4 w-4 mr-2" />
                   Compare All Rates
                 </Badge>
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 leading-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent py-2">
                   Compare Mortgage Rates
                 </h1>
                 <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
