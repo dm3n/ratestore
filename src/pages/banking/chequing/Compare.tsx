@@ -134,123 +134,219 @@ const CompareChequing = () => {
           </div>
         </section>
 
-        {/* Comparison Categories */}
-        <section className="relative py-20 lg:py-28 bg-gradient-to-br from-secondary/5 via-background to-primary/5 overflow-hidden" id="comparison-categories">
-          {/* Background Elements */}
-          <div className="absolute top-20 left-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-80 h-80 bg-secondary/15 rounded-full blur-3xl" />
+        {/* Comparison Categories - Interactive Selection */}
+        <section className="relative py-24 lg:py-32 bg-slate-900 text-white overflow-hidden" id="comparison-categories">
+          {/* Animated Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse animation-delay-1000" />
+          <div className="absolute inset-0 opacity-40" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }} />
           
           <div className="container relative">
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-16">
-                <Badge variant="outline" className="mb-6 bg-primary/10 text-primary border-primary/20">
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Smart Comparison
-                </Badge>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                  Compare by What Matters Most
+            <div className="max-w-7xl mx-auto">
+              {/* Header */}
+              <div className="text-center mb-20">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-8 group hover:bg-white/20 transition-all duration-300">
+                  <BarChart3 className="h-10 w-10 text-white group-hover:scale-110 transition-transform" />
+                </div>
+                
+                <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
+                  Choose Your
+                  <span className="block bg-gradient-to-r from-primary-foreground via-white to-primary-foreground bg-clip-text text-transparent">
+                    Comparison Style
+                  </span>
                 </h2>
-                <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Choose your comparison criteria and find accounts perfectly tailored to your banking habits and financial goals
+                
+                <p className="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
+                  Three powerful ways to find your perfect chequing account. Each approach reveals different insights about the best banking options for your needs.
                 </p>
               </div>
-              
-              <div className="grid lg:grid-cols-3 gap-8">
-                {/* Monthly Fee Category */}
+
+              {/* Interactive Category Cards */}
+              <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
+                {/* Fee-First Approach */}
                 <div className="group relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-green-400/10 rounded-3xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
-                  <Card className="relative border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-card/80 backdrop-blur-sm group-hover:scale-105">
-                    <CardHeader className="text-center pb-4">
-                      <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:rotate-6 transition-transform duration-300">
-                        <DollarSign className="h-10 w-10 text-white" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/30 to-green-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 hover:border-emerald-400/30">
+                    {/* Icon & Number */}
+                    <div className="flex items-center justify-between mb-8">
+                      <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-500">
+                        <DollarSign className="h-8 w-8 text-white" />
                       </div>
-                      <CardTitle className="text-2xl font-bold">By Monthly Fee</CardTitle>
-                      <CardDescription className="text-base">
-                        Compare accounts based on monthly maintenance fees and fee waiver options
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                      <div className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 p-6 rounded-2xl mb-6">
-                        <div className="text-4xl font-black bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent mb-2">$0-$60</div>
-                        <div className="text-sm font-semibold text-green-700 dark:text-green-300">Monthly fee range</div>
+                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white">1</span>
                       </div>
-                      <div className="space-y-3 text-sm text-muted-foreground">
-                        <div className="flex items-center justify-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          <span>No-fee options available</span>
-                        </div>
-                        <div className="flex items-center justify-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          <span>Fee waiver conditions</span>
-                        </div>
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="text-2xl font-bold text-white mb-4">Fee-First Analysis</h3>
+                    <p className="text-slate-300 mb-8 leading-relaxed">
+                      Start with monthly fees and discover accounts that won't drain your budget. Perfect for cost-conscious banking.
+                    </p>
+
+                    {/* Stats */}
+                    <div className="bg-emerald-500/10 border border-emerald-400/20 rounded-2xl p-6 mb-8">
+                      <div className="text-center">
+                        <div className="text-4xl font-black text-emerald-400 mb-2">$0 - $60</div>
+                        <div className="text-sm text-emerald-300 font-semibold">Monthly fee range</div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+
+                    {/* Features */}
+                    <div className="space-y-3 mb-8">
+                      <div className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                        <span className="text-sm">No-fee options available</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse animation-delay-200" />
+                        <span className="text-sm">Fee waiver strategies</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse animation-delay-400" />
+                        <span className="text-sm">Hidden cost analysis</span>
+                      </div>
+                    </div>
+
+                    {/* CTA */}
+                    <Button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white border-0 py-3 rounded-xl font-semibold transition-all duration-300 group-hover:shadow-lg">
+                      Compare by Fees
+                    </Button>
+                  </div>
                 </div>
 
-                {/* Transaction Limits Category */}
+                {/* Transaction-First Approach */}
                 <div className="group relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-blue-400/10 rounded-3xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
-                  <Card className="relative border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-card/80 backdrop-blur-sm group-hover:scale-105">
-                    <CardHeader className="text-center pb-4">
-                      <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:rotate-6 transition-transform duration-300">
-                        <CheckCircle className="h-10 w-10 text-white" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-cyan-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 hover:border-blue-400/30">
+                    {/* Icon & Number */}
+                    <div className="flex items-center justify-between mb-8">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-500">
+                        <CheckCircle className="h-8 w-8 text-white" />
                       </div>
-                      <CardTitle className="text-2xl font-bold">By Transaction Limits</CardTitle>
-                      <CardDescription className="text-base">
-                        Find accounts with transaction limits that match your banking habits
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                      <div className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 p-6 rounded-2xl mb-6">
-                        <div className="text-4xl font-black bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">10-∞</div>
-                        <div className="text-sm font-semibold text-blue-700 dark:text-blue-300">Transaction range</div>
+                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white">2</span>
                       </div>
-                      <div className="space-y-3 text-sm text-muted-foreground">
-                        <div className="flex items-center justify-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-blue-500" />
-                          <span>Unlimited options</span>
-                        </div>
-                        <div className="flex items-center justify-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-blue-500" />
-                          <span>Low-usage accounts</span>
-                        </div>
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="text-2xl font-bold text-white mb-4">Usage-Based Matching</h3>
+                    <p className="text-slate-300 mb-8 leading-relaxed">
+                      Match accounts to your transaction patterns. Ideal for finding accounts that fit your banking habits.
+                    </p>
+
+                    {/* Stats */}
+                    <div className="bg-blue-500/10 border border-blue-400/20 rounded-2xl p-6 mb-8">
+                      <div className="text-center">
+                        <div className="text-4xl font-black text-blue-400 mb-2">10 - ∞</div>
+                        <div className="text-sm text-blue-300 font-semibold">Transaction limits</div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+
+                    {/* Features */}
+                    <div className="space-y-3 mb-8">
+                      <div className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+                        <span className="text-sm">Unlimited transaction options</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse animation-delay-200" />
+                        <span className="text-sm">Low-usage friendly accounts</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse animation-delay-400" />
+                        <span className="text-sm">Per-transaction cost analysis</span>
+                      </div>
+                    </div>
+
+                    {/* CTA */}
+                    <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white border-0 py-3 rounded-xl font-semibold transition-all duration-300 group-hover:shadow-lg">
+                      Match by Usage
+                    </Button>
+                  </div>
                 </div>
 
-                {/* Special Category */}
+                {/* Lifestyle-First Approach */}
                 <div className="group relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-purple-400/10 rounded-3xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
-                  <Card className="relative border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-card/80 backdrop-blur-sm group-hover:scale-105">
-                    <CardHeader className="text-center pb-4">
-                      <div className="mx-auto w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:rotate-6 transition-transform duration-300">
-                        <Users className="h-10 w-10 text-white" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-pink-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 hover:border-purple-400/30">
+                    {/* Icon & Number */}
+                    <div className="flex items-center justify-between mb-8">
+                      <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-500">
+                        <Users className="h-8 w-8 text-white" />
                       </div>
-                      <CardTitle className="text-2xl font-bold">By Special Category</CardTitle>
-                      <CardDescription className="text-base">
-                        Student, senior, newcomer, and youth accounts with special benefits
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                      <div className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900 p-6 rounded-2xl mb-6">
-                        <div className="text-4xl font-black bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent mb-2">4+</div>
-                        <div className="text-sm font-semibold text-purple-700 dark:text-purple-300">Special categories</div>
+                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white">3</span>
                       </div>
-                      <div className="space-y-3 text-sm text-muted-foreground">
-                        <div className="flex items-center justify-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-purple-500" />
-                          <span>Age-based accounts</span>
-                        </div>
-                        <div className="flex items-center justify-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-purple-500" />
-                          <span>Newcomer programs</span>
-                        </div>
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="text-2xl font-bold text-white mb-4">Lifestyle Categories</h3>
+                    <p className="text-slate-300 mb-8 leading-relaxed">
+                      Find accounts designed for your life stage. Student, senior, newcomer, and youth-specific options.
+                    </p>
+
+                    {/* Stats */}
+                    <div className="bg-purple-500/10 border border-purple-400/20 rounded-2xl p-6 mb-8">
+                      <div className="text-center">
+                        <div className="text-4xl font-black text-purple-400 mb-2">6+</div>
+                        <div className="text-sm text-purple-300 font-semibold">Lifestyle categories</div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+
+                    {/* Features */}
+                    <div className="space-y-3 mb-8">
+                      <div className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+                        <span className="text-sm">Age-specific benefits</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse animation-delay-200" />
+                        <span className="text-sm">Newcomer welcome programs</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-slate-300">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse animation-delay-400" />
+                        <span className="text-sm">Special perks & rewards</span>
+                      </div>
+                    </div>
+
+                    {/* CTA */}
+                    <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white border-0 py-3 rounded-xl font-semibold transition-all duration-300 group-hover:shadow-lg">
+                      Browse Categories
+                    </Button>
+                  </div>
                 </div>
+              </div>
+
+              {/* Bottom CTA */}
+              <div className="text-center mt-20">
+                <div className="inline-flex items-center gap-8 p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 mb-8">
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <CheckCircle className="h-5 w-5 text-primary" />
+                    <span className="font-medium">Real-time data</span>
+                  </div>
+                  <div className="h-6 w-px bg-white/20" />
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <Users className="h-5 w-5 text-primary" />
+                    <span className="font-medium">All major banks</span>
+                  </div>
+                  <div className="h-6 w-px bg-white/20" />
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <DollarSign className="h-5 w-5 text-primary" />
+                    <span className="font-medium">100% free</span>
+                  </div>
+                </div>
+                
+                <Button 
+                  size="lg" 
+                  className="px-12 py-4 text-lg font-bold bg-primary hover:bg-primary/90 shadow-2xl hover:shadow-primary/25 transition-all duration-300 hover:scale-105"
+                  onClick={scrollToCalculator}
+                >
+                  <Calculator className="h-6 w-6 mr-3" />
+                  Start Smart Comparison
+                </Button>
               </div>
             </div>
           </div>
