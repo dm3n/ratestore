@@ -281,9 +281,11 @@ const OntarioHomeInsurance = () => {
                     Get Ontario Quote <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
-                  <Phone className="mr-2 h-5 w-5" />
-                  Speak with Expert
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-transparent font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/contact">
+                    <Phone className="mr-2 h-5 w-5" />
+                    Speak with Expert
+                  </Link>
                 </Button>
               </div>
             </div>
