@@ -28,25 +28,94 @@ const CompareChequing = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-primary/5 py-12 md:py-16">
-          <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
-                <BarChart3 className="h-3 w-3 mr-1" />
-                All Banks Included
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/20 py-20 lg:py-28">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent" />
+          <div className="absolute top-10 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-10 left-10 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
+          
+          <div className="container relative">
+            <div className="max-w-6xl mx-auto text-center">
+              <Badge variant="outline" className="mb-8 bg-primary/10 text-primary border-primary/20 hover:bg-primary/15 transition-colors backdrop-blur-sm">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                All Canadian Banks & Credit Unions
               </Badge>
-              <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">
-                Compare All Chequing Accounts in Canada
+              
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 leading-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent py-2">
+                Compare All <br className="hidden md:block" />
+                <span className="text-primary">Chequing Accounts</span>
               </h1>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Compare chequing accounts from all major Canadian financial institutions. 
-                Find the perfect account for your banking needs with our comprehensive comparison tool.
+              
+              <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+                Find the perfect chequing account with no guesswork. Compare fees, features, 
+                and benefits from every major Canadian financial institution.
               </p>
+
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <Users className="h-8 w-8 text-primary mx-auto mb-3" />
+                    <div className="text-3xl font-bold text-primary mb-2">50+</div>
+                    <div className="text-sm text-muted-foreground font-medium">Financial Institutions</div>
+                  </div>
+                </div>
+                
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-secondary/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <DollarSign className="h-8 w-8 text-primary mx-auto mb-3" />
+                    <div className="text-3xl font-bold text-primary mb-2">$0</div>
+                    <div className="text-sm text-muted-foreground font-medium">Monthly Fee Options</div>
+                  </div>
+                </div>
+                
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-accent/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <CheckCircle className="h-8 w-8 text-primary mx-auto mb-3" />
+                    <div className="text-3xl font-bold text-primary mb-2">100%</div>
+                    <div className="text-sm text-muted-foreground font-medium">Free Comparison</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="gap-2" onClick={scrollToCalculator}>
-                  <Calculator className="h-5 w-5" />
-                  Start Comparison
+                <Button 
+                  size="lg" 
+                  className="px-8 py-4 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" 
+                  onClick={scrollToCalculator}
+                >
+                  <Calculator className="h-5 w-5 mr-2" />
+                  Start Smart Comparison
                 </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="px-8 py-4 text-lg font-semibold border-primary/20 text-primary hover:bg-primary/5 backdrop-blur-sm transition-all duration-300"
+                  onClick={scrollToCategories}
+                >
+                  <BarChart3 className="h-5 w-5 mr-2" />
+                  Browse Categories
+                </Button>
+              </div>
+
+              {/* Feature Highlights */}
+              <div className="mt-16 flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  <span>Real-time rates</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  <span>All major banks included</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  <span>No bias or hidden fees</span>
+                </div>
               </div>
             </div>
           </div>
