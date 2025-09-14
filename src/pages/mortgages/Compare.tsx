@@ -75,37 +75,79 @@ const Compare = () => {
       <Header />
       
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-blue-50 to-primary/5 py-16">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-6 bg-blue-100 text-blue-700 border-blue-200">
-                <TrendingUp className="h-3 w-3 mr-1" />
-                Compare All Rates
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                Compare Mortgage Rates
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Find and compare the best mortgage rates in Canada. Compare by rate type, 
-                lender, province, and special programs to find your perfect mortgage.
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                  <div>
-                    <div className="text-2xl font-bold text-primary">3.84%</div>
-                    <div className="text-xs text-muted-foreground">Best 5-Year Fixed</div>
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/20 py-20 lg:py-28">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent" />
+          <div className="absolute top-10 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-10 left-10 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
+          
+          <div className="container relative px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              {/* Header Content */}
+              <div className="text-center mb-16">
+                <Badge variant="outline" className="mb-6 bg-primary/10 text-primary border-primary/20 hover:bg-primary/15 transition-colors">
+                  <TrendingUp className="h-4 w-4 mr-2" />
+                  Compare All Rates
+                </Badge>
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                  Compare Mortgage Rates
+                </h1>
+                <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+                  Discover Canada's most competitive mortgage rates. Compare by lender, province, 
+                  and rate type to secure your perfect mortgage deal.
+                </p>
+              </div>
+
+              {/* Rate Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <div className="text-3xl font-bold text-primary mb-2 animate-fade-in">3.84%</div>
+                    <div className="text-sm text-muted-foreground font-medium">Best 5-Year Fixed</div>
+                    <div className="mt-3 text-xs text-primary/70">Starting from</div>
                   </div>
-                  <div>
-                    <div className="text-2xl font-bold text-primary">3.95%</div>
-                    <div className="text-xs text-muted-foreground">Best 5-Year Variable</div>
+                </div>
+                
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-secondary/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <div className="text-3xl font-bold text-primary mb-2 animate-fade-in">3.95%</div>
+                    <div className="text-sm text-muted-foreground font-medium">Best 5-Year Variable</div>
+                    <div className="mt-3 text-xs text-primary/70">Starting from</div>
                   </div>
-                  <div>
-                    <div className="text-2xl font-bold text-primary">4.12%</div>
-                    <div className="text-xs text-muted-foreground">Best 3-Year Fixed</div>
+                </div>
+                
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-accent/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <div className="text-3xl font-bold text-primary mb-2 animate-fade-in">4.12%</div>
+                    <div className="text-sm text-muted-foreground font-medium">Best 3-Year Fixed</div>
+                    <div className="mt-3 text-xs text-primary/70">Starting from</div>
                   </div>
-                  <div>
-                    <div className="text-2xl font-bold text-primary">4.79%</div>
-                    <div className="text-xs text-muted-foreground">Best Bank Rate</div>
+                </div>
+                
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-muted/20 to-muted/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <div className="text-3xl font-bold text-primary mb-2 animate-fade-in">4.79%</div>
+                    <div className="text-sm text-muted-foreground font-medium">Best Bank Rate</div>
+                    <div className="mt-3 text-xs text-primary/70">Starting from</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Section */}
+              <div className="text-center">
+                <div className="inline-flex items-center gap-4 p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Clock className="h-4 w-4" />
+                    <span>Updated daily</span>
+                  </div>
+                  <div className="h-4 w-px bg-border" />
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Award className="h-4 w-4" />
+                    <span>Best rates guaranteed</span>
                   </div>
                 </div>
               </div>
