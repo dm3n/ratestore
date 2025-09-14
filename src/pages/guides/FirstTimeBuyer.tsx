@@ -383,7 +383,7 @@ const FirstTimeBuyer = () => {
                 </CardHeader>
                 <CardContent>
                   <Button asChild className="w-full">
-                    <Link to="/tools/down-payment">Calculate Down Payment</Link>
+                    <Link to="/tools/down-payment-calculator">Calculate Down Payment</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -400,7 +400,7 @@ const FirstTimeBuyer = () => {
                 </CardHeader>
                 <CardContent>
                   <Button asChild className="w-full">
-                    <Link to="/tools/affordability">Check Affordability</Link>
+                    <Link to="/tools/affordability-calculator">Check Affordability</Link>
                   </Button>
                 </CardContent>
               </Card>
