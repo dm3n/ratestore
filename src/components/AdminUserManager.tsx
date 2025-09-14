@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { UserPlus, Shield, ShieldOff, Search, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { securityAudit } from "@/lib/security-audit";
 
 interface UserWithRole {
   id: string;
@@ -84,6 +85,23 @@ export function AdminUserManager() {
 
   const makeUserAdmin = async (email: string, userId: string) => {
     try {
+      // Input validation
+      if (!email || !userId) {
+        throw new Error('Invalid user data');
+      }
+
+      // Verify user exists before granting admin
+      const { data: userData, error: userError } = await supabase
+        .from('profiles')
+        .select('id, email')
+        .eq('id', userId)
+        .eq('email', email)
+        .single();
+
+      if (userError || !userData) {
+        throw new Error('User not found or email mismatch');
+      }
+
       const { error } = await supabase.rpc('make_user_admin', {
         target_user_id: userId,
         user_email: email
@@ -91,17 +109,32 @@ export function AdminUserManager() {
 
       if (error) throw error;
 
+      // Log the admin privilege grant
+      await securityAudit.logAdminAction('grant_admin', userId, email);
+
       toast({
         title: "Success",
         description: `${email} has been made an admin`
       });
 
       fetchUsersWithRoles();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error making user admin:', error);
+      
+      // Log failed admin privilege attempt
+      await securityAudit.logSecurityEvent({
+        action: 'admin_grant_failed',
+        details: { 
+          target_email: email, 
+          target_user_id: userId,
+          error_message: error.message 
+        },
+        severity: 'high'
+      });
+
       toast({
         title: "Error",
-        description: "Failed to make user admin",
+        description: error.message || "Failed to make user admin",
         variant: "destructive"
       });
     }
@@ -109,6 +142,35 @@ export function AdminUserManager() {
 
   const removeAdminRole = async (userId: string, email: string) => {
     try {
+      // Input validation
+      if (!email || !userId) {
+        throw new Error('Invalid user data');
+      }
+
+      // Verify user exists and is actually an admin before removal
+      const { data: userData, error: userError } = await supabase
+        .from('profiles')
+        .select('id, email')
+        .eq('id', userId)
+        .eq('email', email)
+        .single();
+
+      if (userError || !userData) {
+        throw new Error('User not found or email mismatch');
+      }
+
+      // Check if user is actually an admin
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'admin')
+        .single();
+
+      if (roleError || !roleData) {
+        throw new Error('User is not an admin');
+      }
+
       const { error } = await supabase.rpc('remove_admin_role', {
         target_user_id: userId,
         user_email: email
@@ -116,17 +178,32 @@ export function AdminUserManager() {
 
       if (error) throw error;
 
+      // Log the admin privilege revocation
+      await securityAudit.logAdminAction('revoke_admin', userId, email);
+
       toast({
         title: "Success",
         description: `Admin role removed from ${email}`
       });
 
       fetchUsersWithRoles();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error removing admin role:', error);
+
+      // Log failed admin privilege removal attempt
+      await securityAudit.logSecurityEvent({
+        action: 'admin_revoke_failed',
+        details: { 
+          target_email: email, 
+          target_user_id: userId,
+          error_message: error.message 
+        },
+        severity: 'high'
+      });
+
       toast({
         title: "Error",
-        description: "Failed to remove admin role",
+        description: error.message || "Failed to remove admin role",
         variant: "destructive"
       });
     }

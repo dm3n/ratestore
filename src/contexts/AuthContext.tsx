@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { securityAudit } from '@/lib/security-audit';
 
 interface AuthContextType {
   user: User | null;
@@ -86,6 +87,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string, fullName?: string) => {
     try {
+      // Basic input validation
+      if (!email || !password) {
+        const error = new Error('Email and password are required') as AuthError;
+        error.name = 'ValidationError';
+        return { data: null, error };
+      }
+
+      if (password.length < 8) {
+        const error = new Error('Password must be at least 8 characters long') as AuthError;
+        error.name = 'ValidationError';
+        return { data: null, error };
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -96,6 +110,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           },
         },
       });
+
+      if (error) {
+        await securityAudit.logSecurityEvent({
+          action: 'signup_failed',
+          details: { email, error_message: error.message },
+          severity: 'low'
+        });
+      } else {
+        await securityAudit.logSecurityEvent({
+          action: 'signup_success',
+          details: { email },
+          severity: 'low'
+        });
+      }
       
       // Handle the case where user already exists but is unverified
       if (data?.user && !data.session) {
@@ -109,20 +137,85 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       return { data, error };
     } catch (err: any) {
+      await securityAudit.logSecurityEvent({
+        action: 'signup_error',
+        details: { email, error: err.message },
+        severity: 'medium'
+      });
       return { data: null, error: err };
     }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { data, error };
+    try {
+      // Check rate limiting
+      if (securityAudit.isRateLimited(email)) {
+        const error = new Error('Too many failed attempts. Please try again in 15 minutes.') as AuthError;
+        error.name = 'RateLimitError';
+        return { data: null, error };
+      }
+
+      // Basic input validation
+      if (!email || !password) {
+        const error = new Error('Email and password are required') as AuthError;
+        error.name = 'ValidationError';
+        return { data: null, error };
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        // Record failed attempt for rate limiting
+        const isLocked = securityAudit.recordFailedAttempt(email);
+        
+        await securityAudit.logSecurityEvent({
+          action: 'login_failed',
+          details: { 
+            email, 
+            error_message: error.message,
+            rate_limited: isLocked 
+          },
+          severity: isLocked ? 'high' : 'medium'
+        });
+      } else {
+        // Clear failed attempts on successful login
+        securityAudit.clearFailedAttempts(email);
+        
+        await securityAudit.logSecurityEvent({
+          user_id: data.user?.id,
+          action: 'login_success',
+          details: { email },
+          severity: 'low'
+        });
+      }
+
+      return { data, error };
+    } catch (err: any) {
+      await securityAudit.logSecurityEvent({
+        action: 'login_error',
+        details: { email, error: err.message },
+        severity: 'high'
+      });
+      return { data: null, error: err };
+    }
   };
 
   const signOut = async () => {
+    const currentUser = user;
     try {
+      // Log sign out event
+      if (currentUser) {
+        await securityAudit.logSecurityEvent({
+          user_id: currentUser.id,
+          action: 'logout',
+          details: { email: currentUser.email },
+          severity: 'low'
+        });
+      }
+
       // Try global sign out first, but don't hang forever
       const signOutPromise = supabase.auth.signOut();
       const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Sign out timeout')), 7000));
