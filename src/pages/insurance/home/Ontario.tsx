@@ -1,65 +1,45 @@
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Home, Shield, MapPin, Calculator, CheckCircle, 
-  ArrowRight, Phone, DollarSign, AlertTriangle, Users, Clock
-} from "lucide-react";
+import { Home, Shield, MapPin, Calculator, CheckCircle, ArrowRight, Phone, DollarSign, AlertTriangle, Users, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
-
 const OntarioHomeInsurance = () => {
-  const coverageTypes = [
-    {
-      title: "Dwelling Coverage",
-      description: "Protects your home's structure and attached buildings",
-      icon: Home,
-      amount: "Replacement Cost",
-      details: "Covers damage from fire, wind, hail, and other covered perils"
-    },
-    {
-      title: "Personal Property",
-      description: "Coverage for your belongings and personal items",
-      icon: Shield,
-      amount: "Up to 75% of dwelling",
-      details: "Furniture, electronics, clothing, and other possessions"
-    },
-    {
-      title: "Liability Protection",
-      description: "Protects against lawsuits and injury claims",
-      icon: Users,
-      amount: "Up to $2M",
-      details: "Medical expenses and legal costs for injuries on your property"
-    }
-  ];
-
-  const ontarioSpecifics = [
-    {
-      title: "Overland Water Coverage",
-      description: "Ontario homes are at risk of flooding from heavy rains and melting snow",
-      icon: AlertTriangle
-    },
-    {
-      title: "Sewer Backup Protection",
-      description: "Essential coverage for basement flooding in Ontario's older cities",
-      icon: Home
-    },
-    {
-      title: "Ice Damming Coverage",
-      description: "Protection against ice dam damage common in Ontario winters",
-      icon: Shield
-    }
-  ];
-
-  const ontarioCities = [
-    "Toronto", "Ottawa", "Hamilton", "London", "Kitchener", 
-    "Windsor", "Oshawa", "Barrie", "Kingston", "Peterborough"
-  ];
-
-  return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-blue-50">
+  const coverageTypes = [{
+    title: "Dwelling Coverage",
+    description: "Protects your home's structure and attached buildings",
+    icon: Home,
+    amount: "Replacement Cost",
+    details: "Covers damage from fire, wind, hail, and other covered perils"
+  }, {
+    title: "Personal Property",
+    description: "Coverage for your belongings and personal items",
+    icon: Shield,
+    amount: "Up to 75% of dwelling",
+    details: "Furniture, electronics, clothing, and other possessions"
+  }, {
+    title: "Liability Protection",
+    description: "Protects against lawsuits and injury claims",
+    icon: Users,
+    amount: "Up to $2M",
+    details: "Medical expenses and legal costs for injuries on your property"
+  }];
+  const ontarioSpecifics = [{
+    title: "Overland Water Coverage",
+    description: "Ontario homes are at risk of flooding from heavy rains and melting snow",
+    icon: AlertTriangle
+  }, {
+    title: "Sewer Backup Protection",
+    description: "Essential coverage for basement flooding in Ontario's older cities",
+    icon: Home
+  }, {
+    title: "Ice Damming Coverage",
+    description: "Protection against ice dam damage common in Ontario winters",
+    icon: Shield
+  }];
+  const ontarioCities = ["Toronto", "Ottawa", "Hamilton", "London", "Kitchener", "Windsor", "Oshawa", "Barrie", "Kingston", "Peterborough"];
+  return <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-blue-50">
       <Header />
       
       <main className="flex-1">
@@ -89,10 +69,8 @@ const OntarioHomeInsurance = () => {
                     Get Ontario Quote <Shield className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-transparent font-semibold px-8 py-4 h-auto" asChild>
-                  <Link to="/insurance/home/compare">
-                    Compare Rates <Calculator className="ml-2 h-5 w-5" />
-                  </Link>
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-transparent font-semibold px-8 py-4 h-auto">
+                  Compare Rates 
                 </Button>
               </div>
             </div>
@@ -111,8 +89,7 @@ const OntarioHomeInsurance = () => {
               </div>
               
               <div className="grid md:grid-cols-3 gap-8">
-                {coverageTypes.map((coverage, index) => (
-                  <Card key={index} className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                {coverageTypes.map((coverage, index) => <Card key={index} className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                     <CardHeader className="text-center">
                       <div className="bg-blue-100 w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-600 transition-colors duration-300">
                         <coverage.icon className="h-8 w-8 text-blue-600 group-hover:text-white transition-colors duration-300" />
@@ -132,8 +109,7 @@ const OntarioHomeInsurance = () => {
                         {coverage.details}
                       </p>
                     </CardContent>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
           </div>
@@ -151,8 +127,7 @@ const OntarioHomeInsurance = () => {
               </div>
               
               <div className="grid md:grid-cols-3 gap-8">
-                {ontarioSpecifics.map((item, index) => (
-                  <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+                {ontarioSpecifics.map((item, index) => <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
                     <CardHeader>
                       <div className="bg-orange-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
                         <item.icon className="h-6 w-6 text-orange-600" />
@@ -162,8 +137,7 @@ const OntarioHomeInsurance = () => {
                         {item.description}
                       </CardDescription>
                     </CardHeader>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
           </div>
@@ -181,16 +155,14 @@ const OntarioHomeInsurance = () => {
               </div>
               
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                {ontarioCities.map((city, index) => (
-                  <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow text-center">
+                {ontarioCities.map((city, index) => <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow text-center">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-center gap-2">
                         <MapPin className="h-4 w-4 text-blue-600" />
                         <span className="font-medium">{city}</span>
                       </div>
                     </CardContent>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
           </div>
@@ -296,8 +268,6 @@ const OntarioHomeInsurance = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default OntarioHomeInsurance;
