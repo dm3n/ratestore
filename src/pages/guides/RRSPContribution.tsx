@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, TrendingUp, Calendar, AlertCircle, CheckCircle, DollarSign, Target } from "lucide-react";
+import { Calculator, TrendingUp, Calendar, AlertCircle, CheckCircle, DollarSign, Target, PiggyBank } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const RRSPContributionGuide = () => {
@@ -47,28 +47,53 @@ const RRSPContributionGuide = () => {
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-primary/5 py-16">
-          <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-600 border-blue-200">
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-secondary py-20">
+          {/* Background decorative elements */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-primary/60 to-secondary/80"></div>
+          
+          <div className="container relative z-10">
+            <div className="max-w-5xl mx-auto text-center">
+              {/* Icon */}
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-8">
+                <PiggyBank className="w-10 h-10 text-white" />
+              </div>
+              
+              {/* Badge */}
+              <Badge variant="outline" className="mb-6 bg-white/10 text-white border-white/20 backdrop-blur-sm">
+                <Target className="h-4 w-4 mr-2" />
                 RRSP Contribution Guide
               </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                RRSP Contribution Limits & Rules
+              
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                RRSP Contribution Limits 
+                <span className="block text-white/95">& Rules</span>
               </h1>
-              <p className="text-lg text-muted-foreground mb-8">
+              
+              <p className="text-xl md:text-2xl text-white/90 mb-12 leading-relaxed max-w-3xl mx-auto">
                 Master RRSP contribution limits, deadlines, and strategies to maximize your 
-                tax savings and retirement wealth building potential.
+                <span className="font-semibold text-white"> tax savings and retirement wealth building potential.</span>
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button size="lg" className="gap-2" asChild>
-                  <Link to="/tools/retirement">
-                    Calculate Retirement <Calculator className="h-5 w-5" />
+              
+              <div className="flex flex-col sm:flex-row justify-center gap-6">
+                <Button 
+                  size="lg" 
+                  className="bg-white text-primary hover:bg-white/90 font-semibold px-8 py-4 h-auto shadow-lg" 
+                  asChild
+                >
+                  <Link to="/tools/retirement" className="gap-3">
+                    <Calculator className="h-5 w-5" />
+                    Calculate Retirement
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2" asChild>
-                  <Link to="/guides/rrsp">
-                    RRSP Basics <Target className="h-5 w-5" />
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 font-semibold px-8 py-4 h-auto shadow-lg" 
+                  asChild
+                >
+                  <Link to="/guides/rrsp" className="gap-3">
+                    <Target className="h-5 w-5" />
+                    RRSP Basics
                   </Link>
                 </Button>
               </div>
