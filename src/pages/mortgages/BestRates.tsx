@@ -346,8 +346,8 @@ const BestRates = () => {
                 <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100" asChild>
                   <Link to="/pre-approval">Get Pre-Approved</Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary" asChild>
-                  <Link to="/compare-all-rates">Compare All Rates</Link>
+                <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10" asChild>
+                  <Link to="/mortgages/compare">Compare All Rates</Link>
                 </Button>
               </div>
             </div>
