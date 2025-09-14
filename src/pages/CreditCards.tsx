@@ -250,27 +250,68 @@ const CreditCards = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-blue-50 to-white py-16">
-          <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="outline" className="mb-4 bg-blue-100 text-blue-700 border-blue-200">
-                Credit Card Hub
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/10 py-20 lg:py-28">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent" />
+          <div className="absolute top-10 right-10 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-10 left-10 w-96 h-96 bg-secondary/30 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
+          
+          <div className="container relative">
+            <div className="max-w-6xl mx-auto text-center">
+              <Badge variant="outline" className="mb-8 bg-primary/10 text-primary border-primary/20 hover:bg-primary/15 transition-colors backdrop-blur-sm">
+                <CreditCard className="h-4 w-4 mr-2" />
+                200+ Credit Cards
               </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                Find the Perfect Credit Card for You
+              
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent">
+                Find the Perfect <br className="hidden md:block" />
+                <span className="text-primary">Credit Card</span>
               </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Compare over 200+ credit cards from Canada's top banks and find the best rewards, rates, and benefits.
+              
+              <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+                Compare Canada's best credit cards, earn more rewards, and discover exclusive benefits 
+                from top banks and financial institutions.
               </p>
+
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <div className="text-3xl font-bold text-primary mb-2">200+</div>
+                    <div className="text-sm text-muted-foreground font-medium">Credit Cards</div>
+                  </div>
+                </div>
+                
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-secondary/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <div className="text-3xl font-bold text-primary mb-2">15+</div>
+                    <div className="text-sm text-muted-foreground font-medium">Top Banks</div>
+                  </div>
+                </div>
+                
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-accent/10 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <div className="text-3xl font-bold text-primary mb-2">$0</div>
+                    <div className="text-sm text-muted-foreground font-medium">Cost to Compare</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700">
-                  <Link to="/card-finder">
-                    <Search className="mr-2 h-5 w-5" />
-                    Find My Card
+                <Button size="lg" asChild className="px-8 py-4 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  <Link to="/card-finder" className="flex items-center gap-3">
+                    <Search className="h-5 w-5" />
+                    Find My Perfect Card
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <Link to="/credit-cards/best-overall">
+                <Button size="lg" variant="outline" asChild className="px-8 py-4 text-lg font-semibold border-primary/20 text-primary hover:bg-primary/5 backdrop-blur-sm transition-all duration-300">
+                  <Link to="/credit-cards/best-overall" className="flex items-center gap-3">
+                    <Award className="h-5 w-5" />
                     View Best Cards
                   </Link>
                 </Button>
@@ -279,47 +320,102 @@ const CreditCards = () => {
           </div>
         </section>
 
-        {/* CardFinder Promotion */}
-        <section className="py-16 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
-          <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-6">
-                <CreditCard className="h-8 w-8" />
+        {/* CardFinder Interactive Section */}
+        <section className="relative py-20 lg:py-28 overflow-hidden bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-white">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full blur-3xl" />
+          
+          <div className="container relative">
+            <div className="max-w-6xl mx-auto">
+              {/* Header */}
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-8 group hover:bg-white/20 transition-all duration-300">
+                  <Calculator className="h-10 w-10 text-white group-hover:scale-110 transition-transform" />
+                </div>
+                
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                  CardFinder
+                  <span className="block text-2xl md:text-3xl lg:text-4xl text-white/80 font-normal mt-2">
+                    Your Personal Credit Card Assistant
+                  </span>
+                </h2>
+                
+                <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+                  Get personalized credit card recommendations in under 60 seconds. 
+                  No credit check required, completely free.
+                </p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                CardFinder - Find Your Perfect Match
-              </h2>
-              <p className="text-xl mb-8 text-purple-100">
-                Get personalized credit card recommendations in under 1 minute. No credit check required.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-xl font-bold">1</span>
+
+              {/* Process Steps */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div className="group text-center">
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto group-hover:bg-white/20 transition-all duration-300 group hover:scale-110">
+                      <span className="text-3xl font-bold text-white">1</span>
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-white/20 rounded-full animate-ping" />
                   </div>
-                  <h3 className="font-semibold mb-2">Answer Questions</h3>
-                  <p className="text-purple-100 text-sm">Tell us about your spending habits</p>
+                  <h3 className="text-xl font-bold mb-3 text-white">Answer Simple Questions</h3>
+                  <p className="text-white/80 leading-relaxed">
+                    Tell us about your spending habits, credit score range, and what rewards matter to you most
+                  </p>
                 </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-xl font-bold">2</span>
+                
+                <div className="group text-center">
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto group-hover:bg-white/20 transition-all duration-300 group hover:scale-110">
+                      <span className="text-3xl font-bold text-white">2</span>
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-white/20 rounded-full animate-ping animation-delay-300" />
                   </div>
-                  <h3 className="font-semibold mb-2">Get Matches</h3>
-                  <p className="text-purple-100 text-sm">See personalized recommendations</p>
+                  <h3 className="text-xl font-bold mb-3 text-white">Get Smart Matches</h3>
+                  <p className="text-white/80 leading-relaxed">
+                    Our AI analyzes 200+ cards and shows you the top 3-5 matches ranked by your potential value
+                  </p>
                 </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-xl font-bold">3</span>
+                
+                <div className="group text-center">
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto group-hover:bg-white/20 transition-all duration-300 group hover:scale-110">
+                      <span className="text-3xl font-bold text-white">3</span>
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-white/20 rounded-full animate-ping animation-delay-500" />
                   </div>
-                  <h3 className="font-semibold mb-2">Apply Now</h3>
-                  <p className="text-purple-100 text-sm">Apply with confidence</p>
+                  <h3 className="text-xl font-bold mb-3 text-white">Apply with Confidence</h3>
+                  <p className="text-white/80 leading-relaxed">
+                    Compare your matches side-by-side and apply directly to your chosen card with pre-filled applications
+                  </p>
                 </div>
               </div>
-              <Button size="lg" variant="secondary" asChild>
-                <Link to="/card-finder">
-                  Try CardFinder Now
-                </Link>
-              </Button>
+
+              {/* CTA Section */}
+              <div className="text-center">
+                <div className="inline-flex items-center gap-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 mb-8">
+                  <div className="flex items-center gap-2 text-white/90">
+                    <Shield className="h-5 w-5" />
+                    <span className="font-medium">No credit check</span>
+                  </div>
+                  <div className="h-6 w-px bg-white/20" />
+                  <div className="flex items-center gap-2 text-white/90">
+                    <Zap className="h-5 w-5" />
+                    <span className="font-medium">60 seconds</span>
+                  </div>
+                  <div className="h-6 w-px bg-white/20" />
+                  <div className="flex items-center gap-2 text-white/90">
+                    <Heart className="h-5 w-5" />
+                    <span className="font-medium">100% free</span>
+                  </div>
+                </div>
+                
+                <Button size="lg" variant="secondary" asChild className="px-10 py-4 text-lg font-bold bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                  <Link to="/card-finder" className="flex items-center gap-3">
+                    <Search className="h-6 w-6" />
+                    Start CardFinder Now
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
