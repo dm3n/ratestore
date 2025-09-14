@@ -27,13 +27,13 @@ const FirstHomeSavings = () => {
               
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
                 Best First Home Savings Account 
-                <span className="block text-accent-foreground/90">(FHSA) in Canada</span>
+                <span className="block text-white/95">(FHSA) in Canada</span>
               </h1>
               
               <p className="text-xl md:text-2xl text-white/90 mb-12 leading-relaxed max-w-3xl mx-auto">
                 Compare FHSA rates and save for your first home with the best of both worlds - 
-                <span className="font-semibold text-accent-foreground"> tax-deductible contributions</span> AND 
-                <span className="font-semibold text-accent-foreground"> tax-free withdrawals</span>.
+                <span className="font-semibold text-white"> tax-deductible contributions</span> AND 
+                <span className="font-semibold text-white"> tax-free withdrawals</span>.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
