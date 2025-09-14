@@ -89,49 +89,73 @@ export default function NoFee() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen flex flex-col">
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Shield className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold text-gray-900">No Annual Fee Credit Cards</h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Build credit and earn rewards without paying annual fees. Perfect for first-time 
-            cardholders and anyone wanting to minimize costs while maximizing benefits.
-          </p>
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-background to-green-50 py-20 md:py-28">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent" />
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Gift className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">$0 Annual Fee</h3>
-              <p className="text-gray-600">Keep more money in your pocket with no annual costs</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <TrendingUp className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Earn Rewards</h3>
-              <p className="text-gray-600">Up to 2% cash back or points on purchases</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <Target className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Build Credit</h3>
-              <p className="text-gray-600">Establish and improve your credit score over time</p>
+          <div className="container relative">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
+                <Shield className="h-4 w-4" />
+                Zero Annual Fees Forever
+              </div>
+              
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-fade-in">
+                No Annual Fee
+                <span className="block bg-gradient-to-r from-emerald-600 to-green-500 bg-clip-text text-transparent">
+                  Credit Cards
+                </span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto animate-fade-in">
+                <span className="text-emerald-600 font-semibold">Build credit and earn rewards</span> without 
+                <span className="text-green-600 font-semibold"> paying annual fees</span>. 
+                Perfect for first-time cardholders and anyone wanting to minimize costs.
+              </p>
+
+              {/* Feature Highlights */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto animate-fade-in">
+                <div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-xl border border-white/30 hover:shadow-lg transition-all hover:scale-105">
+                  <Gift className="h-10 w-10 text-emerald-600 mx-auto mb-3" />
+                  <h3 className="font-semibold text-lg text-emerald-900 mb-2">$0 Annual Fee</h3>
+                  <p className="text-muted-foreground">Keep more money in your pocket with no annual costs</p>
+                </div>
+                <div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-xl border border-white/30 hover:shadow-lg transition-all hover:scale-105">
+                  <TrendingUp className="h-10 w-10 text-green-600 mx-auto mb-3" />
+                  <h3 className="font-semibold text-lg text-green-900 mb-2">Earn Rewards</h3>
+                  <p className="text-muted-foreground">Up to 2% cash back or points on purchases</p>
+                </div>
+                <div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-xl border border-white/30 hover:shadow-lg transition-all hover:scale-105">
+                  <Target className="h-10 w-10 text-blue-600 mx-auto mb-3" />
+                  <h3 className="font-semibold text-lg text-blue-900 mb-2">Build Credit</h3>
+                  <p className="text-muted-foreground">Establish and improve your credit score over time</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
+                <Button size="lg" className="gap-2 px-8 py-6 text-lg bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                  Find No Fee Card <Shield className="h-5 w-5" />
+                </Button>
+                <Button size="lg" variant="outline" className="gap-2 px-8 py-6 text-lg hover:bg-emerald-50 border-emerald-200 text-emerald-700 transition-all" onClick={() => setActiveTab("calculator")}>
+                  Calculate Rewards <Calculator className="h-5 w-5" />
+                </Button>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button size="lg" className="gap-2" onClick={() => setActiveTab("calculator")}>
-              <Calculator className="h-5 w-5" />
-              Calculate Rewards
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2" onClick={() => setActiveTab("compare")}>
-              <Target className="h-5 w-5" />
-              Compare Cards
-            </Button>
-          </div>
-        </div>
+          {/* Decorative Elements */}
+          <div className="absolute top-20 left-10 w-20 h-20 bg-emerald-200 rounded-full blur-xl animate-pulse opacity-60" />
+          <div className="absolute bottom-20 right-10 w-32 h-32 bg-green-200 rounded-full blur-2xl animate-pulse opacity-40" />
+        </section>
+
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-12">
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
           <TabsList className="grid w-full grid-cols-4">
@@ -371,6 +395,8 @@ export default function NoFee() {
             </div>
           </TabsContent>
         </Tabs>
+          </div>
+        </div>
       </main>
       
       <Footer />
