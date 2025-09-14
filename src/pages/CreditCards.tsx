@@ -703,7 +703,7 @@ const CreditCards = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="min-w-[200px] border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-colors" 
+                  className="min-w-[200px] bg-transparent border-white text-white hover:bg-white/10 transition-colors" 
                   asChild
                 >
                   <Link to="/credit-cards/best-overall">
