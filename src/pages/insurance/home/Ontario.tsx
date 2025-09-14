@@ -89,8 +89,10 @@ const OntarioHomeInsurance = () => {
                     Get Ontario Quote <Shield className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-transparent font-semibold px-8 py-4 h-auto">
-                  Compare Rates <Calculator className="ml-2 h-5 w-5" />
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-transparent font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/insurance/home/compare">
+                    Compare Rates <Calculator className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
               </div>
             </div>
