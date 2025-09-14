@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { DollarSign, Star, CreditCard, Filter, Calculator, TrendingUp, Target } from "lucide-react";
+import { DollarSign, Star, CreditCard, Filter, Calculator, TrendingUp, Target, BookOpen, ArrowUpDown } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
@@ -230,41 +230,67 @@ export default function CashBack() {
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="browse">Browse Cards</TabsTrigger>
-            <TabsTrigger value="calculator">Calculator</TabsTrigger>
-            <TabsTrigger value="compare">Compare</TabsTrigger>
-            <TabsTrigger value="guide">Guide</TabsTrigger>
-          </TabsList>
+        <div className="relative">
+          {/* Background decoration */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 rounded-2xl blur-xl"></div>
+          
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="relative mb-8">
+            <div className="bg-background/80 backdrop-blur-sm border rounded-2xl p-6 shadow-lg">
+              <TabsList className="grid w-full grid-cols-4 bg-muted/50 backdrop-blur-sm rounded-xl p-1 mb-6 shadow-inner">
+                <TabsTrigger value="browse" className="data-[state=active]:bg-background data-[state=active]:shadow-md transition-all duration-300 rounded-lg font-medium">
+                  <CreditCard className="w-4 h-4 mr-2" />
+                  Browse Cards
+                </TabsTrigger>
+                <TabsTrigger value="calculator" className="data-[state=active]:bg-background data-[state=active]:shadow-md transition-all duration-300 rounded-lg font-medium">
+                  <Calculator className="w-4 h-4 mr-2" />
+                  Calculator
+                </TabsTrigger>
+                <TabsTrigger value="compare" className="data-[state=active]:bg-background data-[state=active]:shadow-md transition-all duration-300 rounded-lg font-medium">
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  Compare
+                </TabsTrigger>
+                <TabsTrigger value="guide" className="data-[state=active]:bg-background data-[state=active]:shadow-md transition-all duration-300 rounded-lg font-medium">
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Guide
+                </TabsTrigger>
+              </TabsList>
 
-          <TabsContent value="browse" className="space-y-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4 text-gray-500" />
-                <Select value={filterBy} onValueChange={setFilterBy}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Filter by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Cards</SelectItem>
-                    <SelectItem value="no-fee">No Annual Fee</SelectItem>
-                    <SelectItem value="high-rate">High Cash Back Rate</SelectItem>
-                    <SelectItem value="promoted">Featured Cards</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="cash-back-rate">Cash Back Potential</SelectItem>
-                  <SelectItem value="annual-fee">Annual Fee</SelectItem>
-                  <SelectItem value="welcome-bonus">Welcome Bonus</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <TabsContent value="browse" className="space-y-6 mt-0">
+                <div className="bg-gradient-to-r from-muted/50 to-accent/10 rounded-xl p-4 border shadow-sm">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <Filter className="h-4 w-4 text-primary" />
+                      </div>
+                      <Select value={filterBy} onValueChange={setFilterBy}>
+                        <SelectTrigger className="w-full sm:w-48 bg-background/80 backdrop-blur-sm border-muted shadow-sm">
+                          <SelectValue placeholder="Filter by category" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background/95 backdrop-blur-md">
+                          <SelectItem value="all">All Cards</SelectItem>
+                          <SelectItem value="no-fee">No Annual Fee</SelectItem>
+                          <SelectItem value="high-rate">High Cash Back Rate</SelectItem>
+                          <SelectItem value="promoted">Featured Cards</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <ArrowUpDown className="h-4 w-4 text-accent-foreground" />
+                      </div>
+                      <Select value={sortBy} onValueChange={setSortBy}>
+                        <SelectTrigger className="w-full sm:w-48 bg-background/80 backdrop-blur-sm border-muted shadow-sm">
+                          <SelectValue placeholder="Sort by" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background/95 backdrop-blur-md">
+                          <SelectItem value="cash-back-rate">Cash Back Potential</SelectItem>
+                          <SelectItem value="annual-fee">Annual Fee</SelectItem>
+                          <SelectItem value="welcome-bonus">Welcome Bonus</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {sortedCards.map(card => <Card key={card.id} className="relative overflow-hidden hover:shadow-lg transition-shadow">
@@ -565,8 +591,10 @@ export default function CashBack() {
                 </p>
               </div>
             </div>
-          </TabsContent>
-        </Tabs>
+              </TabsContent>
+            </div>
+          </Tabs>
+        </div>
       </main>
       
       <Footer />
