@@ -241,34 +241,86 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Tools Section */}
-        <section className="py-16 lg:py-24 bg-slate-50">
-          <div className="container px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Financial Calculators & Tools</h2>
-                <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                  Make informed decisions with our comprehensive suite of financial calculators
+        {/* Enhanced Tools Section */}
+        <section className="py-16 lg:py-24 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 relative overflow-hidden">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-indigo-500/5" />
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-400/10 rounded-full blur-3xl" />
+          
+          <div className="container px-4 sm:px-6 lg:px-8 relative">
+            <div className="max-w-7xl mx-auto">
+              {/* Enhanced Header */}
+              <div className="text-center mb-16 animate-fade-in">
+                <Badge variant="outline" className="mb-6 px-4 py-2 bg-primary/10 border-primary/20">
+                  <Calculator className="h-4 w-4 mr-2" />
+                  Financial Tools Suite
+                </Badge>
+                <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-900 bg-clip-text text-transparent mb-6 leading-tight">
+                  Powerful Financial<br />
+                  <span className="text-primary">Calculators & Tools</span>
+                </h2>
+                <p className="text-xl lg:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                  Make informed decisions with our comprehensive suite of financial calculators. 
+                  From mortgages to investments—we've got you covered.
                 </p>
               </div>
               
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Enhanced Tools Grid */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 lg:gap-8">
                 {tools.map((tool, index) => (
-                  <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-md bg-white hover:-translate-y-1">
-                    <CardHeader className="text-center pb-4">
-                      <div className="mx-auto mb-4 bg-slate-100 group-hover:bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center transition-colors">
-                        <tool.icon className="h-8 w-8 text-slate-600 group-hover:text-blue-600 transition-colors" />
+                  <Card key={index} className="group relative overflow-hidden border-0 bg-white/70 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 animate-scale-in hover-scale">
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    
+                    <CardHeader className="text-center pb-4 relative z-10">
+                      <div className="relative mx-auto mb-6">
+                        {/* Icon Container with Glow Effect */}
+                        <div className="relative">
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-500 scale-110" />
+                          <div className="relative bg-gradient-to-br from-slate-100 to-white group-hover:from-blue-100 group-hover:to-indigo-100 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 border border-slate-200 group-hover:border-blue-200 shadow-sm">
+                            <tool.icon className="h-8 w-8 text-slate-600 group-hover:text-blue-600 transition-colors duration-300" />
+                          </div>
+                        </div>
                       </div>
-                      <CardTitle className="text-xl font-semibold text-slate-900">{tool.name}</CardTitle>
-                      <CardDescription className="text-slate-600">{tool.description}</CardDescription>
+                      <CardTitle className="text-lg font-bold text-slate-900 group-hover:text-blue-900 transition-colors duration-300 mb-2">
+                        {tool.name}
+                      </CardTitle>
+                      <CardDescription className="text-slate-600 group-hover:text-slate-700 transition-colors duration-300 text-sm leading-relaxed">
+                        {tool.description}
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <Button variant="outline" className="w-full font-semibold hover:bg-slate-50" asChild>
-                        <Link to={tool.link}>Use Calculator</Link>
+                    <CardContent className="relative z-10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full font-semibold bg-white/50 border-slate-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:border-blue-300 transition-all duration-300 group-hover:shadow-md" 
+                        asChild
+                      >
+                        <Link to={tool.link} className="flex items-center justify-center gap-2">
+                          Use Calculator
+                          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        </Link>
                       </Button>
                     </CardContent>
+
+                    {/* Shine Effect */}
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 skew-x-12" />
                   </Card>
                 ))}
+              </div>
+
+              {/* Call to Action */}
+              <div className="text-center mt-12 animate-fade-in">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-4 h-auto font-semibold hover-scale"
+                  asChild
+                >
+                  <Link to="/tools/calculators" className="flex items-center gap-2">
+                    Explore All Tools
+                    <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
