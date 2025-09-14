@@ -28,7 +28,7 @@ const mortgageGuides = [
     category: "Government Programs",
     icon: Users,
     featured: true,
-    href: "/guides/first-time-programs",
+    href: "/guides/first-time-buyer",
     gradient: "from-green-500 to-teal-600"
   },
   {
