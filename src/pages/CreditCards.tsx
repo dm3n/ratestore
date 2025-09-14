@@ -392,17 +392,17 @@ const CreditCards = () => {
 
               {/* CTA Section */}
               <div className="text-center">
-                <div className="inline-flex items-center gap-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 mb-8">
+                <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 p-4 md:p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 mb-8 max-w-4xl mx-auto">
                   <div className="flex items-center gap-2 text-white/90">
                     <Shield className="h-5 w-5" />
                     <span className="font-medium">No credit check</span>
                   </div>
-                  <div className="h-6 w-px bg-white/20" />
+                  <div className="hidden md:block h-6 w-px bg-white/20" />
                   <div className="flex items-center gap-2 text-white/90">
                     <Zap className="h-5 w-5" />
                     <span className="font-medium">60 seconds</span>
                   </div>
-                  <div className="h-6 w-px bg-white/20" />
+                  <div className="hidden md:block h-6 w-px bg-white/20" />
                   <div className="flex items-center gap-2 text-white/90">
                     <Heart className="h-5 w-5" />
                     <span className="font-medium">100% free</span>
