@@ -69,6 +69,7 @@ const Index = () => {
     { name: "Mortgage Calculator", description: "Calculate monthly payments", icon: Calculator, link: "/tools/mortgage-calculator" },
     { name: "Debt Payoff Calculator", description: "Plan your debt freedom", icon: TrendingUp, link: "/tools/debt-payoff-calculator" },
     { name: "TFSA Calculator", description: "Calculate your contribution", icon: DollarSign, link: "/tools/tfsa-calculator" },
+    { name: "Affordability Calculator", description: "Check what you can afford", icon: Home, link: "/tools/affordability-calculator" },
     { name: "Calculators Hub", description: "All financial tools", icon: Award, link: "/tools/calculators" },
   ];
 
@@ -267,7 +268,7 @@ const Index = () => {
               </div>
               
               {/* Enhanced Tools Grid */}
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 lg:gap-8">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 lg:gap-8">
                 {tools.map((tool, index) => (
                   <Card key={index} className="group relative overflow-hidden border-0 bg-white/70 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 animate-scale-in hover-scale">
                     {/* Gradient Overlay */}
