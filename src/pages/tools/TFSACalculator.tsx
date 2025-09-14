@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
-import { Calculator, PiggyBank, TrendingUp, AlertCircle, BookOpen, Target, DollarSign } from "lucide-react";
+import { Calculator, PiggyBank, TrendingUp, AlertCircle, BookOpen, Target, DollarSign, Calendar, CheckCircle } from "lucide-react";
 const TFSACalculator = () => {
   const [birthYear, setBirthYear] = useState<string>("");
   const [currentContributions, setCurrentContributions] = useState<string>("");
@@ -93,31 +93,105 @@ const TFSACalculator = () => {
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-green-50 to-emerald-100 py-16">
-          <div className="container">
-            <div className="max-w-4xl mx-auto text-center">
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/10 py-20 lg:py-28">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent" />
+          <div className="absolute top-10 right-10 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-10 left-10 w-96 h-96 bg-secondary/30 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
+          
+          <div className="container relative">
+            <div className="max-w-6xl mx-auto text-center">
+              <Badge variant="outline" className="mb-8 bg-primary/10 text-primary border-primary/20 hover:bg-primary/15 transition-colors backdrop-blur-sm">
+                <PiggyBank className="h-4 w-4 mr-2" />
+                Tax-Free Savings Account
+              </Badge>
               
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                TFSA Contribution Room Calculator
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 leading-tight bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent py-2">
+                TFSA Calculator
+                <span className="block text-3xl md:text-4xl lg:text-5xl text-primary mt-4">
+                  Maximize Your Tax-Free Growth
+                </span>
               </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Calculate your available Tax-Free Savings Account contribution room and 
-                plan your tax-free investment strategy for maximum savings growth.
+              
+              <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed">
+                Calculate your available contribution room, plan your tax-free investment strategy, 
+                and discover how much you can save with Canada's most flexible savings account.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-green-600">$7,000</div>
-                  <div className="text-sm text-gray-600">2025 Annual Limit</div>
+
+              {/* Enhanced Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-400/10 rounded-3xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl p-8 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                    <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:rotate-6 transition-transform duration-300">
+                      <DollarSign className="h-8 w-8 text-white" />
+                    </div>
+                    <div className="text-4xl font-black bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent mb-2">$7,000</div>
+                    <div className="text-sm font-semibold text-muted-foreground">2025 Annual Limit</div>
+                    <div className="mt-3 text-xs text-green-600/70">Maximum contribution</div>
+                  </div>
                 </div>
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-blue-600">0%</div>
-                  <div className="text-sm text-gray-600">Tax on Growth</div>
+                
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-400/10 rounded-3xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl p-8 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:rotate-6 transition-transform duration-300">
+                      <Target className="h-8 w-8 text-white" />
+                    </div>
+                    <div className="text-4xl font-black bg-gradient-to-r from-blue-600 to-cyan-700 bg-clip-text text-transparent mb-2">0%</div>
+                    <div className="text-sm font-semibold text-muted-foreground">Tax on Growth</div>
+                    <div className="mt-3 text-xs text-blue-600/70">Completely tax-free</div>
+                  </div>
                 </div>
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-purple-600">18+</div>
-                  <div className="text-sm text-gray-600">Eligible Age</div>
+                
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-400/10 rounded-3xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl p-8 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                    <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:rotate-6 transition-transform duration-300">
+                      <Calendar className="h-8 w-8 text-white" />
+                    </div>
+                    <div className="text-4xl font-black bg-gradient-to-r from-purple-600 to-pink-700 bg-clip-text text-transparent mb-2">18+</div>
+                    <div className="text-sm font-semibold text-muted-foreground">Eligible Age</div>
+                    <div className="mt-3 text-xs text-purple-600/70">Canadian resident</div>
+                  </div>
                 </div>
               </div>
+
+              {/* Feature Highlights */}
+              <div className="flex flex-wrap justify-center gap-8 text-sm text-muted-foreground mb-12">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  <span>Flexible withdrawals</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  <span>No age limit</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  <span>Multiple investment options</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  <span>Re-contribution room</span>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <Button 
+                size="lg" 
+                className="px-10 py-4 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                onClick={() => {
+                  const calculatorSection = document.querySelector('[data-state="active"]');
+                  if (calculatorSection) {
+                    calculatorSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <Calculator className="h-5 w-5 mr-2" />
+                Calculate My TFSA Room
+              </Button>
             </div>
           </div>
         </section>
