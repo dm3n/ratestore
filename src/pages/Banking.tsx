@@ -457,7 +457,7 @@ export function Banking() {
                     Compare Savings Rates
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white" asChild>
+                <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold bg-transparent border-green-500 text-green-500 hover:bg-green-500/10" asChild>
                   <Link to="/banking/best-chequing">
                     Compare Chequing Accounts
                   </Link>
