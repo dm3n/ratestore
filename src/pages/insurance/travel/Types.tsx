@@ -139,8 +139,10 @@ const TravelInsuranceTypes = () => {
                     Get Free Quote <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto">
-                  Compare Plans <Globe className="ml-2 h-5 w-5" />
+                <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10 backdrop-blur-sm font-semibold px-8 py-4 h-auto" asChild>
+                  <Link to="/insurance/travel/quotes">
+                    Compare Plans <Globe className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
               </div>
             </div>
